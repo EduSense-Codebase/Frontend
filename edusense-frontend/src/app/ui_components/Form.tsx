@@ -40,7 +40,7 @@ const Form: React.FC<IFormProps> = ({
   return (
     <form
       onSubmit={onSubmit}
-      className={`w-full max-w-md mx-auto bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5 ${
+      className={`w-full max-w-lg mx-auto bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5 ${
         metadata?.formClassName || ""
       }`}
     >
@@ -51,10 +51,7 @@ const Form: React.FC<IFormProps> = ({
       )}
 
       {fields.map((field, index) => (
-        <div
-          className={`flex flex-col ${metadata?.inputGroupClassName || ""}`}
-          key={field.callbackID || index}
-        >
+        <React.Fragment key={index}>
           <label className="mb-1 text-sm font-medium text-gray-700">
             {field.label}
           </label>
@@ -68,7 +65,7 @@ const Form: React.FC<IFormProps> = ({
               field.className || ""
             }`}
           />
-        </div>
+          </React.Fragment>
       ))}
 
       <Button

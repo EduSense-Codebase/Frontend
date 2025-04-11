@@ -80,12 +80,11 @@ const Register: React.FC = () => {
 	};
 
 	return (
-	<div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
 		<Form
 		metadata={{
 			heading: 'Register',
 			formClassName:
-			'w-full max-w-md bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5',
+			'w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5',
 			inputGroupClassName: 'space-y-1',
 		}}
 		fields={fields}
@@ -93,7 +92,6 @@ const Register: React.FC = () => {
 		submitCallback={handleSubmit}
 		submitDisplayName="Register"
 		/>
-	</div>
 	);
 };
 
