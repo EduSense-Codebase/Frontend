@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import axios from 'axios'
+import { API_PREFIX, AUTH_ENDPOINT } from "../global";
+import { httpPost } from "../utils";
 
 
 export default function RegisterPage(){
@@ -13,20 +15,22 @@ export default function RegisterPage(){
 
 
 	const handleRegister = (e: React.FormEvent) => {
-
 		e.preventDefault()
-		console.log("making account")
-		axios.post("http://127.0.0.1:8000/api/auth/?type=signup", form, {
-			headers: {
-				'Content-Type':  'multipart/form-data'
-			}
-		}).then((response)=>{
-			console.log("Successful")
-			console.log(response.data)
+
+		let apiUrl = API_PREFIX + AUTH_ENDPOINT;
+		let queryParams = {
+			type: "signup"
+		}
+		let signupPromise = httpPost(apiUrl, form, queryParams)
+
+		signupPromise.then((response) => {
+			console.log("Successfull");
+			console.log(response.data);
 		}).catch((err) => {
 			console.log("Error")
 			console.log(err)
 		})
+
 		router.push("/login")
 	}
 
