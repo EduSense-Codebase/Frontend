@@ -4,7 +4,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-//import axios from 'axios'
+import axios from 'axios'
+
 
 export default function RegisterPage(){
 	const [form, setForm] = useState({name: '', email: '', password: '', age: ''});
@@ -12,8 +13,20 @@ export default function RegisterPage(){
 
 
 	const handleRegister = (e: React.FormEvent) => {
+
 		e.preventDefault()
 		console.log("making account")
+		axios.post("http://127.0.0.1:8000/api/auth/?type=signup", form, {
+			headers: {
+				'Content-Type':  'multipart/form-data'
+			}
+		}).then((response)=>{
+			console.log("Successful")
+			console.log(response.data)
+		}).catch((err) => {
+			console.log("Error")
+			console.log(err)
+		})
 		router.push("/login")
 	}
 
@@ -48,7 +61,7 @@ export default function RegisterPage(){
 			  placeholder="Age"
 			  className="w-full border px-3 py-2 rounded text-gray-700"
 			  value={form.age}
-			  onChange={(e) => setForm({ ...form, password: e.target.value })}
+			  onChange={(e) => setForm({ ...form, age: e.target.value })}
 			/>
 			<button className="bg-green-600 text-white px-4 py-2 rounded w-full" type="submit">
 			  Register
