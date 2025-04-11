@@ -1,85 +1,96 @@
-// app/login/page.tsx
 'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import Form, { IFormFieldBase } from '../ui_components/Form';
 
-import { API_PREFIX, AUTH_ENDPOINT } from "../global";
-import { httpPost } from "../utils";
+const Register: React.FC = () => {
+  const [fname, setFname] = useState<string>('');
+  const [lname, setLname] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  
+  const router = useRouter();
 
-export default function RegisterPage(){
-	const [form, setForm] = useState({name: '', email: '', password: '', age: ''});
-	const router = useRouter()
+  const fields: IFormFieldBase[] = [
+    {
+      type: 'text',
+      placeholder: 'Enter your first name',
+      value: fname,
+      callbackID: '1',
+      label: 'First Name',
+    },
+    {
+      type: 'text',
+      placeholder: 'Enter your last name',
+      value: lname,
+      callbackID: '2',
+      label: 'Last Name',
+    },
+    {
+      type: 'email',
+      placeholder: 'Enter your email',
+      value: email,
+      callbackID: '3',
+      label: 'Email',
+    },
+    {
+      type: 'password',
+      placeholder: 'Enter your password',
+      value: password,
+      callbackID: '4',
+      label: 'Password',
+    },
+  ];
 
+  const handleFieldChange = (id: string, value: string) => {
+    if (id === '1') setFname(value);
+    else if (id === '2') setLname(value);
+    else if (id === '3') setEmail(value);
+    else if (id === '4') setPassword(value);
+  };
 
-	const handleRegister = (e: React.FormEvent) => {
-		e.preventDefault()
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('name', `${fname} ${lname}`);
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('age', '10'); // Placeholder age
 
-		let apiUrl = API_PREFIX + AUTH_ENDPOINT;
-		let queryParams = {
-			type: "signup"
-		}
-		let signupPromise = httpPost(apiUrl, form, queryParams)
+      const response = await axios.post(
+        'http://127.0.0.1:8000/api/auth/?type=signup',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
 
-		signupPromise.then((response) => {
-			console.log("Successfull");
-			console.log(response.data);
-		}).catch((err) => {
-			console.log("Error")
-			console.log(err)
-		})
+      console.log('Successfully registered');
+      console.log(response.data);
+      router.push('/login');
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
+  };
 
-		router.push("/login")
-	}
-
-	return (
-		<form
-      onSubmit={handleRegister}
-      className="w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5"
-    >
-      <h2 className="text-2xl font-semibold text-gray-800 text-center">Register</h2>
-
-      <input
-        type="text"
-        placeholder="Full Name"
-        className="w-full border border-gray-300 px-4 py-2 rounded-md text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-        required
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <Form
+        metadata={{
+          heading: 'Register',
+          formClassName:
+            'w-full max-w-md bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5',
+          inputGroupClassName: 'space-y-1',
+        }}
+        fields={fields}
+        callbackFunc={handleFieldChange}
+        submitCallback={handleSubmit}
+        submitDisplayName="Register"
       />
+    </div>
+  );
+};
 
-      <input
-        type="email"
-        placeholder="Email"
-        className="w-full border border-gray-300 px-4 py-2 rounded-md text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-        required
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        className="w-full border border-gray-300 px-4 py-2 rounded-md text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={form.password}
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-        required
-      />
-
-      <input
-        type="number"
-        placeholder="Age"
-        className="w-full border border-gray-300 px-4 py-2 rounded-md text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={form.age}
-        onChange={(e) => setForm({ ...form, age: e.target.value })}
-      />
-
-      <button
-        type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-semibold transition"
-      >
-        Register
-      </button>
-    </form>
-	  );
-}
+export default Register;
