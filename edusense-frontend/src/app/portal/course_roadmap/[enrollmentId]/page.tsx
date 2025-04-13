@@ -58,7 +58,7 @@ export default function CourseRoadmap() {
                     const isLast = index === data.length - 1
 
                     return (
-                    <div key={index} className="relative w-full max-w-5xl mb-16">
+                    <div key={index} className="relative w-full mb-16">
                         <div className="flex justify-between items-center w-full">
 
                         {/* Left Card */}

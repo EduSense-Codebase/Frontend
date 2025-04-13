@@ -6,7 +6,7 @@ import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Edusense',
+  title: 'EduSense',
   description: 'A smarter way to learn — powered by AI.',
 };
 
@@ -18,12 +18,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="bg-white shadow-sm sticky top-0 z-50">
           <div className="bg-white max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="text-2xl font-bold text-blue-600">
-              Edusense
+              EduSense
             </Link>
             <nav className="space-x-6 text-sm font-medium text-gray-700">
               <Link href="/auth/login" className="hover:text-blue-600">Login</Link>
               <Link href="/auth/register" className="hover:text-blue-600">Register</Link>
-              <Link href="/auth/register" className="hover:text-blue-600">Auth Layout</Link>
             </nav>
           </div>
         </header>
@@ -35,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Footer */}
         <footer className="bg-white border-t mt-12 py-6 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} Edusense. All rights reserved.
+          © {new Date().getFullYear()} EduSense. All rights reserved.
         </footer>
       </body>
     </html>

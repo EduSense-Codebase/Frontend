@@ -18,11 +18,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="bg-white shadow-sm sticky top-0 z-50">
           <div className="bg-white mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="text-2xl font-bold text-blue-600">
-              Edusense
+              EduSense
             </Link>
             <nav className="space-x-6 text-sm font-medium text-gray-700">
-              <Link href="/auth/login" className="hover:text-blue-600">Login</Link>
-              <Link href="/auth/register" className="hover:text-blue-600">Register</Link>
+              <Link href="/auth/logout" className="hover:text-blue-600">Logout</Link>
             </nav>
           </div>
         </header>
