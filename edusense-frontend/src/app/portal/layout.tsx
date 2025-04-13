@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} bg-white text-gray-800 min-h-screen flex flex-col`}>
         {/* Header */}
         <header className="bg-white shadow-sm sticky top-0 z-50">
-          <div className="bg-white max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="bg-white mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="text-2xl font-bold text-blue-600">
               Edusense
             </Link>
@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </header>
 
         {/* Main Content */}
-        <main className="flex items-center min-h-screen bg-white max-w-4xl mx-auto px-4 py-12">
+        <main className="flex w-full h-full min-h-screen bg-white mx-auto px-4 py-12">
           {children}
         </main>
 

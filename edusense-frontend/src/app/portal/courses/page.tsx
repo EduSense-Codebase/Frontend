@@ -100,10 +100,14 @@ export default function CoursesPage() {
 
   return (
 	<>
-      <div className="flex flex-wrap gap-6 mb-10">
-        {courses.map((course) => (
-            renderCourseTile(course)
-        ))}
+      <div className="w-full h-full flex flex-wrap justify-start gap-6 mb-10">
+        {courses.map((course) => {
+            return (
+              <>
+                {renderCourseTile(course)}
+              </>
+            )
+        })}
       </div>
 
       {/* Dialog for offered courses */}
