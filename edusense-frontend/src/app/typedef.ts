@@ -28,4 +28,8 @@ export interface IAllOfferedResponse {
     data : IOfferedCourse[]
 }
 
+export interface IAllEnrolledCourseResponse {
+    data: ICourse[]
+}
+
 /* ********************* Axios Response Types END *********************** */

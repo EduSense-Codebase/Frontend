@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from "../global";
-import { IAllOfferedResponse, ICourse, IOfferedCourse, IUserInfoResponse } from '../typedef';
-import { httpGet, httpPost } from '../utils';
+import { IAllEnrolledCourseResponse, IAllOfferedResponse, ICourse, IOfferedCourse, IUserInfoResponse } from '../typedef';
+import { httpGet } from '../utils';
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<ICourse[]>([]);
@@ -23,11 +23,27 @@ export default function CoursesPage() {
         setName(response.data.data.name);
       })
       .catch((err) => {
+        //FIXME: Add Error Handling
 		console.log("HELLO 1")
         console.error(err);
       });
       
     // You can also fetch courses here if needed.
+
+    const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
+
+    let queryParams = {
+        section: "all_courses"
+    }
+
+    const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
+
+    courseResponse.then((response) => {
+        setCourses(response.data.data);
+    }).catch((err) => {
+        //FIXME: Add Error Handling
+    })
+
   }, []);
 
   const handleAction = (action: string) => {
@@ -76,7 +92,7 @@ export default function CoursesPage() {
       className="w-[250px] h-[250px] flex items-center justify-center rounded-lg text-white text-center transition-transform duration-200 shadow hover:scale-105 hover:shadow-lg active:scale-95"
       style={{ backgroundColor: courseTileArgs.color }}
     >
-      <h3 className="text-xl font-bold">{name}</h3>
+      <h3 className="text-xl font-bold">{courseTileArgs.name}</h3>
     </div>
   </Link>
     )
