@@ -2,20 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from "../global";
-import { httpPost, httpGet } from '../utils';
-
-
-interface ICourse {
-  id: number;
-  name: string;
-  color: string;
-  takenDiag: boolean;
-}
-
-interface IOfferedCourse {
-  id: number;
-  course_name: string;
-}
+import { IAllOfferedResponse, ICourse, IOfferedCourse, IUserInfoResponse } from '../typedef';
+import { httpGet, httpPost } from '../utils';
 
 const CourseTile = ({ id, name, color }: ICourse) => (
   <Link href={`/courses/${id}`} className="no-underline inline-block">
@@ -40,10 +28,10 @@ export default function CoursesPage() {
     // Example request to fetch user name (using AUTH endpoint)
     const apiUrl = API_PREFIX + AUTH_ENDPOINT;
     //const queryParams = { type: "signin" };
-	const response = httpGet(apiUrl);
+	const response = httpGet<IUserInfoResponse>(apiUrl);
     response.then((response) => {
         console.log('Success:', response.data);
-        setName(response.data.name);
+        setName(response.data.data.name);
       })
       .catch((err) => {
 		console.log("HELLO 1")
@@ -57,7 +45,7 @@ export default function CoursesPage() {
     setCurAction(action);
     const apiUrl = API_PREFIX + COURSE_ENDPOINT;
     const queryParams = { section: "all_offered_courses" };
-	const response = httpGet(apiUrl, queryParams);
+	const response = httpGet<IAllOfferedResponse>(apiUrl, queryParams);
       response.then((res) => {
         setOfferedCourses(res.data.data);
         setDialogOpen(true);
@@ -70,29 +58,31 @@ export default function CoursesPage() {
   };
 
   const handleCourseSelect = (courseID: number, action: string) => {
+    /*
     const formData = {
 		"course_id" : courseID.toString()
 	}
 
-    const apiUrl = API_PREFIX + AUTH_ENDPOINT;
+    const apiUrl = API_PREFIX + COURSE_ENDPOINT;
     const queryParams = { section: "enrollment_details" };
-	const response = httpPost(apiUrl,formData, queryParams);
+	const response = httpGet<IEnrollCourseResponse>(apiUrl, queryParams);
 
       response.then((res) => {
         if (action === 'enroll_course') {
           setCourses((prev) => [...prev, res.data.data]);
         } else {
-          setCourses((prev) => prev.filter((c) => c.id !== res.data.data));
+          setCourses((prev) => prev.filter((c) => c.id !== res.data.data as any));
         }
       })
       .catch((err) => console.error('Failed', err));
 
     setDialogOpen(false);
+    */
   };
 
   return (
 	<>
-      <h1 className="text-3xl text-gray-700 font-bold mb-6">{name}s Courses</h1>
+      {/*<h1 className="text-3xl text-gray-700 font-bold mb-6">{name}s Courses</h1>*/}
 
       <div className="flex flex-wrap gap-6 mb-10">
         {courses.map((course) => (
@@ -121,8 +111,7 @@ export default function CoursesPage() {
             <div className="mt-6 flex justify-end">
               <button
                 onClick={handleDialogClose}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" >
                 Close
               </button>
             </div>

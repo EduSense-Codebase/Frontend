@@ -3,7 +3,6 @@ import axios, { AxiosPromise } from "axios"
 axios.defaults.withCredentials = true;
 
 export function httpPost<T>(url: string, formData: object, queryParams: object): AxiosPromise<T> {
-    console.log("Hit");
     return axios.post<T>(url, formData, {
         params: queryParams,
         headers: {
