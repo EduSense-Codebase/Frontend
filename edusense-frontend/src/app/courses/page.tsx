@@ -42,7 +42,7 @@ export default function CoursesPage() {
     axios.get(apiUrl, {withCredentials: true})
       .then((response) => {
         console.log('Success:', response.data);
-        setName(response.data);
+        setName(response.data.name);
       })
       .catch((err) => {
 		console.log("HELLO 1")
@@ -55,7 +55,7 @@ export default function CoursesPage() {
   const handleAction = (action: string) => {
     setCurAction(action);
     axios
-      .get(`${host}/api/course/`, { params: { section: 'all_offered_courses' } })
+      .get(`http://localhost:8000/api/course/`, { params: { section: 'all_offered_courses' } })
       .then((res) => {
         setOfferedCourses(res.data.data);
         setDialogOpen(true);
@@ -72,7 +72,7 @@ export default function CoursesPage() {
     formData.append('course_id', courseID.toString());
 
     axios
-      .post(`${host}/api/course/`, formData, { params: { section: action } })
+      .post(`http://localhost:8000/api/course/`, formData, { params: { section: action } })
       .then((res) => {
         if (action === 'enroll_course') {
           setCourses((prev) => [...prev, res.data.data]);
@@ -96,7 +96,9 @@ export default function CoursesPage() {
       </div>
 
       {/* Dialog for offered courses */}
-      {dialogOpen && (
+      {(() => {
+        if (dialogOpen) {
+          return (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
             <h2 className="text-xl font-bold mb-4">Offered Courses</h2>
@@ -121,7 +123,9 @@ export default function CoursesPage() {
             </div>
           </div>
         </div>
-      )}
+      )
+        }
+      })()}
 
       {/* Fixed Bottom Bar for Enroll/Unenroll Buttons */}
       <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md p-4 flex justify-center gap-4 z-50">
