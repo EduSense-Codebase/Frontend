@@ -95,7 +95,7 @@ const handleCourseSelect = (courseID: number, action: string) => {
 
 const renderCourseTile = (courseTileArgs: ICourse) => {
 	return (
-		<Link key={courseTileArgs.id} href={`/portal/courses/${courseTileArgs.id}`} className="no-underline inline-block">
+		<Link key={courseTileArgs.id} href={`/portal/course_roadmap/${courseTileArgs.id}`} className="no-underline inline-block">
 	<div
 	className="w-[250px] h-[250px] flex items-center justify-center rounded-lg text-white text-center transition-transform duration-200 shadow hover:scale-105 hover:shadow-lg active:scale-95"
 	style={{ backgroundColor: courseTileArgs.color }}

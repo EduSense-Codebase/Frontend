@@ -1,9 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { AI_ENDPOINT, API_PREFIX } from "../../../global";
-import { IJourney, IJourneyResponse } from '../../../typedef';
-import { httpPost } from '../../../utils';
-import { useParams } from 'next/navigation';
+import { AI_ENDPOINT, API_PREFIX, COURSE_ENDPOINT } from "../../../global";
+import { IJourney, IJourneyResponse, INewEnrollment } from '../../../typedef';
+import { httpPost, httpGet } from '../../../utils';
+import { useParams,useRouter } from 'next/navigation';
 
 /* Local Type Defs */
 type Step = {
@@ -20,17 +20,39 @@ export default function CourseRoadmap() {
     const enrollmentId = params.enrollmentId as string;
 
     const [journey, setJourney] = useState<IJourney[]>([]);
+    const router = useRouter();
+    
+    useEffect(() => {
+        const url = API_PREFIX + COURSE_ENDPOINT
+        const queryParams = {
+            section: "course_details",
+			enrollment_id: enrollmentId?.toString()
+        }
+       
+        const response = httpGet<INewEnrollment>(url, queryParams);
+        response.then((res) => {
+            console.log("Getting course info")
+            console.log(res.data.data);
+            if(res.data.data.takenDiag == false){
+                router.push(`/portal/diagnostic/${enrollmentId}`);
+            }
+        })
+
+
+
+    }, [])
 
     useEffect(() => {
-        let queryParams = {
+        
+        const queryParams = {
             section: "generate_ai_content"
         }
 
-        let prompt_parameters = {
+        const prompt_parameters = {
             level: "beginner"
         }
 
-        let formData = {
+        const formData = {
             enrollment_id: enrollmentId,
             prompt_type: "roadmap",
             prompt_parameters: JSON.stringify(prompt_parameters)
@@ -42,7 +64,7 @@ export default function CourseRoadmap() {
 
         requestResponse.then((response) => {
             console.log(response.data);
-            let localJourney: IJourney[] = []
+            const localJourney: IJourney[] = []
             response.data.data.description.map((currDescription, index) => {
                 localJourney.push({title: response.data.data.title[index], description: currDescription});
             })
@@ -55,7 +77,7 @@ export default function CourseRoadmap() {
             <div className="relative w-full flex flex-col px-4">
                 {data.map((step, index) => {
                     const isLeft = index % 2 === 0
-                    const isLast = index === data.length - 1
+                    //const isLast = index === data.length - 1
 
                     return (
                     <div key={index} className="relative w-full mb-16">
