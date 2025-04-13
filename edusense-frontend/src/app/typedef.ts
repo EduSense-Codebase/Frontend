@@ -32,4 +32,8 @@ export interface IAllEnrolledCourseResponse {
     data: ICourse[]
 }
 
+export interface INewEnrollment{
+  data: ICourse
+}
+
 /* ********************* Axios Response Types END *********************** */
