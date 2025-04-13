@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Link from 'next/link';
-import { API_PREFIX, AUTH_ENDPOINT } from "../global";
+import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from "../global";
+import { httpPost, httpGet } from '../utils';
+
 
 interface ICourse {
   id: number;
@@ -39,8 +40,8 @@ export default function CoursesPage() {
     // Example request to fetch user name (using AUTH endpoint)
     const apiUrl = API_PREFIX + AUTH_ENDPOINT;
     //const queryParams = { type: "signin" };
-    axios.get(apiUrl, {withCredentials: true})
-      .then((response) => {
+	const response = httpGet(apiUrl);
+    response.then((response) => {
         console.log('Success:', response.data);
         setName(response.data.name);
       })
@@ -54,9 +55,10 @@ export default function CoursesPage() {
 
   const handleAction = (action: string) => {
     setCurAction(action);
-    axios
-      .get(`http://localhost:8000/api/course/`, { params: { section: 'all_offered_courses' } })
-      .then((res) => {
+    const apiUrl = API_PREFIX + COURSE_ENDPOINT;
+    const queryParams = { section: "all_offered_courses" };
+	const response = httpGet(apiUrl, queryParams);
+      response.then((res) => {
         setOfferedCourses(res.data.data);
         setDialogOpen(true);
       })
@@ -68,12 +70,15 @@ export default function CoursesPage() {
   };
 
   const handleCourseSelect = (courseID: number, action: string) => {
-    const formData = new FormData();
-    formData.append('course_id', courseID.toString());
+    const formData = {
+		"course_id" : courseID.toString()
+	}
 
-    axios
-      .post(`http://localhost:8000/api/course/`, formData, { params: { section: action } })
-      .then((res) => {
+    const apiUrl = API_PREFIX + AUTH_ENDPOINT;
+    const queryParams = { section: "enrollment_details" };
+	const response = httpPost(apiUrl,formData, queryParams);
+
+      response.then((res) => {
         if (action === 'enroll_course') {
           setCourses((prev) => [...prev, res.data.data]);
         } else {
