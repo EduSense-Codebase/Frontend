@@ -4,6 +4,7 @@ import { AI_ENDPOINT, API_PREFIX, COURSE_ENDPOINT } from "../../../global";
 import { IJourney, IJourneyResponse, INewEnrollment } from '../../../typedef';
 import { httpPost, httpGet } from '../../../utils';
 import { useParams,useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 /* Local Type Defs */
 type Step = {
@@ -87,7 +88,7 @@ export default function CourseRoadmap() {
                         {isLeft && (
                             <div className="w-1/2 pr-6 flex justify-end">
                             <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-right border border-gray-200">
-                                <h3 className="text-xl text-black">{step.title}</h3>
+                                <Link className="text-xl text-black" href={`/portal/article/${enrollmentId}/${step.title}`}>{step.title}</Link>
                                 {step.description && (
                                 <p className="text-sm text-gray-600 mt-2">{step.description}</p>
                                 )}
@@ -99,7 +100,7 @@ export default function CourseRoadmap() {
                         {!isLeft && (
                             <div className="w-1/2 pl-6 flex justify-start">
                             <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-left border border-gray-200">
-                                <h3 className="text-xl text-black">{step.title}</h3>
+                                <Link className="text-xl text-black" href={`/portal/article/${enrollmentId}/${step.title}`}>{step.title}</Link>
                                 {step.description && (
                                 <p className="text-sm text-gray-600 mt-2">{step.description}</p>
                                 )}

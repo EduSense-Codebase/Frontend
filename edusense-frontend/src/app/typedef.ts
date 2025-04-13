@@ -21,6 +21,10 @@ export interface IJourney {
     description: string
 }
 
+export interface IArticle {
+    article: string
+}
+
 /* ********************* Generic Types END *********************** */
 
 /* ********************* Axios Response Types START ********************* */
@@ -46,6 +50,10 @@ export interface IJourneyResponse {
         title: string[];
         description: string[];
     }
+}
+
+export interface IArticleResponse {
+    data: IArticle
 }
 
 /* ********************* Axios Response Types END *********************** */
