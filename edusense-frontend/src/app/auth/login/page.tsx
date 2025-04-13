@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { API_PREFIX, AUTH_ENDPOINT } from "../global";
-import { httpPost } from "../utils";
-import Form, { IFormFieldBase } from "../ui_components/Form";
+import { API_PREFIX, AUTH_ENDPOINT } from "../../global";
+import { httpPost } from "../../utils";
+import Form, { IFormFieldBase } from "../../ui_components/Form";
 
 export default function LoginPage() {
 const [email, setEmail] = useState("");
@@ -53,7 +53,7 @@ const handleLogin = () => {
 	const response = httpPost(apiUrl, form, queryParams);
 	response.then((response) => {
 		console.log("Login successful:", response.data);
-		router.push("/courses");
+		router.push("/portal/courses");
 
 	}).catch((err) => {
 		console.log("WHY")

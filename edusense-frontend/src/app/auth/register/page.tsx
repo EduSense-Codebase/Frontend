@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Form, { IFormFieldBase } from '../ui_components/Form';
-import { API_PREFIX, AUTH_ENDPOINT } from '../global';
-import { httpPost } from '../utils';
+import Form, { IFormFieldBase } from '../../ui_components/Form';
+import { API_PREFIX, AUTH_ENDPOINT } from '../../global';
+import { httpPost } from '../../utils';
 
 const Register: React.FC = () => {
 	const [fname, setFname] = useState('');
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
 		registerPromise.then((response) => {
 			console.log("Successfully Registered")
 			console.log(response.data)
-			router.push('/login');
+			router.push('/auth/login');
 		}).catch((err) => {
 			console.log("Something went wrong while registering")
 			console.log(err)

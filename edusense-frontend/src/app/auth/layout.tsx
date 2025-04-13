@@ -1,5 +1,5 @@
 // app/layout.tsx
-import './globals.css';
+import '../globals.css';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
 
@@ -21,8 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Edusense
             </Link>
             <nav className="space-x-6 text-sm font-medium text-gray-700">
-              <Link href="/login" className="hover:text-blue-600">Login</Link>
-              <Link href="/register" className="hover:text-blue-600">Register</Link>
+              <Link href="/auth/login" className="hover:text-blue-600">Login</Link>
+              <Link href="/auth/register" className="hover:text-blue-600">Register</Link>
+              <Link href="/auth/register" className="hover:text-blue-600">Auth Layout</Link>
             </nav>
           </div>
         </header>

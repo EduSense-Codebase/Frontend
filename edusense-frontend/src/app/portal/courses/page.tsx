@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from "../global";
-import { IAllEnrolledCourseResponse, IAllOfferedResponse, ICourse, IOfferedCourse, IUserInfoResponse } from '../typedef';
-import { httpGet } from '../utils';
+import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from "../../global";
+import { IAllEnrolledCourseResponse, IAllOfferedResponse, ICourse, IOfferedCourse, IUserInfoResponse } from '../../typedef';
+import { httpGet } from '../../utils';
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<ICourse[]>([]);
@@ -87,7 +87,7 @@ export default function CoursesPage() {
 
   const renderCourseTile = (courseTileArgs: ICourse) => {
     return (
-        <Link href={`/courses/${courseTileArgs.id}`} className="no-underline inline-block">
+        <Link key={courseTileArgs.id} href={`/portal/courses/${courseTileArgs.id}`} className="no-underline inline-block">
     <div
       className="w-[250px] h-[250px] flex items-center justify-center rounded-lg text-white text-center transition-transform duration-200 shadow hover:scale-105 hover:shadow-lg active:scale-95"
       style={{ backgroundColor: courseTileArgs.color }}
