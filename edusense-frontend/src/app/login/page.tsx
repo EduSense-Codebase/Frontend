@@ -1,73 +1,79 @@
-// app/login/page.tsx
 'use client';
 
 import { useState } from "react";
-//import axios from 'axios'
+import { useRouter } from "next/navigation";
 import { API_PREFIX, AUTH_ENDPOINT } from "../global";
 import { httpPost } from "../utils";
-import { useRouter } from "next/navigation";
+import Form, { IFormFieldBase } from "../ui_components/Form";
 
-export default function LoginPage(){
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+export default function LoginPage() {
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const router = useRouter();
 
-  const router = useRouter()
-  const handleLogin = (e: React.FormEvent) => {
-		e.preventDefault()
-		console.log("logging in")
-    const apiUrl = API_PREFIX + AUTH_ENDPOINT;
-		const queryParams = {
-			type: "signin"
-		}
-    const form = new FormData
-    form.append("email", email)
-    form.append("password", password)
+const fields: IFormFieldBase[] = [
+	{
+	type: "email",
+	placeholder: "Enter your email",
+	value: email,
+	callbackID: "email",
+	label: "Email",
+	className: "login-input",
+	},
+	{
+	type: "password",
+	placeholder: "Enter your password",
+	value: password,
+	callbackID: "password",
+	label: "Password",
+	className: "login-input",
+	},
+];
 
+const handleFieldChange = (id: string, val: string) => {
+	if (id === "email") setEmail(val);
+	if (id === "password") setPassword(val);
+};
 
-		const signupPromise = httpPost(apiUrl, form, queryParams)
+const handleLogin = () => {
+	//e.preventDefault();
+	const apiUrl = API_PREFIX + AUTH_ENDPOINT;
+	const queryParams = { type: "signin" };
 
-		signupPromise.then((response) => {
-			console.log("Successfull");
-			console.log(response.data);
-      router.push("/courses")
-		}).catch((err) => {
-			console.log("Error")
-			console.log(err)
-		})
+	// const form = new FormData();
+	// form.append("email", email);
+	// form.append("password", password);
 
-	}
+	const form = {
+	"email": email,
+	"password": password
+	};
 
-	return (
-		<form
-      className="w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5"
-      onSubmit={handleLogin}
-    >
-      <h2 className="text-2xl font-semibold text-gray-800 text-center">Log In</h2>
+	
+	const response = httpPost(apiUrl, form, queryParams);
+	response.then((response) => {
+		console.log("Login successful:", response.data);
+		router.push("/courses");
 
-      <input
-        type="email"
-        placeholder="Email"
-        className="w-full border border-gray-300 px-4 py-2 rounded-md text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        onChange={ (e)=> setEmail(e.target.value)}
-        required
-      />
+	}).catch((err) => {
+		console.log("WHY")
+		console.log(err)
+	})
 
-      <input
-        type="password"
-        placeholder="Password"
-        className="w-full border border-gray-300 px-4 py-2 rounded-md text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        onChange={ (e)=> setPassword(e.target.value)}
-        required
-      />
+};
 
-      <button
-        type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-semibold transition"
-      >
-        Log In
-      </button>
-    </form>
-	  );
-
-
+return (
+		<Form
+		metadata={{
+			heading: 'Login',
+			formClassName:
+			'w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5',
+			inputGroupClassName: 'space-y-1',
+		}}
+		fields={fields}
+		callbackFunc={handleFieldChange}
+		submitCallback={handleLogin}
+		submitDisplayName="Login"
+		/>
+);
 }

@@ -8,3 +8,9 @@ export function httpPost<T>(url: string, formData: object, queryParams: object):
         }
     })
 }
+
+export function httpGet<T>(url: string, queryParams: object): AxiosPromise<T> {
+    return axios.get<T>(url, {
+        params: queryParams,
+    })
+}

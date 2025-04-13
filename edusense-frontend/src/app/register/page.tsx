@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import Form, { IFormFieldBase } from '../ui_components/Form';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
 import { httpPost } from '../utils';
@@ -59,23 +58,25 @@ const Register: React.FC = () => {
 	};
 
 	const handleSubmit = () => {
-		let API_URL = API_PREFIX + AUTH_ENDPOINT;
-		let formData = {
+		const API_URL = API_PREFIX + AUTH_ENDPOINT;
+		const formData = {
 			name: fname + " " + lname,
 			email: email,
 			password: password,
 			age: 10
 		};
-		let queryParams = {
+		const queryParams = {
 			type: "signup"
 		}
 		const registerPromise = httpPost(API_URL, formData, queryParams);
 
 		registerPromise.then((response) => {
 			console.log("Successfully Registered")
+			console.log(response.data)
 			router.push('/login');
 		}).catch((err) => {
 			console.log("Something went wrong while registering")
+			console.log(err)
 		})
 	};
 
