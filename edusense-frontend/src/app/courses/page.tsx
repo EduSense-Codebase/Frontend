@@ -5,17 +5,6 @@ import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from "../global";
 import { IAllOfferedResponse, ICourse, IOfferedCourse, IUserInfoResponse } from '../typedef';
 import { httpGet, httpPost } from '../utils';
 
-const CourseTile = ({ id, name, color }: ICourse) => (
-  <Link href={`/courses/${id}`} className="no-underline inline-block">
-    <div
-      className="w-[250px] h-[250px] flex items-center justify-center rounded-lg text-white text-center transition-transform duration-200 shadow hover:scale-105 hover:shadow-lg active:scale-95"
-      style={{ backgroundColor: color }}
-    >
-      <h3 className="text-xl font-bold">{name}</h3>
-    </div>
-  </Link>
-);
-
 export default function CoursesPage() {
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [name, setName] = useState("");
@@ -80,13 +69,24 @@ export default function CoursesPage() {
     */
   };
 
+  const renderCourseTile = (courseTileArgs: ICourse) => {
+    return (
+        <Link href={`/courses/${courseTileArgs.id}`} className="no-underline inline-block">
+    <div
+      className="w-[250px] h-[250px] flex items-center justify-center rounded-lg text-white text-center transition-transform duration-200 shadow hover:scale-105 hover:shadow-lg active:scale-95"
+      style={{ backgroundColor: courseTileArgs.color }}
+    >
+      <h3 className="text-xl font-bold">{name}</h3>
+    </div>
+  </Link>
+    )
+  }
+
   return (
 	<>
-      {/*<h1 className="text-3xl text-gray-700 font-bold mb-6">{name}s Courses</h1>*/}
-
       <div className="flex flex-wrap gap-6 mb-10">
         {courses.map((course) => (
-          <CourseTile key={course.id} {...course} />
+            renderCourseTile(course)
         ))}
       </div>
 
