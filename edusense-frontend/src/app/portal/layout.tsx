@@ -2,6 +2,7 @@
 import '../globals.css';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
+import ChatWidget from '../ui_components/ChatWidget';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} bg-white text-gray-800 min-h-screen flex flex-col`}>
         {/* Header */}
         <header className="bg-white shadow-sm sticky top-0 z-50">
-          <div className="bg-white mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="z-40 bg-white mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="text-2xl font-bold text-blue-600">
               EduSense
             </Link>
@@ -28,8 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Main Content */}
         <main className="flex w-full h-full min-h-screen bg-white mx-auto px-4 py-12">
+          <ChatWidget/>
           {children}
+          
         </main>
+
 
         {/* Footer */}
         <footer className="bg-white border-t mt-12 py-6 text-center text-sm text-gray-500">
