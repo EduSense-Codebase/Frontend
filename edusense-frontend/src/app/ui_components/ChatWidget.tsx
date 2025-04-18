@@ -44,15 +44,15 @@ const ChatWidget = (props: IChatWidgetProps) => {
 
     context += `New User Message ${input}\n`;
     console.log(context)
-    let queryParams = {
+    const queryParams = {
             section: "generate_ai_content"
         }
 
-      let prompt_parameters = {
+      const prompt_parameters = {
           "message": context
       }
 
-      let formData = {
+      const formData = {
           enrollment_id: props.enrollmentId,
           prompt_type: "frontend_ai",
           prompt_parameters: JSON.stringify(prompt_parameters)
