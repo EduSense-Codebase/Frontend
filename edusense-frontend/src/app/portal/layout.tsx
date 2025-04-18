@@ -1,17 +1,31 @@
 // app/layout.tsx
+'use client';
 import '../globals.css';
+import React, { useState } from "react";
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import ChatWidget from '../ui_components/ChatWidget';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'Edusense',
-  description: 'A smarter way to learn — powered by AI.',
+interface ICustomProps {
+  setPageContext: React.Dispatch<React.SetStateAction<string>>,
+  setEnrollmentId: React.Dispatch<React.SetStateAction<number>>
+}
+
+const CustomPropContext = React.createContext<ICustomProps | undefined>(undefined);
+export const useCustomProp = () => {
+  const value = React.useContext(CustomPropContext);
+  if (value === undefined) {
+    throw new Error('useCustomProp must be used within a CustomPropProvider');
+  }
+  return value;
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const [pageContext, setPageContext] = useState("");
+  const [enrollmentId, setEnrollmentId] = useState(-1);
+
   return (
     <html lang="en" className="bg-white min-h-full">
       <body className={`${inter.className} bg-white text-gray-800 min-h-screen flex flex-col`}>
@@ -29,8 +43,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Main Content */}
         <main className="flex w-full h-full min-h-screen bg-white mx-auto px-4 py-12">
-          <ChatWidget/>
-          {children}
+          <ChatWidget pageContext={pageContext} enrollmentId={enrollmentId}  />
+          <CustomPropContext.Provider value={{setPageContext: setPageContext, setEnrollmentId: setEnrollmentId}}>
+            {children}
+          </CustomPropContext.Provider>
           
         </main>
 

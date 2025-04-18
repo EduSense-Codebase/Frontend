@@ -56,4 +56,10 @@ export interface IArticleResponse {
     data: IArticle
 }
 
+export interface IFrontendAIResponse {
+  data: {
+    response: string
+  }
+}
+
 /* ********************* Axios Response Types END *********************** */

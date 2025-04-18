@@ -1,32 +1,73 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./Button";
-//import Input from "./Input";
+import { AI_ENDPOINT, API_PREFIX } from "../global";
+import { httpPost } from "../utils";
+import { IFrontendAIResponse } from "../typedef";
 
-const ChatWidget = () => {
+interface IChatWidgetProps {
+  pageContext: string
+  enrollmentId: number
+}
+
+const ChatWidget = (props: IChatWidgetProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ sender: "user" | "ai"; text: string }[]>([]);
   const [input, setInput] = useState("");
 
+  const [currentContext, setCurrentContext] = useState("");
+
   const toggleChat = () => setIsOpen(!isOpen);
 
+  useEffect(() => {
+    setCurrentContext(props.pageContext);
+  }, [props.pageContext]);
+
+  const stringifyContext = () => {
+    let context = `This is what the user is seeing currently: ${currentContext}\n`;
+    context += "This is the previous conversation you had with this person:\n";
+    messages.forEach((currMessage) => {
+      context += `Sender ${currMessage.sender} Message: ${currMessage.text}\n`;
+    })
+    return context;
+  }
+
   const sendMessage = () => {
-    
-    //TO-DO: SEND CHAT AS CONTEXT TO BACKEND
-    console.log("Chat sent")
-    
     if (input.trim() === "") return;
 
-    setMessages([...messages, { sender: "user", text: input }]);
+    setMessages((currMessages) => {
+      return [...currMessages, { sender: "user", text: input}];
+    })
     setInput("");
 
-    // Simulated AI response (replace with API call)
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { sender: "ai", text: "I'm Edusense AI, here to help!" },
-      ]);
-    }, 600);
+    let context = stringifyContext();
+
+    context += `New User Message ${input}\n`;
+    console.log(context)
+    let queryParams = {
+            section: "generate_ai_content"
+        }
+
+      let prompt_parameters = {
+          "message": context
+      }
+
+      let formData = {
+          enrollment_id: props.enrollmentId,
+          prompt_type: "frontend_ai",
+          prompt_parameters: JSON.stringify(prompt_parameters)
+      }
+      
+      const API_URL = API_PREFIX + AI_ENDPOINT;
+
+      const requestResponse = httpPost<IFrontendAIResponse>(API_URL, formData, queryParams)
+
+      requestResponse.then((response) => {
+          console.log(response.data);
+          setMessages((currMessage) => {
+            return [...currMessage, { sender: "ai", text: response.data.data.response}];
+          })
+      })
   };
 
   return (
