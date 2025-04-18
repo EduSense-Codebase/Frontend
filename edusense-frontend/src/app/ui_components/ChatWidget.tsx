@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Button from "./Button";
+//import Input from "./Input";
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,30 +44,19 @@ const ChatWidget = () => {
         </button>
       )}
 
-            {/* Full-screen close button (top right corner) */}
-        {isOpen && (
-            <button
-            onClick={toggleChat}
-            className="fixed top-4 right-4 z-50 bg-gray-100 hover:bg-gray-200 p-2 rounded-full shadow"
-            >
-            <svg className="z-50 w-5 h-5 text-gray-800" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            </button>
-      )}
 
       {/* Chat Panel */}
       {isOpen && (
         <div className="z-50 fixed bottom-0 right-0 top-0 w-full sm:w-[400px] bg-white shadow-xl z-40 flex flex-col border-l border-gray-200 transition-all">
           {/* Header */}
-          <div className="p-4 border-b flex justify-between items-center">
-            <h2 className="font-semibold text-gray-700 text-lg">Edusense AI Chat</h2>
-            <button onClick={toggleChat}>
-              <svg className="w-5 h-5 text-gray-600 hover:text-black" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+            <div className="p-4 border-b flex justify-between items-center">
+                <h2 className="font-semibold text-gray-700 text-lg">EduSense AI Chat</h2>
+                <button onClick={toggleChat}>
+                <svg className="w-5 h-5 text-gray-600 hover:text-black" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                </button>
+            </div>
 
           {/* Chat messages */}
           <div className="flex-1 p-4 overflow-y-auto space-y-2">

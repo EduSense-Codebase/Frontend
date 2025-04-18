@@ -44,6 +44,81 @@ export default function CourseRoadmap() {
     }, [])
 
     useEffect(() => {
+
+        const cache_query_params = {
+            section: "retrieve_cache",
+            enroll_id: enrollmentId,
+            cache_request: "roadmap"
+        }
+
+
+        const API_URL = API_PREFIX + AI_ENDPOINT;
+        const cacheResponse = httpGet<IJourneyResponse>(API_URL, cache_query_params);
+        cacheResponse.then((response) => {
+            console.log(response);
+            if(response.data != null){
+                const localJourney: IJourney[] = []
+                response.data.data.description.map((currDescription, index) => {
+                localJourney.push({title: response.data.data.title[index], description: currDescription});
+            }
+        )
+            setJourney(localJourney);
+
+            }else{
+                const queryParams = {
+                    section: "generate_ai_content",
+                };
+
+                const prompt_parameters = {
+                    level: "beginner",
+                };
+
+                const formData = {
+                    enrollment_id: enrollmentId,
+                    prompt_type: "roadmap",
+                    prompt_parameters: JSON.stringify(prompt_parameters),
+                };
+
+                httpPost<IJourneyResponse>(API_URL, formData, queryParams)
+                    .then((response) => {
+                        console.log("Generated AI response:", response.data);
+
+                        const localJourney: IJourney[] = [];
+                        response.data.data.description.map((currDescription, index) => {
+                            localJourney.push({
+                                title: response.data.data.title[index],
+                                description: currDescription,
+                            });
+                        });
+
+                        setJourney(localJourney)
+                    }).catch((err) => {
+                        console.log("Generating Error");
+                        console.log(err);
+                    });
+
+                    const cacheSaveParams = {
+                        section: "set_cache_content"
+                    }
+                    
+                    const cacheSaveData = {
+                        enroll_id: enrollmentId,
+                        cache_request: "roadmap",
+                        cache_content: journey,
+
+                    }
+                    const cachePost = httpPost(API_URL, cacheSaveData, cacheSaveParams);
+                    cachePost.then((res) => {
+                        console.log(res);
+                    }).catch((error) => {
+                        console.log("ERROR setting the cache");
+                        console.log(error);
+                    })
+
+
+
+            }
+        })
         
         const queryParams = {
             section: "generate_ai_content"
@@ -59,7 +134,6 @@ export default function CourseRoadmap() {
             prompt_parameters: JSON.stringify(prompt_parameters)
         }
         
-        const API_URL = API_PREFIX + AI_ENDPOINT;
 
         const requestResponse = httpPost<IJourneyResponse>(API_URL, formData, queryParams)
 
