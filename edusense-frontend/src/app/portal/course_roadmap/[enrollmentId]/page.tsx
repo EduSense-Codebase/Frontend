@@ -35,118 +35,90 @@ export default function CourseRoadmap() {
             console.log(res.data.data);
             if(res.data.data.takenDiag == false){
                 router.push(`/portal/diagnostic/${enrollmentId}`);
-            }
-        })
-
-
-
-    }, [])
-
-    useEffect(() => {
-
-        const cache_query_params = {
-            section: "retrieve_cache",
-            enroll_id: enrollmentId,
-            cache_request: "roadmap"
-        }
-
-
-        const API_URL = API_PREFIX + AI_ENDPOINT;
-        const cacheResponse = httpGet<IJourneyResponse>(API_URL, cache_query_params);
-        cacheResponse.then((response) => {
-
-            if(response.data.data != null){
-                console.log("Fetching from the cache...")
-                console.log(response);
-                const localJourney: IJourney[] = [];
-                        response.data.data.description.map((currDescription, index) => {
-                            localJourney.push({
-                                title: response.data.data.title[index],
-                                description: currDescription,
-                            });
-                        });
-                setJourney(localJourney);
             }else{
-                console.log("Manually generating...");
-                const queryParams = {
-                    section: "generate_ai_content",
-                };
 
-                const prompt_parameters = {
-                    level: "beginner",
-                };
+                const cache_query_params = {
+                    section: "retrieve_cache",
+                    enroll_id: enrollmentId,
+                    cache_request: "roadmap"
+                }
 
-                const formData = {
-                    enrollment_id: enrollmentId,
-                    prompt_type: "roadmap",
-                    prompt_parameters: JSON.stringify(prompt_parameters),
-                };
+                const API_URL = API_PREFIX + AI_ENDPOINT;
+                const cacheResponse = httpGet<IJourneyResponse>(API_URL, cache_query_params);
+                cacheResponse.then((response) => {
 
-                httpPost<IJourneyResponse>(API_URL, formData, queryParams)
-                    .then((response) => {
-                        console.log("Generated AI response:", response.data);
-
+                    if(response.data.data != null){
+                        console.log("Fetching from the cache...")
+                        console.log(response);
                         const localJourney: IJourney[] = [];
-                        response.data.data.description.map((currDescription, index) => {
-                            localJourney.push({
-                                title: response.data.data.title[index],
-                                description: currDescription,
+                                response.data.data.description.map((currDescription, index) => {
+                                    localJourney.push({
+                                        title: response.data.data.title[index],
+                                        description: currDescription,
+                                    });
+                                });
+                        setJourney(localJourney);
+                    }else{
+                        console.log("Manually generating...");
+                        const queryParams = {
+                            section: "generate_ai_content",
+                        };
+
+                        const prompt_parameters = {
+                            level: "beginner",
+                        };
+
+                        const formData = {
+                            enrollment_id: enrollmentId,
+                            prompt_type: "roadmap",
+                            prompt_parameters: JSON.stringify(prompt_parameters),
+                        };
+
+                        httpPost<IJourneyResponse>(API_URL, formData, queryParams)
+                            .then((response) => {
+                                console.log("Generated AI response:", response.data);
+
+                                const localJourney: IJourney[] = [];
+                                response.data.data.description.map((currDescription, index) => {
+                                    localJourney.push({
+                                        title: response.data.data.title[index],
+                                        description: currDescription,
+                                    });
+                                });
+
+                                setJourney(localJourney)
+
+                                const cacheSaveParams = {
+                                    section: "set_cache_content"
+                                }
+                                
+                                const cacheSaveData = {
+                                    enroll_id: enrollmentId,
+                                    cache_request: "roadmap",
+                                    cache_content: JSON.stringify(response.data.data),
+
+                                }
+                                const cachePost = httpPost(API_URL, cacheSaveData, cacheSaveParams);
+                                cachePost.then((res) => {
+                                    console.log(res);
+                                }).catch((error) => {
+                                    console.log("ERROR setting the cache");
+                                    console.log(error);
+                                });
+                            }).catch((err) => {
+                                console.log("Generating Error");
+                                console.log(err);
                             });
-                        });
 
-                        setJourney(localJourney)
 
-                        const cacheSaveParams = {
-                            section: "set_cache_content"
-                        }
-                        
-                        const cacheSaveData = {
-                            enroll_id: enrollmentId,
-                            cache_request: "roadmap",
-                            cache_content: JSON.stringify(response.data.data),
-
-                        }
-                        const cachePost = httpPost(API_URL, cacheSaveData, cacheSaveParams);
-                        cachePost.then((res) => {
-                            console.log(res);
-                        }).catch((error) => {
-                            console.log("ERROR setting the cache");
-                            console.log(error);
-                        });
-                    }).catch((err) => {
-                        console.log("Generating Error");
-                        console.log(err);
-                    });
-
+                    }
+                })
 
             }
         })
-        
-        // const queryParams = {
-        //     section: "generate_ai_content"
-        // }
 
-        // const prompt_parameters = {
-        //     level: "beginner"
-        // }
 
-        // const formData = {
-        //     enrollment_id: enrollmentId,
-        //     prompt_type: "roadmap",
-        //     prompt_parameters: JSON.stringify(prompt_parameters)
-        // }
-        
 
-        // const requestResponse = httpPost<IJourneyResponse>(API_URL, formData, queryParams)
-
-        // requestResponse.then((response) => {
-        //     console.log(response.data);
-        //     const localJourney: IJourney[] = []
-        //     response.data.data.description.map((currDescription, index) => {
-        //         localJourney.push({title: response.data.data.title[index], description: currDescription});
-        //     })
-        //     setJourney(localJourney);
-        // })
     }, [])
 
     const renderRoadmap = ({ data }: Props) => {
