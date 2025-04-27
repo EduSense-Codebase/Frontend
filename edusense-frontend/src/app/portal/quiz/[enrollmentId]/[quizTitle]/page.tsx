@@ -18,12 +18,13 @@ export interface IQuizResponse{
 export default function QuizPage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
-    const quizName = params.quizTitle as string
+    const quizName = decodeURIComponent(params.quizTitle  as string)
 
     const [started, setStarted] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
     const [cleanTitle, setCleanTitle] = useState("");
+    const [quiz, setQuiz] = useState<IQuiz>();
 
     useEffect(() => {
         const quizTitleArray = quizName.split("%")
@@ -46,6 +47,8 @@ export default function QuizPage() {
         const response = httpPost<IQuizResponse>(apiUrl, formData, queryParams);
         response.then((response) => {
             console.log(response.data)
+            console.log(response.data.data)
+            setQuiz(response.data.data)
 
         })
 
@@ -79,7 +82,7 @@ export default function QuizPage() {
     };
 
     const handleNext = () => {
-        if (currentQuestionIndex < questions.length - 1) {
+        if (currentQuestionIndex < quiz?.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedAnswer(null); // reset selection
         } else {
@@ -88,7 +91,7 @@ export default function QuizPage() {
         }
     };
 
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+    const progress = ((currentQuestionIndex + 1) / quiz?.length) * 100;
 
     return (
         <div className="min-h-screen flex items-center justify-center w-full bg-white">
@@ -123,25 +126,26 @@ export default function QuizPage() {
 
                 {/* Question */}
                 <h2 className="text-2xl font-semibold text-gray-800 mt-6">
-                {questions[currentQuestionIndex].question}
+                {quiz?.questions[currentQuestionIndex]  }
                 </h2>
 
                 {/* Options */}
                 <div className="flex flex-col gap-4 mt-4 text-gray-500">
-                {questions[currentQuestionIndex].options.map((option, index) => (
-                    <button
-                    key={index}
-                    onClick={() => handleSelectAnswer(index)}
-                    className={`w-full text-left p-4 rounded-lg border font-medium transition duration-200 ${
-                        selectedAnswer === index
-                        ? 'bg-indigo-500 text-white border-indigo-500'
-                        : 'bg-gray-100 hover:bg-indigo-100 border-gray-300 text-gray-700'
-                    }`}
-                    >
-                    {option}
-                    </button>
-                ))}
+                    {quiz?.questions[currentQuestionIndex] && quiz?.choices[currentQuestionIndex]?.map((option, index) => (
+                        <button
+                        key={index}
+                        onClick={() => handleSelectAnswer(index)}
+                        className={`w-full text-left p-4 rounded-lg border font-medium transition duration-200 ${
+                            selectedAnswer === index
+                            ? 'bg-indigo-500 text-white border-indigo-500'
+                            : 'bg-gray-100 hover:bg-indigo-100 border-gray-300 text-gray-700'
+                        }`}
+                        >
+                        {option}
+                        </button>
+                    ))}
                 </div>
+
 
                 {/* Next Button */}
                 <div className="flex justify-end mt-8">
