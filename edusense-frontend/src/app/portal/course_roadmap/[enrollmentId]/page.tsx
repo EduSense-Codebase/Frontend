@@ -136,7 +136,11 @@ export default function CourseRoadmap() {
                         {isLeft && (
                             <div className="w-1/2 pr-6 flex justify-end">
                             <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-right border border-gray-200">
-                                <Link className="text-xl text-black" href={`/portal/article/${enrollmentId}/${step.title}`}>{step.title}</Link>
+                                <Link className="text-xl text-black" href={
+                                     step.title.toLowerCase().includes("quiz")
+                                     ? `/portal/quiz/${enrollmentId}/${step.title}`
+                                     : `/portal/article/${enrollmentId}/${step.title}`
+                                }>{step.title}</Link>
                                 {step.description && (
                                 <p className="text-sm text-gray-600 mt-2">{step.description}</p>
                                 )}
@@ -148,7 +152,11 @@ export default function CourseRoadmap() {
                         {!isLeft && (
                             <div className="w-1/2 pl-6 flex justify-start">
                             <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-left border border-gray-200">
-                                <Link className="text-xl text-black" href={`/portal/article/${enrollmentId}/${step.title}`}>{step.title}</Link>
+                                <Link className="text-xl text-black" href={
+                                     step.title.toLowerCase().includes("quiz")
+                                     ? `/portal/quiz/${enrollmentId}/${step.title}`
+                                     : `/portal/article/${enrollmentId}/${step.title}`
+                                }>{step.title}</Link>
                                 {step.description && (
                                 <p className="text-sm text-gray-600 mt-2">{step.description}</p>
                                 )}
