@@ -133,7 +133,13 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
                   hasSubmitted={hasSubmitted}
                   onSelect={handleSelectAnswer}
                 />
+                
               ))}
+              {hasSubmitted &&(
+              <div className="mt-4 p-4 bg-gray-100 border border-gray-300 rounded-lg text-gray-700">
+                    <strong>Explanation:</strong> {quiz?.reasoning[currentQuestionIndex][selectedAnswer]}
+              </div>)
+                }
             </div>
   
             {/* Buttons */}
