@@ -25,6 +25,14 @@ export interface IArticle {
     article: string
 }
 
+export interface IQuiz{
+    questions: string[]
+    choices:string[][]
+    correct_ans: string[]
+    reasoning: string[][]
+    length: number
+}
+
 /* ********************* Generic Types END *********************** */
 
 /* ********************* Axios Response Types START ********************* */
@@ -60,6 +68,10 @@ export interface IFrontendAIResponse {
   data: {
     response: string
   }
+}
+
+export interface IQuizResponse{
+    data: IQuiz 
 }
 
 /* ********************* Axios Response Types END *********************** */
