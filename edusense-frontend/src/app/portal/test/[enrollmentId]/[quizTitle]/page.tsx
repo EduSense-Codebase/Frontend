@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { httpPost } from '../../../../utils';
-import { AI_ENDPOINT, API_PREFIX, QUIZ_LENGTH } from "../../../../global";
+import { AI_ENDPOINT, API_PREFIX, TEST_LENGTH } from "../../../../global";
 import { IQuiz, IQuizResponse} from '../../../../typedef';
 import Quiz from '../../../../ui_components/Quiz'
 
@@ -22,7 +22,7 @@ export default function QuizPage() {
         }
         const prompt_parameters = {
             "title": quizName,
-            "length": QUIZ_LENGTH
+            "length": TEST_LENGTH
 
         }
         const formData = {

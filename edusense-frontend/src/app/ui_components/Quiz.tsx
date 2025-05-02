@@ -94,7 +94,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
     return (
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-3xl">
         <h1 className="text-3xl text-gray-700 font-bold mb-8 text-center">
-          Quiz: {title || "Untitled"}
+          {title || "Untitled"}
         </h1>
   
         {!started ? (
@@ -103,7 +103,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
               onClick={handleStart}
               className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition duration-300"
             >
-              Start Quiz
+              Start
             </button>
           </div>
         ) : (
