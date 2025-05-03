@@ -25,7 +25,6 @@ useEffect(() => {
 	})
 	.catch((err) => {
 		//FIXME: Add Error Handling
-		console.log("HELLO 1")
 		console.error(err);
 	});
 	

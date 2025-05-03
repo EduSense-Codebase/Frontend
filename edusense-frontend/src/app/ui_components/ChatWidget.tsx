@@ -4,10 +4,14 @@ import Button from "./Button";
 import { AI_ENDPOINT, API_PREFIX } from "../global";
 import { httpPost } from "../utils";
 import { IFrontendAIResponse } from "../typedef";
+import { IQuiz } from "../typedef";
 
 interface IChatWidgetProps {
   pageContext: string
   enrollmentId: number
+  quiz: IQuiz | null | undefined
+
+  article: string | null
 }
 
 const ChatWidget = (props: IChatWidgetProps) => {
@@ -15,16 +19,23 @@ const ChatWidget = (props: IChatWidgetProps) => {
   const [messages, setMessages] = useState<{ sender: "user" | "ai"; text: string }[]>([]);
   const [input, setInput] = useState("");
 
-  const [currentContext, setCurrentContext] = useState("");
+  const [currentContext, setCurrentContext] = useState<IChatWidgetProps>();
 
   const toggleChat = () => setIsOpen(!isOpen);
 
   useEffect(() => {
-    setCurrentContext(props.pageContext);
-  }, [props.pageContext]);
+    setCurrentContext(props);
+  }, [props]);
 
   const stringifyContext = () => {
-    let context = `This is what the user is seeing currently: ${currentContext}\n`;
+    let context = `This is what the user is seeing currently: ${currentContext?.pageContext}\n`;
+    if(currentContext?.article !== "" || currentContext.article !== null){
+        console.log(`asdfasdfa: ${currentContext?.article}`)
+        context+= `This is the article: ${currentContext?.article}`
+    }
+    if(currentContext?.quiz !== null){
+        context+=`This is the quiz: ${JSON.stringify(currentContext?.quiz)}`
+    }
     context += "This is the previous conversation you had with this person:\n";
     messages.forEach((currMessage) => {
       context += `Sender ${currMessage.sender} Message: ${currMessage.text}\n`;

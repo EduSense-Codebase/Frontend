@@ -6,6 +6,8 @@ import { httpPost } from '../../../../utils';
 import { AI_ENDPOINT, API_PREFIX, QUIZ_LENGTH } from "../../../../global";
 import { IQuiz, IQuizResponse} from '../../../../typedef';
 import Quiz from '../../../../ui_components/Quiz'
+import { useCustomProp } from '@/app/portal/layout';
+
 
 
 export default function QuizPage() {
@@ -13,6 +15,9 @@ export default function QuizPage() {
     const enrollmentId = params.enrollmentId as string;
     const quizName = decodeURIComponent(params.quizTitle  as string)
     const [quiz, setQuiz] = useState<IQuiz>();
+
+    const layoutProps = useCustomProp();
+    const contexts = "This page is a quiz page for students to practice their understanding";
 
     useEffect(() => {
 
@@ -36,6 +41,14 @@ export default function QuizPage() {
             console.log(response.data)
             console.log(response.data.data)
             setQuiz(response.data.data)
+
+            layoutProps.setEnrollmentId(parseInt(enrollmentId))
+            layoutProps.setContext(prev => ({
+                ...prev,
+                pageContext: contexts,
+                quiz: response.data.data 
+            }));
+            
 
         })
 

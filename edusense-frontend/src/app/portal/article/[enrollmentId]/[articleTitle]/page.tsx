@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { AI_ENDPOINT, API_PREFIX } from "../../../../global";
-import { IArticleResponse, IJourney, IJourneyResponse } from '../../../../typedef';
+import { IArticleResponse  } from '../../../../typedef';
 import { httpGet, httpPost } from '../../../../utils';
 import { useParams } from 'next/navigation';
 import { useCustomProp } from '@/app/portal/layout';
@@ -49,6 +49,7 @@ export default function CourseRoadmap() {
     const [article, setArticle] = useState<string>("");
 
     const layoutProps = useCustomProp();
+    const pageContexts = "This page is an article designed to teach the student about a particular topic"
 
     useEffect(() => {
         let queryParams = {
@@ -108,8 +109,14 @@ export default function CourseRoadmap() {
 
             setArticle(articleProcessed);
 
-            layoutProps.setPageContext(response.data.data.article);
-            layoutProps.setEnrollmentId(parseInt(enrollmentId));
+            // layoutProps.setContext.setPageContext(response.data.data.article);
+            // layoutProps.setEnrollmentId(parseInt(enrollmentId));
+            layoutProps.setEnrollmentId(parseInt(enrollmentId))
+            layoutProps.setContext(prev => ({
+                ...prev,
+                pageContext: pageContexts,
+                article: response.data.data.article,
+            }));
         })
     }, [])
 

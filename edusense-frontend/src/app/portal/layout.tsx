@@ -5,13 +5,23 @@ import React, { useState } from "react";
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import ChatWidget from '../ui_components/ChatWidget';
+import { IQuiz } from '../typedef';
 
 const inter = Inter({ subsets: ['latin'] });
 
-interface ICustomProps {
-  setPageContext: React.Dispatch<React.SetStateAction<string>>,
-  setEnrollmentId: React.Dispatch<React.SetStateAction<number>>
+interface IPageContext {
+    pageContext: string;
+    quiz?: IQuiz | null;
+    article: string | null;
 }
+
+interface ICustomProps {
+    context: IPageContext;
+    enrollmentId: number
+    setContext: React.Dispatch<React.SetStateAction<IPageContext>>;
+    setEnrollmentId: React.Dispatch<React.SetStateAction<number>>;
+}
+
 
 const CustomPropContext = React.createContext<ICustomProps | undefined>(undefined);
 export const useCustomProp = () => {
@@ -23,8 +33,13 @@ export const useCustomProp = () => {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [pageContext, setPageContext] = useState("");
-  const [enrollmentId, setEnrollmentId] = useState(-1);
+
+    const [context, setContext] = useState<IPageContext>({
+        pageContext: "",
+        quiz: null,
+        article: "",
+    });
+    const [enrollmentId, setEnrollmentId] = useState(-1);
 
   return (
     <html lang="en" className="bg-white min-h-full">
@@ -43,8 +58,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Main Content */}
         <main className="flex w-full h-full min-h-screen bg-white mx-auto px-4 py-12">
-          <ChatWidget pageContext={pageContext} enrollmentId={enrollmentId}  />
-          <CustomPropContext.Provider value={{setPageContext: setPageContext, setEnrollmentId: setEnrollmentId}}>
+          <ChatWidget pageContext={context?.pageContext} enrollmentId={enrollmentId} quiz={context.quiz}  article={context.article}/>
+          <CustomPropContext.Provider value={{context, setContext, enrollmentId, setEnrollmentId}}>
             {children}
           </CustomPropContext.Provider>
           

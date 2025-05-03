@@ -4,6 +4,7 @@ import { AI_ENDPOINT, API_PREFIX, COURSE_ENDPOINT } from "../../../global";
 import { IJourney, IJourneyResponse, INewEnrollment } from '../../../typedef';
 import { httpPost, httpGet } from '../../../utils';
 import { useParams,useRouter } from 'next/navigation';
+
 import Link from 'next/link';
 
 /* Local Type Defs */
@@ -22,6 +23,8 @@ export default function CourseRoadmap() {
 
     const [journey, setJourney] = useState<IJourney[]>([]);
     const router = useRouter();
+
+
     
     useEffect(() => {
         const url = API_PREFIX + COURSE_ENDPOINT
