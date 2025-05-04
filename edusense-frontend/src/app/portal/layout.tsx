@@ -6,13 +6,14 @@ import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import ChatWidget from '../ui_components/ChatWidget';
 import { IQuiz } from '../typedef';
+import Logout from '../ui_components/Logout';
 
 const inter = Inter({ subsets: ['latin'] });
 
 interface IPageContext {
     pageContext: string;
     quiz?: IQuiz | null;
-    article: string | null;
+    article?: string | null ;
 }
 
 interface ICustomProps {
@@ -51,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               EduSense
             </Link>
             <nav className="space-x-6 text-sm font-medium text-gray-700">
-              <Link href="/auth/logout" className="hover:text-blue-600">Logout</Link>
+              <Logout/>
             </nav>
           </div>
         </header>

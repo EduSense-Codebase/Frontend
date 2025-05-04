@@ -11,7 +11,7 @@ interface IChatWidgetProps {
   enrollmentId: number
   quiz: IQuiz | null | undefined
 
-  article: string | null
+  article: string | null |undefined
 }
 
 const ChatWidget = (props: IChatWidgetProps) => {
