@@ -51,8 +51,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="text-2xl font-bold text-blue-600">
               EduSense
             </Link>
-            <nav className="space-x-6 text-sm font-medium text-gray-700">
-              <Logout/>
+            <nav className="flex items-center space-x-6 text-sm font-medium text-gray-700">
+                <Link href="/portal/settings" className="hover:text-gray-900">Settings</Link>
+                <Logout />
             </nav>
           </div>
         </header>
