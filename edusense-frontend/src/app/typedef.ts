@@ -22,7 +22,9 @@ export interface IJourney {
 }
 
 export interface IArticle {
-    article: string
+    article_title: string,
+    sections: string[],
+    section_content: string[]
 }
 
 export interface IQuiz{

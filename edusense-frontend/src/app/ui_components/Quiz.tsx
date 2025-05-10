@@ -57,7 +57,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
     const [started, setStarted] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+    const [selectedAnswer, setSelectedAnswer] = useState<number>(-1);
     const [hasSubmitted, setHasSubmitted] = useState(false);
   
     const handleStart = () => {
@@ -82,7 +82,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
     const handleNext = () => {
       if (currentQuestionIndex < quiz.length - 1) {
         setCurrentQuestionIndex((prev) => prev + 1);
-        setSelectedAnswer(null);
+        setSelectedAnswer(-1);
         setHasSubmitted(false);
       } else {
         alert("Quiz completed!");
@@ -137,7 +137,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
               ))}
               {hasSubmitted &&(
               <div className="mt-4 p-4 bg-gray-100 border border-gray-300 rounded-lg text-gray-700">
-                    <strong>Explanation:</strong> {quiz?.reasoning[currentQuestionIndex][selectedAnswer]}
+                    <strong>Explanation:</strong> {quiz.reasoning[currentQuestionIndex][selectedAnswer]}
               </div>)
                 }
             </div>

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { AI_ENDPOINT, API_PREFIX } from "../../../../global";
-import { IArticleResponse  } from '../../../../typedef';
+import { IArticle, IArticleResponse  } from '../../../../typedef';
 import { httpGet, httpPost } from '../../../../utils';
 import { useParams } from 'next/navigation';
 import { useCustomProp } from '@/app/portal/layout';
@@ -12,7 +12,6 @@ import rehypeRaw from "rehype-raw";
 interface ILatexToSvgResponse {
     svg: string
 }
-
 
 const MarkdownViewer = ({ content }: { content: string }) => {
   return (
@@ -43,18 +42,33 @@ const MarkdownViewer = ({ content }: { content: string }) => {
 
 export default function CourseRoadmap() {
     const params = useParams();
-    const enrollmentId = params.enrollmentId as string;
-    const articleTitle = params.articleTitle as string;
+    const enrollmentId = decodeURIComponent(params.enrollmentId as string).trim();
+    const articleTitle = decodeURIComponent(params.articleTitle as string).trim();
 
-    const [article, setArticle] = useState<string>("");
+    const [article, setArticle] = useState<IArticle | undefined>(undefined);
 
     const layoutProps = useCustomProp();
     const pageContexts = "This page is an article designed to teach the student about a particular topic"
+
+    const getArticleStr = (article: IArticle) => {
+        let return_string = "";
+
+        return_string += `Heading: ${article.article_title}\n`
+
+        article.sections.map((currSection, index) => {
+            return_string += `Section: ${currSection}\n`
+            return_string += `${article.section_content[index]}\n`
+        })
+
+        return return_string;
+    }
 
     useEffect(() => {
         let queryParams = {
             section: "generate_ai_content"
         }
+
+        console.log(articleTitle);
 
         let prompt_parameters = {
             "title": articleTitle
@@ -72,42 +86,7 @@ export default function CourseRoadmap() {
 
         requestResponse.then((response) => {
             console.log(response.data);
-            const tikzBlocks = [...response.data.data.article.matchAll(/\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/g)];
-
-            const svgPromises = tikzBlocks.map((block, i) => {
-                let latex = block[0];
-                const fullLatexDocument = `
-                    \\documentclass{standalone}
-                    \\usepackage{tikz}
-                    \\begin{document}
-                    ${latex} 
-                    \\end{document}
-                    `;
-                const API_URL = API_PREFIX + AI_ENDPOINT;
-
-                let queryParams = {
-                    section: "latex_to_svg",
-                    latex_source: fullLatexDocument 
-                }
-
-                const requestResponse = httpGet<ILatexToSvgResponse>(API_URL, queryParams);
-                return requestResponse;
-            })
-            let articleProcessed = response.data.data.article;
-            Promise.all(svgPromises).then((svgResponses) => {
-
-                tikzBlocks.forEach((block, i) => {
-                    const svgString = svgResponses[i].data.svg;
-
-                    const imgTag = `<div>${svgString}</div>`
-
-                    console.log(imgTag);
-
-                    articleProcessed = articleProcessed.replace(block[0], imgTag);
-                })
-            })
-
-            setArticle(articleProcessed);
+            setArticle(response.data.data);
 
             // layoutProps.setContext.setPageContext(response.data.data.article);
             // layoutProps.setEnrollmentId(parseInt(enrollmentId));
@@ -115,17 +94,53 @@ export default function CourseRoadmap() {
             layoutProps.setContext(prev => ({
                 ...prev,
                 pageContext: pageContexts,
-                article: response.data.data.article,
+                article: getArticleStr(response.data.data),
             }));
         })
     }, [])
 
     const renderArticle = () => {
+        /*
         return (
             <div className="relative w-full flex flex-col px-4 text-black">
                 <MarkdownViewer content={article} />
             </div>
         )
+        */
+    if (article != undefined) {
+        return (
+            <div className="flex min-h-screen bg-white text-gray-900">
+            <aside className="hidden lg:block w-64 p-6 sticky top-0 h-screen border-r overflow-y-auto">
+                <h2 className="text-lg font-semibold mb-4">Table of Contents</h2>
+                <nav>
+                {article.sections.map((title, idx) => (
+                    <a
+                    key={idx}
+                    href={`#section-${idx}`}
+                    className="block py-1 text-sm text-gray-700 hover:text-blue-600"
+                    >
+                    {title}
+                    </a>
+                ))}
+                </nav>
+            </aside>
+
+            <main className="flex-1 px-6 py-10 max-w-3xl mx-auto">
+                <h1 className="text-4xl font-bold mb-6">{article.article_title}</h1>
+                {article.sections.map((title, idx) => (
+                <section key={idx} id={`section-${idx}`} className="mb-12 scroll-mt-24">
+                    <h2 className="text-2xl font-semibold mb-3">{title}</h2>
+                    <div className="prose prose-lg max-w-none">
+                    {/*<p>{article.section_content[idx]}</p>*/}
+                    <MarkdownViewer content={article.section_content[idx]} />
+                    </div>
+                </section>
+                ))}
+            </main>
+            </div>
+        )
+    }
+    
     }
 
     return (
