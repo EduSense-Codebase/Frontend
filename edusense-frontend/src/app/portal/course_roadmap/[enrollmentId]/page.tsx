@@ -61,7 +61,7 @@ export default function CourseRoadmap() {
                                     });
                                 });
                         setJourney(localJourney);
-                    }else{
+                    } else {
                         console.log("Manually generating...");
                         const queryParams = {
                             section: "generate_ai_content",
@@ -98,8 +98,7 @@ export default function CourseRoadmap() {
                                 const cacheSaveData = {
                                     enroll_id: enrollmentId,
                                     cache_request: "roadmap",
-                                    cache_content: JSON.stringify(response.data.data),
-
+                                    cache_content: JSON.stringify(response.data.data)
                                 }
                                 const cachePost = httpPost(API_URL, cacheSaveData, cacheSaveParams);
                                 cachePost.then((res) => {

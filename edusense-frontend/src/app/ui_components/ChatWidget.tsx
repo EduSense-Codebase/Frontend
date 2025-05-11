@@ -10,8 +10,8 @@ interface IChatWidgetProps {
   pageContext: string
   enrollmentId: number
   quiz: IQuiz | null | undefined
-
   article: string | null |undefined
+  userSelection: string
 }
 
 const ChatWidget = (props: IChatWidgetProps) => {
@@ -29,12 +29,16 @@ const ChatWidget = (props: IChatWidgetProps) => {
 
   const stringifyContext = () => {
     let context = `This is what the user is seeing currently: ${currentContext?.pageContext}\n`;
-    if(currentContext?.article !== "" || currentContext.article !== null){
+    if (currentContext?.article !== "" || currentContext.article !== null){
         console.log(`asdfasdfa: ${currentContext?.article}`)
-        context+= `This is the article: ${currentContext?.article}`
+        context += `This is the article: ${currentContext?.article}\n`
     }
-    if(currentContext?.quiz !== null){
-        context+=`This is the quiz: ${JSON.stringify(currentContext?.quiz)}`
+    if (currentContext?.quiz !== null){
+        context +=`This is the quiz: ${JSON.stringify(currentContext?.quiz)}\n`
+    }
+    if (currentContext?.userSelection !== "") {
+      console.log(currentContext?.userSelection);
+      context += `This is what the user has selected within the article when asking question: ${currentContext?.userSelection}\n`
     }
     context += "This is the previous conversation you had with this person:\n";
     messages.forEach((currMessage) => {

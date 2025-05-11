@@ -15,6 +15,7 @@ interface IPageContext {
     pageContext: string;
     quiz?: IQuiz | null;
     article?: string | null ;
+    roadmap?: string;
 }
 
 interface ICustomProps {
@@ -22,6 +23,7 @@ interface ICustomProps {
     enrollmentId: number
     setContext: React.Dispatch<React.SetStateAction<IPageContext>>;
     setEnrollmentId: React.Dispatch<React.SetStateAction<number>>;
+    setUserSelection: React.Dispatch<React.SetStateAction<string>>;
 }
 
 
@@ -44,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     });
     const [enrollmentId, setEnrollmentId] = useState(-1);
     const showChatWidget = pathname.endsWith('/portal/courses');
+    const [userSelection, setUserSelection] = useState("");
 
   return (
     <html lang="en" className="bg-white min-h-full">
@@ -69,9 +72,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 enrollmentId={enrollmentId}
                 quiz={context.quiz}
                 article={context.article}
+                userSelection={userSelection}
             />
             )}
-            <CustomPropContext.Provider value={{ context, setContext, enrollmentId, setEnrollmentId }}>
+          <CustomPropContext.Provider value={{context, setContext, enrollmentId, setEnrollmentId, setUserSelection}}>
             {children}
             </CustomPropContext.Provider>
         </main>

@@ -9,10 +9,6 @@ import { useCustomProp } from '@/app/portal/layout';
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"; 
 
-interface ILatexToSvgResponse {
-    svg: string
-}
-
 const MarkdownViewer = ({ content }: { content: string }) => {
   return (
     <div className="prose max-w-none">
@@ -88,8 +84,6 @@ export default function CourseRoadmap() {
             console.log(response.data);
             setArticle(response.data.data);
 
-            // layoutProps.setContext.setPageContext(response.data.data.article);
-            // layoutProps.setEnrollmentId(parseInt(enrollmentId));
             layoutProps.setEnrollmentId(parseInt(enrollmentId))
             layoutProps.setContext(prev => ({
                 ...prev,
@@ -99,14 +93,28 @@ export default function CourseRoadmap() {
         })
     }, [])
 
+    useEffect(() => {
+        const handleSection = () => {
+            const selection = window.getSelection();
+            const text = selection?.toString();
+            if (text) {
+                layoutProps.setUserSelection(text);
+                console.log("User Selected: ", text);
+            }
+        }
+
+        document.addEventListener("selectionchange", handleSection);
+        document.addEventListener("mouseup", handleSection);
+        document.addEventListener("touchend", handleSection);
+
+        return () => {
+            document.removeEventListener("selectionchange", handleSection);
+            document.removeEventListener("mouseup", handleSection);
+            document.removeEventListener("touchend", handleSection);
+        }
+    }, [])
+
     const renderArticle = () => {
-        /*
-        return (
-            <div className="relative w-full flex flex-col px-4 text-black">
-                <MarkdownViewer content={article} />
-            </div>
-        )
-        */
     if (article != undefined) {
         return (
             <div className="flex min-h-screen bg-white text-gray-900">
@@ -131,7 +139,6 @@ export default function CourseRoadmap() {
                 <section key={idx} id={`section-${idx}`} className="mb-12 scroll-mt-24">
                     <h2 className="text-2xl font-semibold mb-3">{title}</h2>
                     <div className="prose prose-lg max-w-none">
-                    {/*<p>{article.section_content[idx]}</p>*/}
                     <MarkdownViewer content={article.section_content[idx]} />
                     </div>
                 </section>
