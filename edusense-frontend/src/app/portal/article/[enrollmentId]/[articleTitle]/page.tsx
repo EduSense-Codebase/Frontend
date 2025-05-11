@@ -1,19 +1,64 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, cloneElement } from 'react';
 import { AI_ENDPOINT, API_PREFIX } from "../../../../global";
 import { IArticle, IArticleResponse  } from '../../../../typedef';
 import { httpGet, httpPost } from '../../../../utils';
 import { useParams } from 'next/navigation';
 import { useCustomProp } from '@/app/portal/layout';
 
+import { Plugin } from 'unified';
+import { visit } from 'unist-util-visit';
+import { Literal } from 'unist';
+
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"; 
+import remarkGfm from 'remark-gfm';
+import { start } from 'repl';
+
+const remarkHighlight: Plugin = () => {
+  return (tree) => {
+    visit(tree, 'text', (node: Literal, index, parent: any) => {
+      const value: string = node.value as string;
+      const regex = /==(.+?)==/g;
+      let match;
+      const newChildren = [];
+      let lastIndex = 0;
+
+      while ((match = regex.exec(value)) !== null) {
+        const [fullMatch, innerText] = match;
+        const start = match.index;
+        const end = start + fullMatch.length;
+
+        if (start > lastIndex) {
+          newChildren.push({ type: 'text', value: value.slice(lastIndex, start) });
+        }
+
+        newChildren.push({
+          type: 'element',
+          tagName: 'mark',
+          properties: {},
+          children: [{ type: 'text', value: innerText }],
+        });
+
+        lastIndex = end;
+      }
+
+      if (lastIndex < value.length) {
+        newChildren.push({ type: 'text', value: value.slice(lastIndex) });
+      }
+
+      if (newChildren.length > 0) {
+        parent.children.splice(index, 1, ...newChildren);
+      }
+    });
+  };
+};
 
 const MarkdownViewer = ({ content }: { content: string }) => {
   return (
     <div className="prose max-w-none">
       <ReactMarkdown
-        rehypePlugins={[rehypeRaw]}  // Allow raw HTML (SVG)
+        rehypePlugins={[rehypeRaw, remarkGfm, remarkHighlight]}  // Allow raw HTML (SVG)
         components={{
           code({ node, className, children, ...props }) {
             // Check if it's an SVG block
@@ -42,6 +87,7 @@ export default function CourseRoadmap() {
     const articleTitle = decodeURIComponent(params.articleTitle as string).trim();
 
     const [article, setArticle] = useState<IArticle | undefined>(undefined);
+    const articleRef = useRef<HTMLDivElement>(null);
 
     const layoutProps = useCustomProp();
     const pageContexts = "This page is an article designed to teach the student about a particular topic"
@@ -93,26 +139,74 @@ export default function CourseRoadmap() {
         })
     }, [])
 
-    useEffect(() => {
-        const handleSection = () => {
-            const selection = window.getSelection();
-            const text = selection?.toString();
-            if (text) {
-                layoutProps.setUserSelection(text);
-                console.log("User Selected: ", text);
+    const onMouseUp = (e: React.MouseEvent<HTMLElement>, section_id: number) => {
+        const selection = document.getSelection();
+        if (!selection || selection.isCollapsed) return;
+
+        const range = selection.getRangeAt(0);
+        const container = articleRef.current;
+
+        const startContainer = range.startContainer;
+        const endContainer = range.endContainer;
+
+        let startOffset = range.startOffset;
+        let endOffset = range.endOffset;
+
+        if (startContainer.nodeType === Node.TEXT_NODE) {
+            const textNode = startContainer as Text;
+            const textContent = textNode.nodeValue || '';
+
+            // Split the text at the startOffset and endOffset
+            const beforeText = textContent.slice(0, startOffset);
+            const selectedText = textContent.slice(startOffset, endOffset);
+            console.log(`Selected Text: ${selectedText}`)
+            const afterText = textContent.slice(endOffset);
+
+            // Create a span element to highlight the selected text
+            const highlightSpan = document.createElement('span');
+            highlightSpan.style.backgroundColor = 'yellow';  // Highlight with yellow color
+            highlightSpan.textContent = selectedText;
+
+            // Get the parent element of the text node
+            const parentElement = textNode.parentNode;
+            console.log(`Parent Element: ${parentElement}`)
+
+            if (parentElement) {
+                // Replace the original text node with the beforeText, the highlighted span, and afterText
+                parentElement.insertBefore(document.createTextNode(beforeText), textNode);
+                parentElement.appendChild(highlightSpan);
+                parentElement.appendChild(document.createTextNode(afterText));
+                parentElement.removeChild(textNode); // Remove the original text node
             }
+
+            layoutProps.setUserSelection(selectedText);
+
         }
 
-        document.addEventListener("selectionchange", handleSection);
-        document.addEventListener("mouseup", handleSection);
-        document.addEventListener("touchend", handleSection);
-
-        return () => {
-            document.removeEventListener("selectionchange", handleSection);
-            document.removeEventListener("mouseup", handleSection);
-            document.removeEventListener("touchend", handleSection);
+        if (container && container.contains(range.commonAncestorContainer)) {
+            const selectedText = selection.toString();
+            console.log("Selected inside container:", selectedText);
+            console.log("Section ID:", section_id);
+            let new_section_text = article?.section_content[section_id];
+            if (new_section_text != undefined && article != undefined) {
+                new_section_text = new_section_text.replace(/==/g, '');
+                let start = article.section_content[section_id].indexOf(selectedText);
+                let end = start + selectedText.length;
+                new_section_text = new_section_text.slice(0, start) + '==' + new_section_text.slice(start, end) + '==' + new_section_text.slice(end);
+            }
+            /*
+            setArticle((prevArticle) => {
+                let newArticle = structuredClone(prevArticle);
+                if (newArticle != undefined && new_section_text != undefined) {
+                    newArticle.section_content[section_id] = new_section_text;
+                }
+                return newArticle;
+            })
+            */
+        } else {
+            console.log("Selection is outside of this component.");
         }
-    }, [])
+    }
 
     const renderArticle = () => {
     if (article != undefined) {
@@ -136,12 +230,12 @@ export default function CourseRoadmap() {
             <main className="flex-1 px-6 py-10 max-w-3xl mx-auto">
                 <h1 className="text-4xl font-bold mb-6">{article.article_title}</h1>
                 {article.sections.map((title, idx) => (
-                <section key={idx} id={`section-${idx}`} className="mb-12 scroll-mt-24">
-                    <h2 className="text-2xl font-semibold mb-3">{title}</h2>
-                    <div className="prose prose-lg max-w-none">
-                    <MarkdownViewer content={article.section_content[idx]} />
-                    </div>
-                </section>
+                    <section key={idx} id={`section-${idx}`} className="mb-12 scroll-mt-24" onMouseUp={(e) => onMouseUp(e, idx)}>
+                        <h2 className="text-2xl font-semibold mb-3">{title}</h2>
+                        <div className="prose prose-lg max-w-none">
+                            <MarkdownViewer content={article.section_content[idx]} />
+                        </div>
+                    </section>
                 ))}
             </main>
             </div>
@@ -152,7 +246,7 @@ export default function CourseRoadmap() {
 
     return (
         <>
-            <div className="w-full h-full flex flex-wrap justify-start gap-6 mb-10">
+            <div className="w-full h-full flex flex-wrap justify-start gap-6 mb-10" ref={articleRef}>
                 {renderArticle()}
             </div>
         </>
