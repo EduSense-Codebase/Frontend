@@ -7,6 +7,7 @@ import Link from 'next/link';
 import ChatWidget from '../ui_components/ChatWidget';
 import { IQuiz } from '../typedef';
 import Logout from '../ui_components/Logout';
+import { usePathname } from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,6 +35,7 @@ export const useCustomProp = () => {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
 
     const [context, setContext] = useState<IPageContext>({
         pageContext: "",
@@ -41,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         article: "",
     });
     const [enrollmentId, setEnrollmentId] = useState(-1);
+    const showChatWidget = pathname.endsWith('/portal/courses');
 
   return (
     <html lang="en" className="bg-white min-h-full">
@@ -48,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Header */}
         <header className="bg-white shadow-sm sticky top-0 z-50">
           <div className="z-40 bg-white mx-auto px-4 py-4 flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-blue-600">
+            <Link href="/portal/courses" className="text-2xl font-bold text-blue-600">
               EduSense
             </Link>
             <nav className="flex items-center space-x-6 text-sm font-medium text-gray-700">
@@ -60,11 +63,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Main Content */}
         <main className="flex w-full h-full min-h-screen bg-white mx-auto px-4 py-12">
-          <ChatWidget pageContext={context?.pageContext} enrollmentId={enrollmentId} quiz={context.quiz}  article={context.article}/>
-          <CustomPropContext.Provider value={{context, setContext, enrollmentId, setEnrollmentId}}>
+            {!showChatWidget && (
+            <ChatWidget
+                pageContext={context.pageContext}
+                enrollmentId={enrollmentId}
+                quiz={context.quiz}
+                article={context.article}
+            />
+            )}
+            <CustomPropContext.Provider value={{ context, setContext, enrollmentId, setEnrollmentId }}>
             {children}
-          </CustomPropContext.Provider>
-          
+            </CustomPropContext.Provider>
         </main>
 
 
