@@ -4,6 +4,7 @@ export interface ICourse {
   name: string;
   color: string;
   takenDiag: boolean;
+  roadmaps: string[];
 }
 
 export interface IOfferedCourse {
