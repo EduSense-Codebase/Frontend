@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { IQuiz, } from '../typedef';
+import PointsPopup from "./PointsPopup";
 
 interface QuizProps {
     quiz: IQuiz,
@@ -32,7 +33,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       "w-full text-left p-4 rounded-lg border font-medium transition duration-200";
   
     let stateClasses = "";
-  
+ 
     if (hasSubmitted) {
       if (isSelected && isCorrect) {
         stateClasses = "bg-green-500 text-white border-green-600";
@@ -59,6 +60,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<number>(-1);
     const [hasSubmitted, setHasSubmitted] = useState(false);
+    const [showPointsPopup, setShowPointsPopup] = useState(false);
   
     const handleStart = () => {
       setStarted(true);
@@ -74,6 +76,13 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
   
       const correct = quiz.correct_ans[currentQuestionIndex];
       const selected = quiz.choices[currentQuestionIndex][selectedAnswer][0];
+
+      if (selected === correct) {
+        setShowPointsPopup(true);
+    
+        // Automatically hide after 2 seconds (optional, in case popup component doesn't auto-close)
+        //setTimeout(() => setShowPointsPopup(false), 10000);
+      }
   
       console.log(`Correct: ${correct}, Selected: ${selected}`);
       setHasSubmitted(true);
@@ -160,6 +169,10 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
               </button>
             </div>
           </div>
+        )}
+
+        {showPointsPopup && (
+        <PointsPopup points={10} onClose={() => setShowPointsPopup(false)} />
         )}
       </div>
     );
