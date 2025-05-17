@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect, useRef, cloneElement } from 'react';
-import { AI_ENDPOINT, API_PREFIX } from "../../../../../../../global";
-import { IArticle, IArticleResponse  } from '../../../../../../../typedef';
-import { httpGet, httpPost } from '../../../../../../../utils';
+import { AI_ENDPOINT, API_PREFIX } from "../../../../../../global";
+import { IArticle, IArticleResponse  } from '../../../../../../typedef';
+import { httpGet, httpPost } from '../../../../../../utils';
 import { useParams } from 'next/navigation';
 import { useCustomProp } from '@/app/portal/layout';
 
@@ -14,6 +14,7 @@ import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"; 
 import remarkGfm from 'remark-gfm';
 import { start } from 'repl';
+import RoadMapNav from '@/app/ui_components/RoadMapNav';
 
 const remarkHighlight: Plugin = () => {
   return (tree) => {
@@ -85,6 +86,7 @@ export default function CourseRoadmap() {
     const params = useParams();
     const enrollmentId = decodeURIComponent(params.enrollmentId as string).trim();
     const articleTitle = decodeURIComponent(params.articleTitle as string).trim();
+    const section = params.section as string
 
     const [article, setArticle] = useState<IArticle | undefined>(undefined);
     const articleRef = useRef<HTMLDivElement>(null);
@@ -249,6 +251,7 @@ export default function CourseRoadmap() {
             <div className="w-full h-full flex flex-wrap justify-start gap-6 mb-10" ref={articleRef}>
                 {renderArticle()}
             </div>
+            <RoadMapNav enrollmentId={enrollmentId} section={section} />
         </>
     );
 }

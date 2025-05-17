@@ -1,12 +1,14 @@
 'use client';
 
+
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { httpPost } from '../../../../utils';
-import { AI_ENDPOINT, API_PREFIX, QUIZ_LENGTH } from "../../../../global";
-import { IQuiz, IQuizResponse} from '../../../../typedef';
-import Quiz from '../../../../ui_components/Quiz'
-import { useCustomProp } from '@/app/portal/layout';
+import { httpPost } from '../../../../../../utils';
+import { AI_ENDPOINT, API_PREFIX, QUIZ_LENGTH } from '../../../../../../global';
+import { IQuiz, IQuizResponse } from '../../../../../../typedef';
+import Quiz from '../../../../../../ui_components/Quiz';
+import { useCustomProp } from '@/app/portal/layout'; // this is correct if it's from the layout.tsx directly in /portal
+import RoadMapNav from '@/app/ui_components/RoadMapNav';
 
 
 
@@ -14,6 +16,7 @@ export default function QuizPage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
     const quizName = decodeURIComponent(params.quizTitle  as string)
+    const section = params.section as string
     const [quiz, setQuiz] = useState<IQuiz>();
 
     const layoutProps = useCustomProp();
@@ -57,10 +60,12 @@ export default function QuizPage() {
     },[])
 
     return (
-        <div className="min-h-screen flex items-center justify-center w-full bg-white">
-            {quiz ? <Quiz quiz={quiz} title={quizName} /> : <p>Loading...</p>}
-        </div>
-
+        <>
+            <div className="min-h-screen flex items-center justify-center w-full bg-white">
+                {quiz ? <Quiz quiz={quiz} title={quizName} /> : <p>Loading...</p>}
+            </div>
+            <RoadMapNav enrollmentId={enrollmentId} section={section} />
+        </>
     );
 }
 

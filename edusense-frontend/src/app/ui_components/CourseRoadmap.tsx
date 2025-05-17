@@ -141,10 +141,10 @@ export default function CourseRoadmap() {
                             <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-right border border-gray-200">
                                 <Link className="text-xl text-black"   href={
                                     step.title.toLowerCase().includes("quiz")
-                                    ? `/portal/quiz/${enrollmentId}/${step.title}`
+                                    ?  `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
                                     : step.title.toLowerCase().includes("test")
-                                        ? `/portal/test/${enrollmentId}/${step.title}`
-                                        : `/portal/article/${enrollmentId}/${step.title}`
+                                        ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
+                                        : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
                                 }>{step.title}</Link>
                                 {step.description && (
                                 <p className="text-sm text-gray-600 mt-2">{step.description}</p>
@@ -159,10 +159,10 @@ export default function CourseRoadmap() {
                             <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-left border border-gray-200">
                                 <Link className="text-xl text-black"   href={
                                         step.title.toLowerCase().includes("quiz")
-                                        ? `/portal/quiz/${enrollmentId}/${step.title}`
+                                        ?  `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
                                         : step.title.toLowerCase().includes("test")
-                                            ? `/portal/test/${enrollmentId}/${step.title}`
-                                            : `/portal/article/${enrollmentId}/${step.title}`
+                                            ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
+                                            : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
                                     }>{step.title}</Link>
                                 {step.description && (
                                 <p className="text-sm text-gray-600 mt-2">{step.description}</p>
