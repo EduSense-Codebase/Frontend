@@ -34,6 +34,7 @@ export interface IQuiz{
     correct_ans: string[]
     reasoning: string[][]
     length: number
+    passage: string
 }
 
 export type Task = {

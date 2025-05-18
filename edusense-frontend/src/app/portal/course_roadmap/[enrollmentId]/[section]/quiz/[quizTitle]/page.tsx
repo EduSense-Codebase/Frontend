@@ -22,6 +22,8 @@ export default function QuizPage() {
     const layoutProps = useCustomProp();
     const contexts = "This page is a quiz page for students to practice their understanding";
 
+
+
     useEffect(() => {
 
         const apiUrl = API_PREFIX + AI_ENDPOINT;
@@ -30,7 +32,7 @@ export default function QuizPage() {
         }
         const prompt_parameters = {
             "title": quizName,
-            "length": QUIZ_LENGTH
+            "length": QUIZ_LENGTH,
 
         }
         const formData = {

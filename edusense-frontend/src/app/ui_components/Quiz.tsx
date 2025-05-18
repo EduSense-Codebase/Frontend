@@ -124,6 +124,17 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
                 style={{ width: `${progress}%` }}
               />
             </div>
+
+            {(() => {
+              if (quiz.passage != undefined && quiz.passage !== "") {
+              return (
+                <p className="text text-gray-800 mt-6">
+                  {quiz.passage}
+                </p>
+              )
+
+              }
+            })()}
   
             {/* Question */}
             <h2 className="text-2xl font-semibold text-gray-800 mt-6">

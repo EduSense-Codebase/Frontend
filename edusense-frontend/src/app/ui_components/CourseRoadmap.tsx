@@ -39,8 +39,7 @@ export default function CourseRoadmap() {
             console.log(res.data.data);
             if(res.data.data.takenDiag == false){
                 router.push(`/portal/diagnostic/${enrollmentId}`);
-            }else{
-
+            } else {
                 const cache_query_params = {
                     section: "retrieve_cache",
                     enroll_id: enrollmentId,
@@ -51,7 +50,7 @@ export default function CourseRoadmap() {
                 const cacheResponse = httpGet<IJourneyResponse>(API_URL, cache_query_params);
                 cacheResponse.then((response) => {
 
-                    if(response.data.data != null){
+                    if (response.data.data != null) {
                         console.log("Fetching from the cache...")
                         //console.log(response);
                         const localJourney: IJourney[] = [];
@@ -119,9 +118,6 @@ export default function CourseRoadmap() {
 
             }
         })
-
-
-
     }, [])
 
     const renderRoadmap = ({ data }: Props) => {
