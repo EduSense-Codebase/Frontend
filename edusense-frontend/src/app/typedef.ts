@@ -36,6 +36,12 @@ export interface IQuiz{
     length: number
 }
 
+export type Task = {
+    id: number;
+    title: string;
+    status: "pending" | "completed";
+};
+
 /* ********************* Generic Types END *********************** */
 
 /* ********************* Axios Response Types START ********************* */
@@ -78,3 +84,18 @@ export interface IQuizResponse{
 }
 
 /* ********************* Axios Response Types END *********************** */
+
+
+/* ********************* Mock Data START *********************** */
+
+// Example in app/sat/page.tsx (or wherever you're working)
+export const mockTasks: Task[] = [
+    { id: 1, title: "Finish Reading Lesson 2", status: "pending" },
+    { id: 2, title: "Take Practice Quiz 1", status: "pending" },
+    { id: 3, title: "Review missed questions", status: "completed" },
+    { id: 4, title: "Watch timing strategy video", status: "pending" },
+    { id: 5, title: "Complete Vocab Drill", status: "pending" },
+  ];
+  
+
+/* ********************* Mock Data END *********************** */
