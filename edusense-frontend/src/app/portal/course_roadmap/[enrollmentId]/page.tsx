@@ -52,7 +52,7 @@ export default function CourseRoadmapPage() {
 
             {/* Floating To-Do Button */}
             <button
-                className="fixed top-24 right-6 z-50 p-3 bg-blue-500 rounded-full shadow-md hover:bg-blue-700"
+                className="fixed top-24 right-6 z-40 p-3 bg-blue-500 rounded-full shadow-md hover:bg-blue-700"
                 onClick={() => setShowDashboard(!showDashboard)}
                 >
                 <svg

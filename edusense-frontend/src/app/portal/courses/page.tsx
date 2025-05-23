@@ -107,16 +107,14 @@ export default function CoursesPage() {
 
 	return (
 		<>
-		<div className="w-full h-full flex flex-wrap justify-start gap-6 mb-10">
-		<h1 className="text-3xl font-bold text-gray-800">{name}s Courses</h1>
-			{courses.map((course) => {
-				return (
-				<>
-					{renderCourseTile(course)}
-				</>
-				)
-			})}
-		</div>
+        <div className="w-full h-full mb-10">
+        <h1 className="text-3xl font-bold text-gray-700 mb-6">Dashboard</h1>
+        <div className="flex flex-wrap justify-start gap-6">
+            {courses.map((course) => (
+            renderCourseTile(course)
+            ))}
+        </div>
+        </div>
 
 		{/* Dialog for offered courses */}
 		{(() => {

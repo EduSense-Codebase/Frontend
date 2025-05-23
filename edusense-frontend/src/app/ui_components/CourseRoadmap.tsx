@@ -133,7 +133,7 @@ export default function CourseRoadmap() {
 
                         {/* Left Card */}
                         {isLeft && (
-                            <div className="w-1/2 pr-6 flex justify-end">
+                            <div className="w-full pr-6 flex justify-end">
                             <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-right border border-gray-200">
                                 <Link className="text-xl text-black"   href={
                                     step.title.toLowerCase().includes("quiz")
@@ -151,7 +151,7 @@ export default function CourseRoadmap() {
 
                         {/* Right Card */}
                         {!isLeft && (
-                            <div className="w-1/2 pl-6 flex justify-start">
+                            <div className="w-full pl-6 flex justify-start">
                             <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-left border border-gray-200">
                                 <Link className="text-xl text-black"   href={
                                         step.title.toLowerCase().includes("quiz")
