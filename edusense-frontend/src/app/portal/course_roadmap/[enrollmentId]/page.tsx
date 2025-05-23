@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { INewEnrollment } from "@/app/typedef";
 import MiniDashboard from "@/app/ui_components/MiniDashboard";
 import { mockTasks } from "@/app/typedef";
+import { ZoomCard } from "@/app/ui_components/ZoomCard";
 
 export default function CourseRoadmapPage() {
     const params = useParams();
@@ -36,15 +37,7 @@ export default function CourseRoadmapPage() {
           <h1 className="text-2xl font-bold text-gray-700">Choose a section to begin</h1>
           <div className="grid grid-cols-1 gap-4">
             {roadmaps.map((roadmap) => (
-              <button
-                key={roadmap}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                onClick={() =>
-                  router.push(`/portal/course_roadmap/${enrollmentId}/${roadmap.toLowerCase()}`)
-                }
-              >
-                {roadmap}
-              </button>
+              <ZoomCard title={roadmap} url={`/portal/course_roadmap/${enrollmentId}/${roadmap.toLowerCase()}`} />
             ))}
           </div>
         </div>
