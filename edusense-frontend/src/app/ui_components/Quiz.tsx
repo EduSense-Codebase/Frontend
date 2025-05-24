@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { IQuiz, } from '../typedef';
 import PointsPopup from "./PointsPopup";
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface QuizProps {
     quiz: IQuiz,
@@ -106,81 +107,108 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
           {title || "Untitled"}
         </h1>
   
-        {!started ? (
-          <div className="flex justify-center">
-            <button
-              onClick={handleStart}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition duration-300"
-            >
-              Start
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {/* Progress Bar */}
-            <div className="w-full bg-gray-200 rounded-full h-3">
-              <div
-                className="bg-indigo-600 h-3 rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+        <AnimatePresence mode="wait">
+    {!started ? (
+        <motion.div
+        key="start-button"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="flex justify-center"
+        >
+        <button
+            onClick={handleStart}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition duration-300"
+        >
+            Start
+        </button>
+        </motion.div>
+    ) : (
+        <motion.div
+        key={`quiz-content-${currentQuestionIndex}`} // re-animates on question change
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="space-y-6"
+        >
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-200 rounded-full h-3">
+            <div
+            className="bg-indigo-600 h-3 rounded-full transition-all duration-300"
+            style={{ width: `${progress}%` }}
+            />
+        </div>
 
-            {(() => {
-              if (quiz.passage != undefined && quiz.passage !== "") {
-              return (
-                <p className="text text-gray-800 mt-6">
-                  {quiz.passage}
-                </p>
-              )
-
-              }
-            })()}
-  
-            {/* Question */}
-            <h2 className="text-2xl font-semibold text-gray-800 mt-6">
-              {quiz.questions[currentQuestionIndex]}
-            </h2>
-  
-            {/* Options */}
-            <div className="flex flex-col gap-4 mt-4 text-gray-500">
-              {quiz.choices[currentQuestionIndex].map((option, index) => (
-                <QuizOption
-                  key={index}
-                  option={option}
-                  index={index}
-                  selectedAnswer={selectedAnswer}
-                  correctAnswer={quiz.correct_ans[currentQuestionIndex]}
-                  hasSubmitted={hasSubmitted}
-                  onSelect={handleSelectAnswer}
-                />
-                
-              ))}
-              {hasSubmitted &&(
-              <div className="mt-4 p-4 bg-gray-100 border border-gray-300 rounded-lg text-gray-700">
-                    <strong>Explanation:</strong> {quiz.reasoning[currentQuestionIndex][selectedAnswer]}
-              </div>)
-                }
-            </div>
-  
-            {/* Buttons */}
-            <div className="mt-6 flex justify-between gap-4">
-              <button
-                onClick={handleSubmit}
-                className="flex-1 py-3 px-6 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
-              >
-                Submit Answer
-              </button>
-  
-              <button
-                onClick={handleNext}
-                disabled={!hasSubmitted}
-                className="flex-1 py-3 px-6 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next Question
-              </button>
-            </div>
-          </div>
+        {quiz.passage && (
+            <p className="text text-gray-800 mt-6">{quiz.passage}</p>
         )}
+
+        {/* Question */}
+        <h2 className="text-2xl font-semibold text-gray-800 mt-6">
+            {quiz.questions[currentQuestionIndex]}
+        </h2>
+
+        {/* Options with stagger */}
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+            visible: {
+                transition: {
+                staggerChildren: 0.1,
+                },
+            },
+            }}
+            className="flex flex-col gap-4 mt-4 text-gray-500"
+        >
+            {quiz.choices[currentQuestionIndex].map((option, index) => (
+            <motion.div
+                key={index}
+                variants={{
+                hidden: { opacity: 0, x: -20 },
+                visible: { opacity: 1, x: 0 },
+                }}
+            >
+                <QuizOption
+                option={option}
+                index={index}
+                selectedAnswer={selectedAnswer}
+                correctAnswer={quiz.correct_ans[currentQuestionIndex]}
+                hasSubmitted={hasSubmitted}
+                onSelect={handleSelectAnswer}
+                />
+            </motion.div>
+            ))}
+        </motion.div>
+
+        {hasSubmitted && (
+            <div className="mt-4 p-4 bg-gray-100 border border-gray-300 rounded-lg text-gray-700">
+            <strong>Explanation:</strong> {quiz.reasoning[currentQuestionIndex][selectedAnswer]}
+            </div>
+        )}
+
+        {/* Buttons */}
+        <div className="mt-6 flex justify-between gap-4">
+            <button
+            onClick={handleSubmit}
+            className="flex-1 py-3 px-6 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
+            >
+            Submit Answer
+            </button>
+
+            <button
+            onClick={handleNext}
+            disabled={!hasSubmitted}
+            className="flex-1 py-3 px-6 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+            Next Question
+            </button>
+        </div>
+        </motion.div>
+    )}
+    </AnimatePresence>
 
         {showPointsPopup && (
         <PointsPopup points={10} onClose={() => setShowPointsPopup(false)} />

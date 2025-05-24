@@ -4,17 +4,18 @@ import { AI_ENDPOINT, API_PREFIX, COURSE_ENDPOINT } from "../global";
 import { IJourney, IJourneyResponse, INewEnrollment } from '../typedef';
 import { httpPost, httpGet } from '../utils';
 import { useParams,useRouter } from 'next/navigation';
+import { ArcherContainer, ArcherElement } from 'react-archer';
 
 import Link from 'next/link';
 
 /* Local Type Defs */
 type Step = {
-  title: string
-  description?: string
+title: string
+description?: string
 }
 
 type Props = {
-  data: Step[]
+data: Step[]
 }
 
 export default function CourseRoadmap() {
@@ -31,9 +32,9 @@ export default function CourseRoadmap() {
         const url = API_PREFIX + COURSE_ENDPOINT
         const queryParams = {
             section: "course_details",
-			enrollment_id: enrollmentId?.toString()
+            enrollment_id: enrollmentId?.toString()
         }
-       
+    
         const response = httpGet<INewEnrollment>(url, queryParams);
         response.then((res) => {
             console.log(res.data.data);
@@ -122,63 +123,66 @@ export default function CourseRoadmap() {
 
     const renderRoadmap = ({ data }: Props) => {
         return (
-            <div className="relative w-full flex flex-col px-4">
-                {data.map((step, index) => {
-                    const isLeft = index % 2 === 0
-                    //const isLast = index === data.length - 1
-
-                    return (
-                    <div key={index} className="relative w-full mb-16">
-                        <div className="flex justify-between items-center w-full">
-
-                        {/* Left Card */}
-                        {isLeft && (
-                            <div className="w-full pr-6 flex justify-end">
-                            <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-right border border-gray-200">
-                                <Link className="text-xl text-black"   href={
-                                    step.title.toLowerCase().includes("quiz")
-                                    ?  `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
-                                    : step.title.toLowerCase().includes("test")
-                                        ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
-                                        : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
-                                }>{step.title}</Link>
-                                {step.description && (
-                                <p className="text-sm text-gray-600 mt-2">{step.description}</p>
-                                )}
-                            </div>
-                            </div>
-                        )}
-
-                        {/* Right Card */}
-                        {!isLeft && (
-                            <div className="w-full pl-6 flex justify-start">
-                            <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-left border border-gray-200">
-                                <Link className="text-xl text-black"   href={
-                                        step.title.toLowerCase().includes("quiz")
-                                        ?  `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
-                                        : step.title.toLowerCase().includes("test")
-                                            ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
-                                            : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
-                                    }>{step.title}</Link>
-                                {step.description && (
-                                <p className="text-sm text-gray-600 mt-2">{step.description}</p>
-                                )}
-                            </div>
-                            </div>
-                        )}
+          <ArcherContainer strokeColor="black" strokeWidth={2} >
+            <div className="w-screen px-8 mx-auto px-4 relative">
+              {data.map((step, index) => {
+                const isLeft = index % 2 === 1;
+                const isLast = index === data.length - 1;
+      
+                return (
+                  <div key={index} className="relative mb-24 ml-35 flex">
+                    {isLeft && <div className="w-1/2"></div>}
+      
+                    <ArcherElement
+                      id={`step-${index}`}
+                      relations={
+                        !isLast
+                          ? [{
+                              targetId: `step-${index + 1}`,
+                              targetAnchor: isLeft ? 'left' : 'right',
+                              sourceAnchor: isLeft ? 'right' : 'left',
+                              style: { strokeColor: 'black', strokeWidth: 2 },
+                            }]
+                          : []
+                      }
+                    >
+                      <div className="w-1/3 flex justify-center relative">
+                        <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-200">
+                          {/* Your Link and content */}
+                          <Link
+                            className="text-xl text-black"
+                            href={
+                              step.title.toLowerCase().includes("quiz")
+                                ? `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
+                                : step.title.toLowerCase().includes("test")
+                                ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
+                                : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
+                            }
+                          >
+                            {step.title}
+                          </Link>
+                          {step.description && (
+                            <p className="text-sm text-gray-600 mt-2">{step.description}</p>
+                          )}
                         </div>
-                    </div>
-                    )
-                })}
+                      </div>
+                    </ArcherElement>
+      
+                    {!isLeft && <div className="w-1/2"></div>}
+                  </div>
+                );
+              })}
             </div>
-        )
-    }
+          </ArcherContainer>
+        );
+      };
+      
+    
+        
 
     return (
         <>
-            <div className="w-full h-full flex flex-wrap justify-start gap-6 mb-10">
                 {renderRoadmap({data: journey})}
-            </div>
         </>
     );
 }

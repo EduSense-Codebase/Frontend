@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from "../../global";
 import { IAllEnrolledCourseResponse, IAllOfferedResponse, ICourse, IOfferedCourse, IUserInfoResponse, INewEnrollment } from '../../typedef';
 import { httpGet, httpPost } from '../../utils';
+import * as motion from "motion/react-client";
+
 
 export default function CoursesPage() {
 	const [courses, setCourses] = useState<ICourse[]>([]);
@@ -92,26 +94,34 @@ export default function CoursesPage() {
 		
 	};
 
-	const renderCourseTile = (courseTileArgs: ICourse) => {
-		return (
-			<Link key={courseTileArgs.id} href={`/portal/course_roadmap/${courseTileArgs.id}`} className="no-underline inline-block">
-		<div
-		className="w-[250px] h-[250px] flex items-center justify-center rounded-lg text-white text-center transition-transform duration-200 shadow hover:scale-105 hover:shadow-lg active:scale-95"
-		style={{ backgroundColor: courseTileArgs.color }}
-		>
-		<h3 className="text-xl font-bold">{courseTileArgs.name}</h3>
-		</div>
-	</Link>
-		)
-	}
+    const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
+        return (
+            <Link key={courseTileArgs.id} href={`/portal/course_roadmap/${courseTileArgs.id}`} className="no-underline inline-block">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                        delay: index * 0.1,
+                        duration: 0.4,
+                        scale: { type: "spring", visualDuration: 0.4, bounce: 0.3 },
+                    }}
+                    className="w-[250px] h-[250px] flex items-center justify-center rounded-lg text-white text-center transition-transform duration-200 shadow hover:scale-105 hover:shadow-lg active:scale-95"
+                    style={{ backgroundColor: courseTileArgs.color }}
+                >
+                    <h3 className="text-xl font-bold">{courseTileArgs.name}</h3>
+                </motion.div>
+            </Link>
+        );
+    };
+    
 
 	return (
 		<>
         <div className="w-full h-full mb-10">
         <h1 className="text-3xl font-bold text-gray-700 mb-6">Dashboard</h1>
         <div className="flex flex-wrap justify-start gap-6">
-            {courses.map((course) => (
-            renderCourseTile(course)
+            {courses.map((course, index) => (
+            renderCourseTile(course, index)
             ))}
         </div>
         </div>
