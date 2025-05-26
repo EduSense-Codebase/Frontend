@@ -6,6 +6,7 @@ import { httpPost } from '../../../../../../utils';
 import { AI_ENDPOINT, API_PREFIX, TEST_LENGTH } from "../../../../../../global";
 import { IQuiz, IQuizResponse} from '../../../../../../typedef';
 import Quiz from '../../../../../../ui_components/Quiz'
+//import {motion} from "framer-motion"
 import RoadMapNav from '@/app/ui_components/RoadMapNav';
 
 export default function QuizPage() {
@@ -44,10 +45,12 @@ export default function QuizPage() {
 
     },[])
 
+    
+
     return (
         <>
         <div className="min-h-screen flex items-center justify-center w-full bg-white">
-            {quiz ? <Quiz quiz={quiz} title={quizName} /> : <p>Loading...</p>}
+            {quiz ? <Quiz quiz={quiz} title={quizName} /> :  <div className="w-12 h-12 border-4 border-gray-700 border-t-indigo-600 rounded-full animate-spin" />}
         </div>
          <RoadMapNav enrollmentId={enrollmentId} section={section} />
 

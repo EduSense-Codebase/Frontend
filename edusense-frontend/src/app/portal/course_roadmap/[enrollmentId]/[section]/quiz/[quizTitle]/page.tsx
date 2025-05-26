@@ -64,7 +64,8 @@ export default function QuizPage() {
     return (
         <>
             <div className="min-h-screen flex items-center justify-center w-full bg-white">
-                {quiz ? <Quiz quiz={quiz} title={quizName} /> : <p>Loading...</p>}
+
+                            {quiz ? <Quiz quiz={quiz} title={quizName} /> :  <div className="w-15 h-15 border-7 border-gray-500 border-t-indigo-600 rounded-full animate-spin" />}
             </div>
             <RoadMapNav enrollmentId={enrollmentId} section={section} />
         </>

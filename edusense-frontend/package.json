@@ -11,11 +11,12 @@
   "dependencies": {
     "axios": "^1.8.4",
     "framer-motion": "^12.12.1",
+    "install": "^0.13.0",
     "latex.js": "^0.12.6",
     "motion": "^12.12.2",
     "next": "15.3.0",
+    "npm": "^11.4.1",
     "react": "^19.0.0",
-    "react-archer": "^4.4.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
     "rehype-raw": "^7.0.0",
