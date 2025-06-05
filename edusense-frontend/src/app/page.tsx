@@ -9,10 +9,68 @@ export default function LandingPage() {
     const getStarted = () =>{
         router.push("/auth/register")
     }
+    const stepInfo = (step:string) => {
+
+        let content = ""
+
+        if( step == "Sign Up"){
+            content = "Sign up for free!"
+        } else if( step == "Pick Your Course"){
+            content = "Choose from a variety of courses to begin your learning!"
+        }else if (step == "Learn & Earn"){
+            content = "Complete activities to earn points and redeem them for rewards!"
+        }else{
+            content = "Set goals and track your progress!"
+        }
+
+        return (
+            <p className="text-gray-600 text-sm">  {content}</p>
+        );
+    }
+
+    const featureInfo = (feature:string) => {
+
+        let content = ""
+        let image = ""
+
+        if( feature == "AI Lessons"){
+            image = "/Ai-lessons.png"
+            content = "Sign up for free!"
+        } else if( feature == "1-on-1 Tutor"){
+            image = "/1-on-1-tutor.png"
+            content = "Choose from a variety of courses to begin your learning!"
+        }else if (feature == "Gamified Learning"){
+            image = "/Gamified-learning.png"
+            content = "Complete activities to earn points and redeem them for rewards!"
+        }else{
+            image = "/Diagnostics.png"
+            content = "Set goals and track your progress!"
+        }
+
+        return (
+            <>
+
+                <div className="flex justify-center">
+                <Image 
+                    src= {image}
+                    alt={feature}
+                    width={120}
+                    height={0}
+                />
+                </div>
+                <h4 className="text-xl font-medium mb-2">{feature}</h4>
+                <p className="text-gray-600 text-sm">{content}</p>
+            
+            </>
+           
+        );
+    }
 return (
     <div className="min-h-screen bg-white text-gray-900">
     {/* Navbar */}
     <header className="flex justify-between items-center px-8 py-6 shadow-md">
+
+
             <Link href="/" className="text-2xl font-bold text-blue-600">
                 <Image
                     src = "/EduSense-Sample-Logo.png"
@@ -56,13 +114,8 @@ return (
             viewport={{ once: true }}
             transition={{ delay: i * 0.2, duration: 0.5 }}
             >
-            <img
-                src={`https://via.placeholder.com/100?text=${feature.split(' ')[0]}`}
-                alt={feature}
-                className="mx-auto mb-4"
-            />
-            <h4 className="text-xl font-medium mb-2">{feature}</h4>
-            <p className="text-gray-600 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+                {featureInfo(feature)}
             </motion.div>
         ))}
         </div>
@@ -76,7 +129,7 @@ return (
             <div key={i} className="p-6">
                 <div className="text-5xl font-bold text-blue-500 mb-4">{i + 1}</div>
                 <h4 className="text-xl font-semibold mb-2">{step}</h4>
-                <p className="text-gray-600 text-sm">Step description goes here with concise info.</p>
+                {stepInfo(step)}
             </div>
             ))}
         </div>
