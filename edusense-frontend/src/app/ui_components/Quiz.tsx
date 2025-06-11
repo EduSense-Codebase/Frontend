@@ -4,6 +4,8 @@ import { useState } from "react";
 import { IQuiz, } from '../typedef';
 import PointsPopup from "./PointsPopup";
 import { motion, AnimatePresence } from 'framer-motion';
+import { httpPost } from "../utils";
+import { API_PREFIX, AUTH_ENDPOINT } from "../global";
 
 interface QuizProps {
     quiz: IQuiz,
@@ -17,8 +19,8 @@ interface QuizOptionProps {
     correctAnswer: string;
     hasSubmitted: boolean;
     onSelect: (index: number) => void;
-  }
-  
+}
+
 const QuizOption: React.FC<QuizOptionProps> = ({
     option,
     index,
@@ -26,87 +28,107 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     correctAnswer,
     hasSubmitted,
     onSelect,
-  }) => {
+}) => {
     const isCorrect = option[0] === correctAnswer;
     const isSelected = index === selectedAnswer;
-  
+
     const baseClasses =
-      "w-full text-left p-4 rounded-lg border font-medium transition duration-200";
-  
+    "w-full text-left p-4 rounded-lg border font-medium transition duration-200";
+
     let stateClasses = "";
- 
+
     if (hasSubmitted) {
-      if (isSelected && isCorrect) {
+    if (isSelected && isCorrect) {
         stateClasses = "bg-green-500 text-white border-green-600";
-      } else if (isSelected && !isCorrect) {
+    } else if (isSelected && !isCorrect) {
         stateClasses = "bg-red-500 text-white border-red-600";
-      } else {
-        stateClasses = "bg-gray-100 border-gray-300 text-gray-700";
-      }
     } else {
-      stateClasses = isSelected
+        stateClasses = "bg-gray-100 border-gray-300 text-gray-700";
+    }
+    } else {
+    stateClasses = isSelected
         ? "bg-indigo-500 text-white border-indigo-500"
         : "bg-gray-100 hover:bg-indigo-100 border-gray-300 text-gray-700";
     }
-  
+
     return (
-      <button onClick={() => onSelect(index)} className={`${baseClasses} ${stateClasses}`}>
+    <button onClick={() => onSelect(index)} className={`${baseClasses} ${stateClasses}`}>
         {option}
-      </button>
+    </button>
     );
 };
-  
+
 const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
     const [started, setStarted] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<number>(-1);
     const [hasSubmitted, setHasSubmitted] = useState(false);
     const [showPointsPopup, setShowPointsPopup] = useState(false);
-  
-    const handleStart = () => {
-      setStarted(true);
-    };
-  
-    const handleSelectAnswer = (index: number) => {
-      setHasSubmitted(false);
-      setSelectedAnswer(index);
-    };
-  
-    const handleSubmit = () => {
-      if (selectedAnswer === null) return;
-  
-      const correct = quiz.correct_ans[currentQuestionIndex];
-      const selected = quiz.choices[currentQuestionIndex][selectedAnswer][0];
 
-      if (selected === correct) {
+    const [curAnswered, setCurAnswered] = useState(false);
+
+    const handleStart = () => {
+    setStarted(true);
+    };
+
+    const handleSelectAnswer = (index: number) => {
+    setHasSubmitted(false);
+    setSelectedAnswer(index);
+    };
+
+    const handleSubmit = () => {
+    if (selectedAnswer === null) return;
+
+    const correct = quiz.correct_ans[currentQuestionIndex];
+    const selected = quiz.choices[currentQuestionIndex][selectedAnswer][0];
+
+    if (selected === correct && !curAnswered) {
         setShowPointsPopup(true);
     
         // Automatically hide after 2 seconds (optional, in case popup component doesn't auto-close)
-        //setTimeout(() => setShowPointsPopup(false), 10000);
-      }
-  
-      console.log(`Correct: ${correct}, Selected: ${selected}`);
-      setHasSubmitted(true);
+        setTimeout(() => setShowPointsPopup(false), 10000);
+        
+        const API_URL = API_PREFIX + AUTH_ENDPOINT
+        const queryParams = {
+            "type": "add_points"
+        }
+        const formData = {
+            "event_type": "correct_answer"
+        }
+
+        const response = httpPost(API_URL, formData, queryParams);
+        response.then((res)=>{
+            console.log(res["data"]);
+        })
+
+
+
+    }
+    setCurAnswered(true)
+
+    //console.log(`Correct: ${correct}, Selected: ${selected}`);
+    setHasSubmitted(true);
     };
-  
+
     const handleNext = () => {
-      if (currentQuestionIndex < quiz.length - 1) {
+    if (currentQuestionIndex < quiz.length - 1) {
         setCurrentQuestionIndex((prev) => prev + 1);
         setSelectedAnswer(-1);
         setHasSubmitted(false);
-      } else {
+        setCurAnswered(false)
+    } else {
         alert("Quiz completed!");
-      }
+    }
     };
-  
+
     const progress = ((currentQuestionIndex + 1) / quiz.length) * 100;
-  
+
     return (
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-3xl">
+    <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-3xl">
         <h1 className="text-3xl text-gray-700 font-bold mb-8 text-center">
-          {title || "Untitled"}
+        {title || "Untitled"}
         </h1>
-  
+
         <AnimatePresence mode="wait">
     {!started ? (
         <motion.div
@@ -213,8 +235,8 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
         {showPointsPopup && (
         <PointsPopup points={10} onClose={() => setShowPointsPopup(false)} />
         )}
-      </div>
+    </div>
     );
-  };
-  
-  export default Quiz;
+};
+
+export default Quiz;
