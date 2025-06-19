@@ -174,11 +174,11 @@ export default function CourseRoadmap() {
     };
     
     
-    console.log(`Journey length: ${journey.length}`)
-    console.log(`Num length: ${numCompleted}`)
+    // console.log(`Journey length: ${journey.length}`)
+    // console.log(`Num length: ${numCompleted}`)
     const progress = (( numCompleted) / journey.length) * 100;
 
-    console.log(`Progress: ${progress}`)
+    // console.log(`Progress: ${progress}`)
     
     return(
     <>

@@ -90,7 +90,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             <Image src="/EduSense-Sample-Logo.png" alt="Logo" width={120} height={0} />
           </Link>
 
-          <nav className="flex items-center space-x-6 text-sm font-medium text-gray-700">
+          <nav className="flex items-center space-x-6 text-sm font-medium  text-gray-700">
             {/* XP Level Display */}
             <div className="flex flex-col items-end text-sm text-gray-800 mr-4">
               <span className="font-semibold">Lvl {userXP.level}</span>
