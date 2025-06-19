@@ -5,10 +5,12 @@ import React, { useState, useEffect } from "react";
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import ChatWidget from '../ui_components/ChatWidget';
-import { IQuiz } from '../typedef';
+import { IPointsRespones, IQuiz } from '../typedef';
 import Logout from '../ui_components/Logout';
 import { usePathname } from 'next/navigation'
 import Image from 'next/image';
+import { httpGet } from '../utils';
+import { API_PREFIX, AUTH_ENDPOINT } from '../global';
 
 
 const inter = Inter({ subsets: ['latin'] });
@@ -72,6 +74,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         // } catch (error) {
         //     console.error('Failed to fetch XP:', error);
         // }
+        const url = API_PREFIX + AUTH_ENDPOINT;
+        const queryParams = {
+            type: "get_points"
+        }
+        const requestResponse = httpGet<IPointsRespones>(url, queryParams);
+
+        requestResponse.then((response) => {
+            setUserXP({
+                 points: response.data.data.points,
+                 level: response.data.data.level,
+                 currentThreshold: response.data.data.current_threshold,
+                 nextThreshold: response.data.data.next_threshold,
+             });
+        })
     };
 
 

@@ -84,6 +84,15 @@ export interface IQuizResponse{
     data: IQuiz 
 }
 
+export interface IPointsRespones {
+    data: {
+        points: number,
+        level: number,
+        current_threshold: number,
+        next_threshold: number,
+    }
+}
+
 /* ********************* Axios Response Types END *********************** */
 
 
