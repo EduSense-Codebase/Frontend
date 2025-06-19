@@ -7,9 +7,15 @@ import { usePathname } from 'next/navigation';
 import axios from 'axios';
 
 import ChatWidget from '../ui_components/ChatWidget';
+import { IPointsRespones, IQuiz } from '../typedef';
 import Logout from '../ui_components/Logout';
-import { IQuiz } from '../typedef';
+import { usePathname } from 'next/navigation'
+import Image from 'next/image';
+import { httpGet } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
+
+
+const inter = Inter({ subsets: ['latin'] });
 
 interface IPageContext {
   pageContext: string;
@@ -58,9 +64,35 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     nextThreshold: 50,
   });
 
-  const refreshXP = () => {
-    // Implement refresh logic here
-  };
+    const refreshXP = () => {
+        // try {
+        //     const res = await fetch('/api/user/xp');
+        //     const data = await res.json();
+        //     setUserXP({
+        //         points: data.points,
+        //         level: data.level,
+        //         currentThreshold: data.current_threshold,
+        //         nextThreshold: data.next_threshold,
+        //     });
+        // } catch (error) {
+        //     console.error('Failed to fetch XP:', error);
+        // }
+        const url = API_PREFIX + AUTH_ENDPOINT;
+        const queryParams = {
+            type: "get_points"
+        }
+        const requestResponse = httpGet<IPointsRespones>(url, queryParams);
+
+        requestResponse.then((response) => {
+            setUserXP({
+                 points: response.data.data.points,
+                 level: response.data.data.level,
+                 currentThreshold: response.data.data.current_threshold,
+                 nextThreshold: response.data.data.next_threshold,
+             });
+        })
+    };
+
 
   useEffect(() => {
     const API_URL = API_PREFIX + AUTH_ENDPOINT;
