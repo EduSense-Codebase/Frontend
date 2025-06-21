@@ -96,7 +96,7 @@ export default function CoursesPage() {
 
     const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
         return (
-            <Link key={courseTileArgs.id} href={`/portal/course_roadmap/${courseTileArgs.id}`} className="no-underline inline-block">
+            <Link id='tile-course-btn' key={courseTileArgs.id} href={`/portal/course_roadmap/${courseTileArgs.id}`} className="no-underline inline-block">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -130,36 +130,36 @@ export default function CoursesPage() {
 		{(() => {
 			if (dialogOpen) {
 			return (
-				<div className="fixed inset-0 bg-gray-400 bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50">
-			<div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-				<h2 className="text-xl text-gray-700 font-bold mb-4">Offered Courses</h2>
-				<div className="flex flex-col text-gray-700 gap-3 max-h-[300px] overflow-y-auto">
-				{offeredCourses.map((course) => (
-					<div
-					key={course.id}
-					onClick={() => handleCourseSelect(course.id, curAction)}
-					className="cursor-pointer bg-gray-100 p-3 rounded text-center hover:bg-gray-200"
-					>
-					{course.course_name}
-					</div>
-				))}
-				</div>
-				<div className="mt-6 flex justify-end">
-				<button
-					onClick={handleDialogClose}
-					className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" >
-					Close
-				</button>
-				</div>
-			</div>
+			<div id='course-modal' className="fixed inset-0 bg-gray-400 bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50">
+                <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+                    <h2 className="text-xl text-gray-700 font-bold mb-4">Offered Courses</h2>
+                    <div className="flex flex-col text-gray-700 gap-3 max-h-[300px] overflow-y-auto">
+                    {offeredCourses.map((course) => (
+                        <div
+                        key={course.id}
+                        onClick={() => handleCourseSelect(course.id, curAction)}
+                        className="cursor-pointer bg-gray-100 p-3 rounded text-center hover:bg-gray-200"
+                        >
+                        {course.course_name}
+                        </div>
+                    ))}
+                    </div>
+                    <div className="mt-6 flex justify-end">
+                    <button
+                        onClick={handleDialogClose}
+                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" >
+                        Close
+                    </button>
+                    </div>
+                </div>
 			</div>
 		)
 			}
 		})()}
 
 		{/* Fixed Bottom Bar for Enroll/Unenroll Buttons */}
-		<div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md p-4 flex justify-center gap-4 z-50">
-			<button
+		<div id='start-course-nav' className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md p-4 flex justify-center gap-4 z-50">
+			<button id = "start-course-btn" 
 			onClick={() => handleAction('enroll_course')}
 			className="bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600 transition"
 			>

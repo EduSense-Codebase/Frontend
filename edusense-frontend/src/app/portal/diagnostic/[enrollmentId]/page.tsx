@@ -7,6 +7,17 @@ import { API_PREFIX, COURSE_ENDPOINT } from "../../../global";
 import { httpPost } from '../../../utils';
 import Input from "../../../ui_components/Input"
 import Button from "../../../ui_components/Button"
+import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
+import { Step } from 'react-joyride';
+
+
+const diagnosticSteps: Step[] = [
+    {
+        target: "body",
+        placement: "center",
+        content: "This is the diagnostic page! Here you can specify your experience, motivation, and more, so that each section will be personalized to your skill level!"
+    }
+]
 
 
 export default function CourseDiagnostic(){
@@ -52,6 +63,8 @@ export default function CourseDiagnostic(){
     };
 
     return (
+        <>
+        <JoyrideWrapper steps={diagnosticSteps} seenKey='diagKey'/>
     <div className="min-h-screen justify-center w-full h-full flex items-center bg-white">
         <div className=" bg-white p-8 rounded-2xl shadow-md">
         <h2 className="text-3xl text-gray-700 font-bold mb-8 text-center">Course Diagnostic Form</h2>
@@ -103,5 +116,6 @@ export default function CourseDiagnostic(){
             />
         </div>
     </div>
+    </>
     );
 }

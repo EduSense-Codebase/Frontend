@@ -2,178 +2,174 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import axios from 'axios';
-
+import { Step } from 'react-joyride';
 import ChatWidget from '../ui_components/ChatWidget';
 import { IPointsRespones, IQuiz } from '../typedef';
 import Logout from '../ui_components/Logout';
-import { usePathname } from 'next/navigation'
+import { usePathname} from 'next/navigation';
 import Image from 'next/image';
 import { httpGet } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
 
+import dynamic from 'next/dynamic';
+const JoyrideWrapper = dynamic(() => import('@/app/ui_components/JoyrideWrapper'), { ssr: false });
 
-const inter = Inter({ subsets: ['latin'] });
 
 interface IPageContext {
-  pageContext: string;
-  quiz?: IQuiz | null;
-  article?: string | null;
-  roadmap?: string;
+pageContext: string;
+quiz?: IQuiz | null;
+article?: string | null;
+roadmap?: string;
 }
 
 interface ICustomProps {
-  context: IPageContext;
-  enrollmentId: number;
-  setContext: React.Dispatch<React.SetStateAction<IPageContext>>;
-  setEnrollmentId: React.Dispatch<React.SetStateAction<number>>;
-  setUserSelection: React.Dispatch<React.SetStateAction<string>>;
-  refreshXP: () => void;
+context: IPageContext;
+enrollmentId: number;
+setContext: React.Dispatch<React.SetStateAction<IPageContext>>;
+setEnrollmentId: React.Dispatch<React.SetStateAction<number>>;
+setUserSelection: React.Dispatch<React.SetStateAction<string>>;
+refreshXP: () => void;
 }
+
+
+const mainSteps: Step[] = [
+    {
+        target: "body",
+        placement:"center",
+        content: "Welcome to Edusense! This quick tutorial will help you get comfortable with the platform, so you can start learning right away.",
+        disableBeacon: true
+    },
+        
+    {
+        target: '#dashboard-nav',
+        content: 'This is your dashboard nav. Here you can view your progress bar and your current level, and you can log off.',
+    },
+    {
+        target: '#start-course-nav',
+        placement: "top",
+        content: 'Down here is where you can enroll and unenroll in different courses, ranging from math, science, writing, and many more!',
+    },
+    {
+        target: '#start-course-btn',
+        content: 'Click here to enroll in your first course!',
+    },
+];
 
 const CustomPropContext = React.createContext<ICustomProps | undefined>(undefined);
 export const useCustomProp = () => {
-  const value = React.useContext(CustomPropContext);
-  if (value === undefined) {
-    throw new Error('useCustomProp must be used within a CustomPropProvider');
-  }
-  return value;
-};
+    const value = React.useContext(CustomPropContext);
+    if (value === undefined) {
+        throw new Error('useCustomProp must be used within a CustomPropProvider');
+    }
+    return value;
+    };
 
-const interClassName = 'font-inter'; // You can adjust this if needed.
+    const interClassName = 'font-inter';
 
-export default function PortalLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+    export default function PortalLayout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+    //   const router = useRouter();
 
-  const [context, setContext] = useState<IPageContext>({
-    pageContext: '',
-    quiz: null,
-    article: '',
-  });
-  const [enrollmentId, setEnrollmentId] = useState(-1);
-  const [userSelection, setUserSelection] = useState('');
-  const showChatWidget = pathname.endsWith('/portal/courses');
+    const [context, setContext] = useState<IPageContext>({
+        pageContext: '',
+        quiz: null,
+        article: '',
+    });
 
-  // XP + Level state
-  const [userXP, setUserXP] = useState({
-    points: 0,
-    level: 1,
-    currentThreshold: 0,
-    nextThreshold: 50,
-  });
+    const [enrollmentId, setEnrollmentId] = useState(-1);
+    const [userSelection, setUserSelection] = useState('');
+    const [userXP, setUserXP] = useState({
+        points: 0,
+        level: 1,
+        currentThreshold: 0,
+        nextThreshold: 50,
+    });
+
+
+    useEffect(() => {
+        localStorage.clear()
+        refreshXP();
+
+    }, []);
 
     const refreshXP = () => {
-        // try {
-        //     const res = await fetch('/api/user/xp');
-        //     const data = await res.json();
-        //     setUserXP({
-        //         points: data.points,
-        //         level: data.level,
-        //         currentThreshold: data.current_threshold,
-        //         nextThreshold: data.next_threshold,
-        //     });
-        // } catch (error) {
-        //     console.error('Failed to fetch XP:', error);
-        // }
         const url = API_PREFIX + AUTH_ENDPOINT;
-        const queryParams = {
-            type: "get_points"
-        }
+        const queryParams = { type: 'get_points' };
         const requestResponse = httpGet<IPointsRespones>(url, queryParams);
 
         requestResponse.then((response) => {
-            setUserXP({
-                 points: response.data.data.points,
-                 level: response.data.data.level,
-                 currentThreshold: response.data.data.current_threshold,
-                 nextThreshold: response.data.data.next_threshold,
-             });
-        })
+        setUserXP({
+            points: response.data.data.points,
+            level: response.data.data.level,
+            currentThreshold: response.data.data.current_threshold,
+            nextThreshold: response.data.data.next_threshold,
+        });
+        });
     };
 
 
-  useEffect(() => {
-    const API_URL = API_PREFIX + AUTH_ENDPOINT;
+    const showChatWidget = pathname.endsWith('/portal/courses');
 
-    axios
-      .get(API_URL, { params: { type: 'get_points' } })
-      .then((response) => {
-        console.log('Response:', response.data);
-        setUserXP({
-          points: response.data.points,
-          level: response.data.level,
-          currentThreshold: userXP.currentThreshold,
-          nextThreshold: userXP.nextThreshold,
-        });
-      })
-      .catch((error) => {
-        console.error('Error fetching points:', error);
-      });
-  }, []);
+    return (
+        <div id='main' className={`${interClassName} bg-white text-gray-800 min-h-screen flex flex-col`}>
 
-  return (
-    <div className={`${interClassName} bg-white text-gray-800 min-h-screen flex flex-col`}>
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="z-40 bg-white mx-auto px-4 py-4 flex justify-between items-center ">
-          <Link href="/portal/courses" className="text-2xl font-bold text-blue-600">
-            <Image src="/EduSense-Sample-Logo.png" alt="Logo" width={120} height={0} />
-          </Link>
+        <JoyrideWrapper steps={mainSteps} seenKey='MainPageTutorial' />
 
-          <nav className="flex items-center space-x-6 text-sm font-medium  text-gray-700">
-            {/* XP Level Display */}
-            <div className="flex flex-col items-end text-sm text-gray-800 mr-4">
-              <span className="font-semibold">Lvl {userXP.level}</span>
-              <div className="relative w-28 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="absolute top-0 left-0 h-full bg-blue-500 rounded-full"
-                  style={{
-                    width: `${Math.min(
-                      100,
-                      ((userXP.points - userXP.currentThreshold) /
-                        (userXP.nextThreshold - userXP.currentThreshold)) *
-                        100
-                    )}%`,
-                  }}
-                />
-              </div>
-              <span className="text-xs text-gray-500">
-                {userXP.points} / {userXP.nextThreshold}
-              </span>
-            </div>
-
-            <Link href="/portal/settings" className="hover:text-gray-900">
-              Settings
+        <header id="dashboard-nav" className="bg-white shadow-sm sticky top-0 z-50">
+            <div className="z-40 bg-white mx-auto px-4 py-4 flex justify-between items-center ">
+            <Link href="/portal/courses" className="text-2xl font-bold text-blue-600" id="dashboard-nav">
+                <Image src="/EduSense-Sample-Logo.png" alt="Logo" width={120} height={0} />
             </Link>
-            <Logout />
-          </nav>
+
+            <nav  className="flex items-center space-x-6 text-sm font-medium  text-gray-700">
+                <div className="flex flex-col items-end text-sm text-gray-800 mr-4" id="course-progress-bar">
+                <span className="font-semibold">Lvl {userXP.level}</span>
+                <div className="relative w-28 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                    className="absolute top-0 left-0 h-full bg-blue-500 rounded-full"
+                    style={{
+                        width: `${Math.min(
+                        100,
+                        ((userXP.points - userXP.currentThreshold) /
+                            (userXP.nextThreshold - userXP.currentThreshold)) *
+                            100
+                        )}%`,
+                    }}
+                    />
+                </div>
+                <span className="text-xs text-gray-500">
+                    {userXP.points} / {userXP.nextThreshold}
+                </span>
+                </div>
+
+                <Link href="/portal/settings" className="hover:text-gray-900">
+                Settings
+                </Link>
+                <Logout />
+            </nav>
+            </div>
+        </header>
+
+        <main className="flex w-full h-full min-h-screen bg-white mx-auto px-4 py-12 ">
+            {!showChatWidget && (
+            <ChatWidget
+                pageContext={context.pageContext}
+                enrollmentId={enrollmentId}
+                quiz={context.quiz}
+                article={context.article}
+                userSelection={userSelection}
+            />
+            )}
+            <CustomPropContext.Provider
+            value={{ context, setContext, enrollmentId, setEnrollmentId, setUserSelection, refreshXP }}
+            >
+            {children}
+            </CustomPropContext.Provider>
+        </main>
+
+        <footer className="bg-white border-t mt-12 py-6 text-center text-sm text-gray-500">
+            © {new Date().getFullYear()} Edusense. All rights reserved.
+        </footer>
         </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex w-full h-full min-h-screen bg-white mx-auto px-4 py-12 ">
-        {!showChatWidget && (
-          <ChatWidget
-            pageContext={context.pageContext}
-            enrollmentId={enrollmentId}
-            quiz={context.quiz}
-            article={context.article}
-            userSelection={userSelection}
-          />
-        )}
-        <CustomPropContext.Provider
-          value={{ context, setContext, enrollmentId, setEnrollmentId, setUserSelection, refreshXP }}
-        >
-          {children}
-        </CustomPropContext.Provider>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t mt-12 py-6 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Edusense. All rights reserved.
-      </footer>
-    </div>
-  );
+    );
 }
