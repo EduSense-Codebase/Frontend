@@ -20,7 +20,7 @@ export default function SectionRoadmap() {
     const section = params.section as string
     return (
         <>
-        <JoyrideWrapper seenKey="roadMapSeen" steps={roadmapSteps}/>
+        <JoyrideWrapper seenKey="3" steps={roadmapSteps}/>
         <div>
             <h1 className="flex justify-center text-4xl items-center font-bold mb-4 capitalize text-gray-700">{section} Roadmap</h1>
 

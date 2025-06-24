@@ -41,6 +41,8 @@ export default function CoursesPage() {
 		const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
 
 		courseResponse.then((response) => {
+            console.log("sessyy")
+            console.log(response)
 			setCourses(response.data.data);
 		}).catch((err) => {
 			//FIXME: Add Error Handling

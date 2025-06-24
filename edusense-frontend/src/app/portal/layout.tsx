@@ -113,7 +113,7 @@ export const useCustomProp = () => {
     return (
         <div id='main' className={`${interClassName} bg-white text-gray-800 min-h-screen flex flex-col`}>
 
-        <JoyrideWrapper steps={mainSteps} seenKey='MainPageTutorial' />
+        <JoyrideWrapper steps={mainSteps} seenKey='1' />
 
         <header id="dashboard-nav" className="bg-white shadow-sm sticky top-0 z-50">
             <div className="z-40 bg-white mx-auto px-4 py-4 flex justify-between items-center ">
