@@ -7,6 +7,7 @@ import { IFrontendAIResponse } from "../typedef";
 import { IQuiz } from "../typedef";
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from "next/image";
+import ReactMarkdown from "react-markdown"
 
 interface IChatWidgetProps {
   pageContext: string
@@ -173,7 +174,11 @@ const ChatWidget = (props: IChatWidgetProps) => {
                       : "bg-gray-200 text-gray-800 self-start mr-auto"
                   }`}
                 >
-                  {msg.text}
+                    {msg.sender === "ai" ? (
+                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+                    ) : (
+                    msg.text
+                    )}
                 </div>
               ))}
             </div>
