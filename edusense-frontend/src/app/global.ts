@@ -1,3 +1,5 @@
+export const GOOGLE_CLIENT_ID = "140940625332-td38m1kcgeapil6tf6ppdppnqagrbn3l.apps.googleusercontent.com";
+
 export const API_PREFIX = "http://localhost:8000/"
 
 export const AUTH_ENDPOINT = "api/auth/"

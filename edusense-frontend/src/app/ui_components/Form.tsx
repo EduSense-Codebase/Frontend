@@ -23,6 +23,7 @@ export interface IFormProps {
   callbackFunc: (callbackID: string, value: string) => void;
   submitCallback: () => void;
   submitDisplayName: string;
+  extraComponents?: React.ReactElement
 }
 
 const Form: React.FC<IFormProps> = ({
@@ -31,6 +32,7 @@ const Form: React.FC<IFormProps> = ({
   callbackFunc,
   submitCallback,
   submitDisplayName,
+  extraComponents
 }) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -73,6 +75,7 @@ const Form: React.FC<IFormProps> = ({
         onClick={submitCallback}
         variant="primary"
       />
+      {extraComponents}
     </form>
   );
 };
