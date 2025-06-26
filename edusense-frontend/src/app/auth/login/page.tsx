@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { API_PREFIX, AUTH_ENDPOINT } from "../../global";
+import { API_PREFIX, AUTH_ENDPOINT, GOOGLE_CLIENT_ID } from "../../global";
 import { httpPost } from "../../utils";
 import Form, { IFormFieldBase } from "../../ui_components/Form";
+
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 export default function LoginPage() {
 const [email, setEmail] = useState("");
@@ -62,8 +64,31 @@ const handleLogin = () => {
 
 };
 
+const handleGoogleLogin = (credentialResponse: any) => {
+	const apiUrl = API_PREFIX + AUTH_ENDPOINT;
+	const formData = {
+			provider: "google",
+			credential: credentialResponse.credential,
+		};
+	const queryParams = {
+		type: "third_party_signin"
+	}
+
+	
+	const response = httpPost(apiUrl, formData, queryParams);
+	response.then((response) => {
+		console.log("Login successful:", response.data);
+		router.push("/portal/courses");
+
+	}).catch((err) => {
+		console.log("WHY")
+		console.log(err)
+	})
+}
+
 return (
-		<Form
+		<GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+			<Form
 		metadata={{
 			heading: 'Login',
 			formClassName:
@@ -74,6 +99,9 @@ return (
 		callbackFunc={handleFieldChange}
 		submitCallback={handleLogin}
 		submitDisplayName="Login"
+		extraComponents={<GoogleLogin onSuccess={handleGoogleLogin} />}
 		/>
+		</GoogleOAuthProvider>
+		
 );
 }
