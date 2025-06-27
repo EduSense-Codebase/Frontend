@@ -156,6 +156,8 @@ export default function CourseRoadmap() {
                               ? `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
                               : step.title.toLowerCase().includes("test")
                               ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
+                              : (step.title.toLowerCase().includes("match") ||step.title.toLowerCase().includes("matching")  )
+                              ? `/portal/course_roadmap/${enrollmentId}/${section}/matching/${step.title}`
                               : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
                           }
                         >

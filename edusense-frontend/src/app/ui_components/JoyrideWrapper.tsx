@@ -30,7 +30,7 @@ export default function JoyrideWrapper({steps, seenKey}: JoyrideWrapperProps) {
         const response = httpGet<tutorialResponse>(API_URL, queryParams);
         
         response.then((res)=>{
-            console.log(res)
+            //console.log(res)
             if(!res.data.seen){
                 console.log("nt seen")
                 setRun(true)
