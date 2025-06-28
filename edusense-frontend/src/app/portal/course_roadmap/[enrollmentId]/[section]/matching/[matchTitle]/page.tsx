@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import RoadMapNav from '@/app/ui_components/RoadMapNav';
 import { useCustomProp } from '@/app/portal/layout';
+import { API_PREFIX, AI_ENDPOINT } from '@/app/global';
+import { httpPost } from '@/app/utils';
 
 interface MatchingPair {
   left: string;
@@ -23,7 +25,7 @@ export default function MatchingPage() {
   const params = useParams();
   const enrollmentId = params.enrollmentId as string;
   const section = params.section as string;
-  const title = decodeURIComponent(params.matchingTitle as string);
+  const title = decodeURIComponent(params.matchTitle as string);
 
   const layoutProps = useCustomProp();
 
@@ -50,7 +52,33 @@ export default function MatchingPage() {
       pageContext: "This page is a matching activity to reinforce learning through interactive pairing.",
     }));
 
-    setActivity(dummyData);
+    //setActivity(dummyData);
+    const apiUrl = API_PREFIX + AI_ENDPOINT;
+    const queryParams = {
+        section: "generate_ai_content"
+    }
+    const prompt_parameters = {
+        "title": title,
+    }
+    const formData = {
+        enrollment_id: enrollmentId,
+        prompt_type: "matching_activity",
+        prompt_parameters: JSON.stringify(prompt_parameters),
+    }
+
+    const response = httpPost<IMatchingActivity>(apiUrl, formData, queryParams);
+    response.then((res)=>{
+        console.log("Raw response:", res);
+        console.log(res.data.data);
+        setActivity({
+            title: title,
+            instructions: res.data.data.description,
+            leftItems: res.data.data.left_items,
+            rightItems: res.data.data.right_items,
+            correctPairs: res.data.data.correct_pairs,
+        })
+    })
+
   }, []);
 
   return (
@@ -63,7 +91,7 @@ export default function MatchingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <h1 className="text-2xl font-bold text-indigo-800 mb-4">{activity.title}</h1>
+            <h1 className="text-2xl font-bold text-indigo-800 mb-4">{title}</h1>
             <p className="text-gray-700 mb-6">{activity.instructions}</p>
             <div className="grid grid-cols-2 gap-6">
               <div>

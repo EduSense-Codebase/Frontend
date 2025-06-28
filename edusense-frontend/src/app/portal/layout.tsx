@@ -88,7 +88,7 @@ export const useCustomProp = () => {
 
     useEffect(() => {
         localStorage.clear()
-        refreshXP();
+        //refreshXP();
 
     }, []);
 

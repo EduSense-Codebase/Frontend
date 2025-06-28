@@ -1,34 +1,34 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from "../../global";
-import { IAllEnrolledCourseResponse, IAllOfferedResponse, ICourse, IOfferedCourse, IUserInfoResponse, INewEnrollment } from '../../typedef';
+import { API_PREFIX, COURSE_ENDPOINT } from "../../global";
+import { IAllEnrolledCourseResponse, IAllOfferedResponse, ICourse, IOfferedCourse, INewEnrollment } from '../../typedef';
 import { httpGet, httpPost } from '../../utils';
 import * as motion from "motion/react-client";
 
 
 export default function CoursesPage() {
 	const [courses, setCourses] = useState<ICourse[]>([]);
-	const [name, setName] = useState("");
+	//const [name, setName] = useState("");
 	const [offeredCourses, setOfferedCourses] = useState<IOfferedCourse[]>([]);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [curAction, setCurAction] = useState('');
 
 
 	useEffect(() => {
-		// Example request to fetch user name (using AUTH endpoint)
-		const apiUrl = API_PREFIX + AUTH_ENDPOINT;
-		//const queryParams = { type: "signin" };
-		const response = httpGet<IUserInfoResponse>(apiUrl);
-		response.then((response) => {
-			console.log('Success:', response.data.data);
-			setName(response.data.data.name);
+		// // Example request to fetch user name (using AUTH endpoint)
+		// const apiUrl = API_PREFIX + AUTH_ENDPOINT;
+		// //const queryParams = { type: "signin" };
+		// const response = httpGet<IUserInfoResponse>(apiUrl);
+		// response.then((response) => {
+		// 	console.log('Success:', response.data.data);
+		// 	setName(response.data.data.name);
 
-		})
-		.catch((err) => {
-			//FIXME: Add Error Handling
-			console.error(err);
-		});
+		// })
+		// .catch((err) => {
+		// 	//FIXME: Add Error Handling
+		// 	console.error(err);
+		// });
 		
 		// You can also fetch courses here if needed.
 
@@ -41,12 +41,12 @@ export default function CoursesPage() {
 		const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
 
 		courseResponse.then((response) => {
-            console.log("sessyy")
-            console.log(response)
+            //console.log(response)
 			setCourses(response.data.data);
 		}).catch((err) => {
 			//FIXME: Add Error Handling
 			console.log(err);
+            console.log(courses)
 		})
 
 	}, []);
