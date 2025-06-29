@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --max-warnings 0",
+    "format": "prettier --write \"src/**/*.{js,ts,tsx,jsx,json,css,md}\"",
+    "prepare": "husky"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
@@ -34,7 +36,12 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
+    "husky": "^9.1.7",
     "postcss": "^8.5.4",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4.1.8",
     "typescript": "^5"
   }
