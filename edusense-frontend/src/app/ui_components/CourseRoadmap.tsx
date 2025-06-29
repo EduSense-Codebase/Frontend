@@ -91,6 +91,16 @@ export default function CourseRoadmap() {
         
     }, []);
 
+    // const getStepLink = (stepTitle: string) => {
+    //     const lower = stepTitle.toLowerCase();
+      
+    //     if (lower.includes("quiz")) return "quiz";
+    //     if (lower.includes("test")) return "test";
+    //     if (lower.includes("match")) return "matching";
+    //     if (lower.includes("matching")) return "matching";
+    //     return "article";
+    //   };
+
     const renderRoadmap = ({ data }: Props) => {
         console.log(`Journey length: ${journey.length}`);
         const toggleCompletion = (index: number) => {
@@ -149,20 +159,25 @@ export default function CourseRoadmap() {
                         transition={{ type: "spring", stiffness: 300 }}
                         className="bg-white p-6 md:p-8 rounded-xl shadow-xl border border-gray-200 w-[90%] max-w-md"
                       >
-                        <Link
-                          className="text-xl font-semibold text-black"
-                          href={
-                            step.title.toLowerCase().includes("quiz")
-                              ? `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
-                              : step.title.toLowerCase().includes("test")
-                              ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
-                              : (step.title.toLowerCase().includes("match") ||step.title.toLowerCase().includes("matching")  )
-                              ? `/portal/course_roadmap/${enrollmentId}/${section}/matching/${step.title}`
-                              : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
-                          }
-                        >
-                          {step.title}
-                        </Link>
+                            <Link
+                            className="text-xl font-semibold text-black"
+                            href={
+                                step.title.toLowerCase().includes("match") || step.title.toLowerCase().includes("matching")
+                                ? {
+                                    pathname: `/portal/course_roadmap/${enrollmentId}/${section}/matching/${step.title}`,
+                                    query: { description: step.description },
+                                    }
+                                : `/portal/course_roadmap/${enrollmentId}/${section}/${
+                                    step.title.toLowerCase().includes("quiz")
+                                        ? "quiz"
+                                        : step.title.toLowerCase().includes("test")
+                                        ? "test"
+                                        : "article"
+                                    }/${step.title}`
+                            }
+                            >
+                            {step.title}
+                            </Link>
                         {step.description && (
                           <p className="text-sm text-gray-600 mt-2">{step.description}</p>
                         )}

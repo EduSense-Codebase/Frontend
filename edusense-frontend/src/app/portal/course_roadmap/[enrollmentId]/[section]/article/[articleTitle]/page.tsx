@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect, useRef, cloneElement } from 'react';
-import { AI_ENDPOINT, API_PREFIX } from "../../../../../../../global";
-import { IArticle, IArticleResponse  } from '../../../../../../../typedef';
-import { httpGet, httpPost } from '../../../../../../../utils';
+import { AI_ENDPOINT, API_PREFIX } from "../../../../../../global";
+import { IArticle, IArticleResponse  } from '../../../../../../typedef';
+import { httpGet, httpPost } from '../../../../../../utils';
 import { useParams } from 'next/navigation';
 import { useCustomProp } from '@/app/portal/layout';
 
