@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint --max-warnings 0",
     "format": "prettier --write \"src/**/*.{js,ts,tsx,jsx,json,css,md}\"",
-    "pre-commit": "next lint --max-warnings 0; prettier --write \"src/**/*.{js,ts,tsx,jsx,json,css,md}\""
+    "pre-commit": "prettier --write \"src/**/*.{js,ts,tsx,jsx,json,css,md}\"; next lint --max-warnings 0"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
