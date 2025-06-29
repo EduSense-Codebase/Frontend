@@ -1,20 +1,20 @@
 // components/PointsPopup.tsx
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 type Props = {
-  points: number;
-  onClose: () => void;
+    points: number;
+    onClose: () => void;
 };
 
 export default function PointsPopup({ points, onClose }: Props) {
-  useEffect(() => {
-    const timer = setTimeout(() => onClose(), 2000); // Hide after 2s
-    return () => clearTimeout(timer);
-  }, [onClose]);
+    useEffect(() => {
+        const timer = setTimeout(() => onClose(), 2000); // Hide after 2s
+        return () => clearTimeout(timer);
+    }, [onClose]);
 
-  return (
-    <div className="fixed top-20 right-50 bg-green-100 text-green-800 px-4 py-2 rounded-xl shadow-lg text-lg font-bold animate-bounce z-50">
-      +{points} Points!
-    </div>
-  );
+    return (
+        <div className="fixed top-20 right-50 z-50 animate-bounce rounded-xl bg-green-100 px-4 py-2 text-lg font-bold text-green-800 shadow-lg">
+            +{points} Points!
+        </div>
+    );
 }

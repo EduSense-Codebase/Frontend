@@ -1,46 +1,46 @@
 /* ********************* Generic Types START ********************* */
 export interface ICourse {
-  id: number;
-  name: string;
-  color: string;
-  takenDiag: boolean;
-  roadmaps: string[];
+    id: number;
+    name: string;
+    color: string;
+    takenDiag: boolean;
+    roadmaps: string[];
 }
 
 export interface IOfferedCourse {
-  id: number;
-  course_name: string;
+    id: number;
+    course_name: string;
 }
 
 export interface IUserInfo {
-    name: string,
-    age: number
+    name: string;
+    age: number;
 }
 
 export interface IJourney {
-    title: string,
-    description: string
+    title: string;
+    description: string;
 }
 
 export interface IArticle {
-    article_title: string,
-    sections: string[],
-    section_content: string[]
+    article_title: string;
+    sections: string[];
+    section_content: string[];
 }
 
-export interface IQuiz{
-    questions: string[]
-    choices:string[][]
-    correct_ans: string[]
-    reasoning: string[][]
-    length: number
-    passage: string
+export interface IQuiz {
+    questions: string[];
+    choices: string[][];
+    correct_ans: string[];
+    reasoning: string[][];
+    length: number;
+    passage: string;
 }
 
 export type Task = {
     id: number;
     title: string;
-    status: "pending" | "completed";
+    status: 'pending' | 'completed';
 };
 
 /* ********************* Generic Types END *********************** */
@@ -48,64 +48,62 @@ export type Task = {
 /* ********************* Axios Response Types START ********************* */
 
 export interface IUserInfoResponse {
-    data: IUserInfo
+    data: IUserInfo;
 }
 
 export interface IAllOfferedResponse {
-    data : IOfferedCourse[]
+    data: IOfferedCourse[];
 }
 
 export interface IAllEnrolledCourseResponse {
-    data: ICourse[]
+    data: ICourse[];
 }
 
-export interface INewEnrollment{
-  data: ICourse
+export interface INewEnrollment {
+    data: ICourse;
 }
 
 export interface IJourneyResponse {
     data: {
         title: string[];
         description: string[];
-    }
+    };
 }
 
 export interface IArticleResponse {
-    data: IArticle
+    data: IArticle;
 }
 
 export interface IFrontendAIResponse {
-  data: {
-    response: string
-  }
+    data: {
+        response: string;
+    };
 }
 
-export interface IQuizResponse{
-    data: IQuiz 
+export interface IQuizResponse {
+    data: IQuiz;
 }
 
 export interface IPointsRespones {
     data: {
-        points: number,
-        level: number,
-        current_threshold: number,
-        next_threshold: number,
-    }
+        points: number;
+        level: number;
+        current_threshold: number;
+        next_threshold: number;
+    };
 }
 
 /* ********************* Axios Response Types END *********************** */
-
 
 /* ********************* Mock Data START *********************** */
 
 // Example in app/sat/page.tsx (or wherever you're working)
 export const mockTasks: Task[] = [
-    { id: 1, title: "Finish Reading Lesson 2", status: "pending" },
-    { id: 2, title: "Take Practice Quiz 1", status: "pending" },
-    { id: 3, title: "Review missed questions", status: "completed" },
-    { id: 4, title: "Watch timing strategy video", status: "pending" },
-    { id: 5, title: "Complete Vocab Drill", status: "pending" },
-  ];
-  
+    { id: 1, title: 'Finish Reading Lesson 2', status: 'pending' },
+    { id: 2, title: 'Take Practice Quiz 1', status: 'pending' },
+    { id: 3, title: 'Review missed questions', status: 'completed' },
+    { id: 4, title: 'Watch timing strategy video', status: 'pending' },
+    { id: 5, title: 'Complete Vocab Drill', status: 'pending' },
+];
 
 /* ********************* Mock Data END *********************** */
