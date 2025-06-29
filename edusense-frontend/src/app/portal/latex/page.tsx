@@ -2,15 +2,11 @@
 'use client';
 import { AI_ENDPOINT, API_PREFIX } from '@/app/global';
 import { httpGet } from '@/app/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 //import { parse, HtmlGenerator } from 'latex.js'
-interface ILatexProps {
-    latexString: string
-}
-
 interface ILatexToSvgResponse {
-    svg: string
+    svg: string;
 }
 
 function LatexRenderer({ latexSource }: { latexSource: string }) {
@@ -19,18 +15,20 @@ function LatexRenderer({ latexSource }: { latexSource: string }) {
     useEffect(() => {
         const API_URL = API_PREFIX + AI_ENDPOINT;
 
-        let queryParams = {
-            section: "latex_to_svg",
-            latex_source: latexSource
-        }
+        const queryParams = {
+            section: 'latex_to_svg',
+            latex_source: latexSource,
+        };
 
         const requestResponse = httpGet<ILatexToSvgResponse>(API_URL, queryParams);
         requestResponse.then((response) => {
             setHtml(response.data.svg);
-        })
-    }, [latexSource])
+        });
+    }, [latexSource]);
 
-    return <div className="prose max-w-none text-black" dangerouslySetInnerHTML={{ __html: html }} />;
+    return (
+        <div className="prose max-w-none text-black" dangerouslySetInnerHTML={{ __html: html }} />
+    );
 }
 
 export default function TestLatex() {
@@ -56,8 +54,8 @@ export default function TestLatex() {
 \\end{document}
 `;
     return (
-        <div className="w-full h-full flex flex-wrap justify-start gap-6 mb-10">
+        <div className="mb-10 flex h-full w-full flex-wrap justify-start gap-6">
             <LatexRenderer latexSource={tikzTriangle} />
         </div>
-    )
+    );
 }
