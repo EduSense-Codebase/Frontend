@@ -13,7 +13,6 @@ import { Literal, Parent } from 'unist';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-import RoadMapNav from '@/app/ui_components/RoadMapNav';
 
 const remarkHighlight: Plugin = () => {
     return (tree) => {
@@ -88,7 +87,6 @@ export default function CourseRoadmap() {
     const params = useParams();
     const enrollmentId = decodeURIComponent(params.enrollmentId as string).trim();
     const articleTitle = decodeURIComponent(params.articleTitle as string).trim();
-    const section = params.section as string;
 
     const [article, setArticle] = useState<IArticle | undefined>(undefined);
     const articleRef = useRef<HTMLDivElement>(null);
@@ -266,7 +264,6 @@ export default function CourseRoadmap() {
             >
                 {renderArticle()}
             </div>
-            <RoadMapNav enrollmentId={enrollmentId} section={section} />
         </>
     );
 }

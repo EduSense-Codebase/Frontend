@@ -96,6 +96,16 @@ export default function CourseRoadmap() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // const getStepLink = (stepTitle: string) => {
+    //     const lower = stepTitle.toLowerCase();
+
+    //     if (lower.includes("quiz")) return "quiz";
+    //     if (lower.includes("test")) return "test";
+    //     if (lower.includes("match")) return "matching";
+    //     if (lower.includes("matching")) return "matching";
+    //     return "article";
+    //   };
+
     const renderRoadmap = ({ data }: Props) => {
         console.log(`Journey length: ${journey.length}`);
         const toggleCompletion = (index: number) => {
@@ -159,11 +169,21 @@ export default function CourseRoadmap() {
                                     <Link
                                         className="text-xl font-semibold text-black"
                                         href={
-                                            step.title.toLowerCase().includes('quiz')
-                                                ? `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
-                                                : step.title.toLowerCase().includes('test')
-                                                  ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
-                                                  : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
+                                            step.title.toLowerCase().includes('match') ||
+                                            step.title.toLowerCase().includes('matching')
+                                                ? {
+                                                      pathname: `/portal/course_roadmap/${enrollmentId}/${section}/matching/${step.title}`,
+                                                      query: { description: step.description },
+                                                  }
+                                                : `/portal/course_roadmap/${enrollmentId}/${section}/${
+                                                      step.title.toLowerCase().includes('quiz')
+                                                          ? 'quiz'
+                                                          : step.title
+                                                                  .toLowerCase()
+                                                                  .includes('test')
+                                                            ? 'test'
+                                                            : 'article'
+                                                  }/${step.title}`
                                         }
                                     >
                                         {step.title}
