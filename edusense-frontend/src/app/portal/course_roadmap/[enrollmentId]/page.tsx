@@ -72,16 +72,35 @@ export default function CourseRoadmapPage() {
     const router = useRouter();
 
     useEffect(() => {
-        const API_URL = API_PREFIX + COURSE_ENDPOINT;
-        const queryParams = {
+
+
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        const queryParamsDiag = {
             section: 'course_details',
             enrollment_id: enrollmentId?.toString(),
         };
-        const request = httpGet<INewEnrollment>(API_URL, queryParams);
-        request.then((res) => {
-            console.log(res);
-            setRoadmaps(res.data.data.roadmaps);
-        });
+
+
+        const response = httpGet<INewEnrollment>(url, queryParamsDiag);
+
+        response.then((res) =>{
+            if(res.data.data.takenDiag == false){
+                router.push(`/portal/diagnostic/${enrollmentId}`);
+            }else{
+                const API_URL = API_PREFIX + COURSE_ENDPOINT;
+                const queryParams = {
+                    section: 'course_details',
+                    enrollment_id: enrollmentId?.toString(),
+                };
+                const request = httpGet<INewEnrollment>(API_URL, queryParams);
+                request.then((res) => {
+                    console.log(res);
+                    setRoadmaps(res.data.data.roadmaps);
+                });
+        
+
+            }
+        })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
