@@ -26,26 +26,36 @@ export default function CourseRoadmap() {
     const router = useRouter();
 
     useEffect(() => {
-        const url = API_PREFIX + COURSE_ENDPOINT;
-        const queryParams = {
-            section: 'course_details',
-            enrollment_id: enrollmentId?.toString(),
+        const cache_query_params = {
+            section: 'retrieve_cache',
+            enroll_id: enrollmentId,
+            cache_request: section,
         };
 
-        const response = httpGet<INewEnrollment>(url, queryParams);
-        response.then((res) => {
-            if (res.data.data.takenDiag == false) {
-                router.push(`/portal/diagnostic/${enrollmentId}`);
+        const API_URL = API_PREFIX + AI_ENDPOINT;
+        httpGet<IJourneyResponse>(API_URL, cache_query_params).then((response) => {
+            if (response.data.data != null) {
+                const localJourney: IJourney[] = [];
+                response.data.data.description.map((desc, index) => {
+                    localJourney.push({
+                        title: response.data.data.title[index],
+                        description: desc,
+                    });
+                });
+                setJourney(localJourney);
             } else {
-                const cache_query_params = {
-                    section: 'retrieve_cache',
-                    enroll_id: enrollmentId,
-                    cache_request: section,
+                const queryParams = {
+                    section: 'generate_ai_content',
                 };
 
-                const API_URL = API_PREFIX + AI_ENDPOINT;
-                httpGet<IJourneyResponse>(API_URL, cache_query_params).then((response) => {
-                    if (response.data.data != null) {
+                const formData = {
+                    enrollment_id: enrollmentId,
+                    prompt_type: 'roadmap',
+                    prompt_parameters: JSON.stringify({ type: section }),
+                };
+
+                httpPost<IJourneyResponse>(API_URL, formData, queryParams).then(
+                    (response) => {
                         const localJourney: IJourney[] = [];
                         response.data.data.description.map((desc, index) => {
                             localJourney.push({
@@ -53,45 +63,23 @@ export default function CourseRoadmap() {
                                 description: desc,
                             });
                         });
+
                         setJourney(localJourney);
-                    } else {
-                        const queryParams = {
-                            section: 'generate_ai_content',
-                        };
 
-                        const formData = {
-                            enrollment_id: enrollmentId,
-                            prompt_type: 'roadmap',
-                            prompt_parameters: JSON.stringify({ type: section }),
-                        };
-
-                        httpPost<IJourneyResponse>(API_URL, formData, queryParams).then(
-                            (response) => {
-                                const localJourney: IJourney[] = [];
-                                response.data.data.description.map((desc, index) => {
-                                    localJourney.push({
-                                        title: response.data.data.title[index],
-                                        description: desc,
-                                    });
-                                });
-
-                                setJourney(localJourney);
-
-                                httpPost(
-                                    API_URL,
-                                    {
-                                        enroll_id: enrollmentId,
-                                        cache_request: section,
-                                        cache_content: JSON.stringify(response.data.data),
-                                    },
-                                    { section: 'set_cache_content' },
-                                );
+                        httpPost(
+                            API_URL,
+                            {
+                                enroll_id: enrollmentId,
+                                cache_request: section,
+                                cache_content: JSON.stringify(response.data.data),
                             },
+                            { section: 'set_cache_content' },
                         );
-                    }
-                });
+                    },
+                );
             }
         });
+            
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

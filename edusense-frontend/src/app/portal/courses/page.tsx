@@ -29,7 +29,6 @@ export default function CoursesPage() {
 
         courseResponse
             .then((response) => {
-                console.log('sessyy');
                 console.log(response);
                 setCourses(response.data.data);
             })
