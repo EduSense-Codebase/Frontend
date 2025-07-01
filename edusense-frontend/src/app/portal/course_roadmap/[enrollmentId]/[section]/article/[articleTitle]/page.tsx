@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { AI_ENDPOINT, API_PREFIX } from '../../../../../../global';
 import { IArticle, IArticleResponse } from '../../../../../../typedef';
-import { httpPost } from '../../../../../../utils';
+import { httpPost, httpGet } from '../../../../../../utils';
 import { useParams } from 'next/navigation';
 import { useCustomProp } from '@/app/portal/layout';
 
@@ -109,36 +109,69 @@ export default function CourseRoadmap() {
     };
 
     useEffect(() => {
-        const queryParams = {
-            section: 'generate_ai_content',
-        };
-
-        console.log(articleTitle);
-
-        const prompt_parameters = {
-            title: articleTitle,
-        };
-
-        const formData = {
-            enrollment_id: enrollmentId,
-            prompt_type: 'article',
-            prompt_parameters: JSON.stringify(prompt_parameters),
+        const cache_query_params = {
+            section: 'retrieve_cache',
+            enroll_id: enrollmentId,
+            cache_request: articleTitle,
         };
 
         const API_URL = API_PREFIX + AI_ENDPOINT;
+        httpGet<IArticleResponse>(API_URL, cache_query_params).then((response) => {
+            if (response.data.data != null) {
+                console.log(response.data);
+                setArticle(response.data.data);
 
-        const requestResponse = httpPost<IArticleResponse>(API_URL, formData, queryParams);
+                layoutProps.setEnrollmentId(parseInt(enrollmentId));
+                layoutProps.setContext((prev) => ({
+                    ...prev,
+                    pageContext: pageContexts,
+                    article: getArticleStr(response.data.data),
+                }));
+            } else {
+                const queryParams = {
+                    section: 'generate_ai_content',
+                };
 
-        requestResponse.then((response) => {
-            console.log(response.data);
-            setArticle(response.data.data);
+                console.log(articleTitle);
 
-            layoutProps.setEnrollmentId(parseInt(enrollmentId));
-            layoutProps.setContext((prev) => ({
-                ...prev,
-                pageContext: pageContexts,
-                article: getArticleStr(response.data.data),
-            }));
+                const prompt_parameters = {
+                    title: articleTitle,
+                };
+
+                const formData = {
+                    enrollment_id: enrollmentId,
+                    prompt_type: 'article',
+                    prompt_parameters: JSON.stringify(prompt_parameters),
+                };
+
+                const API_URL = API_PREFIX + AI_ENDPOINT;
+
+                const requestResponse = httpPost<IArticleResponse>(API_URL, formData, queryParams);
+
+                requestResponse.then((response) => {
+                    console.log(response.data);
+                    setArticle(response.data.data);
+
+                    layoutProps.setEnrollmentId(parseInt(enrollmentId));
+                    layoutProps.setContext((prev) => ({
+                        ...prev,
+                        pageContext: pageContexts,
+                        article: getArticleStr(response.data.data),
+                    }));
+
+                    httpPost(
+                        API_URL,
+                        {
+                            enroll_id: enrollmentId,
+                            cache_request: articleTitle,
+                            cache_content: JSON.stringify(response.data.data),
+                        },
+                        { section: 'set_cache_content' },
+                    ).then((res) => {
+                        console.log(res);
+                    });
+                });
+            }
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
