@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { httpPost } from '../../../../../../utils';
+import { httpPost, httpGet } from '../../../../../../utils';
 import { AI_ENDPOINT, API_PREFIX, QUIZ_LENGTH } from '../../../../../../global';
 import { IQuiz, IQuizResponse } from '../../../../../../typedef';
 import Quiz from '../../../../../../ui_components/Quiz';
@@ -20,32 +20,67 @@ export default function QuizPage() {
     const contexts = 'This page is a quiz page for students to practice their understanding';
 
     useEffect(() => {
-        const apiUrl = API_PREFIX + AI_ENDPOINT;
-        const queryParams = {
-            section: 'generate_ai_content',
-        };
-        const prompt_parameters = {
-            title: quizName,
-            length: QUIZ_LENGTH,
-        };
-        const formData = {
-            enrollment_id: enrollmentId,
-            prompt_type: 'quiz_mc',
-            prompt_parameters: JSON.stringify(prompt_parameters),
+        const cache_query_params = {
+            section: 'retrieve_cache',
+            enroll_id: enrollmentId,
+            cache_request: quizName,
         };
 
-        const response = httpPost<IQuizResponse>(apiUrl, formData, queryParams);
-        response.then((response) => {
-            console.log(response.data);
-            console.log(response.data.data);
-            setQuiz(response.data.data);
+        const API_URL = API_PREFIX + AI_ENDPOINT;
+        httpGet<IQuizResponse>(API_URL, cache_query_params).then((response) => {
+            if (response.data.data != null) {
+                console.log('Cached');
+                console.log(response.data.data);
+                setQuiz(response.data.data);
+                layoutProps.setEnrollmentId(parseInt(enrollmentId));
+                layoutProps.setContext((prev) => ({
+                    ...prev,
+                    pageContext: contexts,
+                    quiz: response.data.data,
+                }));
+            } else {
+                // Not cached yet
 
-            layoutProps.setEnrollmentId(parseInt(enrollmentId));
-            layoutProps.setContext((prev) => ({
-                ...prev,
-                pageContext: contexts,
-                quiz: response.data.data,
-            }));
+                const apiUrl = API_PREFIX + AI_ENDPOINT;
+                const queryParams = {
+                    section: 'generate_ai_content',
+                };
+                const prompt_parameters = {
+                    title: quizName,
+                    length: QUIZ_LENGTH,
+                };
+                const formData = {
+                    enrollment_id: enrollmentId,
+                    prompt_type: 'quiz_mc',
+                    prompt_parameters: JSON.stringify(prompt_parameters),
+                };
+
+                const response = httpPost<IQuizResponse>(apiUrl, formData, queryParams);
+                response.then((response) => {
+                    console.log(response.data);
+                    console.log(response.data.data);
+                    setQuiz(response.data.data);
+
+                    layoutProps.setEnrollmentId(parseInt(enrollmentId));
+                    layoutProps.setContext((prev) => ({
+                        ...prev,
+                        pageContext: contexts,
+                        quiz: response.data.data,
+                    }));
+
+                    httpPost(
+                        API_URL,
+                        {
+                            enroll_id: enrollmentId,
+                            cache_request: quizName,
+                            cache_content: JSON.stringify(response.data.data),
+                        },
+                        { section: 'set_cache_content' },
+                    ).then((res) => {
+                        console.log(res);
+                    });
+                });
+            }
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -6,20 +6,8 @@ import { motion } from 'framer-motion';
 import RoadMapNav from '@/app/ui_components/RoadMapNav';
 import { useCustomProp } from '@/app/portal/layout';
 import { API_PREFIX, AI_ENDPOINT } from '@/app/global';
-import { httpPost } from '@/app/utils';
-
-// interface MatchingPair {
-// left: string;
-// right: string;
-// }
-
-interface IMatchingActivity {
-    title: string;
-    instructions: string;
-    leftItems: string[];
-    rightItems: string[];
-    correctPairs: [string, string][];
-}
+import { httpPost, httpGet } from '@/app/utils';
+import { IMatchingActivity, IMatchingActivityResponse } from '@/app/typedef';
 
 export default function MatchingPage() {
     const params = useParams();
@@ -45,39 +33,60 @@ export default function MatchingPage() {
 
     // Fetch activity content
     useEffect(() => {
+        const cache_query_params = {
+            section: 'retrieve_cache',
+            enroll_id: enrollmentId,
+            cache_request: title,
+        };
+
+        const API_URL = API_PREFIX + AI_ENDPOINT;
+        httpGet<IMatchingActivityResponse>(API_URL, cache_query_params).then((res) => {
+            if (res.data.data != null) {
+                console.log('cached');
+                setActivity(res.data.data);
+            } else {
+                console.log('not cached');
+                const apiUrl = API_PREFIX + AI_ENDPOINT;
+                const queryParams = {
+                    section: 'generate_ai_content',
+                };
+                const prompt_parameters = {
+                    title: prompt_param,
+                };
+                //console.log(prompt_parameters);
+                const formData = {
+                    enrollment_id: enrollmentId,
+                    prompt_type: 'matching_activity',
+                    prompt_parameters: JSON.stringify(prompt_parameters),
+                };
+
+                const response = httpPost<IMatchingActivityResponse>(apiUrl, formData, queryParams);
+                response.then((res) => {
+                    //console.log("Raw response:", res);
+                    console.log(res.data.data);
+                    setActivity(res.data.data);
+
+                    httpPost(
+                        API_URL,
+                        {
+                            enroll_id: enrollmentId,
+                            cache_request: title,
+                            cache_content: JSON.stringify(res.data.data),
+                        },
+                        { section: 'set_cache_content' },
+                    ).then((res) => {
+                        console.log(res);
+                    });
+                });
+            }
+        });
+
         layoutProps.setEnrollmentId(Number(enrollmentId));
         layoutProps.setContext((prev) => ({
             ...prev,
             pageContext:
                 'This page is a matching activity to reinforce learning through interactive pairing.',
         }));
-
-        const apiUrl = API_PREFIX + AI_ENDPOINT;
-        const queryParams = {
-            section: 'generate_ai_content',
-        };
-        const prompt_parameters = {
-            title: prompt_param,
-        };
-        console.log(prompt_parameters);
-        const formData = {
-            enrollment_id: enrollmentId,
-            prompt_type: 'matching_activity',
-            prompt_parameters: JSON.stringify(prompt_parameters),
-        };
-
-        const response = httpPost<IMatchingActivity>(apiUrl, formData, queryParams);
-        response.then((res) => {
-            //console.log("Raw response:", res);
-            console.log(res.data.data);
-            setActivity({
-                title: title,
-                instructions: res.data.data.description,
-                leftItems: res.data.data.left_items,
-                rightItems: res.data.data.right_items,
-                correctPairs: res.data.data.correct_pairs,
-            });
-        });
     }, []);
 
     // Tile click handler
@@ -143,9 +152,9 @@ export default function MatchingPage() {
         console.log('submitted');
 
         const results = connections.map(({ left, right }) => {
-            const leftText = activity.leftItems[left];
-            const rightText = activity.rightItems[right];
-            const isCorrect = activity.correctPairs.some(
+            const leftText = activity.left_items[left];
+            const rightText = activity.right_items[right];
+            const isCorrect = activity.correct_pairs.some(
                 ([correctLeft, correctRight]) =>
                     correctLeft === leftText && correctRight === rightText,
             );
@@ -189,7 +198,7 @@ export default function MatchingPage() {
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
                     <h1 className="mb-4 text-2xl font-bold text-indigo-800">{title}</h1>
-                    <p className="mb-6 text-gray-700">{activity.instructions}</p>
+                    <p className="mb-6 text-gray-700">{activity.description}</p>
 
                     <div ref={containerRef} className="relative h-full w-full">
                         {renderLines()}
@@ -197,7 +206,7 @@ export default function MatchingPage() {
                             {/* Left Tiles */}
                             <div>
                                 <h2 className="mb-2 font-semibold">Match the tile on the left</h2>
-                                {activity.leftItems.map((item, index) => (
+                                {activity.left_items.map((item, index) => (
                                     <motion.div
                                         key={index}
                                         ref={(el) => (leftRefs.current[index] = el)}
@@ -215,7 +224,7 @@ export default function MatchingPage() {
                                 <h2 className="mb-2 font-semibold">
                                     ... to the correct tiles on the right!
                                 </h2>
-                                {activity.rightItems.map((item, index) => (
+                                {activity.right_items.map((item, index) => (
                                     <motion.div
                                         key={index}
                                         ref={(el) => (rightRefs.current[index] = el)}

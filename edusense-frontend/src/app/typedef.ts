@@ -37,6 +37,14 @@ export interface IQuiz {
     passage: string;
 }
 
+export interface IMatchingActivity {
+    title: string;
+    description: string;
+    left_items: string[];
+    right_items: string[];
+    correct_pairs: [string, string][];
+}
+
 export type Task = {
     id: number;
     title: string;
@@ -91,6 +99,10 @@ export interface IPointsRespones {
         current_threshold: number;
         next_threshold: number;
     };
+}
+
+export interface IMatchingActivityResponse {
+    data: IMatchingActivity;
 }
 
 /* ********************* Axios Response Types END *********************** */
