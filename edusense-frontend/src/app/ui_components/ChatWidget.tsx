@@ -86,6 +86,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
         const queryParams = { section: 'generate_ai_content' };
 
         const prompt_parameters = { message: context };
+        console.log(`enrollment id is ${props.enrollmentId}`);
 
         const formData = {
             enrollment_id: props.enrollmentId,
