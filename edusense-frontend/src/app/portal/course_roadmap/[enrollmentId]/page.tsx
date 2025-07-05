@@ -95,7 +95,7 @@ export default function CourseRoadmapPage() {
                 };
                 const request = httpGet<INewEnrollment>(API_URL, queryParams);
                 request.then((res) => {
-                    console.log(res);
+                    //console.log(res);
                     setRoadmaps(res.data.data.roadmaps);
                 });
             }
