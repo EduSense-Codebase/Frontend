@@ -9,6 +9,7 @@ import MiniDashboard from '@/app/ui_components/MiniDashboard';
 import { mockTasks } from '@/app/typedef';
 import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
+import { useCustomProp } from '@/app/portal/layout';
 
 const sectionSteps: Step[] = [
     {
@@ -68,25 +69,25 @@ export default function CourseRoadmapPage() {
     const enrollmentId = params.enrollmentId as string;
     const [roadmaps, setRoadmaps] = useState<string[]>(['']);
     const [showDashboard, setShowDashboard] = useState(false);
+    const pageContexts =
+        'This page is an section page where users can select the various sections of the course to do work.';
 
     const router = useRouter();
+    const layoutProps = useCustomProp();
 
     useEffect(() => {
-
-
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParamsDiag = {
             section: 'course_details',
             enrollment_id: enrollmentId?.toString(),
         };
 
-
         const response = httpGet<INewEnrollment>(url, queryParamsDiag);
 
-        response.then((res) =>{
-            if(res.data.data.takenDiag == false){
+        response.then((res) => {
+            if (res.data.data.takenDiag == false) {
                 router.push(`/portal/diagnostic/${enrollmentId}`);
-            }else{
+            } else {
                 const API_URL = API_PREFIX + COURSE_ENDPOINT;
                 const queryParams = {
                     section: 'course_details',
@@ -94,13 +95,17 @@ export default function CourseRoadmapPage() {
                 };
                 const request = httpGet<INewEnrollment>(API_URL, queryParams);
                 request.then((res) => {
-                    console.log(res);
+                    //console.log(res);
                     setRoadmaps(res.data.data.roadmaps);
                 });
-        
-
             }
-        })
+            layoutProps.setEnrollmentId(parseInt(enrollmentId));
+            layoutProps.setContext((prev) => ({
+                ...prev,
+                pageContext: pageContexts,
+                roadmap: res.data.data.roadmaps.join(' '),
+            }));
+        });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

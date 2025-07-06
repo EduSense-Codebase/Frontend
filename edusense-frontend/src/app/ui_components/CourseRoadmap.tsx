@@ -6,6 +6,7 @@ import { httpPost, httpGet } from '../utils';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useCustomProp } from '../portal/layout';
 
 type Step = {
     title: string;
@@ -23,7 +24,11 @@ export default function CourseRoadmap() {
 
     const [journey, setJourney] = useState<IJourney[]>([]);
     const [numCompleted, setNumCompleted] = useState<number>(1);
+ 
     const router = useRouter();
+    const layoutProps = useCustomProp();
+    const pageContexts =
+        'This page is the roadmap page where the roadmap is generated and the student can choose various tiles in the roadmap, as well as see the progress bar at the top.';
 
     useEffect(() => {
         const cache_query_params = {
@@ -78,6 +83,14 @@ export default function CourseRoadmap() {
                     },
                 );
             }
+
+            layoutProps.setEnrollmentId(parseInt(enrollmentId));
+            layoutProps.setContext((prev) => ({
+                ...prev,
+                pageContext: pageContexts,
+                roadmap: journey.join(" "),
+            }));
+            console.log(`layout props roadmap: ${layoutProps.context.roadmap}`)
         });
             
 
