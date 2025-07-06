@@ -87,8 +87,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     });
 
     useEffect(() => {
-        localStorage.clear();
         refreshXP();
+        console.log(userXP)
     }, []);
 
     const refreshXP = () => {
@@ -97,6 +97,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         const requestResponse = httpGet<IPointsRespones>(url, queryParams);
 
         requestResponse.then((response) => {
+            console.log(response.data.data);
             setUserXP({
                 points: response.data.data.points,
                 level: response.data.data.level,
