@@ -6,6 +6,7 @@ import PointsPopup from './PointsPopup';
 import { motion, AnimatePresence } from 'framer-motion';
 import { httpPost } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
+import { useCustomProp } from '../portal/layout';
 
 interface QuizProps {
     quiz: IQuiz;
@@ -31,6 +32,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 }) => {
     const isCorrect = option[0] === correctAnswer;
     const isSelected = index === selectedAnswer;
+    const { refreshXP } = useCustomProp();
 
     const baseClasses =
         'w-full text-left p-4 rounded-lg border font-medium transition duration-200';
@@ -40,6 +42,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     if (hasSubmitted) {
         if (isSelected && isCorrect) {
             stateClasses = 'bg-green-500 text-white border-green-600';
+            refreshXP();
         } else if (isSelected && !isCorrect) {
             stateClasses = 'bg-red-500 text-white border-red-600';
         } else {
@@ -93,7 +96,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
                 type: 'add_points',
             };
             const formData = {
-                event_type: 'correct_answer',
+                qty: '5',
             };
 
             const response = httpPost(API_URL, formData, queryParams);

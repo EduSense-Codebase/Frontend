@@ -29,7 +29,7 @@ export default function CoursesPage() {
 
         courseResponse
             .then((response) => {
-                console.log(response);
+                //console.log(response);
                 setCourses(response.data.data);
             })
             .catch((err) => {
