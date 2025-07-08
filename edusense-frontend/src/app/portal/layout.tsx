@@ -88,7 +88,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
     useEffect(() => {
         refreshXP();
-        console.log(userXP)
+        //console.log(userXP);
     }, []);
 
     const refreshXP = () => {
