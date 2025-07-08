@@ -5,9 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import RoadMapNav from '@/app/ui_components/RoadMapNav';
 import { useCustomProp } from '@/app/portal/layout';
-import { API_PREFIX, AI_ENDPOINT } from '@/app/global';
+import { API_PREFIX, AI_ENDPOINT, AUTH_ENDPOINT } from '@/app/global';
 import { httpPost, httpGet } from '@/app/utils';
 import { IMatchingActivity, IMatchingActivityResponse } from '@/app/typedef';
+import PointsPopup from '@/app/ui_components/PointsPopup';
 
 export default function MatchingPage() {
     const params = useParams();
@@ -23,6 +24,9 @@ export default function MatchingPage() {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const leftRefs = useRef<(HTMLDivElement | null)[]>([]);
     const rightRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const { refreshXP } = useCustomProp();
+    const [showPointsPopup, setShowPointsPopup] = useState(false);
+    const [numCorrect, setNumCorrect] = useState(0);
 
     const [activity, setActivity] = useState<IMatchingActivity | null>(null);
     const [leftSelectedIndex, setLeftSelectedIndex] = useState<number | null>(null);
@@ -151,6 +155,7 @@ export default function MatchingPage() {
     const handleSubmit = () => {
         console.log('submitted');
 
+        let counter = 0;
         const results = connections.map(({ left, right }) => {
             const leftText = activity.left_items[left];
             const rightText = activity.right_items[right];
@@ -158,11 +163,32 @@ export default function MatchingPage() {
                 ([correctLeft, correctRight]) =>
                     correctLeft === leftText && correctRight === rightText,
             );
+            if (isCorrect) {
+                counter += 1;
+            }
 
             return { left, right, isCorrect };
         });
 
+        const API_URL = API_PREFIX + AUTH_ENDPOINT;
+        const queryParams = {
+            type: 'add_points',
+        };
+        const formData = {
+            qty: (numCorrect * 3).toString(),
+        };
+
+        const response = httpPost(API_URL, formData, queryParams);
+        response.then((res) => {
+            console.log(res['data']);
+        });
+        console.log(`num correct is ${counter}`);
         setPairResults(results);
+        setNumCorrect(counter);
+        if (counter > 0) {
+            setShowPointsPopup(true);
+        }
+        refreshXP();
     };
 
     const getTileStyle = (side: 'left' | 'right', index: number) => {
@@ -247,6 +273,12 @@ export default function MatchingPage() {
                         </div>
                     </div>
                 </motion.div>
+                {showPointsPopup && (
+                    <PointsPopup
+                        points={numCorrect * 3}
+                        onClose={() => setShowPointsPopup(false)}
+                    />
+                )}
             </div>
             <RoadMapNav enrollmentId={enrollmentId} section={section} />
         </>
