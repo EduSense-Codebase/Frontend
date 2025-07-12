@@ -5,8 +5,6 @@ import { httpGet } from '@/app/utils';
 import { COURSE_ENDPOINT, API_PREFIX } from '@/app/global';
 import { useParams, useRouter } from 'next/navigation';
 import { INewEnrollment } from '@/app/typedef';
-import MiniDashboard from '@/app/ui_components/MiniDashboard';
-import { mockTasks } from '@/app/typedef';
 import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/portal/layout';
@@ -24,51 +22,51 @@ const sectionSteps: Step[] = [
     },
 ];
 
-function SectionMetaPanel({
-    progress,
-    next,
-    last,
-}: {
-    progress: number;
-    next: string;
-    last: string;
-}) {
-    return (
-        <div className="bg-opacity-90 pointer-events-none absolute top-0 left-0 z-10 h-full w-full rounded-xl bg-white p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            {/* Progress */}
-            <div className="mb-3">
-                <div className="mb-1 flex justify-between text-xs">
-                    <span className="font-medium">Progress</span>
-                    <span className="font-semibold text-blue-700">{progress}%</span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
-                    <div
-                        className="h-2 rounded-full bg-blue-600"
-                        style={{ width: `${progress}%` }}
-                    ></div>
-                </div>
-            </div>
+// function SectionMetaPanel({
+//     progress,
+//     next,
+//     last,
+// }: {
+//     progress: number;
+//     next: string;
+//     last: string;
+// }) {
+//     return (
+//         <div className="bg-opacity-90 pointer-events-none absolute top-0 left-0 z-10 h-full w-full rounded-xl bg-white p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+//             {/* Progress */}
+//             <div className="mb-3">
+//                 <div className="mb-1 flex justify-between text-xs">
+//                     <span className="font-medium">Progress</span>
+//                     <span className="font-semibold text-blue-700">{progress}%</span>
+//                 </div>
+//                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+//                     <div
+//                         className="h-2 rounded-full bg-blue-600"
+//                         style={{ width: `${progress}%` }}
+//                     ></div>
+//                 </div>
+//             </div>
 
-            {/* Next + Last Tile Info */}
-            <div className="flex justify-between pt-1 text-xs">
-                <div>
-                    <div className="text-gray-500">Next</div>
-                    <div className="font-medium">{next}</div>
-                </div>
-                <div>
-                    <div className="text-gray-500">Last</div>
-                    <div className="font-medium">{last}</div>
-                </div>
-            </div>
-        </div>
-    );
-}
+//             {/* Next + Last Tile Info */}
+//             <div className="flex justify-between pt-1 text-xs">
+//                 <div>
+//                     <div className="text-gray-500">Next</div>
+//                     <div className="font-medium">{next}</div>
+//                 </div>
+//                 <div>
+//                     <div className="text-gray-500">Last</div>
+//                     <div className="font-medium">{last}</div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// }
 
 export default function CourseRoadmapPage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
     const [roadmaps, setRoadmaps] = useState<string[]>(['']);
-    const [showDashboard, setShowDashboard] = useState(false);
+    const [courseName, setCourseName] = useState<string>('');
     const pageContexts =
         'This page is an section page where users can select the various sections of the course to do work.';
 
@@ -97,6 +95,7 @@ export default function CourseRoadmapPage() {
                 request.then((res) => {
                     //console.log(res);
                     setRoadmaps(res.data.data.roadmaps);
+                    setCourseName(res.data.data.name);
                 });
             }
             layoutProps.setEnrollmentId(parseInt(enrollmentId));
@@ -125,7 +124,9 @@ export default function CourseRoadmapPage() {
                         <div className="relative h-[500px] w-[500px]">
                             {/* Centered course title */}
                             <div className="absolute top-1/2 left-1/2 z-20 w-[160px] -translate-x-1/2 -translate-y-1/2 transform rounded-xl bg-blue-50 p-6 text-center shadow-md">
-                                <h1 className="mb-1 text-lg font-bold text-blue-900">Course</h1>
+                                <h1 className="mb-1 text-lg font-bold text-blue-900">
+                                    {courseName}
+                                </h1>
                                 <p className="text-sm text-blue-700">Choose your section</p>
                             </div>
 
@@ -179,15 +180,6 @@ export default function CourseRoadmapPage() {
                                                     {roadmap}
                                                 </h3>
                                             </div>
-
-                                            {/* Hover panel */}
-                                            <div className="pointer-events-none absolute top-full left-1/2 z-50 mt-2 w-[200px] -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100">
-                                                <SectionMetaPanel
-                                                    progress={42}
-                                                    next="Functions Quiz"
-                                                    last="Intro Article"
-                                                />
-                                            </div>
                                         </div>
                                     </>
                                 );
@@ -196,31 +188,6 @@ export default function CourseRoadmapPage() {
                     </div>
                 </div>
             </div>
-
-            {/* To-do button and dashboard */}
-            <button
-                className="fixed top-24 right-6 z-40 rounded-full bg-blue-500 p-3 shadow-md hover:bg-blue-700"
-                onClick={() => setShowDashboard(!showDashboard)}
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                >
-                    <path d="M16 4h1a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1" />
-                    <rect width="6" height="4" x="9" y="2" rx="1" />
-                    <path d="M9 12h6M9 16h6" />
-                </svg>
-            </button>
-
-            {showDashboard && (
-                <div className="fixed top-14 right-10 z-50 rounded-xl bg-white p-3 shadow-xl">
-                    <MiniDashboard tasks={mockTasks} />
-                </div>
-            )}
         </>
     );
 }

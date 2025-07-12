@@ -24,7 +24,7 @@ export default function CourseRoadmap() {
 
     const [journey, setJourney] = useState<IJourney[]>([]);
     const [numCompleted, setNumCompleted] = useState<number>(1);
- 
+
     const router = useRouter();
     const layoutProps = useCustomProp();
     const pageContexts =
@@ -59,40 +59,37 @@ export default function CourseRoadmap() {
                     prompt_parameters: JSON.stringify({ type: section }),
                 };
 
-                httpPost<IJourneyResponse>(API_URL, formData, queryParams).then(
-                    (response) => {
-                        const localJourney: IJourney[] = [];
-                        response.data.data.description.map((desc, index) => {
-                            localJourney.push({
-                                title: response.data.data.title[index],
-                                description: desc,
-                            });
+                httpPost<IJourneyResponse>(API_URL, formData, queryParams).then((response) => {
+                    const localJourney: IJourney[] = [];
+                    response.data.data.description.map((desc, index) => {
+                        localJourney.push({
+                            title: response.data.data.title[index],
+                            description: desc,
                         });
+                    });
 
-                        setJourney(localJourney);
+                    setJourney(localJourney);
 
-                        httpPost(
-                            API_URL,
-                            {
-                                enroll_id: enrollmentId,
-                                cache_request: section,
-                                cache_content: JSON.stringify(response.data.data),
-                            },
-                            { section: 'set_cache_content' },
-                        );
-                    },
-                );
+                    httpPost(
+                        API_URL,
+                        {
+                            enroll_id: enrollmentId,
+                            cache_request: section,
+                            cache_content: JSON.stringify(response.data.data),
+                        },
+                        { section: 'set_cache_content' },
+                    );
+                });
             }
 
             layoutProps.setEnrollmentId(parseInt(enrollmentId));
             layoutProps.setContext((prev) => ({
                 ...prev,
                 pageContext: pageContexts,
-                roadmap: journey.join(" "),
+                roadmap: journey.join(' '),
             }));
-            console.log(`layout props roadmap: ${layoutProps.context.roadmap}`)
+            console.log(`layout props roadmap: ${layoutProps.context.roadmap}`);
         });
-            
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
