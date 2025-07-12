@@ -118,37 +118,36 @@ export default function CourseRoadmap() {
                   >
                     <div className="w-full md:w-1/2"></div>
                     <div className="w-full md:w-1/2 flex justify-center relative">
-                      {/* Completion Badge */}
                       <motion.div
                         whileHover={{ scale: 1.05, y: -5 }}
                         transition={{ type: "spring", stiffness: 300 }}
-                        onClick={() => toggleCompletion(index)}
-                        className={`absolute -top-3 right-30 rounded-full p-1 shadow-md cursor-pointer transition-colors duration-200 ${
-                          isCompleted ? 'bg-green-500 text-white' : 'bg-gray-300 text-black'
-                        }`}
-                        title={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
+                        className="relative bg-white p-6 md:p-8 rounded-xl shadow-xl border border-gray-200 w-[90%] max-w-md"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
+                        {/* Completion Badge */}
+                        <motion.div
+                          whileHover={{ scale: 1.05, y: -5 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                          onClick={() => toggleCompletion(index)}
+                          className={`absolute -top-3 right-5 rounded-full p-1 shadow-md cursor-pointer transition-colors duration-200 ${
+                            isCompleted ? 'bg-green-500 text-white' : 'bg-gray-300 text-black'
+                          }`}
+                          title={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={3}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </motion.div>
-        
-                      <motion.div
-                        whileHover={{ scale: 1.05, y: -5 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                        className="bg-white p-6 md:p-8 rounded-xl shadow-xl border border-gray-200 w-[90%] max-w-md"
-                      >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={3}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </motion.div>
                         <Link
                           className="text-xl font-semibold text-black"
                           href={
