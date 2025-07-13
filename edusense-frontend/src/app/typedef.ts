@@ -20,6 +20,7 @@ export interface IUserInfo {
 export interface IJourney {
     title: string;
     description: string;
+    type: string;
 }
 
 export interface IArticle {
@@ -75,6 +76,7 @@ export interface IJourneyResponse {
     data: {
         title: string[];
         description: string[];
+        type: string[];
     };
 }
 

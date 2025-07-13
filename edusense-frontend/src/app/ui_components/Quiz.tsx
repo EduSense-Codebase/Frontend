@@ -8,6 +8,17 @@ import { httpPost } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
 import { useCustomProp } from '../portal/layout';
 
+const ANSWER_TO_INDEX = {
+    A: 0,
+    B: 1,
+    C: 2,
+    D: 3,
+} as const;
+
+const POINT_VALUE = 5;
+
+type AnswerLetter = keyof typeof ANSWER_TO_INDEX;
+
 interface QuizProps {
     quiz: IQuiz;
     title: string;
@@ -30,9 +41,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     hasSubmitted,
     onSelect,
 }) => {
-    const isCorrect = option[0] === correctAnswer;
+    const isCorrect = option === correctAnswer;
     const isSelected = index === selectedAnswer;
-    const { refreshXP } = useCustomProp();
 
     const baseClasses =
         'w-full text-left p-4 rounded-lg border font-medium transition duration-200';
@@ -42,7 +52,6 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     if (hasSubmitted) {
         if (isSelected && isCorrect) {
             stateClasses = 'bg-green-500 text-white border-green-600';
-            refreshXP();
         } else if (isSelected && !isCorrect) {
             stateClasses = 'bg-red-500 text-white border-red-600';
         } else {
@@ -67,8 +76,9 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
     const [selectedAnswer, setSelectedAnswer] = useState<number>(-1);
     const [hasSubmitted, setHasSubmitted] = useState(false);
     const [showPointsPopup, setShowPointsPopup] = useState(false);
-
+    const { refreshXP } = useCustomProp();
     const [curAnswered, setCurAnswered] = useState(false);
+    const [correctAnswer, setCorrectAnswer] = useState(' ');
 
     const handleStart = () => {
         setStarted(true);
@@ -82,8 +92,12 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
     const handleSubmit = () => {
         if (selectedAnswer === null) return;
 
-        const correct = quiz.correct_ans[currentQuestionIndex];
-        const selected = quiz.choices[currentQuestionIndex][selectedAnswer][0];
+        const correctLetter = quiz.correct_ans[currentQuestionIndex] as AnswerLetter;
+        const correctIndex = ANSWER_TO_INDEX[correctLetter];
+        const correct = quiz.choices[currentQuestionIndex][correctIndex];
+        const selected = quiz.choices[currentQuestionIndex][selectedAnswer];
+        setCorrectAnswer(correct);
+        console.log(`selected: ${selected} and correct ${correct}`);
 
         if (selected === correct && !curAnswered) {
             setShowPointsPopup(true);
@@ -96,12 +110,13 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
                 type: 'add_points',
             };
             const formData = {
-                qty: '5',
+                qty: POINT_VALUE,
             };
 
             const response = httpPost(API_URL, formData, queryParams);
             response.then((res) => {
                 console.log(res['data']);
+                refreshXP();
             });
         }
         setCurAnswered(true);
@@ -195,7 +210,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
                                         option={option}
                                         index={index}
                                         selectedAnswer={selectedAnswer}
-                                        correctAnswer={quiz.correct_ans[currentQuestionIndex]}
+                                        correctAnswer={correctAnswer}
                                         hasSubmitted={hasSubmitted}
                                         onSelect={handleSelectAnswer}
                                     />
@@ -232,7 +247,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
             </AnimatePresence>
 
             {showPointsPopup && (
-                <PointsPopup points={10} onClose={() => setShowPointsPopup(false)} />
+                <PointsPopup points={POINT_VALUE} onClose={() => setShowPointsPopup(false)} />
             )}
         </div>
     );
