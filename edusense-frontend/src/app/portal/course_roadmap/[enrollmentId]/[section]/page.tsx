@@ -10,7 +10,7 @@ const roadmapSteps: Step[] = [
         placement: 'center',
         content:
             'This is the roadmap page! Here you can view all the course activities completely generated and personalized to maximize your learning!',
-        disableBeacon: false,
+        disableBeacon: true,
     },
 ];
 
