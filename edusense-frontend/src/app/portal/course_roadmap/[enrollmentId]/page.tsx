@@ -19,6 +19,7 @@ const sectionSteps: Step[] = [
     {
         target: '#section-tile',
         content: 'Click on a section when your ready to check out the section roadmap!.',
+        disableBeacon: true,
     },
 ];
 

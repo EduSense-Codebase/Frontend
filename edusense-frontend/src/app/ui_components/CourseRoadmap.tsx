@@ -11,6 +11,7 @@ import { useCustomProp } from '../portal/layout';
 type Step = {
     title: string;
     description?: string;
+    type: string;
 };
 
 type Props = {
@@ -25,7 +26,6 @@ export default function CourseRoadmap() {
     const [journey, setJourney] = useState<IJourney[]>([]);
     const [numCompleted, setNumCompleted] = useState<number>(1);
 
-    const router = useRouter();
     const layoutProps = useCustomProp();
     const pageContexts =
         'This page is the roadmap page where the roadmap is generated and the student can choose various tiles in the roadmap, as well as see the progress bar at the top.';
@@ -40,11 +40,13 @@ export default function CourseRoadmap() {
         const API_URL = API_PREFIX + AI_ENDPOINT;
         httpGet<IJourneyResponse>(API_URL, cache_query_params).then((response) => {
             if (response.data.data != null) {
+                console.log(response.data.data);
                 const localJourney: IJourney[] = [];
                 response.data.data.description.map((desc, index) => {
                     localJourney.push({
                         title: response.data.data.title[index],
                         description: desc,
+                        type: response.data.data.type[index],
                     });
                 });
                 setJourney(localJourney);
@@ -61,10 +63,12 @@ export default function CourseRoadmap() {
 
                 httpPost<IJourneyResponse>(API_URL, formData, queryParams).then((response) => {
                     const localJourney: IJourney[] = [];
+                    console.log(response.data.data);
                     response.data.data.description.map((desc, index) => {
                         localJourney.push({
                             title: response.data.data.title[index],
                             description: desc,
+                            type: response.data.data.type[index],
                         });
                     });
 
@@ -93,16 +97,6 @@ export default function CourseRoadmap() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // const getStepLink = (stepTitle: string) => {
-    //     const lower = stepTitle.toLowerCase();
-
-    //     if (lower.includes("quiz")) return "quiz";
-    //     if (lower.includes("test")) return "test";
-    //     if (lower.includes("match")) return "matching";
-    //     if (lower.includes("matching")) return "matching";
-    //     return "article";
-    //   };
 
     const renderRoadmap = ({ data }: Props) => {
         console.log(`Journey length: ${journey.length}`);
@@ -167,18 +161,15 @@ export default function CourseRoadmap() {
                                     <Link
                                         className="text-xl font-semibold text-black"
                                         href={
-                                            step.title.toLowerCase().includes('match') ||
-                                            step.title.toLowerCase().includes('matching')
+                                            step.type.toLowerCase() == 'matching activity'
                                                 ? {
                                                       pathname: `/portal/course_roadmap/${enrollmentId}/${section}/matching/${step.title}`,
                                                       query: { description: step.description },
                                                   }
                                                 : `/portal/course_roadmap/${enrollmentId}/${section}/${
-                                                      step.title.toLowerCase().includes('quiz')
+                                                      step.type.toLowerCase() == 'quiz'
                                                           ? 'quiz'
-                                                          : step.title
-                                                                  .toLowerCase()
-                                                                  .includes('test')
+                                                          : step.type == 'test'
                                                             ? 'test'
                                                             : 'article'
                                                   }/${step.title}`

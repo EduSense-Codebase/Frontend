@@ -29,7 +29,7 @@ export default function JoyrideWrapper({ steps, seenKey }: IJoyrideWrapperProps)
         const response = httpGet<ITutorialResponse>(API_URL, queryParams);
 
         response.then((res) => {
-            console.log(res);
+            //console.log(res);
             if (!res.data.seen) {
                 console.log('nt seen');
                 setRun(true);

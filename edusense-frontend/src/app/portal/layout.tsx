@@ -43,16 +43,19 @@ const mainSteps: Step[] = [
         target: '#dashboard-nav',
         content:
             'This is your dashboard nav. Here you can view your progress bar and your current level, and you can log off.',
+        disableBeacon: true,
     },
     {
         target: '#start-course-nav',
         placement: 'top',
         content:
             'Down here is where you can enroll and unenroll in different courses, ranging from math, science, writing, and many more!',
+        disableBeacon: true,
     },
     {
         target: '#start-course-btn',
         content: 'Click here to enroll in your first course!',
+        disableBeacon: true,
     },
 ];
 

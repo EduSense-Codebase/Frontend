@@ -15,6 +15,8 @@ const ANSWER_TO_INDEX = {
     D: 3,
 } as const;
 
+const POINT_VALUE = 5;
+
 type AnswerLetter = keyof typeof ANSWER_TO_INDEX;
 
 interface QuizProps {
@@ -108,7 +110,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
                 type: 'add_points',
             };
             const formData = {
-                qty: '5',
+                qty: POINT_VALUE,
             };
 
             const response = httpPost(API_URL, formData, queryParams);
@@ -245,7 +247,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
             </AnimatePresence>
 
             {showPointsPopup && (
-                <PointsPopup points={10} onClose={() => setShowPointsPopup(false)} />
+                <PointsPopup points={POINT_VALUE} onClose={() => setShowPointsPopup(false)} />
             )}
         </div>
     );
