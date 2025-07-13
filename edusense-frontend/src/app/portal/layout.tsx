@@ -153,6 +153,10 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                             </span>
                         </div>
 
+                        <Link href="/portal/profile" className="hover:text-gray-900 ml-3">
+                            Profile
+                        </Link>
+
                         <Link href="/portal/settings" className="hover:text-gray-900">
                             Settings
                         </Link>
