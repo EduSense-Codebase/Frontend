@@ -108,73 +108,79 @@ export default function CourseRoadmap() {
                 // Mark the current one as completed
                 setNumCompleted((prev) => prev + 1);
             }
-          };
-        
-          return (
-            <div className="w-screen px-4 mx-auto relative">
-              {data.map((step, index) => {
-                const isLeft = index % 2 === 0;
-                const isCompleted = index < numCompleted;
-        
-                return (
-                  <div
-                    key={index}
-                    className={`relative mb-24 flex flex-col md:flex-row ${
-                      isLeft ? 'md:flex-row-reverse' : ''
-                    } items-center justify-between`}
-                  >
-                    <div className="w-full md:w-1/2"></div>
-                    <div className="w-full md:w-1/2 flex justify-center relative">
-                      <motion.div
-                        whileHover={{ scale: 1.05, y: -5 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                        className="relative bg-white p-6 md:p-8 rounded-xl shadow-xl border border-gray-200 w-[90%] max-w-md"
-                      >
-                        {/* Completion Badge */}
-                        <motion.div
-                          whileHover={{ scale: 1.05, y: -5 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                          onClick={() => toggleCompletion(index)}
-                          className={`absolute -top-3 right-5 rounded-full p-1 shadow-md cursor-pointer transition-colors duration-200 ${
-                            isCompleted ? 'bg-green-500 text-white' : 'bg-gray-300 text-black'
-                          }`}
-                          title={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
+        };
+
+        return (
+            <div className="relative mx-auto w-screen px-4">
+                {data.map((step, index) => {
+                    const isLeft = index % 2 === 0;
+                    const isCompleted = index < numCompleted;
+
+                    return (
+                        <div
+                            key={index}
+                            className={`relative mb-24 flex flex-col md:flex-row ${
+                                isLeft ? 'md:flex-row-reverse' : ''
+                            } items-center justify-between`}
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={3}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        </motion.div>
-                        <Link
-                          className="text-xl font-semibold text-black"
-                          href={
-                            step.title.toLowerCase().includes("quiz")
-                              ? `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
-                              : step.title.toLowerCase().includes("test")
-                              ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
-                              : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
-                          }
-                        >
-                          {step.title}
-                        </Link>
-                        {step.description && (
-                          <p className="text-sm text-gray-600 mt-2">{step.description}</p>
-                        )}
-                      </motion.div>
-                    </div>
-                  </div>
-                );
-              })}
+                            <div className="w-full md:w-1/2"></div>
+                            <div className="relative flex w-full justify-center md:w-1/2">
+                                <motion.div
+                                    whileHover={{ scale: 1.05, y: -5 }}
+                                    transition={{ type: 'spring', stiffness: 300 }}
+                                    className="relative w-[90%] max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl md:p-8"
+                                >
+                                    {/* Completion Badge */}
+                                    <motion.div
+                                        whileHover={{ scale: 1.05, y: -5 }}
+                                        transition={{ type: 'spring', stiffness: 300 }}
+                                        onClick={() => toggleCompletion(index)}
+                                        className={`absolute -top-3 right-5 cursor-pointer rounded-full p-1 shadow-md transition-colors duration-200 ${
+                                            isCompleted
+                                                ? 'bg-green-500 text-white'
+                                                : 'bg-gray-300 text-black'
+                                        }`}
+                                        title={
+                                            isCompleted ? 'Mark as incomplete' : 'Mark as complete'
+                                        }
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-4 w-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={3}
+                                                d="M5 13l4 4L19 7"
+                                            />
+                                        </svg>
+                                    </motion.div>
+                                    <Link
+                                        className="text-xl font-semibold text-black"
+                                        href={
+                                            step.title.toLowerCase().includes('quiz')
+                                                ? `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
+                                                : step.title.toLowerCase().includes('test')
+                                                  ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
+                                                  : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
+                                        }
+                                    >
+                                        {step.title}
+                                    </Link>
+                                    {step.description && (
+                                        <p className="mt-2 text-sm text-gray-600">
+                                            {step.description}
+                                        </p>
+                                    )}
+                                </motion.div>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         );
     };
