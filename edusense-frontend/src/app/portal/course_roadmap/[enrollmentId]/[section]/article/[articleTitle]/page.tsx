@@ -1,145 +1,181 @@
 'use client';
-import { useState, useEffect, useRef, cloneElement } from 'react';
-import { AI_ENDPOINT, API_PREFIX } from "../../../../../../global";
-import { IArticle, IArticleResponse  } from '../../../../../../typedef';
-import { httpGet, httpPost } from '../../../../../../utils';
+import { useState, useEffect, useRef } from 'react';
+import { AI_ENDPOINT, API_PREFIX } from '../../../../../../global';
+import { IArticle, IArticleResponse } from '../../../../../../typedef';
+import { httpPost, httpGet } from '../../../../../../utils';
 import { useParams } from 'next/navigation';
 import { useCustomProp } from '@/app/portal/layout';
 
 import { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
-import { Literal } from 'unist';
+import { Literal, Parent } from 'unist';
 
-import ReactMarkdown from "react-markdown"
-import rehypeRaw from "rehype-raw"; 
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-import { start } from 'repl';
-import RoadMapNav from '@/app/ui_components/RoadMapNav';
 
 const remarkHighlight: Plugin = () => {
-  return (tree) => {
-    visit(tree, 'text', (node: Literal, index, parent: any) => {
-      const value: string = node.value as string;
-      const regex = /==(.+?)==/g;
-      let match;
-      const newChildren = [];
-      let lastIndex = 0;
+    return (tree) => {
+        visit(tree, 'text', (node: Literal, index: number, parent: Parent) => {
+            const value: string = node.value as string;
+            const regex = /==(.+?)==/g;
+            let match;
+            const newChildren = [];
+            let lastIndex = 0;
 
-      while ((match = regex.exec(value)) !== null) {
-        const [fullMatch, innerText] = match;
-        const start = match.index;
-        const end = start + fullMatch.length;
+            while ((match = regex.exec(value)) !== null) {
+                const [fullMatch, innerText] = match;
+                const start = match.index;
+                const end = start + fullMatch.length;
 
-        if (start > lastIndex) {
-          newChildren.push({ type: 'text', value: value.slice(lastIndex, start) });
-        }
+                if (start > lastIndex) {
+                    newChildren.push({
+                        type: 'text',
+                        value: value.slice(lastIndex, start),
+                    });
+                }
 
-        newChildren.push({
-          type: 'element',
-          tagName: 'mark',
-          properties: {},
-          children: [{ type: 'text', value: innerText }],
+                newChildren.push({
+                    type: 'element',
+                    tagName: 'mark',
+                    properties: {},
+                    children: [{ type: 'text', value: innerText }],
+                });
+
+                lastIndex = end;
+            }
+
+            if (lastIndex < value.length) {
+                newChildren.push({ type: 'text', value: value.slice(lastIndex) });
+            }
+
+            if (newChildren.length > 0) {
+                parent.children.splice(index, 1, ...newChildren);
+            }
         });
-
-        lastIndex = end;
-      }
-
-      if (lastIndex < value.length) {
-        newChildren.push({ type: 'text', value: value.slice(lastIndex) });
-      }
-
-      if (newChildren.length > 0) {
-        parent.children.splice(index, 1, ...newChildren);
-      }
-    });
-  };
+    };
 };
 
 const MarkdownViewer = ({ content }: { content: string }) => {
-  return (
-    <div className="prose max-w-none">
-      <ReactMarkdown
-        rehypePlugins={[rehypeRaw, remarkGfm, remarkHighlight]}  // Allow raw HTML (SVG)
-        components={{
-          code({ node, className, children, ...props }) {
-            // Check if it's an SVG block
-            if (className && className.includes('language-svg')) {
-              // Render the SVG content directly
-              const svgContent = children?.toString();
-              return <div dangerouslySetInnerHTML={{ __html: svgContent || "" }} />;
-            }
-            return (
-              <pre className={className}>
-                <code>{children}</code>
-              </pre>
-            );
-          },
-        }}
-      >
-        {content}
-      </ReactMarkdown>
-    </div>
-  );
+    return (
+        <div className="prose max-w-none">
+            <ReactMarkdown
+                rehypePlugins={[rehypeRaw, remarkGfm, remarkHighlight]} // Allow raw HTML (SVG)
+                components={{
+                    code({ className, children }) {
+                        // Check if it's an SVG block
+                        if (className && className.includes('language-svg')) {
+                            // Render the SVG content directly
+                            const svgContent = children?.toString();
+                            return <div dangerouslySetInnerHTML={{ __html: svgContent || '' }} />;
+                        }
+                        return (
+                            <pre className={className}>
+                                <code>{children}</code>
+                            </pre>
+                        );
+                    },
+                }}
+            >
+                {content}
+            </ReactMarkdown>
+        </div>
+    );
 };
 
 export default function CourseRoadmap() {
     const params = useParams();
     const enrollmentId = decodeURIComponent(params.enrollmentId as string).trim();
     const articleTitle = decodeURIComponent(params.articleTitle as string).trim();
-    const section = params.section as string
 
     const [article, setArticle] = useState<IArticle | undefined>(undefined);
     const articleRef = useRef<HTMLDivElement>(null);
 
     const layoutProps = useCustomProp();
-    const pageContexts = "This page is an article designed to teach the student about a particular topic"
+    const pageContexts =
+        'This page is an article designed to teach the student about a particular topic';
 
     const getArticleStr = (article: IArticle) => {
-        let return_string = "";
+        let return_string = '';
 
-        return_string += `Heading: ${article.article_title}\n`
+        return_string += `Heading: ${article.article_title}\n`;
 
         article.sections.map((currSection, index) => {
-            return_string += `Section: ${currSection}\n`
-            return_string += `${article.section_content[index]}\n`
-        })
+            return_string += `Section: ${currSection}\n`;
+            return_string += `${article.section_content[index]}\n`;
+        });
 
         return return_string;
-    }
+    };
 
     useEffect(() => {
-        let queryParams = {
-            section: "generate_ai_content"
-        }
+        const cache_query_params = {
+            section: 'retrieve_cache',
+            enroll_id: enrollmentId,
+            cache_request: articleTitle,
+        };
 
-        console.log(articleTitle);
-
-        let prompt_parameters = {
-            "title": articleTitle
-        }
-
-        let formData = {
-            enrollment_id: enrollmentId,
-            prompt_type: "article",
-            prompt_parameters: JSON.stringify(prompt_parameters)
-        }
-        
         const API_URL = API_PREFIX + AI_ENDPOINT;
+        httpGet<IArticleResponse>(API_URL, cache_query_params).then((response) => {
+            if (response.data.data != null) {
+                console.log(response.data);
+                setArticle(response.data.data);
 
-        const requestResponse = httpPost<IArticleResponse>(API_URL, formData, queryParams)
+                layoutProps.setEnrollmentId(parseInt(enrollmentId));
+                layoutProps.setContext((prev) => ({
+                    ...prev,
+                    pageContext: pageContexts,
+                    article: getArticleStr(response.data.data),
+                }));
+            } else {
+                const queryParams = {
+                    section: 'generate_ai_content',
+                };
 
-        requestResponse.then((response) => {
-            console.log(response.data);
-            setArticle(response.data.data);
+                console.log(articleTitle);
 
-            layoutProps.setEnrollmentId(parseInt(enrollmentId))
-            layoutProps.setContext(prev => ({
-                ...prev,
-                pageContext: pageContexts,
-                article: getArticleStr(response.data.data),
-            }));
-        })
-    }, [])
+                const prompt_parameters = {
+                    title: articleTitle,
+                };
+
+                const formData = {
+                    enrollment_id: enrollmentId,
+                    prompt_type: 'article',
+                    prompt_parameters: JSON.stringify(prompt_parameters),
+                };
+
+                const API_URL = API_PREFIX + AI_ENDPOINT;
+
+                const requestResponse = httpPost<IArticleResponse>(API_URL, formData, queryParams);
+
+                requestResponse.then((response) => {
+                    console.log(response.data);
+                    setArticle(response.data.data);
+
+                    layoutProps.setEnrollmentId(parseInt(enrollmentId));
+                    layoutProps.setContext((prev) => ({
+                        ...prev,
+                        pageContext: pageContexts,
+                        article: getArticleStr(response.data.data),
+                    }));
+
+                    httpPost(
+                        API_URL,
+                        {
+                            enroll_id: enrollmentId,
+                            cache_request: articleTitle,
+                            cache_content: JSON.stringify(response.data.data),
+                        },
+                        { section: 'set_cache_content' },
+                    ).then((res) => {
+                        console.log(res);
+                    });
+                });
+            }
+        });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onMouseUp = (e: React.MouseEvent<HTMLElement>, section_id: number) => {
         const selection = document.getSelection();
@@ -149,10 +185,9 @@ export default function CourseRoadmap() {
         const container = articleRef.current;
 
         const startContainer = range.startContainer;
-        const endContainer = range.endContainer;
 
-        let startOffset = range.startOffset;
-        let endOffset = range.endOffset;
+        const startOffset = range.startOffset;
+        const endOffset = range.endOffset;
 
         if (startContainer.nodeType === Node.TEXT_NODE) {
             const textNode = startContainer as Text;
@@ -161,17 +196,17 @@ export default function CourseRoadmap() {
             // Split the text at the startOffset and endOffset
             const beforeText = textContent.slice(0, startOffset);
             const selectedText = textContent.slice(startOffset, endOffset);
-            console.log(`Selected Text: ${selectedText}`)
+            console.log(`Selected Text: ${selectedText}`);
             const afterText = textContent.slice(endOffset);
 
             // Create a span element to highlight the selected text
             const highlightSpan = document.createElement('span');
-            highlightSpan.style.backgroundColor = 'yellow';  // Highlight with yellow color
+            highlightSpan.style.backgroundColor = 'yellow'; // Highlight with yellow color
             highlightSpan.textContent = selectedText;
 
             // Get the parent element of the text node
             const parentElement = textNode.parentNode;
-            console.log(`Parent Element: ${parentElement}`)
+            console.log(`Parent Element: ${parentElement}`);
 
             if (parentElement) {
                 // Replace the original text node with the beforeText, the highlighted span, and afterText
@@ -182,19 +217,23 @@ export default function CourseRoadmap() {
             }
 
             layoutProps.setUserSelection(selectedText);
-
         }
 
         if (container && container.contains(range.commonAncestorContainer)) {
             const selectedText = selection.toString();
-            console.log("Selected inside container:", selectedText);
-            console.log("Section ID:", section_id);
+            console.log('Selected inside container:', selectedText);
+            console.log('Section ID:', section_id);
             let new_section_text = article?.section_content[section_id];
             if (new_section_text != undefined && article != undefined) {
                 new_section_text = new_section_text.replace(/==/g, '');
-                let start = article.section_content[section_id].indexOf(selectedText);
-                let end = start + selectedText.length;
-                new_section_text = new_section_text.slice(0, start) + '==' + new_section_text.slice(start, end) + '==' + new_section_text.slice(end);
+                const start = article.section_content[section_id].indexOf(selectedText);
+                const end = start + selectedText.length;
+                new_section_text =
+                    new_section_text.slice(0, start) +
+                    '==' +
+                    new_section_text.slice(start, end) +
+                    '==' +
+                    new_section_text.slice(end);
             }
             /*
             setArticle((prevArticle) => {
@@ -206,52 +245,58 @@ export default function CourseRoadmap() {
             })
             */
         } else {
-            console.log("Selection is outside of this component.");
+            console.log('Selection is outside of this component.');
         }
-    }
+    };
 
     const renderArticle = () => {
-    if (article != undefined) {
-        return (
-            <div className="flex min-h-screen bg-white text-gray-900">
-            <aside className="hidden lg:block w-64 p-6 sticky top-0 h-screen border-r overflow-y-auto">
-                <h2 className="text-lg font-semibold mb-4">Table of Contents</h2>
-                <nav>
-                {article.sections.map((title, idx) => (
-                    <a
-                    key={idx}
-                    href={`#section-${idx}`}
-                    className="block py-1 text-sm text-gray-700 hover:text-blue-600"
-                    >
-                    {title}
-                    </a>
-                ))}
-                </nav>
-            </aside>
+        if (article != undefined) {
+            return (
+                <div className="flex min-h-screen bg-white text-gray-900">
+                    <aside className="sticky top-0 hidden h-screen w-64 overflow-y-auto border-r p-6 lg:block">
+                        <h2 className="mb-4 text-lg font-semibold">Table of Contents</h2>
+                        <nav>
+                            {article.sections.map((title, idx) => (
+                                <a
+                                    key={idx}
+                                    href={`#section-${idx}`}
+                                    className="block py-1 text-sm text-gray-700 hover:text-blue-600"
+                                >
+                                    {title}
+                                </a>
+                            ))}
+                        </nav>
+                    </aside>
 
-            <main className="flex-1 px-6 py-10 max-w-3xl mx-auto">
-                <h1 className="text-4xl font-bold mb-6">{article.article_title}</h1>
-                {article.sections.map((title, idx) => (
-                    <section key={idx} id={`section-${idx}`} className="mb-12 scroll-mt-24" onMouseUp={(e) => onMouseUp(e, idx)}>
-                        <h2 className="text-2xl font-semibold mb-3">{title}</h2>
-                        <div className="prose prose-lg max-w-none">
-                            <MarkdownViewer content={article.section_content[idx]} />
-                        </div>
-                    </section>
-                ))}
-            </main>
-            </div>
-        )
-    }
-    
-    }
+                    <main className="mx-auto max-w-3xl flex-1 px-6 py-10">
+                        <h1 className="mb-6 text-4xl font-bold">{article.article_title}</h1>
+                        {article.sections.map((title, idx) => (
+                            <section
+                                key={idx}
+                                id={`section-${idx}`}
+                                className="mb-12 scroll-mt-24"
+                                onMouseUp={(e) => onMouseUp(e, idx)}
+                            >
+                                <h2 className="mb-3 text-2xl font-semibold">{title}</h2>
+                                <div className="prose prose-lg max-w-none">
+                                    <MarkdownViewer content={article.section_content[idx]} />
+                                </div>
+                            </section>
+                        ))}
+                    </main>
+                </div>
+            );
+        }
+    };
 
     return (
         <>
-            <div className="w-full h-full flex flex-wrap justify-start gap-6 mb-10" ref={articleRef}>
+            <div
+                className="mb-10 flex h-full w-full flex-wrap justify-start gap-6"
+                ref={articleRef}
+            >
                 {renderArticle()}
             </div>
-            <RoadMapNav enrollmentId={enrollmentId} section={section} />
         </>
     );
 }

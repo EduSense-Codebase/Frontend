@@ -1,20 +1,22 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { AI_ENDPOINT, API_PREFIX, COURSE_ENDPOINT } from "../global";
+import { AI_ENDPOINT, API_PREFIX, COURSE_ENDPOINT } from '../global';
 import { IJourney, IJourneyResponse, INewEnrollment } from '../typedef';
 import { httpPost, httpGet } from '../utils';
 import { useParams, useRouter } from 'next/navigation';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useCustomProp } from '../portal/layout';
 
 type Step = {
-title: string
-description?: string
-}
+    title: string;
+    description?: string;
+    type: string;
+};
 
 type Props = {
-data: Step[]
-}
+    data: Step[];
+};
 
 export default function CourseRoadmap() {
     const params = useParams();
@@ -22,84 +24,89 @@ export default function CourseRoadmap() {
     const section = params.section as string;
 
     const [journey, setJourney] = useState<IJourney[]>([]);
-    const [numCompleted, setNumCompleted] = useState<number>(1)
-    const router = useRouter();
+    const [numCompleted, setNumCompleted] = useState<number>(1);
+
+    const layoutProps = useCustomProp();
+    const pageContexts =
+        'This page is the roadmap page where the roadmap is generated and the student can choose various tiles in the roadmap, as well as see the progress bar at the top.';
 
     useEffect(() => {
-        const url = API_PREFIX + COURSE_ENDPOINT;
-        const queryParams = {
-        section: "course_details",
-        enrollment_id: enrollmentId?.toString()
-        };
-
-        const response = httpGet<INewEnrollment>(url, queryParams);
-        response.then((res) => {
-        if (res.data.data.takenDiag == false) {
-            router.push(`/portal/diagnostic/${enrollmentId}`);
-        } else {
-            const cache_query_params = {
-            section: "retrieve_cache",
+        const cache_query_params = {
+            section: 'retrieve_cache',
             enroll_id: enrollmentId,
             cache_request: section,
-            
-            };
+        };
 
-            const API_URL = API_PREFIX + AI_ENDPOINT;
-            httpGet<IJourneyResponse>(API_URL, cache_query_params).then((response) => {
+        const API_URL = API_PREFIX + AI_ENDPOINT;
+        httpGet<IJourneyResponse>(API_URL, cache_query_params).then((response) => {
             if (response.data.data != null) {
-                const localJourney: IJourney[] = [];
-                response.data.data.description.map((desc, index) => {
-                localJourney.push({
-                    title: response.data.data.title[index],
-                    description: desc,
-                });
-                });
-                setJourney(localJourney);
-                
-            } else {
-                const queryParams = {
-                section: "generate_ai_content",
-                };
-
-                const formData = {
-                enrollment_id: enrollmentId,
-                prompt_type: "roadmap",
-                prompt_parameters: JSON.stringify({ type: section }),
-                };
-
-                httpPost<IJourneyResponse>(API_URL, formData, queryParams).then((response) => {
+                console.log(response.data.data);
                 const localJourney: IJourney[] = [];
                 response.data.data.description.map((desc, index) => {
                     localJourney.push({
-                    title: response.data.data.title[index],
-                    description: desc,
+                        title: response.data.data.title[index],
+                        description: desc,
+                        type: response.data.data.type[index],
                     });
                 });
-
                 setJourney(localJourney);
+            } else {
+                const queryParams = {
+                    section: 'generate_ai_content',
+                };
 
-                httpPost(API_URL, {
-                    enroll_id: enrollmentId,
-                    cache_request: section,
-                    cache_content: JSON.stringify(response.data.data)
-                }, { section: "set_cache_content" });
+                const formData = {
+                    enrollment_id: enrollmentId,
+                    prompt_type: 'roadmap',
+                    prompt_parameters: JSON.stringify({ type: section }),
+                };
+
+                httpPost<IJourneyResponse>(API_URL, formData, queryParams).then((response) => {
+                    const localJourney: IJourney[] = [];
+                    console.log(response.data.data);
+                    response.data.data.description.map((desc, index) => {
+                        localJourney.push({
+                            title: response.data.data.title[index],
+                            description: desc,
+                            type: response.data.data.type[index],
+                        });
+                    });
+
+                    setJourney(localJourney);
+
+                    httpPost(
+                        API_URL,
+                        {
+                            enroll_id: enrollmentId,
+                            cache_request: section,
+                            cache_content: JSON.stringify(response.data.data),
+                        },
+                        { section: 'set_cache_content' },
+                    );
                 });
             }
-            });
-        }
+
+            layoutProps.setEnrollmentId(parseInt(enrollmentId));
+            layoutProps.setContext((prev) => ({
+                ...prev,
+                pageContext: pageContexts,
+                roadmap: journey.join(' '),
+            }));
+            console.log(`layout props roadmap: ${layoutProps.context.roadmap}`);
         });
-        
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const renderRoadmap = ({ data }: Props) => {
         console.log(`Journey length: ${journey.length}`);
         const toggleCompletion = (index: number) => {
             if (index < numCompleted) {
-              // Step is completed, so unmark it and all after it
-              setNumCompleted(index);
+                // Step is completed, so unmark it and all after it
+                setNumCompleted(index);
             } else if (index === numCompleted) {
-              // Mark the current one as completed
-              setNumCompleted((prev) => prev + 1);
+                // Mark the current one as completed
+                setNumCompleted((prev) => prev + 1);
             }
           };
         
@@ -169,27 +176,24 @@ export default function CourseRoadmap() {
                 );
               })}
             </div>
-          );
+        );
     };
-    
-    
+
     // console.log(`Journey length: ${journey.length}`)
     // console.log(`Num length: ${numCompleted}`)
-    const progress = (( numCompleted) / journey.length) * 100;
+    const progress = (numCompleted / journey.length) * 100;
 
     // console.log(`Progress: ${progress}`)
-    
-    return(
-    <>
-        <div className="w-[90%] bg-gray-200 rounded-full h-4 mx-12 mt-15 mb-15">
-            <div
-            className="bg-indigo-600 h-4 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-            />
 
-        </div>
-        {renderRoadmap({ data: journey })}
-        
-
-    </>);
+    return (
+        <>
+            <div className="mx-12 mt-15 mb-15 h-4 w-[90%] rounded-full bg-gray-200">
+                <div
+                    className="h-4 rounded-full bg-indigo-600 transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                />
+            </div>
+            {renderRoadmap({ data: journey })}
+        </>
+    );
 }

@@ -1,80 +1,77 @@
 // ui_components/Form.tsx
-import React from "react";
-import Input from "./Input";
-import Button from "./Button";
+import React from 'react';
+import Input from './Input';
+import Button from './Button';
 
 export interface IFormFieldBase {
-  type: "text" | "email" | "password";
-  value: string;
-  callbackID: string;
-  label: string;
-  placeholder?: string;
-  disabled?: boolean;
-  className?: string;
+    type: 'text' | 'email' | 'password';
+    value: string;
+    callbackID: string;
+    label: string;
+    placeholder?: string;
+    disabled?: boolean;
+    className?: string;
 }
 
 export interface IFormProps {
-  metadata?: {
-    formClassName?: string;
-    inputGroupClassName?: string;
-    heading?: string;
-  };
-  fields: IFormFieldBase[];
-  callbackFunc: (callbackID: string, value: string) => void;
-  submitCallback: () => void;
-  submitDisplayName: string;
+    metadata?: {
+        formClassName?: string;
+        inputGroupClassName?: string;
+        heading?: string;
+    };
+    fields: IFormFieldBase[];
+    callbackFunc: (callbackID: string, value: string) => void;
+    submitCallback: () => void;
+    submitDisplayName: string;
+    extraComponents?: React.ReactElement;
 }
 
 const Form: React.FC<IFormProps> = ({
-  metadata,
-  fields,
-  callbackFunc,
-  submitCallback,
-  submitDisplayName,
+    metadata,
+    fields,
+    callbackFunc,
+    submitCallback,
+    submitDisplayName,
+    extraComponents,
 }) => {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    submitCallback();
-  };
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        submitCallback();
+    };
 
-  return (
-    <form
-      onSubmit={onSubmit}
-      className={`w-full max-w-lg mx-auto bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5 ${
-        metadata?.formClassName || ""
-      }`}
-    >
-      {metadata?.heading && (
-        <h2 className="text-2xl font-semibold text-gray-800 text-center">
-          {metadata.heading}
-        </h2>
-      )}
-
-      {fields.map((field, index) => (
-        <React.Fragment key={index}>
-          <label className="mb-1 text-sm font-medium text-gray-700">
-            {field.label}
-          </label>
-          <Input
-            type={field.type}
-            placeholder={field.placeholder}
-            value={field.value}
-            onChange={(val) => callbackFunc(field.callbackID, val)}
-            disabled={field.disabled}
-            className={`w-full border border-gray-300 px-4 py-2 rounded-md text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              field.className || ""
+    return (
+        <form
+            onSubmit={onSubmit}
+            className={`mx-auto w-full max-w-lg space-y-5 rounded-xl border border-gray-300 bg-white p-8 shadow-sm ${
+                metadata?.formClassName || ''
             }`}
-          />
-          </React.Fragment>
-      ))}
+        >
+            {metadata?.heading && (
+                <h2 className="text-center text-2xl font-semibold text-gray-800">
+                    {metadata.heading}
+                </h2>
+            )}
 
-      <Button
-        displayName={submitDisplayName}
-        onClick={submitCallback}
-        variant="primary"
-      />
-    </form>
-  );
+            {fields.map((field, index) => (
+                <React.Fragment key={index}>
+                    <label className="mb-1 text-sm font-medium text-gray-700">{field.label}</label>
+                    <Input
+                        type={field.type}
+                        placeholder={field.placeholder}
+                        value={field.value}
+                        onChange={(val) => callbackFunc(field.callbackID, val)}
+                        disabled={field.disabled}
+                        className={`w-full rounded-md border border-gray-300 px-4 py-2 text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                            field.className || ''
+                        }`}
+                    />
+                </React.Fragment>
+            ))}
+
+            <Button displayName={submitDisplayName} onClick={submitCallback} variant="primary" />
+            {extraComponents}
+        </form>
+    );
 };
 
 export default Form;
