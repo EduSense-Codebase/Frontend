@@ -109,6 +109,7 @@ export default function CoursesPage() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
+                        whileHover={{ scale: 1.05 }}
                         transition={{
                             delay: index * 0.1,
                             duration: 0.4,
@@ -136,20 +137,23 @@ export default function CoursesPage() {
                 <h3 className="subheading">My Courses</h3>
                 <div className="cards-container">
                     {courses.map((course, index) => renderCourseTile(course, index))}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{
-                            delay: courses.length * 0.1, // Delay to appear after all courses
-                            duration: 0.4,
-                            scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
-                        }}
-                        className="course-tile"
-                        id="enroll-course-tile"
-                    >
-                        <img src="/plus_icon.png" className="plus-icon"/>
-                        <h3 className="course-tile-name">ENROLL COURSE</h3>
-                    </motion.div>
+                    <button onClick={() => handleAction('enroll_course')}>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            whileHover={{ scale: 1.05 }}
+                            transition={{
+                                delay: courses.length * 0.1, // Delay to appear after all courses
+                                duration: 0.4,
+                                scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
+                            }}
+                            className="course-tile"
+                            id="enroll-course-tile"
+                        >
+                            <img src="/plus_icon.png" className="plus-icon"/>
+                            <h3 className="course-tile-name">ENROLL COURSE</h3>
+                        </motion.div>
+                    </button>
                 </div>
             </div>
 
@@ -196,17 +200,11 @@ export default function CoursesPage() {
                 className="footer"
             >
                 <button
-                    id="start-course-btn"
-                    onClick={() => handleAction('enroll_course')}
-                    className="rounded bg-green-500 px-6 py-2 text-white transition hover:bg-green-600"
-                >
-                    Enroll Course
-                </button>
-                <button
+                    id="manage-courses-btn"
                     onClick={() => handleAction('unenroll_course')}
-                    className="rounded bg-red-500 px-6 py-2 text-white transition hover:bg-red-600"
+                    className="button"
                 >
-                    Delete Course
+                    Manage Courses
                 </button>
             </div>
         </div>

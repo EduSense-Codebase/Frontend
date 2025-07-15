@@ -18,6 +18,7 @@
     --white: #FFFFFF;
     --light-blue: #EFF6FF;
     --dark-blue: #4B76B3;
+    --darker-blue: #3B5A8C;
     --dropshadow: 0 4px 6px rgba(75, 118, 179, 0.25);
     --font-jua: 'Jua', sans-serif;
 }
@@ -93,6 +94,7 @@
     box-shadow: var(--dropshadow);
     overflow: hidden;
     font-family: "Itim", sans-serif;
+    cursor: pointer;
 }
 
 
@@ -125,4 +127,19 @@
 .plus-icon {
     width: 4rem;
     height: 4rem;
+}
+
+.button {
+    background-color: var(--dark-blue);
+    color: var(--white);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: var(--dropshadow);
+}
+
+.button:hover {
+    background-color: var(--darker-blue);
 }
