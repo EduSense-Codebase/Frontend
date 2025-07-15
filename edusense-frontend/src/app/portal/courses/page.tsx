@@ -11,6 +11,7 @@ import {
 } from '../../typedef';
 import { httpGet, httpPost } from '../../utils';
 import * as motion from 'motion/react-client';
+import '../../theme.css';
 
 export default function CoursesPage() {
     const [courses, setCourses] = useState<ICourse[]>([]);
@@ -99,20 +100,21 @@ export default function CoursesPage() {
                         duration: 0.4,
                         scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
                     }}
-                    className="flex h-[250px] w-[250px] items-center justify-center rounded-lg text-center text-white shadow transition-transform duration-200 hover:scale-105 hover:shadow-lg active:scale-95"
+                    className="course-tile"
                     style={{ backgroundColor: courseTileArgs.color }}
                 >
-                    <h3 className="text-xl font-bold">{courseTileArgs.name}</h3>
+                    <h3 className="course-tile-name">{courseTileArgs.name}</h3>
                 </motion.div>
             </Link>
         );
     };
 
     return (
-        <>
-            <div className="mb-10 h-full w-full">
-                <h1 className="mb-6 text-3xl font-bold text-gray-700">Dashboard</h1>
-                <div className="flex flex-wrap justify-start gap-6">
+        <div className="theme">
+            <h1 className="heading">Dashboard</h1>
+            <div className="container">
+                <h3 className="subheading">My Courses</h3>
+                <div className="cards-container">
                     {courses.map((course, index) => renderCourseTile(course, index))}
                 </div>
             </div>
@@ -157,7 +159,7 @@ export default function CoursesPage() {
             {/* Fixed Bottom Bar for Enroll/Unenroll Buttons */}
             <div
                 id="start-course-nav"
-                className="fixed bottom-0 left-0 z-50 flex w-full justify-center gap-4 border-t border-gray-200 bg-white p-4 shadow-md"
+                className="footer"
             >
                 <button
                     id="start-course-btn"
@@ -173,6 +175,6 @@ export default function CoursesPage() {
                     Delete Course
                 </button>
             </div>
-        </>
+        </div>
     );
 }

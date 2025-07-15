@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'Jua';
+    src: url('/fonts/Jua.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.theme {
+    --white: #FFFFFF;
+    --light-blue: #EFF6FF;
+    --dark-blue: #4B76B3;
+    --dropshadow: 0 4px 6px rgba(75, 118, 179, 0.25);
+    --font-jua: 'Jua', sans-serif;
+}
+
+.theme {
+    background-color: var(--white);
+    font-family: var(--font-jua);
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heading {
+    width: 100%;
+    font-size: 4rem;
+    color: var(--dark-blue);
+    text-align: center;
+    padding: 0.5rem 0;
+    background-color: var(--light-blue);
+    margin: 0;
+    box-shadow: var(--dropshadow);
+}
+
+.subheading {
+    font-size: 2rem;
+    color: var(--dark-blue);
+    padding: 1rem 0;
+}
+
+.container {
+    color: var(--white);
+    padding: 2rem 4rem;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background-color: var(--light-blue);
+    padding: 3rem;
+    gap: 3rem;
+    border-radius: 2rem;
+    box-shadow: var(--dropshadow);
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;
+    border-top: 1px solid #e5e7eb;
+    background-color: #ffffff;
+    padding: 1rem;
+    box-shadow: 0 -2px 4px rgba(75, 118, 179, 0.25);
+}
+
+.course-tile {
+    display: flex;
+    color: var(--white);
+    width: 15rem;
+    height: 15rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    box-shadow: var(--dropshadow);
+}
+
+.course-tile-name {
+    color: var(--white);
+    font-size: 1.5rem;
+}
