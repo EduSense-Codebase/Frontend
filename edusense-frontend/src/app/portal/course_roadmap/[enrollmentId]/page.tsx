@@ -112,7 +112,7 @@ export default function CourseRoadmapPage() {
 
     return (
         <>
-            <JoyrideWrapper steps={sectionSteps} seenKey="2"/>
+            <JoyrideWrapper steps={sectionSteps} seenKey="2" />
             <div className="flex w-full items-center justify-center bg-white px-6 py-16">
                 {/* Centered wrapper */}
                 <div className="flex w-full max-w-6xl flex-col items-center justify-center">
