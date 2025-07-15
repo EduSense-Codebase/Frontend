@@ -286,6 +286,12 @@ export default function CourseRoadmap() {
                     </main>
                 </div>
             );
+        } else {
+            return (
+                <div className="flex h-screen w-full items-center justify-center">
+                    <div className="h-16 w-16 animate-spin rounded-full border-7 border-gray-500 border-t-indigo-600" />
+                </div>
+            );
         }
     };
 

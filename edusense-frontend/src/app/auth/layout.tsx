@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             {/* Header */}
             <header className="sticky top-0 z-50 bg-white shadow-sm">
                 <div className="z-40 mx-auto flex items-center justify-between bg-white px-4 py-4">
-                    <Link href="/portal/courses" className="text-2xl font-bold text-blue-600">
+                    <Link href="/" className="text-2xl font-bold text-blue-600">
                         <Image src="/EduSense-Sample-Logo.png" alt="Logo" width={120} height={0} />
                     </Link>
                     <nav className="space-x-6 text-sm font-medium text-gray-700">

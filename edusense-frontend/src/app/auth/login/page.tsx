@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { API_PREFIX, AUTH_ENDPOINT, GOOGLE_CLIENT_ID } from '../../global';
 import { httpPost } from '../../utils';
 import Form, { IFormFieldBase } from '../../ui_components/Form';
+import Link from 'next/link';
 
 import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -87,19 +88,29 @@ export default function LoginPage() {
 
     return (
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            <Form
-                metadata={{
-                    heading: 'Login',
-                    formClassName:
-                        'w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5',
-                    inputGroupClassName: 'space-y-1',
-                }}
-                fields={fields}
-                callbackFunc={handleFieldChange}
-                submitCallback={handleLogin}
-                submitDisplayName="Login"
-                extraComponents={<GoogleLogin onSuccess={handleGoogleLogin} />}
-            />
+            <div className="mx-auto w-full max-w-md">
+                <Form
+                    metadata={{
+                        heading: 'Login',
+                        formClassName:
+                            'w-full bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5',
+                        inputGroupClassName: 'space-y-1',
+                    }}
+                    fields={fields}
+                    callbackFunc={handleFieldChange}
+                    submitCallback={handleLogin}
+                    submitDisplayName="Login"
+                    extraComponents={<GoogleLogin onSuccess={handleGoogleLogin} />}
+                />
+
+                {/* Footer Text BELOW the login box */}
+                <div className="mt-4 text-center text-sm text-gray-500">
+                    Don’t have an account?{' '}
+                    <Link href="/auth/register" className="text-blue-600 hover:underline">
+                        Sign up here!
+                    </Link>
+                </div>
+            </div>
         </GoogleOAuthProvider>
     );
 }
