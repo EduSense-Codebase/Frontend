@@ -99,31 +99,33 @@ export default function CoursesPage() {
     const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
         const bgImage = getBackgroundImage();
         return (
-            <Link
-                id="tile-course-btn"
-                key={courseTileArgs.id}
-                href={`/portal/course_roadmap/${courseTileArgs.id}`}
-                className="inline-block no-underline"
-            >
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{
-                        delay: index * 0.1,
-                        duration: 0.4,
-                        scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
-                    }}
-                    className="course-tile"
+            <>
+                <Link
+                    id="tile-course-btn"
+                    key={courseTileArgs.id}
+                    href={`/portal/course_roadmap/${courseTileArgs.id}`}
+                    className="inline-block no-underline"
                 >
-                    <div
-                        className="course-image"
-                        style={{
-                            backgroundImage: `url(${bgImage})`,
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{
+                            delay: index * 0.1,
+                            duration: 0.4,
+                            scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
                         }}
-                    />
-                    <h3 className="course-tile-name">{courseTileArgs.name}</h3>
-                </motion.div>
-            </Link>
+                        className="course-tile"
+                    >
+                        <div
+                            className="course-image"
+                            style={{
+                                backgroundImage: `url(${bgImage})`,
+                            }}
+                        />
+                        <h3 className="course-tile-name">{courseTileArgs.name}</h3>
+                    </motion.div>
+                </Link>
+            </>
         );
     };
 
@@ -134,6 +136,20 @@ export default function CoursesPage() {
                 <h3 className="subheading">My Courses</h3>
                 <div className="cards-container">
                     {courses.map((course, index) => renderCourseTile(course, index))}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{
+                            delay: courses.length * 0.1, // Delay to appear after all courses
+                            duration: 0.4,
+                            scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
+                        }}
+                        className="course-tile"
+                        id="enroll-course-tile"
+                    >
+                        <img src="/plus_icon.png" className="plus-icon"/>
+                        <h3 className="course-tile-name">ENROLL COURSE</h3>
+                    </motion.div>
                 </div>
             </div>
 

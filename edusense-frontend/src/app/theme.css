@@ -7,6 +7,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Itim';
+    src: url('/fonts/Itim.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .theme {
     --white: #FFFFFF;
     --light-blue: #EFF6FF;
@@ -85,6 +92,7 @@
     border-radius: 1rem;
     box-shadow: var(--dropshadow);
     overflow: hidden;
+    font-family: "Itim", sans-serif;
 }
 
 
@@ -97,6 +105,8 @@
     height: 4rem;
     width: 100%;
     background-color: var(--white);
+    text-align: center;
+    padding: 1rem;
 }
 
 .course-image {
@@ -105,4 +115,14 @@
     background-size: cover;
     background-position: center;
     border-radius: 1rem 1rem 0 0;
+}
+
+#enroll-course-tile {
+    background-color: var(--white);
+    gap: 1rem;
+}
+
+.plus-icon {
+    width: 4rem;
+    height: 4rem;
 }
