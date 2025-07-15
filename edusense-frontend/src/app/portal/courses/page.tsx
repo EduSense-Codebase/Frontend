@@ -18,6 +18,12 @@ export default function CoursesPage() {
     const [offeredCourses, setOfferedCourses] = useState<IOfferedCourse[]>([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [curAction, setCurAction] = useState('');
+    const backgroundImages: Array<string> = [
+        '/course-images/img1.png',
+        '/course-images/img2.png',
+        '/course-images/img3.jpg',
+        '/course-images/img4.jpg',
+    ];
 
     useEffect(() => {
         const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
@@ -84,7 +90,14 @@ export default function CoursesPage() {
         setDialogOpen(false);
     };
 
+    const getBackgroundImage = (): string => {
+        const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+        return backgroundImages[randomIndex];
+    };
+
+
     const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
+        const bgImage = getBackgroundImage();
         return (
             <Link
                 id="tile-course-btn"
@@ -101,8 +114,13 @@ export default function CoursesPage() {
                         scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
                     }}
                     className="course-tile"
-                    style={{ backgroundColor: courseTileArgs.color }}
                 >
+                    <div
+                        className="course-image"
+                        style={{
+                            backgroundImage: `url(${bgImage})`,
+                        }}
+                    />
                     <h3 className="course-tile-name">{courseTileArgs.name}</h3>
                 </motion.div>
             </Link>

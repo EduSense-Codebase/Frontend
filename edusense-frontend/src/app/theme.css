@@ -76,16 +76,33 @@
 
 .course-tile {
     display: flex;
+    flex-direction: column;
     color: var(--white);
-    width: 15rem;
-    height: 15rem;
+    width: 13rem;
+    height: 13rem;
     align-items: center;
     justify-content: center;
     border-radius: 1rem;
     box-shadow: var(--dropshadow);
+    overflow: hidden;
 }
 
+
 .course-tile-name {
-    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-blue);
     font-size: 1.5rem;
+    height: 4rem;
+    width: 100%;
+    background-color: var(--white);
+}
+
+.course-image {
+    height: 9rem;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 1rem 1rem 0 0;
 }
