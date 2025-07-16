@@ -9,6 +9,8 @@ import Quiz from '../../../../../../ui_components/Quiz';
 import { useCustomProp } from '@/app/portal/layout'; // this is correct if it's from the layout.tsx directly in /portal
 import RoadMapNav from '@/app/ui_components/RoadMapNav';
 
+export const runtime = 'edge';
+
 export default function QuizPage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
