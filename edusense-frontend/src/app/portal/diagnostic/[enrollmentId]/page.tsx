@@ -10,6 +10,8 @@ import Button from '../../../ui_components/Button';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { Step } from 'react-joyride';
 
+export const runtime = 'edge';
+
 const diagnosticSteps: Step[] = [
     {
         target: 'body',

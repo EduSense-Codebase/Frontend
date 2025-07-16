@@ -14,6 +14,8 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
+export const runtime = 'edge';
+
 const remarkHighlight: Plugin = () => {
     return (tree) => {
         visit(tree, 'text', (node: Literal, index: number, parent: Parent) => {

@@ -10,6 +10,8 @@ import { httpPost, httpGet } from '@/app/utils';
 import { IMatchingActivity, IMatchingActivityResponse } from '@/app/typedef';
 import PointsPopup from '@/app/ui_components/PointsPopup';
 
+export const runtime = 'edge';
+
 export default function MatchingPage() {
     const params = useParams();
     const searchParams = useSearchParams();
