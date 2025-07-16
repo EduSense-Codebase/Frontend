@@ -1,7 +1,6 @@
-export const GOOGLE_CLIENT_ID =
-    '140940625332-td38m1kcgeapil6tf6ppdppnqagrbn3l.apps.googleusercontent.com';
+export const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
 
-export const API_PREFIX = 'http://localhost:8000/';
+export const API_PREFIX = process.env.NEXT_PUBLIC_API_PREFIX || '';
 
 export const AUTH_ENDPOINT = 'api/auth/';
 export const COURSE_ENDPOINT = 'api/course/';

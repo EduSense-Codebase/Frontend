@@ -50,7 +50,7 @@ export default function JoyrideWrapper({ steps, seenKey }: IJoyrideWrapperProps)
         }
 
         // Only set the bit if tutorial is completed or skipped
-        if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+        if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status as any)) {
             setRun(false);
 
             const API_URL = API_PREFIX + AUTH_ENDPOINT;
