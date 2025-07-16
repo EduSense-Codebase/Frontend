@@ -53,7 +53,7 @@ const mainSteps: Step[] = [
         disableBeacon: true,
     },
     {
-        target: '#start-course-btn',
+        target: '#enroll-course-tile',
         content: 'Click here to enroll in your first course!',
         disableBeacon: true,
     },
