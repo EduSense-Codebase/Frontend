@@ -235,7 +235,7 @@ export default function MatchingPage() {
                                 {activity.left_items.map((item, index) => (
                                     <motion.div
                                         key={index}
-                                        ref={(el) => (leftRefs.current[index] = el)}
+                                        ref={(el) => (leftRefs.current[index] = el) as any}
                                         onClick={() => handleTileClick('left', index)}
                                         className={getTileStyle('left', index)}
                                         whileHover={{ scale: 1.05 }}
@@ -253,7 +253,7 @@ export default function MatchingPage() {
                                 {activity.right_items.map((item, index) => (
                                     <motion.div
                                         key={index}
-                                        ref={(el) => (rightRefs.current[index] = el)}
+                                        ref={(el) => (rightRefs.current[index] = el) as any}
                                         onClick={() => handleTileClick('right', index)}
                                         className={getTileStyle('right', index)}
                                         whileHover={{ scale: 1.05 }}
