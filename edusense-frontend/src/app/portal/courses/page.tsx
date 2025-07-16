@@ -11,12 +11,19 @@ import {
 } from '../../typedef';
 import { httpGet, httpPost } from '../../utils';
 import * as motion from 'motion/react-client';
+import '../../theme.css';
 
 export default function CoursesPage() {
     const [courses, setCourses] = useState<ICourse[]>([]);
     const [offeredCourses, setOfferedCourses] = useState<IOfferedCourse[]>([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [curAction, setCurAction] = useState('');
+    const backgroundImages: Array<string> = [
+        '/course-images/img1.png',
+        '/course-images/img2.png',
+        '/course-images/img3.jpg',
+        '/course-images/img4.jpg',
+    ];
 
     useEffect(() => {
         const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
@@ -83,37 +90,69 @@ export default function CoursesPage() {
         setDialogOpen(false);
     };
 
+    const getBackgroundImage = (courseTileArgs: ICourse): string => {
+        const randomIndex = courseTileArgs.id % backgroundImages.length;
+        return backgroundImages[randomIndex];
+    };
+
     const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
+        const bgImage = getBackgroundImage(courseTileArgs);
         return (
-            <Link
-                id="tile-course-btn"
-                key={courseTileArgs.id}
-                href={`/portal/course_roadmap/${courseTileArgs.id}`}
-                className="inline-block no-underline"
-            >
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{
-                        delay: index * 0.1,
-                        duration: 0.4,
-                        scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
-                    }}
-                    className="flex h-[250px] w-[250px] items-center justify-center rounded-lg text-center text-white shadow transition-transform duration-200 hover:scale-105 hover:shadow-lg active:scale-95"
-                    style={{ backgroundColor: courseTileArgs.color }}
+            <>
+                <Link
+                    id="tile-course-btn"
+                    key={courseTileArgs.id}
+                    href={`/portal/course_roadmap/${courseTileArgs.id}`}
+                    className="inline-block no-underline"
                 >
-                    <h3 className="text-xl font-bold">{courseTileArgs.name}</h3>
-                </motion.div>
-            </Link>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        whileHover={{ scale: 1.05 }}
+                        transition={{
+                            delay: index * 0.1,
+                            duration: 0.4,
+                            scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
+                        }}
+                        className="course-tile"
+                    >
+                        <div
+                            className="course-image"
+                            style={{
+                                backgroundImage: `url(${bgImage})`,
+                            }}
+                        />
+                        <h3 className="course-tile-name">{courseTileArgs.name}</h3>
+                    </motion.div>
+                </Link>
+            </>
         );
     };
 
     return (
-        <>
-            <div className="mb-10 h-full w-full">
-                <h1 className="mb-6 text-3xl font-bold text-gray-700">Dashboard</h1>
-                <div className="flex flex-wrap justify-start gap-6">
+        <div className="theme">
+            <h1 className="heading">Dashboard</h1>
+            <div className="container">
+                <h3 className="subheading">My Courses</h3>
+                <div className="cards-container">
                     {courses.map((course, index) => renderCourseTile(course, index))}
+                    <button onClick={() => handleAction('enroll_course')}>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            whileHover={{ scale: 1.05 }}
+                            transition={{
+                                delay: courses.length * 0.1, // Delay to appear after all courses
+                                duration: 0.4,
+                                scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
+                            }}
+                            className="course-tile"
+                            id="enroll-course-tile"
+                        >
+                            <img src="/plus_icon.png" className="plus-icon" />
+                            <h3 className="course-tile-name">ENROLL COURSE</h3>
+                        </motion.div>
+                    </button>
                 </div>
             </div>
 
@@ -155,24 +194,15 @@ export default function CoursesPage() {
             })()}
 
             {/* Fixed Bottom Bar for Enroll/Unenroll Buttons */}
-            <div
-                id="start-course-nav"
-                className="fixed bottom-0 left-0 z-50 flex w-full justify-center gap-4 border-t border-gray-200 bg-white p-4 shadow-md"
-            >
+            <div id="start-course-nav" className="footer">
                 <button
-                    id="start-course-btn"
-                    onClick={() => handleAction('enroll_course')}
-                    className="rounded bg-green-500 px-6 py-2 text-white transition hover:bg-green-600"
-                >
-                    Enroll Course
-                </button>
-                <button
+                    id="manage-courses-btn"
                     onClick={() => handleAction('unenroll_course')}
-                    className="rounded bg-red-500 px-6 py-2 text-white transition hover:bg-red-600"
+                    className="button"
                 >
-                    Delete Course
+                    Manage Courses
                 </button>
             </div>
-        </>
+        </div>
     );
 }
