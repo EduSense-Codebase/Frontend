@@ -90,14 +90,13 @@ export default function CoursesPage() {
         setDialogOpen(false);
     };
 
-    const getBackgroundImage = (): string => {
-        const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+    const getBackgroundImage = (courseTileArgs: ICourse): string => {
+        const randomIndex = courseTileArgs.id % backgroundImages.length;
         return backgroundImages[randomIndex];
     };
 
-
     const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
-        const bgImage = getBackgroundImage();
+        const bgImage = getBackgroundImage(courseTileArgs);
         return (
             <>
                 <Link
@@ -150,7 +149,7 @@ export default function CoursesPage() {
                             className="course-tile"
                             id="enroll-course-tile"
                         >
-                            <img src="/plus_icon.png" className="plus-icon"/>
+                            <img src="/plus_icon.png" className="plus-icon" />
                             <h3 className="course-tile-name">ENROLL COURSE</h3>
                         </motion.div>
                     </button>
@@ -195,10 +194,7 @@ export default function CoursesPage() {
             })()}
 
             {/* Fixed Bottom Bar for Enroll/Unenroll Buttons */}
-            <div
-                id="start-course-nav"
-                className="footer"
-            >
+            <div id="start-course-nav" className="footer">
                 <button
                     id="manage-courses-btn"
                     onClick={() => handleAction('unenroll_course')}
