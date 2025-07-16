@@ -9,6 +9,8 @@ import Quiz from '../../../../../../ui_components/Quiz';
 //import {motion} from "framer-motion"
 import RoadMapNav from '@/app/ui_components/RoadMapNav';
 
+export const runtime = 'edge';
+
 export default function QuizPage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
