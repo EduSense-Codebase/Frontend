@@ -14,6 +14,8 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
+export const runtime = 'edge';
+
 const remarkHighlight: Plugin = () => {
     return (tree) => {
         visit(tree, 'text', (node: Literal, index: number, parent: Parent) => {
@@ -284,6 +286,12 @@ export default function CourseRoadmap() {
                             </section>
                         ))}
                     </main>
+                </div>
+            );
+        } else {
+            return (
+                <div className="flex h-screen w-full items-center justify-center">
+                    <div className="h-16 w-16 animate-spin rounded-full border-7 border-gray-500 border-t-indigo-600" />
                 </div>
             );
         }

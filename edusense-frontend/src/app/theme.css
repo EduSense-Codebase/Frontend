@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @font-face {
     font-family: 'Jua';
@@ -15,10 +15,10 @@
 }
 
 .theme {
-    --white: #FFFFFF;
-    --light-blue: #EFF6FF;
-    --dark-blue: #4B76B3;
-    --darker-blue: #3B5A8C;
+    --white: #ffffff;
+    --light-blue: #eff6ff;
+    --dark-blue: #4b76b3;
+    --darker-blue: #3b5a8c;
     --dropshadow: 0 4px 6px rgba(75, 118, 179, 0.25);
     --font-jua: 'Jua', sans-serif;
 }
@@ -93,10 +93,9 @@
     border-radius: 1rem;
     box-shadow: var(--dropshadow);
     overflow: hidden;
-    font-family: "Itim", sans-serif;
+    font-family: 'Itim', sans-serif;
     cursor: pointer;
 }
-
 
 .course-tile-name {
     display: flex;

@@ -10,6 +10,8 @@ import { httpPost, httpGet } from '@/app/utils';
 import { IMatchingActivity, IMatchingActivityResponse } from '@/app/typedef';
 import PointsPopup from '@/app/ui_components/PointsPopup';
 
+export const runtime = 'edge';
+
 export default function MatchingPage() {
     const params = useParams();
     const searchParams = useSearchParams();
@@ -235,7 +237,7 @@ export default function MatchingPage() {
                                 {activity.left_items.map((item, index) => (
                                     <motion.div
                                         key={index}
-                                        ref={(el) => (leftRefs.current[index] = el)}
+                                        ref={(el) => (leftRefs.current[index] = el) as any}
                                         onClick={() => handleTileClick('left', index)}
                                         className={getTileStyle('left', index)}
                                         whileHover={{ scale: 1.05 }}
@@ -253,7 +255,7 @@ export default function MatchingPage() {
                                 {activity.right_items.map((item, index) => (
                                     <motion.div
                                         key={index}
-                                        ref={(el) => (rightRefs.current[index] = el)}
+                                        ref={(el) => (rightRefs.current[index] = el) as any}
                                         onClick={() => handleTileClick('right', index)}
                                         className={getTileStyle('right', index)}
                                         whileHover={{ scale: 1.05 }}

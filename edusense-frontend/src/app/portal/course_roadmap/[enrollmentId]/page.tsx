@@ -9,6 +9,8 @@ import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/portal/layout';
 
+export const runtime = 'edge';
+
 const sectionSteps: Step[] = [
     {
         target: 'body',

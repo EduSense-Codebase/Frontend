@@ -4,6 +4,8 @@ import { useParams } from 'next/navigation';
 import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 
+export const runtime = 'edge';
+
 const roadmapSteps: Step[] = [
     {
         target: 'body',

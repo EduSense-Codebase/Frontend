@@ -53,7 +53,7 @@ const mainSteps: Step[] = [
         disableBeacon: true,
     },
     {
-        target: '#start-course-btn',
+        target: '#enroll-course-tile',
         content: 'Click here to enroll in your first course!',
         disableBeacon: true,
     },
@@ -153,7 +153,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                             </span>
                         </div>
 
-                        <Link href="/portal/profile" className="hover:text-gray-900 ml-3">
+                        <Link href="/portal/profile" className="ml-3 hover:text-gray-900">
                             Profile
                         </Link>
 
