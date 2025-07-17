@@ -37,6 +37,15 @@ export default function MatchingPage() {
         { left: number; right: number; isCorrect: boolean }[]
     >([]);
 
+    const shuffleArray = (array: string[]): string[] => {
+        const newArray = [...array]; // to avoid mutating original array
+        for (let i = newArray.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+    };
+
     // Fetch activity content
     useEffect(() => {
         const cache_query_params = {
@@ -49,7 +58,17 @@ export default function MatchingPage() {
         httpGet<IMatchingActivityResponse>(API_URL, cache_query_params).then((res) => {
             if (res.data.data != null) {
                 console.log('cached');
-                setActivity(res.data.data);
+                console.log(res.data.data)
+                const originalActivity = res.data.data;
+
+                const shuffledActivity: IMatchingActivity = {
+                    ...originalActivity,
+                    right_items: shuffleArray(originalActivity.right_items),
+                  };
+                console.log(shuffledActivity)
+                setActivity(shuffledActivity);
+
+                
             } else {
                 console.log('not cached');
                 const apiUrl = API_PREFIX + AI_ENDPOINT;
@@ -177,12 +196,13 @@ export default function MatchingPage() {
             type: 'add_points',
         };
         const formData = {
-            qty: (numCorrect * 3).toString(),
+            qty: (counter * 3).toString(),
         };
 
         const response = httpPost(API_URL, formData, queryParams);
         response.then((res) => {
             console.log(res['data']);
+            refreshXP();
         });
         console.log(`num correct is ${counter}`);
         setPairResults(results);
@@ -190,7 +210,7 @@ export default function MatchingPage() {
         if (counter > 0) {
             setShowPointsPopup(true);
         }
-        refreshXP();
+        
     };
 
     const getTileStyle = (side: 'left' | 'right', index: number) => {
