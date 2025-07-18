@@ -165,7 +165,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                 </div>
             </header>
 
-            <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-12">
+            <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
                 {!showChatWidget && (
                     <ChatWidget
                         pageContext={context.pageContext}

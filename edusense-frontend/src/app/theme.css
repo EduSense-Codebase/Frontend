@@ -51,10 +51,18 @@
     padding: 1rem 0;
 }
 
+.paragraph {
+    font-size: 1.2rem;
+    color: var(--dark-blue);
+    padding: 0.5rem 0;
+}
+
 .container {
     color: var(--white);
     padding: 2rem 4rem;
 }
+
+/* Dashboard styles */
 
 .cards-container {
     display: flex;
@@ -141,4 +149,25 @@
 
 .button:hover {
     background-color: var(--darker-blue);
+}
+
+/* Section page styles */
+
+.body-container {
+    color: var(--white);
+    padding: 2rem 4rem;
+}
+
+.section-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--light-blue);
+    padding: 1rem;
+    gap: 3rem;
+    border-radius: 2rem;
+    box-shadow: var(--dropshadow);
+    width: 88vw;
+    padding-bottom: 7rem;
 }
