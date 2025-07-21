@@ -8,10 +8,14 @@ import Form, { IFormFieldBase } from "../../ui_components/Form";
 
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
+import { CredentialResponse } from '@react-oauth/google';
+
 export default function LoginPage() {
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 const router = useRouter();
+const [loginError, setLoginError] = useState(false);
+
 
 const fields: IFormFieldBase[] = [
 	{
@@ -47,24 +51,23 @@ const handleLogin = () => {
 	// form.append("password", password);
 
 	const form = {
-	"email": email,
-	"password": password
+		"email": email,
+		"password": password
 	};
 
-	
-	const response = httpPost(apiUrl, form, queryParams);
-	response.then((response) => {
-		console.log("Login successful:", response.data);
-		router.push("/portal/courses");
-
-	}).catch((err) => {
-		console.log("WHY")
-		console.log(err)
-	})
-
+	httpPost(apiUrl, form, queryParams)
+		.then((response) => {
+			console.log("Login successful:", response.data);
+			setLoginError(false);
+			router.push("/portal/courses");
+		})
+		.catch((err) => {
+			console.log("Login failed:", err);
+			setLoginError(true);
+		});
 };
 
-const handleGoogleLogin = (credentialResponse: any) => {
+const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
 	const apiUrl = API_PREFIX + AUTH_ENDPOINT;
 	const formData = {
 			provider: "google",
@@ -101,6 +104,11 @@ return (
 		submitDisplayName="Login"
 		extraComponents={<GoogleLogin onSuccess={handleGoogleLogin} />}
 		/>
+		{loginError && (
+			<p className="text-red-600 text-sm text-center mt-2">
+				Invalid email or password. Please try again.
+			</p>
+		)}
 		</GoogleOAuthProvider>
 		
 );
