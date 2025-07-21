@@ -33,34 +33,32 @@ const ChatWidget = (props: IChatWidgetProps) => {
     }, [props]);
 
     useEffect(() => {
-        const greetedBefore = sessionStorage.getItem("new_session") == "false";
-        if(isOpen && !greetedBefore){
-            setMessages((currMessages) =>[
+        const greetedBefore = sessionStorage.getItem('new_session') == 'false';
+        if (isOpen && !greetedBefore) {
+            setMessages((currMessages) => [
                 ...currMessages,
                 {
-                    sender: "ai",
-                    text: "Welcome back! I'm excited to continue learning with you, what should we do next?"
+                    sender: 'ai',
+                    text: "Welcome back! I'm excited to continue learning with you, what should we do next?",
                 },
-            
-            ])
-            sessionStorage.setItem("new_session", "false");
+            ]);
+            sessionStorage.setItem('new_session', 'false');
         }
-    },[]);
+    }, []);
 
     useEffect(() => {
-        const usedBefore = localStorage.getItem("new_user") == "false";
-        if(isOpen && !usedBefore){
-            setMessages((currMessages) =>[
+        const usedBefore = localStorage.getItem('new_user') == 'false';
+        if (isOpen && !usedBefore) {
+            setMessages((currMessages) => [
                 ...currMessages,
                 {
-                    sender: "ai",
-                    text: "Welcome back! I'm excited to continue learning with you, what should we do next?"
+                    sender: 'ai',
+                    text: "Welcome back! I'm excited to continue learning with you, what should we do next?",
                 },
-            
-            ])
-            localStorage.setItem("new_user", "false");
+            ]);
+            localStorage.setItem('new_user', 'false');
         }
-    },[]);
+    }, []);
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {

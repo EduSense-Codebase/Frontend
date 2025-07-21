@@ -40,8 +40,8 @@ export default function MatchingPage() {
     const shuffleArray = (array: string[]): string[] => {
         const newArray = [...array]; // to avoid mutating original array
         for (let i = newArray.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
         }
         return newArray;
     };
@@ -58,17 +58,15 @@ export default function MatchingPage() {
         httpGet<IMatchingActivityResponse>(API_URL, cache_query_params).then((res) => {
             if (res.data.data != null) {
                 console.log('cached');
-                console.log(res.data.data)
+                console.log(res.data.data);
                 const originalActivity = res.data.data;
 
                 const shuffledActivity: IMatchingActivity = {
                     ...originalActivity,
                     right_items: shuffleArray(originalActivity.right_items),
-                  };
-                console.log(shuffledActivity)
+                };
+                console.log(shuffledActivity);
                 setActivity(shuffledActivity);
-
-                
             } else {
                 console.log('not cached');
                 const apiUrl = API_PREFIX + AI_ENDPOINT;
@@ -89,7 +87,14 @@ export default function MatchingPage() {
                 response.then((res) => {
                     //console.log("Raw response:", res);
                     console.log(res.data.data);
-                    setActivity(res.data.data);
+                    const originalActivity = res.data.data;
+
+                    const shuffledActivity: IMatchingActivity = {
+                        ...originalActivity,
+                        right_items: shuffleArray(originalActivity.right_items),
+                    };
+                    console.log(shuffledActivity);
+                    setActivity(shuffledActivity);
 
                     httpPost(
                         API_URL,
@@ -210,7 +215,6 @@ export default function MatchingPage() {
         if (counter > 0) {
             setShowPointsPopup(true);
         }
-        
     };
 
     const getTileStyle = (side: 'left' | 'right', index: number) => {
