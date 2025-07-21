@@ -91,26 +91,29 @@ const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
 }
 
 return (
-		<GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-			<Form
-		metadata={{
-			heading: 'Login',
-			formClassName:
-			'w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5',
-			inputGroupClassName: 'space-y-1',
-		}}
-		fields={fields}
-		callbackFunc={handleFieldChange}
-		submitCallback={handleLogin}
-		submitDisplayName="Login"
-		extraComponents={<GoogleLogin onSuccess={handleGoogleLogin} />}
-		/>
-		{loginError && (
-			<p className="text-red-600 text-sm text-center mt-2">
-				Invalid email or password. Please try again.
-			</p>
-		)}
-		</GoogleOAuthProvider>
-		
+  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    <Form
+      metadata={{
+        heading: 'Login',
+        formClassName:
+          'w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5',
+        inputGroupClassName: 'space-y-1',
+      }}
+      fields={fields}
+      callbackFunc={handleFieldChange}
+      submitCallback={handleLogin}
+      submitDisplayName="Login"
+      extraComponents={
+        <div className="flex flex-col space-y-2">
+          <GoogleLogin onSuccess={handleGoogleLogin} />
+          {loginError && (
+            <p className="text-red-600 text-sm text-center">
+              Invalid email or password. Please try again.
+            </p>
+          )}
+        </div>
+      }
+    />
+  </GoogleOAuthProvider>
 );
 }
