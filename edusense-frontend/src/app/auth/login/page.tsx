@@ -7,12 +7,16 @@ import { httpPost } from '../../utils';
 import Form, { IFormFieldBase } from '../../ui_components/Form';
 import Link from 'next/link';
 
-import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+
+import { CredentialResponse } from '@react-oauth/google';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const router = useRouter();
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const router = useRouter();
+const [loginError, setLoginError] = useState(false);
+
 
     const fields: IFormFieldBase[] = [
         {
@@ -47,70 +51,66 @@ export default function LoginPage() {
         // form.append("email", email);
         // form.append("password", password);
 
-        const form = {
-            email: email,
-            password: password,
-        };
+	const form = {
+		"email": email,
+		"password": password
+	};
 
-        const response = httpPost(apiUrl, form, queryParams);
-        response
-            .then((response) => {
-                console.log('Login successful:', response.data);
-                router.push('/portal/courses');
-            })
-            .catch((err) => {
-                console.log('WHY');
-                console.log(err);
-            });
-    };
+	httpPost(apiUrl, form, queryParams)
+		.then((response) => {
+			console.log("Login successful:", response.data);
+			setLoginError(false);
+			router.push("/portal/courses");
+		})
+		.catch((err) => {
+			console.log("Login failed:", err);
+			setLoginError(true);
+		});
+};
 
-    const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
-        const apiUrl = API_PREFIX + AUTH_ENDPOINT;
-        const formData = {
-            provider: 'google',
-            credential: credentialResponse.credential,
-        };
-        const queryParams = {
-            type: 'third_party_signin',
-        };
+const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
+	const apiUrl = API_PREFIX + AUTH_ENDPOINT;
+	const formData = {
+			provider: "google",
+			credential: credentialResponse.credential,
+		};
+	const queryParams = {
+		type: "third_party_signin"
+	}
 
-        const response = httpPost(apiUrl, formData, queryParams);
-        response
-            .then((response) => {
-                console.log('Login successful:', response.data);
-                router.push('/portal/courses');
-            })
-            .catch((err) => {
-                console.log('WHY');
-                console.log(err);
-            });
-    };
+	
+	const response = httpPost(apiUrl, formData, queryParams);
+	response.then((response) => {
+		console.log("Login successful:", response.data);
+		router.push("/portal/courses");
 
-    return (
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            <div className="mx-auto w-full max-w-md">
-                <Form
-                    metadata={{
-                        heading: 'Login',
-                        formClassName:
-                            'w-full bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5',
-                        inputGroupClassName: 'space-y-1',
-                    }}
-                    fields={fields}
-                    callbackFunc={handleFieldChange}
-                    submitCallback={handleLogin}
-                    submitDisplayName="Login"
-                    extraComponents={<GoogleLogin onSuccess={handleGoogleLogin} />}
-                />
+	}).catch((err) => {
+		console.log("WHY")
+		console.log(err)
+	})
+}
 
-                {/* Footer Text BELOW the login box */}
-                <div className="mt-4 text-center text-sm text-gray-500">
-                    Don’t have an account?{' '}
-                    <Link href="/auth/register" className="text-blue-600 hover:underline">
-                        Sign up here!
-                    </Link>
-                </div>
-            </div>
-        </GoogleOAuthProvider>
-    );
+return (
+		<GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+			<Form
+		metadata={{
+			heading: 'Login',
+			formClassName:
+			'w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5',
+			inputGroupClassName: 'space-y-1',
+		}}
+		fields={fields}
+		callbackFunc={handleFieldChange}
+		submitCallback={handleLogin}
+		submitDisplayName="Login"
+		extraComponents={<GoogleLogin onSuccess={handleGoogleLogin} />}
+		/>
+		{loginError && (
+			<p className="text-red-600 text-sm text-center mt-2">
+				Invalid email or password. Please try again.
+			</p>
+		)}
+		</GoogleOAuthProvider>
+		
+);
 }
