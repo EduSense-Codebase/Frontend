@@ -126,11 +126,11 @@ export default function CourseRoadmapPage() {
                     {/* Center radial layout */}
                     <div className="body-container">
                         <div className="section-container">
-                            <p className="subheading mb-8">Choose Your Section Below</p>
+                            <p className="subheading" id="section-title">Choose Your Section Below</p>
                             <div className="relative h-[500px] w-[500px]">
                                 {/* Centered course title */}
-                                <div className="absolute top-1/2 left-1/2 z-20 w-[160px] -translate-x-1/2 -translate-y-1/2 transform">
-                                    <div className="relative min-w-[160px] min-h-[160px]">
+                                <div className="absolute top-1/2 left-1/2 z-20 w-[220px] -translate-x-1/2 -translate-y-1/2 transform">
+                                    <div className="relative min-w-[220px] min-h-[220px]">
                                         <motion.div
                                             animate={{ rotate: 360 }}
                                             transition={{
@@ -140,7 +140,7 @@ export default function CourseRoadmapPage() {
                                             }}>
                                             <img src="/sun.png" className="w-full h-full object-cover" />
                                         </motion.div>
-                                        <h1 className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform text-center text-2xl">{courseName}</h1>
+                                        <h1 className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform text-center text-3xl">{courseName}</h1>
                                     </div>
                                 </div>
 
@@ -183,8 +183,8 @@ export default function CourseRoadmapPage() {
                                                     )
                                                 }
                                             >
-                                                <div className="w-[200px] p-4">
-                                                    <div className="relative min-w-[160px] min-h-[160px]">
+                                                <div className="w-[240px] ">
+                                                    <div className="relative min-w-[180px] min-h-[180px]">
                                                         <motion.div
                                                             animate={{
                                                                 y: [0, -5, 0, 5, 0],
@@ -207,7 +207,7 @@ export default function CourseRoadmapPage() {
                                                                     : roadmap === 'Math'
                                                                     ? '🧮'
                                                                     : '📝'}
-                                                                <h3 className="text-[var(--dark-blue)]">{roadmap}</h3>
+                                                                <h3 className="text-[var(--dark-blue)] text-3xl">{roadmap}</h3>
                                                             </div>
                                                         </motion.div>
                                                     </div>
