@@ -10,6 +10,7 @@ import Button from '../../../ui_components/Button';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { Step } from 'react-joyride';
 import MCInput from '../../../ui_components/MCInput';
+import '../../../theme.css';
 
 export const runtime = 'edge';
 
@@ -65,12 +66,10 @@ export default function CourseDiagnostic() {
     return (
         <>
             <JoyrideWrapper steps={diagnosticSteps} seenKey="diagKey" />
-            <div className="flex h-full min-h-screen w-full items-center justify-center bg-white">
-                <div className="rounded-2xl bg-white p-8 shadow-md">
-                    <h2 className="mb-8 text-center text-3xl font-bold text-gray-700">
-                        Course Diagnostic Form
-                    </h2>
-
+            <div className="theme-vars flex flex-col gap-5 h-full min-h-screen w-full items-center justify-center bg-white">
+                <h2 className="heading">
+                    Course Diagnostic Form
+                </h2>
                     <div className="space-y-6">
                         <MCInput 
                             label="What is your motivation for taking this course?"
@@ -78,7 +77,6 @@ export default function CourseDiagnostic() {
                             name="motivation"
                             selectedValue={motivation}
                             onChange={setMotivation}
-                            className=''
                         />
 
                         <MCInput 
@@ -87,7 +85,6 @@ export default function CourseDiagnostic() {
                             name="skill-level"
                             selectedValue={skillLevel}
                             onChange={setSkillLevel}
-                            className=''
                         />
 
                         <MCInput 
@@ -96,11 +93,11 @@ export default function CourseDiagnostic() {
                             name="time-experience"
                             selectedValue={timeExperience}
                             onChange={setTimeExperience}
-                            className=''
                         />
                     </div>
-                    <Button displayName="Submit" onClick={handleSubmit} />
-                </div>
+                    <button onClick={handleSubmit} className='button'>
+                        Submit
+                    </button>
             </div>
         </>
     );
