@@ -171,7 +171,11 @@ export default function CourseRoadmap() {
                                                     ? `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
                                                     : step.title.toLowerCase().includes('test')
                                                       ? `/portal/course_roadmap/${enrollmentId}/${section}/test/${step.title}`
-                                                      : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
+                                                      : step.title
+                                                              .toLowerCase()
+                                                              .includes('matching activity')
+                                                        ? `/portal/course_roadmap/${enrollmentId}/${section}/matching/${step.title}`
+                                                        : `/portal/course_roadmap/${enrollmentId}/${section}/article/${step.title}`
                                             }
                                         >
                                             {step.title}

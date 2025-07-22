@@ -229,7 +229,7 @@ export default function LandingPage() {
             </section>
 
             {/* Testimonials */}
-            <section className="mx-auto max-w-6xl bg-white px-6 py-20 text-center">
+            {/* <section className="mx-auto max-w-6xl bg-white px-6 py-20 text-center">
                 <h2 className="mb-12 text-3xl font-semibold">What Students Say</h2>
                 <div className="flex flex-col gap-8 md:flex-row md:justify-center md:gap-10">
                     {[
@@ -259,7 +259,7 @@ export default function LandingPage() {
                         </motion.div>
                     ))}
                 </div>
-            </section>
+            </section> */}
 
             {/* Footer */}
             <footer

@@ -119,9 +119,7 @@ export default function CourseRoadmapPage() {
             <div className="theme">
                 {/* Centered wrapper */}
                 <div className="flex w-full max-w-6xl flex-col items-center justify-center">
-                    <h1 className="heading">
-                        Start your Journey!
-                    </h1>
+                    <h1 className="heading">Start your Journey!</h1>
 
                     {/* Center radial layout */}
                     <div className="body-container">
@@ -130,9 +128,7 @@ export default function CourseRoadmapPage() {
                             <div className="relative h-[500px] w-[500px]">
                                 {/* Centered course title */}
                                 <div className="absolute top-1/2 left-1/2 z-20 w-[160px] -translate-x-1/2 -translate-y-1/2 transform rounded-xl bg-blue-50 p-6 text-center shadow-md">
-                                    <h1 className="subheading">
-                                        {courseName}
-                                    </h1>
+                                    <h1 className="subheading">{courseName}</h1>
                                 </div>
 
                                 {/* Orbiting tiles with lines */}
@@ -178,12 +174,10 @@ export default function CourseRoadmapPage() {
                                                         {roadmap === 'Reading'
                                                             ? '📖'
                                                             : roadmap === 'Math'
-                                                            ? '🧮'
-                                                            : '📝'}
+                                                              ? '🧮'
+                                                              : '📝'}
                                                     </div>
-                                                    <h3 className="paragraph">
-                                                        {roadmap}
-                                                    </h3>
+                                                    <h3 className="paragraph">{roadmap}</h3>
                                                 </div>
                                             </div>
                                         </>
