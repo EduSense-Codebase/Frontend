@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IQuiz } from '../typedef';
 import PointsPopup from './PointsPopup';
 import { motion, AnimatePresence } from 'framer-motion';
 import { httpPost } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
 import { useCustomProp } from '../portal/layout';
+import CompletionMsg from './CompletionMsg';
 
 const ANSWER_TO_INDEX = {
     A: 0,
@@ -79,6 +80,7 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
     const { refreshXP } = useCustomProp();
     const [curAnswered, setCurAnswered] = useState(false);
     const [correctAnswer, setCorrectAnswer] = useState(' ');
+    const [quizComplete, setQuizComplete] = useState(false);
 
     const handleStart = () => {
         setStarted(true);
@@ -132,11 +134,20 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
             setHasSubmitted(false);
             setCurAnswered(false);
         } else {
-            alert('Quiz completed!');
+            setQuizComplete(true);
         }
     };
 
     const progress = ((currentQuestionIndex + 1) / quiz.length) * 100;
+
+    useEffect(() => {
+        if (quizComplete) {
+            const timeout = setTimeout(() => {
+                setQuizComplete(false);
+            }, 1800);
+            return () => clearTimeout(timeout);
+        }
+    }, [quizComplete]);
 
     return (
         <div className="w-full max-w-3xl rounded-2xl bg-white p-8 shadow-md">
@@ -249,6 +260,10 @@ const Quiz: React.FC<QuizProps> = ({ quiz, title }) => {
             {showPointsPopup && (
                 <PointsPopup points={POINT_VALUE} onClose={() => setShowPointsPopup(false)} />
             )}
+            <AnimatePresence>
+                {quizComplete && <CompletionMsg />}
+            </AnimatePresence>
+
         </div>
     );
 };

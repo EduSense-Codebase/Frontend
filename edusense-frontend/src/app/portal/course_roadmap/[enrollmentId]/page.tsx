@@ -10,6 +10,7 @@ import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/portal/layout';
 import '../../../theme.css';
 
+
 export const runtime = 'edge';
 
 const sectionSteps: Step[] = [
@@ -116,7 +117,7 @@ export default function CourseRoadmapPage() {
     return (
         <>
             <JoyrideWrapper steps={sectionSteps} seenKey="2" />
-            <div className="theme">
+            <div className="theme-vars theme">
                 {/* Centered wrapper */}
                 <div className="flex w-full max-w-6xl flex-col items-center justify-center">
                     <h1 className="heading">Start your Journey!</h1>
