@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useCustomProp } from '../portal/layout';
+import '../theme.css';
 
 type Step = {
     title: string;
@@ -131,7 +132,7 @@ export default function CourseRoadmap() {
                                     <motion.div
                                         whileHover={{ scale: 1.05, y: -5 }}
                                         transition={{ type: 'spring', stiffness: 300 }}
-                                        className="relative w-[90%] max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl md:p-8"
+                                        className="roadmap_theme roadmap_step_box" // Box
                                     >
                                         <motion.div
                                             whileHover={{ scale: 1.05, y: -5 }}
@@ -165,7 +166,7 @@ export default function CourseRoadmap() {
                                         </motion.div>
 
                                         <Link
-                                            className="text-xl font-semibold text-black"
+                                            className="roadmap_theme roadmap_subheading"
                                             href={
                                                 step.title.toLowerCase().includes('quiz')
                                                     ? `/portal/course_roadmap/${enrollmentId}/${section}/quiz/${step.title}`
@@ -181,7 +182,7 @@ export default function CourseRoadmap() {
                                             {step.title}
                                         </Link>
                                         {step.description && (
-                                            <p className="mt-2 text-sm text-gray-600">
+                                            <p className="roadmap_theme roadmap_paragraph">
                                                 {step.description}
                                             </p>
                                         )}
@@ -199,6 +200,7 @@ export default function CourseRoadmap() {
     const journeyLength = journey?.length ?? 0;
     const progress = journeyLength > 0 ? (numCompleted / journeyLength) * 100 : 0;
 
+    // Progress Bar
     return (
         <>
             <div className="mx-auto mt-10 mb-10 h-4 w-[90%] rounded-full bg-gray-200">

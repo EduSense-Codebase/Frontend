@@ -171,3 +171,45 @@
     width: 88vw;
     padding-bottom: 7rem;
 }
+
+/* Course Roadmap styles */
+
+.roadmap_theme {
+    --light-blue: #eff6ff;
+    --dark-blue: #4b76b3;
+    --darker-blue: #3b5a8c;
+    --dropshadow: 0 4px 6px rgba(75, 118, 179, 0.25);
+    font-family: 'Jua', sans-serif; 
+}
+
+.roadmap_heading {
+    font-size: 3rem;
+    color: var(--dark-blue);
+}
+
+.roadmap_subheading {
+    font-size: 1.5rem;
+    color: var(--dark-blue);
+}
+
+.roadmap_paragraph {
+    font-size: 1rem;
+}
+
+.roadmap_step_box {
+  position: relative;
+  width: 90%;
+  max-width: 28rem;
+  border-radius: 2rem;
+  border: 1px solid #e5e7eb; 
+  background-color: var(--light-blue); 
+  padding: 1.5rem;
+  box-shadow: var(--dropshadow);
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .roadmap_step_box {
+    padding: 2rem;
+  }
+}

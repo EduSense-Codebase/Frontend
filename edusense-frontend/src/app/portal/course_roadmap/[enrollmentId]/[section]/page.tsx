@@ -23,7 +23,18 @@ export default function SectionRoadmap() {
         <>
             <JoyrideWrapper seenKey="3" steps={roadmapSteps} />
             <div>
-                <h1 className="mb-4 flex items-center justify-center text-4xl font-bold text-gray-700 capitalize">
+                <h1
+                    className="mx-auto mb-4 flex items-center justify-center text-[5rem] font-bold capitalize"
+                    style={{
+                        color: '#4b76b3',
+                        fontFamily: 'Jua, sans-serif',
+                        backgroundColor: '#eff6ff',
+                        boxShadow: '0 4px 6px rgba(75, 118, 179, 0.25)',
+                        padding: 0,
+                        width: '30vw',
+                        border: '1px solid #e5e7eb',
+                    }}
+                >
                     {section} Roadmap
                 </h1>
 
