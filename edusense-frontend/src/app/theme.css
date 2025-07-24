@@ -14,18 +14,18 @@
     font-style: normal;
 }
 
-.theme {
+.theme-vars {
     --white: #ffffff;
     --light-blue: #eff6ff;
     --dark-blue: #4b76b3;
     --darker-blue: #3b5a8c;
     --dropshadow: 0 4px 6px rgba(75, 118, 179, 0.25);
     --font-jua: 'Jua', sans-serif;
+    font-family: var(--font-jua);
 }
 
 .theme {
     background-color: var(--white);
-    font-family: var(--font-jua);
     width: 100vw;
     margin: 0;
     padding: 0;
@@ -169,7 +169,15 @@
     border-radius: 2rem;
     box-shadow: var(--dropshadow);
     width: 88vw;
-    padding-bottom: 7rem;
+    padding-bottom: 9rem;
+}
+
+.activity-container {
+    background-color: var(--light-blue);
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    box-shadow: var(--dropshadow);
+    text-align: center;
 }
 
 /* Course Roadmap styles */
