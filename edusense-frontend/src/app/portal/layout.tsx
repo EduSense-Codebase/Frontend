@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import Link from 'next/link';
 import { Step } from 'react-joyride';
 import ChatWidget from '../ui_components/ChatWidget';
-import { IPointsRespones, IQuiz } from '../typedef';
+import { IPointsRespones, IQuiz, IPermissions, IPermissionsResponse} from '../typedef';
 import Logout from '../ui_components/Logout';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -12,22 +12,15 @@ import { httpGet } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
 
 import dynamic from 'next/dynamic';
+import { request } from 'http';
 const JoyrideWrapper = dynamic(() => import('@/app/ui_components/JoyrideWrapper'), { ssr: false });
 
-interface IPageContext {
-    pageContext: string;
-    quiz?: IQuiz | null;
-    article?: string | null;
-    roadmap?: string;
-}
 
 interface ICustomProps {
-    context: IPageContext;
-    enrollmentId: number;
-    setContext: React.Dispatch<React.SetStateAction<IPageContext>>;
-    setEnrollmentId: React.Dispatch<React.SetStateAction<number>>;
-    setUserSelection: React.Dispatch<React.SetStateAction<string>>;
-    refreshXP: () => void;
+    permissions: IPermissions | undefined;
+    setPermissions: React.Dispatch<React.SetStateAction<IPermissions | undefined>>;
+    institutionId: Number;
+    setInstitutionId: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const mainSteps: Step[] = [
@@ -59,7 +52,8 @@ const mainSteps: Step[] = [
     },
 ];
 
-const CustomPropContext = React.createContext<ICustomProps | undefined>(undefined);
+
+const CustomPropContext = React.createContext< ICustomProps| undefined>(undefined);
 export const useCustomProp = () => {
     const value = React.useContext(CustomPropContext);
     if (value === undefined) {
@@ -73,6 +67,8 @@ const interClassName = 'font-inter';
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     //   const router = useRouter();
+    const [permissions, setPermissions] = useState<IPermissions>();
+    const [institutionId, setInstitutionId] = useState<number>(0);
 
     const [context, setContext] = useState<IPageContext>({
         pageContext: '',
@@ -80,8 +76,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         article: '',
     });
 
-    const [enrollmentId, setEnrollmentId] = useState(-1);
-    const [userSelection, setUserSelection] = useState('');
+
     const [userXP, setUserXP] = useState({
         points: 0,
         level: 1,
@@ -90,8 +85,28 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     });
 
     useEffect(() => {
-        refreshXP();
+        //refreshXP();
         //console.log(userXP);
+
+        const API_URL = API_PREFIX + AUTH_ENDPOINT
+        const queryParams = {
+            "section": "permissions"
+        }
+        
+        const requestResponse = httpGet<IPermissionsResponse>(API_URL, queryParams);
+        requestResponse.then((res) => {
+            console.log(res.data)
+            setPermissions(res.data.data)
+        })
+
+
+        // const queryParamsInst = {"section": "institute"}
+        // const requestResponseInst = httpGet<Number>(API_URL, queryParamsInst);
+        // requestResponseInst.then((res) => {
+        //     console.log(res.data)
+        //     setInstitutionId(res.data.data)
+        // })
+
     }, []);
 
     const refreshXP = () => {
@@ -117,7 +132,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             id="main"
             className={`${interClassName} flex min-h-screen flex-col bg-white text-gray-800`}
         >
-            <JoyrideWrapper steps={mainSteps} seenKey="1" />
+            {/* <JoyrideWrapper steps={mainSteps} seenKey="1" /> */}
 
             <header id="dashboard-nav" className="sticky top-0 z-50 bg-white shadow-sm">
                 <div className="z-40 mx-auto flex items-center justify-between bg-white px-4 py-4">
@@ -144,17 +159,17 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                                             ((userXP.points - userXP.currentThreshold) /
                                                 (userXP.nextThreshold - userXP.currentThreshold)) *
                                                 100,
-                                        )}%`,
+                                        )}% `,
                                     }}
                                 />
                             </div>
                             <span className="text-xs text-gray-500">
-                                {userXP.points} / {userXP.nextThreshold}
+                                {userXP.points} / {userXP.nextThreshold} {permissions?.join_course}
                             </span>
                         </div>
 
                         <Link href="/portal/profile" className="ml-3 hover:text-gray-900">
-                            Profile
+                            Profile 
                         </Link>
 
                         <Link href="/portal/settings" className="hover:text-gray-900">
@@ -177,12 +192,10 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                 )}
                 <CustomPropContext.Provider
                     value={{
-                        context,
-                        setContext,
-                        enrollmentId,
-                        setEnrollmentId,
-                        setUserSelection,
-                        refreshXP,
+                        permissions,
+                        setPermissions,
+                        institutionId,
+                        setInstitutionId,
                     }}
                 >
                     {children}

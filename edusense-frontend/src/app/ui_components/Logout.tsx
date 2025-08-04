@@ -9,7 +9,7 @@ export default function Logout() {
     const router = useRouter();
     const apiUrl = API_PREFIX + AUTH_ENDPOINT;
     const queryParams = {
-        type: 'logout',
+        section: 'logout',
     };
     const formData = {};
     console.log('POSTing to:', apiUrl);

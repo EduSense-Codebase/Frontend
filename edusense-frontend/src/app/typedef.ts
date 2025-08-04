@@ -1,7 +1,17 @@
 /* ********************* Generic Types START ********************* */
+
+
+export interface IPermissions{
+    join_course: boolean;
+    create_course: boolean;
+    edit_course: boolean;
+    quick_actions: boolean;
+}
+
 export interface ICourse {
     id: number;
-    name: string;
+
+    course_name: string;
     color: string;
     takenDiag: boolean;
     roadmaps: string[];
@@ -105,6 +115,10 @@ export interface IPointsRespones {
 
 export interface IMatchingActivityResponse {
     data: IMatchingActivity;
+}
+
+export interface IPermissionsResponse{
+    data: IPermissions;
 }
 
 /* ********************* Axios Response Types END *********************** */

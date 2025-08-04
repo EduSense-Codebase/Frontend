@@ -12,12 +12,24 @@ import {
 import { httpGet, httpPost } from '../../utils';
 import * as motion from 'motion/react-client';
 import '../../theme.css';
+import { useCustomProp } from '../layout';
+import { create } from 'domain';
+import { error } from 'console';
 
-export default function CoursesPage() {
-    const [courses, setCourses] = useState<ICourse[]>([]);
-    const [offeredCourses, setOfferedCourses] = useState<IOfferedCourse[]>([]);
+export default function CourseSection() {
+    const { permissions } = useCustomProp();
+  
     const [dialogOpen, setDialogOpen] = useState(false);
     const [curAction, setCurAction] = useState('');
+    const [createCourseName, setCreateCourseName] = useState('');
+    const [joinCode, setJoinCode] = useState('')
+    const[loading, setLoading] = useState(false)
+    const [courses, setCourses] = useState<ICourse[]>([]);
+  
+    const join_course = permissions?.join_course;
+    const create_course = permissions?.create_course;
+    const new_tile = join_course ? "ENROLL COURSE" : create_course ? "CREATE COURSE" : null;
+
     const backgroundImages: Array<string> = [
         '/course-images/img1.png',
         '/course-images/img2.png',
@@ -27,68 +39,77 @@ export default function CoursesPage() {
 
     useEffect(() => {
         const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
+        console.log(permissions?.create_course);
 
         const queryParams = {
-            section: 'all_courses',
+            section: join_course ? 'all_enrolled_courses' : create_course ? "all_created_courses": "null",   
         };
 
         const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
 
         courseResponse
             .then((response) => {
-                //console.log(response);
+                console.log(response);
                 setCourses(response.data.data);
             })
             .catch((err) => {
                 //FIXME: Add Error Handling
                 console.log(err);
             });
-    }, []);
+    }, [permissions]);
 
-    const handleAction = (action: string) => {
-        setCurAction(action);
-        const apiUrl = API_PREFIX + COURSE_ENDPOINT;
-        const queryParams = { section: 'all_offered_courses' };
-        const response = httpGet<IAllOfferedResponse>(apiUrl, queryParams);
-        response
-            .then((res) => {
-                setOfferedCourses(res.data.data);
-                console.log('All Offered');
-                console.log(res.data.data);
-                setDialogOpen(true);
-            })
-            .catch((err) => console.error('Error fetching offered courses:', err));
-    };
-
+  
     const handleDialogClose = () => {
-        setDialogOpen(false);
+      setDialogOpen(false);
+      setCurAction('');
+      setCreateCourseName('');
+    };
+  
+    const handleCreateCourseSubmit = () => {
+
+      const apiUrl = API_PREFIX + COURSE_ENDPOINT;
+      const formData = {
+        course_name: createCourseName,
+        institutions: 1
+      };
+      const queryParams = { section: 'create_course' };
+  
+      httpPost(apiUrl, formData, queryParams)
+        .then((res) => {
+          console.log('Course created:', res.data);
+          handleDialogClose();
+        })
+        .catch((err) => {
+          console.error('Failed to create course', err);
+        });
+    };
+  
+    const handleAction = (action: string) => {
+      setCurAction(action);
+      setDialogOpen(true)
     };
 
-    const handleCourseSelect = (courseID: number, action: string) => {
-        const formData = {
-            course_id: courseID.toString(),
-        };
+    const handleJoinCourse = async () => {
+        setLoading(true);
+        
+        const url = API_PREFIX + COURSE_ENDPOINT
+        const queryParams = {"section": "enroll_course"}
+        const formData = {"join_code":joinCode}
 
-        const apiUrl = API_PREFIX + COURSE_ENDPOINT;
-        const queryParams = { section: action };
-        const response = httpPost<INewEnrollment>(apiUrl, formData, queryParams);
+        const requestResponse = httpPost(url, formData, queryParams);
+        requestResponse.then((res) => {
+            console.log(res.data);
+            setCourses((prev) => [...prev, res.data.data]);
 
-        response
-            .then((res) => {
-                if (action === 'enroll_course') {
-                    setCourses((prev) => [...prev, res.data.data]);
-                    console.log('Response');
-                    console.log(res.data.data.name);
-                } else {
-                    setCourses((prev) => prev.filter((c) => c.id !== (res.data.data as unknown)));
-                    console.log('Response');
-                    console.log(res.data.data.name);
-                }
-            })
-            .catch((err) => console.error('Failed', err));
-
-        setDialogOpen(false);
+        }).catch((error) => {
+            console.log("This course does not exist", error)
+        })
+        setLoading(false)
+          // Success
+          handleDialogClose();
+          
     };
+  
 
     const getBackgroundImage = (courseTileArgs: ICourse): string => {
         const randomIndex = courseTileArgs.id % backgroundImages.length;
@@ -122,14 +143,16 @@ export default function CoursesPage() {
                                 backgroundImage: `url(${bgImage})`,
                             }}
                         />
-                        <h3 className="course-tile-name">{courseTileArgs.name}</h3>
+                        <h3 className="course-tile-name">{courseTileArgs.course_name}</h3>
                     </motion.div>
                 </Link>
             </>
         );
     };
 
+
     return (
+      <section>
         <div className="theme-vars theme">
             <h1 className="heading">Dashboard</h1>
             <div className="container">
@@ -150,59 +173,80 @@ export default function CoursesPage() {
                             id="enroll-course-tile"
                         >
                             <img src="/plus_icon.png" className="plus-icon" />
-                            <h3 className="course-tile-name">ENROLL COURSE</h3>
+                            <h3 className="course-tile-name">{new_tile}</h3>
                         </motion.div>
                     </button>
                 </div>
             </div>
-
-            {/* Dialog for offered courses */}
-            {(() => {
-                if (dialogOpen) {
-                    return (
-                        <div
-                            id="course-modal"
-                            className="bg-opacity-20 fixed inset-0 z-50 flex items-center justify-center bg-gray-400 backdrop-blur-sm"
-                        >
-                            <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-                                <h2 className="mb-4 text-xl font-bold text-gray-700">
-                                    Offered Courses
-                                </h2>
-                                <div className="flex max-h-[300px] flex-col gap-3 overflow-y-auto text-gray-700">
-                                    {offeredCourses.map((course) => (
-                                        <div
-                                            key={course.id}
-                                            onClick={() => handleCourseSelect(course.id, curAction)}
-                                            className="cursor-pointer rounded bg-gray-100 p-3 text-center hover:bg-gray-200"
-                                        >
-                                            {course.course_name}
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="mt-6 flex justify-end">
-                                    <button
-                                        onClick={handleDialogClose}
-                                        className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                                    >
-                                        Close
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                }
-            })()}
-
-            {/* Fixed Bottom Bar for Enroll/Unenroll Buttons */}
-            <div id="start-course-nav" className="footer">
-                <button
-                    id="manage-courses-btn"
-                    onClick={() => handleAction('unenroll_course')}
-                    className="button"
-                >
-                    Manage Courses
-                </button>
-            </div>
         </div>
+  
+        {/* Enroll Course Modal */}
+        {dialogOpen && join_course && (
+          <div className="bg-opacity-20 fixed inset-0 z-50 flex items-center justify-center bg-gray-400 backdrop-blur-sm">
+            <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-lg">
+                <h2 className="mb-4 text-xl font-bold text-gray-700">Enter the join code provided by your teacher to enroll in the course.</h2>
+                <div className="grid grid-cols-1 gap-4">
+                <input
+                    type='text' 
+                    value={joinCode}
+                    onChange={(e) => setJoinCode(e.target.value)}
+                    className="w-full rounded border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+
+
+
+                </div>
+                <div className="mt-4 flex justify-end">
+                <button
+                onClick={handleDialogClose}
+                className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400"
+                >
+                    Close
+                </button>
+
+                <button
+                    onClick={handleJoinCourse}
+                    className="rounded bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
+                    disabled={loading || !joinCode}
+                    >
+                    {loading ? 'Joining...' : 'Join Course'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+  
+        {/* Create Course Modal */}
+        {dialogOpen && create_course && (
+          <div className="bg-opacity-20 fixed inset-0 z-50 flex items-center justify-center bg-gray-400 backdrop-blur-sm">
+            <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+              <h2 className="mb-4 text-xl font-bold text-gray-700">Create New Course</h2>
+  
+              <input
+                type="text"
+                placeholder="Course Name"
+                value={createCourseName}
+                onChange={(e) => setCreateCourseName(e.target.value)}
+                className="mb-4 w-full rounded border p-2"
+              />
+  
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={handleDialogClose}
+                  className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateCourseSubmit}
+                  className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
     );
-}
+  }

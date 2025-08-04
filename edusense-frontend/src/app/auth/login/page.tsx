@@ -7,7 +7,6 @@ import { httpPost } from '../../utils';
 import Form, { IFormFieldBase } from '../../ui_components/Form';
 import Link from 'next/link';
 
-import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -41,7 +40,7 @@ export default function LoginPage() {
     const handleLogin = () => {
         //e.preventDefault();
         const apiUrl = API_PREFIX + AUTH_ENDPOINT;
-        const queryParams = { type: 'signin' };
+        const queryParams = { section: 'signin' };
 
         // const form = new FormData();
         // form.append("email", email);
@@ -64,30 +63,8 @@ export default function LoginPage() {
             });
     };
 
-    const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
-        const apiUrl = API_PREFIX + AUTH_ENDPOINT;
-        const formData = {
-            provider: 'google',
-            credential: credentialResponse.credential,
-        };
-        const queryParams = {
-            type: 'third_party_signin',
-        };
-
-        const response = httpPost(apiUrl, formData, queryParams);
-        response
-            .then((response) => {
-                console.log('Login successful:', response.data);
-                router.push('/portal/courses');
-            })
-            .catch((err) => {
-                console.log('WHY');
-                console.log(err);
-            });
-    };
 
     return (
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
             <div className="mx-auto w-full max-w-md">
                 <Form
                     metadata={{
@@ -100,7 +77,6 @@ export default function LoginPage() {
                     callbackFunc={handleFieldChange}
                     submitCallback={handleLogin}
                     submitDisplayName="Login"
-                    extraComponents={<GoogleLogin onSuccess={handleGoogleLogin} />}
                 />
 
                 {/* Footer Text BELOW the login box */}
@@ -111,6 +87,5 @@ export default function LoginPage() {
                     </Link>
                 </div>
             </div>
-        </GoogleOAuthProvider>
     );
 }
