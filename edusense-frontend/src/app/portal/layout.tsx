@@ -19,8 +19,8 @@ const JoyrideWrapper = dynamic(() => import('@/app/ui_components/JoyrideWrapper'
 interface ICustomProps {
     permissions: IPermissions | undefined;
     setPermissions: React.Dispatch<React.SetStateAction<IPermissions | undefined>>;
-    institutionId: Number;
-    setInstitutionId: React.Dispatch<React.SetStateAction<number>>;
+    institution: String;
+    setInstitution: React.Dispatch<React.SetStateAction<String>>;
 }
 
 const mainSteps: Step[] = [
@@ -68,7 +68,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     const pathname = usePathname();
     //   const router = useRouter();
     const [permissions, setPermissions] = useState<IPermissions>();
-    const [institutionId, setInstitutionId] = useState<number>(0);
+    const [institution, setInstitution] = useState<String>("");
 
     const [context, setContext] = useState<IPageContext>({
         pageContext: '',
@@ -100,12 +100,12 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         })
 
 
-        // const queryParamsInst = {"section": "institute"}
-        // const requestResponseInst = httpGet<Number>(API_URL, queryParamsInst);
-        // requestResponseInst.then((res) => {
-        //     console.log(res.data)
-        //     setInstitutionId(res.data.data)
-        // })
+        const queryParamsInst = {"section": "institution"}
+        const requestResponseInst = httpGet<String>(API_URL, queryParamsInst);
+        requestResponseInst.then((res) => {
+            console.log(res.data)
+            setInstitution(res.data.data.name)
+        })
 
     }, []);
 
@@ -194,8 +194,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     value={{
                         permissions,
                         setPermissions,
-                        institutionId,
-                        setInstitutionId,
+                        institution,
+                        setInstitution,
                     }}
                 >
                     {children}
