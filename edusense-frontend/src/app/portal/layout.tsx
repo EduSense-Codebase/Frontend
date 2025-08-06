@@ -68,10 +68,6 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     const [permissions, setPermissions] = useState<IPermissions>();
     const [institution, setInstitution] = useState<string>('');
 
-
-
-
-
     useEffect(() => {
         //refreshXP();
         //console.log(userXP);
@@ -94,7 +90,6 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             setInstitution(res.data.data.name);
         });
     }, []);
-
 
     const showChatWidget = pathname.endsWith('/portal/courses');
 
