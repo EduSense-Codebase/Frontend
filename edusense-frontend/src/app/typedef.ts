@@ -1,7 +1,6 @@
 /* ********************* Generic Types START ********************* */
 
-
-export interface IPermissions{
+export interface IPermissions {
     join_course: boolean;
     create_course: boolean;
     edit_course: boolean;
@@ -117,7 +116,7 @@ export interface IMatchingActivityResponse {
     data: IMatchingActivity;
 }
 
-export interface IPermissionsResponse{
+export interface IPermissionsResponse {
     data: IPermissions;
 }
 

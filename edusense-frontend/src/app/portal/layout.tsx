@@ -4,7 +4,7 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import Link from 'next/link';
 import { Step } from 'react-joyride';
 import ChatWidget from '../ui_components/ChatWidget';
-import { IPointsRespones, IQuiz, IPermissions, IPermissionsResponse} from '../typedef';
+import { IPointsRespones, IQuiz, IPermissions, IPermissionsResponse } from '../typedef';
 import Logout from '../ui_components/Logout';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -15,12 +15,11 @@ import dynamic from 'next/dynamic';
 import { request } from 'http';
 const JoyrideWrapper = dynamic(() => import('@/app/ui_components/JoyrideWrapper'), { ssr: false });
 
-
 interface ICustomProps {
     permissions: IPermissions | undefined;
     setPermissions: React.Dispatch<React.SetStateAction<IPermissions | undefined>>;
-    institution: String;
-    setInstitution: React.Dispatch<React.SetStateAction<String>>;
+    institution: string;
+    setInstitution: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const mainSteps: Step[] = [
@@ -52,8 +51,7 @@ const mainSteps: Step[] = [
     },
 ];
 
-
-const CustomPropContext = React.createContext< ICustomProps| undefined>(undefined);
+const CustomPropContext = React.createContext<ICustomProps | undefined>(undefined);
 export const useCustomProp = () => {
     const value = React.useContext(CustomPropContext);
     if (value === undefined) {
@@ -68,62 +66,35 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     const pathname = usePathname();
     //   const router = useRouter();
     const [permissions, setPermissions] = useState<IPermissions>();
-    const [institution, setInstitution] = useState<String>("");
-
-    const [context, setContext] = useState<IPageContext>({
-        pageContext: '',
-        quiz: null,
-        article: '',
-    });
+    const [institution, setInstitution] = useState<string>('');
 
 
-    const [userXP, setUserXP] = useState({
-        points: 0,
-        level: 1,
-        currentThreshold: 0,
-        nextThreshold: 50,
-    });
+
+
 
     useEffect(() => {
         //refreshXP();
         //console.log(userXP);
 
-        const API_URL = API_PREFIX + AUTH_ENDPOINT
+        const API_URL = API_PREFIX + AUTH_ENDPOINT;
         const queryParams = {
-            "section": "permissions"
-        }
-        
+            section: 'permissions',
+        };
+
         const requestResponse = httpGet<IPermissionsResponse>(API_URL, queryParams);
         requestResponse.then((res) => {
-            console.log(res.data)
-            setPermissions(res.data.data)
-        })
+            console.log(res.data);
+            setPermissions(res.data.data);
+        });
 
-
-        const queryParamsInst = {"section": "institution"}
-        const requestResponseInst = httpGet<String>(API_URL, queryParamsInst);
+        const queryParamsInst = { section: 'institution' };
+        const requestResponseInst = httpGet<string>(API_URL, queryParamsInst);
         requestResponseInst.then((res) => {
-            console.log(res.data)
-            setInstitution(res.data.data.name)
-        })
-
+            console.log(res.data);
+            setInstitution(res.data.data.name);
+        });
     }, []);
 
-    const refreshXP = () => {
-        const url = API_PREFIX + AUTH_ENDPOINT;
-        const queryParams = { type: 'get_points' };
-        const requestResponse = httpGet<IPointsRespones>(url, queryParams);
-
-        requestResponse.then((response) => {
-            console.log(response.data.data);
-            setUserXP({
-                points: response.data.data.points,
-                level: response.data.data.level,
-                currentThreshold: response.data.data.current_threshold,
-                nextThreshold: response.data.data.next_threshold,
-            });
-        });
-    };
 
     const showChatWidget = pathname.endsWith('/portal/courses');
 
@@ -145,31 +116,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     </Link>
 
                     <nav className="flex items-center space-x-6 text-sm font-medium text-gray-700">
-                        <div
-                            className="mr-4 flex flex-col items-end text-sm text-gray-800"
-                            id="course-progress-bar"
-                        >
-                            <span className="font-semibold">Lvl {userXP.level}</span>
-                            <div className="relative h-2 w-28 overflow-hidden rounded-full bg-gray-200">
-                                <div
-                                    className="absolute top-0 left-0 h-full rounded-full bg-blue-500"
-                                    style={{
-                                        width: `${Math.min(
-                                            100,
-                                            ((userXP.points - userXP.currentThreshold) /
-                                                (userXP.nextThreshold - userXP.currentThreshold)) *
-                                                100,
-                                        )}% `,
-                                    }}
-                                />
-                            </div>
-                            <span className="text-xs text-gray-500">
-                                {userXP.points} / {userXP.nextThreshold} {permissions?.join_course}
-                            </span>
-                        </div>
 
                         <Link href="/portal/profile" className="ml-3 hover:text-gray-900">
-                            Profile 
+                            Profile
                         </Link>
 
                         <Link href="/portal/settings" className="hover:text-gray-900">
@@ -183,11 +132,6 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
                 {!showChatWidget && (
                     <ChatWidget
-                        pageContext={context.pageContext}
-                        enrollmentId={enrollmentId}
-                        quiz={context.quiz}
-                        article={context.article}
-                        userSelection={userSelection}
                     />
                 )}
                 <CustomPropContext.Provider

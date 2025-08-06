@@ -7,7 +7,6 @@ import { httpPost } from '../../utils';
 import Form, { IFormFieldBase } from '../../ui_components/Form';
 import Link from 'next/link';
 
-
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -63,29 +62,28 @@ export default function LoginPage() {
             });
     };
 
-
     return (
-            <div className="mx-auto w-full max-w-md">
-                <Form
-                    metadata={{
-                        heading: 'Login',
-                        formClassName:
-                            'w-full bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5',
-                        inputGroupClassName: 'space-y-1',
-                    }}
-                    fields={fields}
-                    callbackFunc={handleFieldChange}
-                    submitCallback={handleLogin}
-                    submitDisplayName="Login"
-                />
+        <div className="mx-auto w-full max-w-md">
+            <Form
+                metadata={{
+                    heading: 'Login',
+                    formClassName:
+                        'w-full bg-white border border-gray-300 p-8 rounded-xl shadow-sm space-y-5',
+                    inputGroupClassName: 'space-y-1',
+                }}
+                fields={fields}
+                callbackFunc={handleFieldChange}
+                submitCallback={handleLogin}
+                submitDisplayName="Login"
+            />
 
-                {/* Footer Text BELOW the login box */}
-                <div className="mt-4 text-center text-sm text-gray-500">
-                    Don’t have an account?{' '}
-                    <Link href="/auth/register" className="text-blue-600 hover:underline">
-                        Sign up here!
-                    </Link>
-                </div>
+            {/* Footer Text BELOW the login box */}
+            <div className="mt-4 text-center text-sm text-gray-500">
+                Don’t have an account?{' '}
+                <Link href="/auth/register" className="text-blue-600 hover:underline">
+                    Sign up here!
+                </Link>
             </div>
+        </div>
     );
 }

@@ -10,20 +10,17 @@ interface MCInputProps {
     className?: string;
 }
 
-const MCInput: React.FC<MCInputProps> = ({
-    label,
-    options,
-    name,
-    selectedValue,
-    onChange,
-}) => {
+const MCInput: React.FC<MCInputProps> = ({ label, options, name, selectedValue, onChange }) => {
     return (
         <div className="theme-vars">
-            <div className='bg-[var(--light-blue)]  rounded-lg p-6 shadow-md'>
+            <div className="rounded-lg bg-[var(--light-blue)] p-6 shadow-md">
                 <label className="paragraph">{label}</label>
                 <div className="space-y-2">
                     {options.map((option) => (
-                        <label key={option} className="flex items-center space-x-2 pt-2 text-gray-700">
+                        <label
+                            key={option}
+                            className="flex items-center space-x-2 pt-2 text-gray-700"
+                        >
                             <input
                                 type="radio"
                                 name={name}

@@ -3,34 +3,19 @@ import { useEffect, useState } from 'react';
 import Button from './Button';
 import { AI_ENDPOINT, API_PREFIX } from '../global';
 import { httpPost } from '../utils';
-import { IFrontendAIResponse } from '../typedef';
-import { IQuiz } from '../typedef';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 
-interface IChatWidgetProps {
-    pageContext: string;
-    enrollmentId: number;
-    quiz: IQuiz | null | undefined;
-    article: string | null | undefined;
-    userSelection: string;
-}
-
-const ChatWidget = (props: IChatWidgetProps) => {
+const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
     const [input, setInput] = useState('');
     const [panelWidth, setPanelWidth] = useState(400);
     const [isResizing, setIsResizing] = useState(false);
 
-    const [currentContext, setCurrentContext] = useState<IChatWidgetProps>();
-
     const toggleChat = () => setIsOpen(!isOpen);
-
-    useEffect(() => {
-        setCurrentContext(props);
-    }, [props]);
 
     useEffect(() => {
         const greetedBefore = sessionStorage.getItem('new_session') == 'false';
@@ -84,55 +69,6 @@ const ChatWidget = (props: IChatWidgetProps) => {
     useEffect(() => {
         document.body.style.userSelect = isResizing ? 'none' : 'auto';
     }, [isResizing]);
-
-    const stringifyContext = () => {
-        let context = `This is what the user is seeing currently: ${currentContext?.pageContext}\n`;
-        if (currentContext?.article !== '' || currentContext.article !== null) {
-            context += `This is the article: ${currentContext?.article}\n`;
-        }
-        if (currentContext?.quiz !== null) {
-            context += `This is the quiz: ${JSON.stringify(currentContext?.quiz)}\n`;
-        }
-        if (currentContext?.userSelection !== '') {
-            context += `This is what the user has selected within the article when asking question: ${currentContext?.userSelection}\n`;
-        }
-        context += 'This is the previous conversation you had with this person:\n';
-        messages.forEach((currMessage) => {
-            context += `Sender ${currMessage.sender} Message: ${currMessage.text}\n`;
-        });
-        return context;
-    };
-
-    const sendMessage = () => {
-        if (input.trim() === '') return;
-
-        setMessages((currMessages) => [...currMessages, { sender: 'user', text: input }]);
-        setInput('');
-
-        const context = stringifyContext() + `New User Message ${input}\n`;
-
-        const queryParams = { section: 'generate_ai_content' };
-
-        const prompt_parameters = { message: context };
-        console.log(`enrollment id is ${props.enrollmentId}`);
-
-        const formData = {
-            enrollment_id: props.enrollmentId,
-            prompt_type: 'frontend_ai',
-            prompt_parameters: JSON.stringify(prompt_parameters),
-        };
-
-        const API_URL = API_PREFIX + AI_ENDPOINT;
-
-        const requestResponse = httpPost<IFrontendAIResponse>(API_URL, formData, queryParams);
-
-        requestResponse.then((response) => {
-            setMessages((currMessage) => [
-                ...currMessage,
-                { sender: 'ai', text: response.data.data.response },
-            ]);
-        });
-    };
 
     return (
         <>
@@ -220,11 +156,11 @@ const ChatWidget = (props: IChatWidgetProps) => {
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                                onKeyDown={(e) => e.key === 'Enter'}
                                 className="flex-1 rounded-lg border px-4 py-2 text-gray-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 placeholder="Ask me anything..."
                             />
-                            <Button displayName="Send" onClick={sendMessage} />
+                            <Button displayName="Send" onClick={} />
                         </div>
                     </motion.div>
                 )}

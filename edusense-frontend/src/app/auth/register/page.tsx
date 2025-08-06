@@ -3,10 +3,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Form, { IFormFieldBase } from '../../ui_components/Form';
-import { API_PREFIX, AUTH_ENDPOINT, GOOGLE_CLIENT_ID } from '../../global';
+import { API_PREFIX, AUTH_ENDPOINT } from '../../global';
 import { httpPost } from '../../utils';
-
-import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 const Register: React.FC = () => {
     const [fname, setFname] = useState('');
@@ -84,48 +82,19 @@ const Register: React.FC = () => {
             });
     };
 
-    const handleGoogleSignup = (credentialResponse: CredentialResponse) => {
-        const API_URL = API_PREFIX + AUTH_ENDPOINT;
-        const formData = {
-            provider: 'google',
-            credential: credentialResponse.credential,
-        };
-        const queryParams = {
-            type: 'third_party_signup',
-        };
-        const registerPromise = httpPost(API_URL, formData, queryParams);
-
-        registerPromise
-            .then((response) => {
-                console.log('Successfully Registered');
-                console.log(response.data);
-                router.push('/auth/login');
-            })
-            .catch((err) => {
-                console.log('Something went wrong while registering');
-                console.log(err);
-            });
-        //console.log(credentialResponse);
-    };
-
     return (
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            <Form
-                metadata={{
-                    heading: 'Register',
-                    formClassName:
-                        'w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5',
-                    inputGroupClassName: 'space-y-1',
-                }}
-                fields={fields}
-                callbackFunc={handleFieldChange}
-                submitCallback={handleSubmit}
-                submitDisplayName="Register"
-                extraComponents={
-                    <GoogleLogin onSuccess={handleGoogleSignup} text={'signup_with'} />
-                }
-            />
-        </GoogleOAuthProvider>
+        <Form
+            metadata={{
+                heading: 'Register',
+                formClassName:
+                    'w-full max-w-lg bg-white border border-gray-300 p-8 rounded-xl shadow-sm w-full max-w-md mx-auto space-y-5',
+                inputGroupClassName: 'space-y-1',
+            }}
+            fields={fields}
+            callbackFunc={handleFieldChange}
+            submitCallback={handleSubmit}
+            submitDisplayName="Register"
+        />
     );
 };
 
