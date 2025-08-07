@@ -83,16 +83,16 @@ To ensure consistent organization within Storybook:
 ### 🔧 UI Components
 Use the following naming convention:
 ```
-EduSense/Component/{ComponentName}
+Component/{ComponentName}
 ```
-**Example:** `EduSense/Component/Button`
+**Example:** `Component/Button`
 
 ### 📄 UIController Components (Page UI)
 Use the following naming convention:
 ```
-EduSense/Pages/{PageName}
+Pages/{PageName}
 ```
-**Example:** `EduSense/Pages/Dashboard`
+**Example:** `Pages/Dashboard`
 
 ---
 
