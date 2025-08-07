@@ -1,5 +1,6 @@
 import React from 'react';
-import '../theme.css';
+//import '../theme.css';
+import '../index.scss'
 
 interface MCInputProps {
     label: string;

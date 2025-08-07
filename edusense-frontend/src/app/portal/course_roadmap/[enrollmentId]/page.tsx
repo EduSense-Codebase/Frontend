@@ -8,7 +8,8 @@ import { INewEnrollment } from '@/app/typedef';
 import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/portal/layout';
-import '../../../theme.css';
+//import '../../../theme.css';
+import '../../../style/index.scss'
 import { motion } from 'framer-motion';
 
 export const runtime = 'edge';

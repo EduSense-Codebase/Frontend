@@ -11,7 +11,8 @@ import {
 } from '../../typedef';
 import { httpGet, httpPost } from '../../utils';
 import * as motion from 'motion/react-client';
-import '../../theme.css';
+//import '../../theme.css';
+import '../../style/index.scss'
 import { useCustomProp } from '../layout';
 import { create } from 'domain';
 import { error } from 'console';
