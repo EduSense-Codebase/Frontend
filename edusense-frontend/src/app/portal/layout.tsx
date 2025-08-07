@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Step } from 'react-joyride';
 import ChatWidget from '../ui_components/ChatWidget';
-import { IPointsRespones, IQuiz, IPermissions, IPermissionsResponse } from '../typedef';
+import { IPermissions, IPermissionsResponse } from '../typedef';
 import Logout from '../ui_components/Logout';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -12,7 +12,6 @@ import { httpGet } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
 
 import dynamic from 'next/dynamic';
-import { request } from 'http';
 const JoyrideWrapper = dynamic(() => import('@/app/ui_components/JoyrideWrapper'), { ssr: false });
 
 interface ICustomProps {
@@ -125,10 +124,10 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             </header>
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
-                {!showChatWidget && (
+                {/* {!showChatWidget && (
                     <ChatWidget
                     />
-                )}
+                )} */}
                 <CustomPropContext.Provider
                     value={{
                         permissions,

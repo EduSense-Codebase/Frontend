@@ -73,7 +73,7 @@ export default function CourseSection() {
         const apiUrl = API_PREFIX + COURSE_ENDPOINT;
         const formData = {
             course_name: createCourseName,
-            institutions: 1,
+            institution: 1,
         };
         const queryParams = { section: 'create_course' };
 

@@ -66,7 +66,7 @@ const Register: React.FC = () => {
             age: 10,
         };
         const queryParams = {
-            type: 'signup',
+            section: 'signup',
         };
         const registerPromise = httpPost(API_URL, formData, queryParams);
 
