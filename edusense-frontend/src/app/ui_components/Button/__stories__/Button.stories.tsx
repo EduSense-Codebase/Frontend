@@ -17,7 +17,8 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
     args: {
         displayName: "Primary Button",
-        variant: 'primary'
+        variant: 'primary',
+        icon: 'edit.svg'
     },
 };
 
