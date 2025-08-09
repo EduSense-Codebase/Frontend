@@ -51,7 +51,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
             </div>
             <div className="right-overview">
               <h3 className="announcements-title">Announcements</h3>
-              <AnnouncementForm onSubmit={onPostAnnouncement} courses={["SAT", "ACT"]} onCancel={onCancelAnnouncement}/>
+              <AnnouncementForm onSubmit={onPostAnnouncement} onCancel={onCancelAnnouncement}/>
             </div>
           </div>
         )}

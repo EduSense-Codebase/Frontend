@@ -99,6 +99,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             className={`${interClassName} flex min-h-screen flex-col bg-white text-gray-800`}
         >
             {/* <JoyrideWrapper steps={mainSteps} seenKey="1" /> */}
+            {/* Sidebar (fixed) */}
+            <Sidebar/>
 
             <header id="dashboard-nav" className="sticky top-0 z-50 bg-white shadow-sm">
 
