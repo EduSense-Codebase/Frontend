@@ -1,0 +1,50 @@
+@import '../../style/variables'; // where your variables are stored
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: $white;
+    border-right: 1px solid #e5e7eb; // border-gray-200
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+    z-index: 1000;
+    box-shadow: $dropshadow;
+  
+    &.open {
+      width: 14rem; // w-56
+    }
+  
+    &.closed {
+      width: 4rem; // w-16
+    }
+  }
+  
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem; // px-4 py-2
+  color: $dark-blue;
+  background-color: transparent;
+  text-decoration: none;
+  font-family: $font-itim;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background-color: $light-blue;
+  }
+
+  &.justify-center {
+    justify-content: center;
+  }
+
+  &.small {
+    font-size: 0.875rem; // text-sm
+  }
+
+  p {
+    margin-left: 0.5rem;
+  }
+}
