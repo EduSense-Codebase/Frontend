@@ -12,6 +12,7 @@ import { httpGet } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT } from '../global';
 
 import dynamic from 'next/dynamic';
+import Sidebar from '../ui_components/Sidebar/Sidebar';
 const JoyrideWrapper = dynamic(() => import('@/app/ui_components/JoyrideWrapper'), { ssr: false });
 
 interface ICustomProps {
@@ -85,7 +86,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         const queryParamsInst = { section: 'institution' };
         const requestResponseInst = httpGet<string>(API_URL, queryParamsInst);
         requestResponseInst.then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
             setInstitution(res.data.data.name);
         });
     }, []);
@@ -100,6 +101,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             {/* <JoyrideWrapper steps={mainSteps} seenKey="1" /> */}
 
             <header id="dashboard-nav" className="sticky top-0 z-50 bg-white shadow-sm">
+
                 <div className="z-40 mx-auto flex items-center justify-between bg-white px-4 py-4">
                     <Link
                         href="/portal/courses"
@@ -122,12 +124,15 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     </nav>
                 </div>
             </header>
+            
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
                 {/* {!showChatWidget && (
                     <ChatWidget
                     />
                 )} */}
+               
+
                 <CustomPropContext.Provider
                     value={{
                         permissions,

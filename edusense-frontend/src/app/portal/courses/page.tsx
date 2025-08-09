@@ -80,6 +80,11 @@ export default function CourseSection() {
         httpPost(apiUrl, formData, queryParams)
             .then((res) => {
                 console.log('Course created:', res.data);
+                setCourses((prev) => [
+                    ...prev,
+                    res.data.data 
+                ]);
+            
                 handleDialogClose();
             })
             .catch((err) => {
