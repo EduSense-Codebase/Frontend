@@ -12,8 +12,7 @@ type Story = StoryObj<typeof AnnouncementForm>;
 
 export const Primary: Story = {
   args: {
-    courses: ['ACT', 'SAT'],
-    onSubmit: (course, message) => alert(`Posted to ${course}: ${message}`),
+    onSubmit: (title, desc) => alert(`Posted announcement with title: ${title} and description: ${desc}`),
     onCancel: () => alert('Cancelled'),
   },
 };

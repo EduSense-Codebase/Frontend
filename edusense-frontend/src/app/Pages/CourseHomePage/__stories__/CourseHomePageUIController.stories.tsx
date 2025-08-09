@@ -20,7 +20,7 @@ export const Primary: Story = {
     onTabChange: () => {},
     announcements: [],
     onCreate: () => alert('Create clicked'),
-    onPostAnnouncement: (course, msg) => alert(`Announcement posted to ${course}: ${msg}`),
+    onPostAnnouncement: (title, desc) => alert(`Posted announcement with title: ${title} and description: ${desc}`),
     onCancelAnnouncement: () => alert('Announcement cancelled'),
     onEditPage: () => alert('Edit page clicked'),
   },

@@ -1,53 +1,102 @@
  @use '../../style/_variables.scss' as variables;
 
-.announcement-form {
+.announcements {
   display: flex;
-  flex-direction: column;
   background-color: variables.$white;
   padding: 16px;
   border-radius: 8px;
-  gap: 8px;
+  gap: 16px;
   font-family: variables.$font-jua;
   box-shadow: variables.$dropshadow;
+  height: 15rem;
 
-  .announcement-label {
-    font-size: 14px;
-    color: variables.$dark-blue;
-    margin-bottom: 4px;
+  .announcements-left {
+    font-size: 1rem;
+    overflow-y: auto;
+    padding-right: 16px;
+    margin-bottom: 16px;
+    max-width: 30%;
   }
 
-  .announcement-inputs {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-  }
+    .recent-announcements {
+      font-size: 0.75rem;
+    }
+      .no-announcements {
+        background-color: variables.$light-blue;
+        color: variables.$grey;
+        padding:16px;
+        margin-top: 16px;
+        border-radius: 8px;
+        font-style: italic;
+        text-align: center;
+      }
 
-    .announcement-select {
+      .announcement-item {
+        background-color: variables.$light-blue;
         padding: 8px;
-        border-radius: 4px;
-        font-size: 14px;
-        background-color: variables.$white;
-        color: variables.$dark-blue;
         box-shadow: variables.$dropshadow;
-        width: 25%;
+        border-radius: 8px;
+        margin-bottom: 8px;
+      }
+
+      .announcement-item h2 {
+        font-weight: bold;
+      }
+
+      .announcement-message {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 0.3s ease, max-height 0.3s ease;
+        color: variables.$grey;
+        opacity: 1;
+      }
+
+      .announcement-item:hover .announcement-message {
+        opacity: 1;
+        max-height: 200px;
+        display: block;
+      }
+
+  .announcements-right {
+    width: 75%;
+  }
+    .announcement-inputs {
+      display: flex;
+      flex-direction: column;
     }
 
-    .announcement-textarea {
-        min-height: 80px;
-        padding: 8px;
-        box-shadow: variables.$dropshadow;
-        border-radius: 4px;
+      .announcement-label {
         font-size: 14px;
-        resize: none;
-        font-family: inherit;
-        width: 75%;
         color: variables.$dark-blue;
-    }
+        margin-bottom: 4px;
+      }
 
-  .announcement-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 8px;
+      .announcement-title {
+          padding: 8px;
+          box-shadow: variables.$dropshadow;
+          border-radius: 4px;
+          font-size: 14px;
+          resize: none;
+          font-family: inherit;
+          color: variables.$dark-blue;
+      }
+
+      .announcement-textarea {
+          min-height: 80px;
+          padding: 8px;
+          box-shadow: variables.$dropshadow;
+          border-radius: 4px;
+          font-size: 14px;
+          resize: none;
+          font-family: inherit;
+          color: variables.$dark-blue;
+      }
+
+    .announcement-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
   }
-}
