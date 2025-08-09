@@ -1,0 +1,128 @@
+@use '../../style/_variables.scss' as variables;
+
+.edit-course-page {
+	width: 100%;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: baseline;
+	font-family: variables.$font-jua;
+}
+
+.header-container {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.header {
+	width: 100%;
+	font-size: 4rem;
+	color: variables.$dark-blue;
+	text-align: center;
+	padding: 2rem 0;
+	background-color: variables.$light-blue;
+	margin: 0;
+	box-shadow: variables.$dropshadow;
+}
+
+.customize-button-container {
+	position: absolute;
+	top: 2rem;
+	left: 80vw;
+}
+
+.edit-btn-container {
+	position: absolute;
+	bottom: 2rem;
+	left: 2rem;
+}
+
+.add-element-btn {
+	color: variables.$dark-blue;
+	margin: 2rem 0;
+	padding: 2rem;
+	border: dashed 2px variables.$dark-blue;
+	border-radius: 1rem;
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	cursor: pointer;
+}
+
+.add-element-btn img {
+	width: 3.5rem;
+	height: 3.5rem;
+}
+
+.add-element-btn p {
+	font-size: 1.2rem;
+	text-align: center;
+}
+
+.edit-footer {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem 2rem;
+	background-color: variables.$light-blue;
+	box-shadow: variables.$dropshadow;
+	position: fixed;
+	bottom: 0;
+}
+
+.footer-btn-container {
+	padding: 0.5rem 4rem;
+	border-radius: 3rem;
+	background-color: variables.$dark-blue;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 3rem;
+}
+
+.footer-btn {
+	background: variables.$light-blue;
+	padding: 0.5rem;
+	border-radius: 100%;
+	width: 3rem;
+	height: 3rem;
+	font-size: 1.2rem;
+	font-family: variables.$font-jua;
+	cursor: pointer;
+}
+
+.footer-btn:hover {
+	background: variables.$white;
+}
+
+.footer-btn-description {
+	position: absolute;
+	top: -0.5rem;
+	opacity: 0;
+	display:none;
+	transition: opacity 0.3s ease;
+	color: variables.$grey;
+	opacity: 1;
+	max-width: 100px;
+}
+
+
+.footer-btn:hover .footer-btn-description {
+	opacity: 1;
+	display: block;
+}
+
+.save-btn-container {
+	display: flex;
+	position: absolute;
+	right: 4rem;
+	gap: 0.5rem;
+}
