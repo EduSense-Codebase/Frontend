@@ -18,11 +18,18 @@ export const Primary: Story = {
     args: {
         displayName: "Primary Button",
         variant: 'primary',
-        icon: 'edit.svg'
+        icon: '/edit.svg'
     },
 };
 
 export const Secondary: Story = {
+    args: {
+        displayName: "Secondary",
+        variant: 'secondary'
+    },
+};
+
+export const Danger: Story = {
     args: {
         displayName: "Danger Button",
         variant: 'danger'

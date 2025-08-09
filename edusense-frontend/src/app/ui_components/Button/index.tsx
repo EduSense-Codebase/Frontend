@@ -5,12 +5,11 @@ import './Button.scss';
 export interface IButtonProps {
     displayName: string;
     onClick: () => void;
-    variant?: 'primary' | 'secondary' | 'danger';
+    variant?: 'primary' | 'danger';
     icon?: string;
 }
 
 const Button: React.FC<IButtonProps> = ({ displayName, onClick, variant = 'primary', icon }) => {
-
     return (
         <>
             <button

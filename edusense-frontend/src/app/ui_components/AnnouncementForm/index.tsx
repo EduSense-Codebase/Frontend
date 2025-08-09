@@ -17,7 +17,6 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
   const [message, setMessage] = useState('');
 
   const handlePost = () => {
-    if (!selectedCourse || !message.trim()) return;
     onSubmit(selectedCourse, message.trim());
     setMessage('');
     setSelectedCourse('');
