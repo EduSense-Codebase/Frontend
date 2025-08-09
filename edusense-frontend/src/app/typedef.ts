@@ -9,11 +9,11 @@ export interface IPermissions {
 
 export interface ICourse {
     id: number;
-
     course_name: string;
-    color: string;
-    takenDiag: boolean;
-    roadmaps: string[];
+
+    institution: number;
+    join_code: string;
+    teacher_id: number;
 }
 
 export interface IOfferedCourse {
@@ -21,53 +21,28 @@ export interface IOfferedCourse {
     course_name: string;
 }
 
-export interface IUserInfo {
-    name: string;
-    age: number;
+
+export interface IAnnouncements{
+    title: string,
+    content: string,
 }
 
-export interface IJourney {
-    title: string;
-    description: string;
-    type: string;
-}
-
-export interface IArticle {
-    article_title: string;
-    sections: string[];
-    section_content: string[];
-}
-
-export interface IQuiz {
-    questions: string[];
-    choices: string[][];
-    correct_ans: string[];
-    reasoning: string[][];
-    length: number;
-    passage: string;
-}
-
-export interface IMatchingActivity {
-    title: string;
-    description: string;
-    left_items: string[];
-    right_items: string[];
-    correct_pairs: [string, string][];
-}
-
-export type Task = {
+export interface IAssignments {
     id: number;
-    title: string;
-    status: 'pending' | 'completed';
-};
+    name: string;
+    created: string; // ISO date string from backend
+    due: string;     // ISO date string from backend
+    description: string;
+    points: number;
+    module: number;
+    assignment_data: Record<string, unknown>; // empty or dynamic object
+  }
+
+
 
 /* ********************* Generic Types END *********************** */
 
 /* ********************* Axios Response Types START ********************* */
-
-export interface IUserInfoResponse {
-    data: IUserInfo;
-}
 
 export interface IAllOfferedResponse {
     data: IOfferedCourse[];
@@ -81,40 +56,19 @@ export interface INewEnrollment {
     data: ICourse;
 }
 
-export interface IJourneyResponse {
-    data: {
-        title: string[];
-        description: string[];
-        type: string[];
-    };
+
+
+export interface IAnnouncementsResponse{
+    data: IAnnouncements[];
 }
 
-export interface IArticleResponse {
-    data: IArticle;
+
+export interface IAssignmentsResponse{
+
+    data: IAssignments[];
 }
 
-export interface IFrontendAIResponse {
-    data: {
-        response: string;
-    };
-}
 
-export interface IQuizResponse {
-    data: IQuiz;
-}
-
-export interface IPointsRespones {
-    data: {
-        points: number;
-        level: number;
-        current_threshold: number;
-        next_threshold: number;
-    };
-}
-
-export interface IMatchingActivityResponse {
-    data: IMatchingActivity;
-}
 
 export interface IPermissionsResponse {
     data: IPermissions;
@@ -124,13 +78,6 @@ export interface IPermissionsResponse {
 
 /* ********************* Mock Data START *********************** */
 
-// Example in app/sat/page.tsx (or wherever you're working)
-export const mockTasks: Task[] = [
-    { id: 1, title: 'Finish Reading Lesson 2', status: 'pending' },
-    { id: 2, title: 'Take Practice Quiz 1', status: 'pending' },
-    { id: 3, title: 'Review missed questions', status: 'completed' },
-    { id: 4, title: 'Watch timing strategy video', status: 'pending' },
-    { id: 5, title: 'Complete Vocab Drill', status: 'pending' },
-];
+
 
 /* ********************* Mock Data END *********************** */

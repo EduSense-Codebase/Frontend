@@ -1,10 +1,10 @@
 'use client';
 //import CourseRoadmap from "@/app/ui_components/CourseRoadmap";
 import { useState, useEffect } from 'react';
-import { httpGet } from '@/app/utils';
+import { httpGet, httpPost } from '@/app/utils';
 import { COURSE_ENDPOINT, API_PREFIX } from '@/app/global';
 import { useParams, useRouter } from 'next/navigation';
-import { INewEnrollment } from '@/app/typedef';
+import { INewEnrollment, ICourse, IAnnouncements, IAnnouncementsResponse, IAssignments, IAssignmentsResponse } from '@/app/typedef';
 import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/portal/layout';
@@ -28,91 +28,80 @@ const sectionSteps: Step[] = [
     },
 ];
 
-// function SectionMetaPanel({
-//     progress,
-//     next,
-//     last,
-// }: {
-//     progress: number;
-//     next: string;
-//     last: string;
-// }) {
-//     return (
-//         <div className="bg-opacity-90 pointer-events-none absolute top-0 left-0 z-10 h-full w-full rounded-xl bg-white p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-//             {/* Progress */}
-//             <div className="mb-3">
-//                 <div className="mb-1 flex justify-between text-xs">
-//                     <span className="font-medium">Progress</span>
-//                     <span className="font-semibold text-blue-700">{progress}%</span>
-//                 </div>
-//                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
-//                     <div
-//                         className="h-2 rounded-full bg-blue-600"
-//                         style={{ width: `${progress}%` }}
-//                     ></div>
-//                 </div>
-//             </div>
 
-//             {/* Next + Last Tile Info */}
-//             <div className="flex justify-between pt-1 text-xs">
-//                 <div>
-//                     <div className="text-gray-500">Next</div>
-//                     <div className="font-medium">{next}</div>
-//                 </div>
-//                 <div>
-//                     <div className="text-gray-500">Last</div>
-//                     <div className="font-medium">{last}</div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-
-export default function CourseRoadmapPage() {
+export default function HomePage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
-    const [courseName, setCourseName] = useState<string>('');
-    const pageContexts =
-        'This page is an section page where users can select the various sections of the course to do work.';
+
+    const { permissions } = useCustomProp();
+    const join_course = permissions?.join_course;
+    const create_course = permissions?.create_course;
+
+    const [courseDetails, setCourseDetails] = useState<ICourse>();
+    const [announcements, setAnnouncements] = useState<IAnnouncements[]>([])
+    const [assignments, setAssignments] = useState<IAssignments[]>([])
 
     const router = useRouter();
-    const layoutProps = useCustomProp();
+
+
 
     useEffect(() => {
-        const url = API_PREFIX + COURSE_ENDPOINT;
-        const queryParamsDiag = {
-            section: 'course_details',
-            enrollment_id: enrollmentId?.toString(),
-        };
+        // Get necessary info to display on Overview page
+        const url = API_PREFIX + COURSE_ENDPOINT
+        const queryParams = {"section": "course_details", "course_id":enrollmentId}
+        const requestResponse = httpGet<INewEnrollment>(url,queryParams);
+        requestResponse.then((res) => {
+            console.log(res.data)
+            setCourseDetails(res.data.data)
+        }).catch((err) => {
+            console.log(err)
+            console.log(enrollmentId)
+        })
 
-        const response = httpGet<INewEnrollment>(url, queryParamsDiag);
+        const queryParamsAnnounce = {"section": "get_announcements", "course_id":enrollmentId}
+        const requestResponseAnnounce = httpGet<IAnnouncementsResponse>(url,queryParamsAnnounce);
+        requestResponseAnnounce.then((res) => {
+            console.log(res.data)
+            setAnnouncements(res.data.data)
+        }).catch((err) => {
+            console.log(err)
+            console.log(enrollmentId)
+        })
 
-        response.then((res) => {
-            if (res.data.data.takenDiag == false) {
-                router.push(`/portal/diagnostic/${enrollmentId}`);
-            } else {
-                const API_URL = API_PREFIX + COURSE_ENDPOINT;
-                const queryParams = {
-                    section: 'course_details',
-                    enrollment_id: enrollmentId?.toString(),
-                };
-                const request = httpGet<INewEnrollment>(API_URL, queryParams);
-                request.then((res) => {
-                    //console.log(res);
-                    setRoadmaps(res.data.data.roadmaps);
-                    setCourseName(res.data.data.name);
-                });
-            }
-            layoutProps.setEnrollmentId(parseInt(enrollmentId));
-            layoutProps.setContext((prev) => ({
-                ...prev,
-                pageContext: pageContexts,
-                roadmap: res.data.data.roadmaps.join(' '),
-            }));
-        });
+        const queryParamsAssign = {"section": "get_assignments", "course_id":enrollmentId}
+        const requestResponseAssign = httpGet<IAssignmentsResponse>(url,queryParamsAssign);
+        requestResponseAssign.then((res) => {
+            console.log(res.data)
+            setAssignments(res.data.data)
+        }).catch((err) => {
+            console.log(err)
+            console.log(enrollmentId)
+        })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return <></>;
+    const handleCreateAnnouncement = (title: string, content: string) => {
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        const formData = { title, content };
+        const queryParams = { section: "make_announcement" };
+    
+        const requestResponse = httpPost(url, formData, queryParams);
+        requestResponse.then((res) => {
+            console.log(res.data);
+            setAnnouncements((prev) => [
+                ...prev,
+                { title, content } // using the params directly
+            ]);
+        }).catch((err) => {
+            console.log(err);
+            console.log(enrollmentId);
+        });
+    };
+    
+
+    return (
+        <>
+        </>
+    );
 }
