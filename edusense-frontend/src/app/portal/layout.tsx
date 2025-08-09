@@ -4,15 +4,17 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Step } from 'react-joyride';
 import ChatWidget from '../ui_components/ChatWidget';
-import { IPermissions, IPermissionsResponse } from '../typedef';
+import { IAllEnrolledCourseResponse, IPermissions, IPermissionsResponse } from '../typedef';
 import Logout from '../ui_components/Logout';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { httpGet } from '../utils';
-import { API_PREFIX, AUTH_ENDPOINT } from '../global';
+import { API_PREFIX, AUTH_ENDPOINT,COURSE_ENDPOINT } from '../global';
 
 import dynamic from 'next/dynamic';
 import Sidebar from '../ui_components/Sidebar/Sidebar';
+import { ICourse } from '../typedef';
+
 const JoyrideWrapper = dynamic(() => import('@/app/ui_components/JoyrideWrapper'), { ssr: false });
 
 interface ICustomProps {
@@ -67,6 +69,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     //   const router = useRouter();
     const [permissions, setPermissions] = useState<IPermissions>();
     const [institution, setInstitution] = useState<string>('');
+    const [courses, setCourses] = useState<ICourse[]>([]);
 
     useEffect(() => {
         //refreshXP();
@@ -81,6 +84,28 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         requestResponse.then((res) => {
             console.log(res.data);
             setPermissions(res.data.data);
+            const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
+            console.log(permissions?.create_course);
+
+            const queryParams = {
+                section: res.data.data.join_course
+                    ? 'all_enrolled_courses'
+                    : res.data.data.create_course 
+                    ? 'all_created_courses'
+                    : 'null',
+            };
+
+            const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
+
+            courseResponse
+                .then((response) => {
+                    console.log(response);
+                    setCourses(response.data.data);
+                })
+                .catch((err) => {
+                    //FIXME: Add Error Handling
+                    console.log(err);
+                });
         });
 
         const queryParamsInst = { section: 'institution' };
@@ -100,7 +125,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         >
             {/* <JoyrideWrapper steps={mainSteps} seenKey="1" /> */}
             {/* Sidebar (fixed) */}
-            <Sidebar/>
+            <Sidebar courses={courses}/>
 
             <header id="dashboard-nav" className="sticky top-0 z-50 bg-white shadow-sm">
 
