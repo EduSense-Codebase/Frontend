@@ -5,7 +5,7 @@ import './Button.scss';
 export interface IButtonProps {
     displayName: string;
     onClick: () => void;
-    variant?: 'primary' | 'danger';
+    variant?: 'primary' | 'secondary' | 'danger';
     icon?: string;
 }
 
