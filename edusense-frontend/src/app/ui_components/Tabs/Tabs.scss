@@ -1,0 +1,30 @@
+ @use '../../style/_variables.scss' as variables;
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid variables.$dark-blue;
+  background-color: variables.$light-blue;
+
+  .tab {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #5a6d90;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    font-family: variables.$font-itim;
+    text-transform: uppercase;
+
+    &:hover {
+      color: variables.$dark-blue;
+    }
+
+    &.active {
+      color: variables.$dark-blue;
+      font-weight: bold;
+      border-bottom-color: variables.$dark-blue;
+    }
+  }
+}
