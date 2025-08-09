@@ -1,0 +1,67 @@
+@use '../../style/_variables.scss' as variables;
+
+.course-page {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: variables.$font-jua;
+}
+
+.header {
+    width: 100%;
+    font-size: 4rem;
+    color: variables.$dark-blue;
+    text-align: center;
+    padding: 0.5rem 0;
+    background-color: variables.$light-blue;
+    margin: 0;
+    box-shadow: variables.$dropshadow;
+}
+
+.edit-button-container {
+    position: relative;
+    top: -1.25rem;
+}
+
+.course-content {
+    background-color: variables.$light-blue;
+    padding: 1rem 3rem;
+    border-radius: 2rem;
+    width: 95%;
+}
+
+.overview-content {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: variables.$dark-blue;
+    align-items: baseline;
+    justify-content: space-evenly;
+}
+
+.left-overview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.right-overview {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 75vw;
+}
+
+.announcements-title {
+    font-family: variables.$font-itim;
+    text-transform: uppercase;
+}

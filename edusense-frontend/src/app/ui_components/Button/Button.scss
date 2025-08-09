@@ -1,0 +1,55 @@
+ @use '../../style/_variables.scss' as variables;
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: variables.$dark-blue !important;
+    font-family: variables.$font-jua !important;
+    color: variables.$white !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem !important;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: variables.$dropshadow !important;
+}
+
+.button:hover {
+    background-color: variables.$darker-blue !important;
+}
+
+.button-icon {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+}
+
+.button {
+    &--primary {
+        background-color: variables.$dark-blue !important;
+        color: variables.$white !important;
+
+        &:hover {
+            background-color: variables.$darker-blue !important;
+        }
+    }
+
+    &--secondary {
+        background-color: gray !important;
+        color: white !important;
+
+        &:hover {
+            background-color: darkgray !important;
+        }
+    }
+
+    &--danger {
+        background-color: red !important;
+        color: white !important;
+
+        &:hover {
+            background-color: darkred !important;
+        }
+    }
+}
