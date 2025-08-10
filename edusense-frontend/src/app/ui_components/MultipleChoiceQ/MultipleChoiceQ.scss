@@ -1,0 +1,121 @@
+@use '../../style/_variables.scss' as variables;
+
+.mcq {
+  background: variables.$white;
+  border-radius: 1rem;
+  box-shadow: variables.$dropshadow;
+  padding: 1rem;
+  font-family: variables.$font-itim;
+  width: 400px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      font-size: 1rem;
+      font-family: variables.$font-jua;
+      color: variables.$dark-blue;
+    }
+
+    input[type='text'] {
+      font-family: variables.$font-jua;
+      font-size: 1rem;
+      border: none;
+      border-bottom: 2px solid variables.$light-grey;
+      outline: none;
+      color: variables.$dark-blue;
+      width: 100%;
+    }
+
+    button {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.75rem;
+    }
+  }
+
+  &__options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .mcq__option {
+      background-color: variables.$light-blue;
+      border-radius: 1rem;
+      padding: 0.5rem 0.75rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: variables.$dropshadow;
+
+        &:hover {
+          background-color: variables.$white;
+          cursor: pointer;
+        }
+
+      label {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: variables.$dark-blue;
+
+        input[type='radio'],
+        input[type='checkbox'] {
+          accent-color: variables.$dark-blue;
+          transform: scale(1.2);
+        }
+      }
+
+      input[type='text'] {
+        flex: 1;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        font-size: 0.9rem;
+        color: variables.$dark-blue;
+      }
+
+      button {
+        background-color: none;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        color: variables.$grey;
+        margin-left: 0.5rem;
+
+        &:hover {
+          color: variables.$dark-blue;
+        }
+      }
+
+      &.selected {
+        background-color: variables.$light-blue;
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+}
+
+
+.mcq__option-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mcq__option-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

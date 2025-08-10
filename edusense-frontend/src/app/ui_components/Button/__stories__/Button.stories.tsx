@@ -35,3 +35,17 @@ export const Danger: Story = {
         variant: 'danger'
     },
 };
+
+export const Icon: Story = {
+    args: {
+        variant: 'icon',
+        icon: '/edit.svg'
+    },
+};
+
+export const IconSecondary: Story = {
+    args: {
+        variant: 'icon-secondary',
+        icon: '/edit.svg'
+    },
+};

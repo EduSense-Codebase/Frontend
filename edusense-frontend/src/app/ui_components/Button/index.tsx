@@ -3,9 +3,9 @@ import React from 'react';
 import './Button.scss';
 
 export interface IButtonProps {
-    displayName: string;
+    displayName?: string;
     onClick: () => void;
-    variant?: 'primary' | 'secondary' | 'danger';
+    variant?: 'primary' | 'secondary' | 'danger' | 'icon' | 'icon-secondary';
     icon?: string;
 }
 
@@ -20,7 +20,7 @@ const Button: React.FC<IButtonProps> = ({ displayName, onClick, variant = 'prima
                 }}
             >
                 {icon && <img src={icon} alt={`${displayName} icon`} className="button-icon" />}
-                <p>{displayName}</p>
+                {displayName && <p>{displayName}</p>}
             </button>
         </>
     );
