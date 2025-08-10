@@ -1,31 +1,38 @@
 import React, { useState } from 'react';
 import './AnnouncementForm.scss';
 import Button from '../Button';
+import { IAnnouncements } from '@/app/typedef';
 
 interface AnnouncementFormProps {
   onSubmit: (course: string, message: string) => void;
-  onCancel: () => void;
+  announcements: IAnnouncements[]
 }
 
 const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
   onSubmit,
-  onCancel
+
+  announcements,
 }) => {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
-  const [announcements, setAnnouncements] = useState<{ title: string, message: string }[]>([]);
+  //const [announcements, setAnnouncements] = useState<{ title: string, message: string }[]>([]);
 
-  const handlePost = () => {
-    const trimmedTitle = title.trim();
-    const trimmedMessage = message.trim(); 
-    if (!trimmedTitle) return;
+//   const handlePost = () => {
+//     const trimmedTitle = title.trim();
+//     const trimmedMessage = message.trim(); 
+//     if (!trimmedTitle) return;
 
-    onSubmit(trimmedTitle, trimmedMessage);
-    setMessage('');
-    setTitle('');
-    setAnnouncements((prev) => [{ title: trimmedTitle, message: trimmedMessage }, ...prev]);
+//     onSubmit(trimmedTitle, trimmedMessage);
+//     setMessage('');
+//     setTitle('');
+//     setAnnouncements((prev) => [{ title: trimmedTitle, message: trimmedMessage }, ...prev]);
 
-  };
+//   };
+
+  const handleCancel = () => {
+    setTitle('')
+    setMessage('')
+  }
 
   return (
     <div className="announcements">      
@@ -38,7 +45,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
             announcements.slice(0, 5).map((announcement, index) => (
               <div key={index} className="announcement-item">
                 <h2>{announcement.title}</h2>
-                <p className="announcement-message">{announcement.message}</p>
+                <p className="announcement-message">{announcement.content}</p>
               </div>
             ))
           )}
@@ -63,8 +70,8 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
         </div>
         
         <div className="announcement-actions">
-          <Button displayName="Cancel" variant="secondary" onClick={onCancel} />
-          <Button displayName="Post" variant="primary" onClick={handlePost} />
+          <Button displayName="Cancel" variant="secondary" onClick={handleCancel} />
+          <Button displayName="Post" variant="primary" onClick={(() => (onSubmit(title, message)))} />
         </div>
       </div>
     </div>
