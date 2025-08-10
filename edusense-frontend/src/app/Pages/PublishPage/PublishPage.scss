@@ -1,0 +1,99 @@
+@use '../../style/variables' as vars;
+
+.container {
+  background-color: vars.$light-blue;
+  padding: 1.5rem;
+  border-radius: 8px;
+  font-family: vars.$font-itim;
+  color: vars.$darker-blue;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: vars.$font-jua;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+
+  .icon {
+    font-size: 1.6rem;
+  }
+}
+
+.form {
+  display: flex;
+  gap: 2rem;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  input, textarea, select {
+    margin-top: 0.3rem;
+    padding: 0.5rem;
+    border: 1px solid vars.$grey;
+    border-radius: 6px;
+    font-family: vars.$font-itim;
+    font-size: 0.95rem;
+    background-color: vars.$white;
+    box-shadow: vars.$dropshadow;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 70px;
+  }
+}
+
+.left {
+  flex: 2;
+}
+
+.right {
+  flex: 1;
+}
+
+.attach {
+  margin-top: 1rem;
+
+  span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+
+  .attach-buttons {
+    display: flex;
+    gap: 1rem;
+
+    button {
+      flex: 1;
+      padding: 0.7rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: vars.$font-itim;
+      box-shadow: vars.$dropshadow;
+    }
+
+    .upload {
+      background-color: vars.$white;
+      color: vars.$dark-blue;
+    }
+
+    .link {
+      background-color: vars.$white;
+      color: vars.$darker-blue;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+  }
+}
