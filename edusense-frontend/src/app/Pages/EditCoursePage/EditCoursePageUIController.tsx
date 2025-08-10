@@ -3,22 +3,38 @@ import { useState } from 'react';
 import './EditCoursePageUIController.scss';
 import Button from '../../ui_components/Button';
 import Dropdown from '../../ui_components/Dropdown';
+import { ICourse, IModules } from '@/app/typedef';
+import ToDo from '@/app/ui_components/ToDo/ToDo';
 
 interface Props {
-  courseTitle: string;
+    course: ICourse | undefined;
+    editMode: boolean
+    setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+    bannerImage: string | null;
+    setBannerImage: React.Dispatch<React.SetStateAction<string | null>>;
+    allModules: IModules[];
+  
 }
 
 const EditCoursePageUIController: React.FC<Props> = ({
-  courseTitle,
+  course,
+  editMode,
+  setEditMode,
+  bannerImage,
+  setBannerImage,
+  allModules,
+  
+
 }) => {
-	const [editMode, setEditMode] = useState(false);
+	// const [editMode, setEditMode] = useState(false);
 	const [sideBarOpen, setSidebarOpen] = useState(false);
 	const [textBoxStyle, setTextBoxStyle] = useState('');
 	const [assignmentsType, setAssignmentsType] = useState('');
 	const [classModule, setClassModule] = useState('');
-	const [bannerImage, setBannerImage] = useState<string | null>(null);
+	// const [bannerImage, setBannerImage] = useState<string | null>(null);
 	const [showCustomize, setShowCustomize] = useState(false);
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const titles = allModules?.map(module => module.title) ?? [];
 
 
   const toggleEditMode = () => {
@@ -34,7 +50,6 @@ const EditCoursePageUIController: React.FC<Props> = ({
 		setSidebarOpen(false);
 		setTextBoxStyle('');
 		setAssignmentsType('');
-		setClassModule('');
 	};
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +64,13 @@ const EditCoursePageUIController: React.FC<Props> = ({
     }
   };
 
+  const renderToDoWidget = () => {
+
+    return (
+        <ToDo course={course}/>
+    )
+  }
+
   return (
     <div className="main-container">
 			<div className="edit-course-page">
@@ -61,10 +83,13 @@ const EditCoursePageUIController: React.FC<Props> = ({
 							backgroundPosition: 'center',
 						}}
 					>
-						{courseTitle}
+						{course?.course_name}
 					</div>
 					<div className="customize-button-container">
-						<Button displayName="Customize" onClick={() => setShowCustomize(true)} variant="primary" icon="/edit.svg"/>
+                        {editMode &&( 
+						    <Button displayName="Customize" onClick={() => setShowCustomize(true)} variant="primary" icon="/edit.svg"/>
+
+                        )}
 					</div>
 				</div>
 				
@@ -76,11 +101,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 				)}
 
 
-				{!editMode && (
-					<div className="edit-btn-container">
-						<Button displayName="Edit Page" onClick={toggleEditMode} variant="primary" icon="/edit.svg"/>
-					</div>
-				)}
+				
 
 				{editMode && (<div className="edit-footer">
 					<div className="footer-btn-container">
@@ -98,7 +119,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 						</button>
 					</div>
 					<div className="save-btn-container">
-						<Button displayName="Save" onClick={() => alert('Save clicked')} variant="primary" icon="save.svg"/>
+						<Button displayName="Save" onClick={() => alert('Save clicked')} variant="primary" icon="/save.svg"/>
 						<Button displayName="Cancel" onClick={cancelEdit} variant="secondary"/>
 
 					</div>
@@ -128,20 +149,13 @@ const EditCoursePageUIController: React.FC<Props> = ({
 							<h2> Sections </h2>
 						</div>
 						<div className="element-options">
-							<h3>Assignments</h3>
-							<Dropdown 
-								value={assignmentsType} 
-								options={["To Do", "Upcoming", "Overdue", "Due Today"]}
-								placeholder="Select Timeframe"
-								onChange={(newValue) => setAssignmentsType(newValue)}
-							/>
+							<Button displayName='Add To-Do Widget' variant='primary' onClick={(() => (console.log("clicked")))}/>
 
-							<h3>Recent Announcements</h3>
 							
 							<h3>Class Modules</h3>
 							<Dropdown 
 								value={classModule} 
-								options={["Resources", "Class Notes", "Discussions"]}
+								options={titles}
 								placeholder="Select Module"
 								onChange={(newValue) => setClassModule(newValue)}
 							/>

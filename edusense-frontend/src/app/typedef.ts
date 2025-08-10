@@ -36,7 +36,14 @@ export interface IAssignments {
     points: number;
     module: number;
     assignment_data: Record<string, unknown>; // empty or dynamic object
-  }
+}
+
+export interface IModules {
+    id: number;
+    title: string;
+    created: string;
+    course: number;
+}
 
 
 
@@ -60,6 +67,10 @@ export interface INewEnrollment {
 
 export interface IAnnouncementsResponse{
     data: IAnnouncements[];
+}
+
+export interface IModulesResponse{
+    data: IModules[];
 }
 
 
