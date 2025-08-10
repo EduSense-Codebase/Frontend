@@ -8,11 +8,11 @@ import { INewEnrollment, ICourse, IAnnouncements, IAnnouncementsResponse, IAssig
 import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/portal/layout';
-//import '../../../theme.css';
 import '../../../style/index.scss'
 import { motion } from 'framer-motion';
 
 export const runtime = 'edge';
+import CourseHomePageUIController from '@/app/Pages/CourseHomePage/CourseHomePageUIController';
 
 const sectionSteps: Step[] = [
     {
@@ -102,6 +102,9 @@ export default function HomePage() {
 
     return (
         <>
+            <CourseHomePageUIController joinCourse={join_course} createCourse = 
+            {create_course} courseDetails={courseDetails} announcements={announcements} assignments={assignments}
+            onPostAnnouncement={handleCreateAnnouncement}  />
         </>
     );
 }

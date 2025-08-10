@@ -1,40 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CourseHomePageUIController.scss';
 import Button from '../../ui_components/Button';
 import Tabs from '../../ui_components/Tabs';
 import CourseCodeCard from '../../ui_components/CourseCodeCard';
 import AnnouncementForm from '../../ui_components/AnnouncementForm';
 import '../../style/theme.scss';
+import { IAnnouncements, IAssignments, ICourse } from '@/app/typedef';
 
 interface Props {
-  courseTitle: string;
-  courseCode: string;
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-  announcements: any[];
-  onCreate: () => void;
-  onPostAnnouncement: (course:string, message: string) => void;
-  onCancelAnnouncement: () => void;
-  onEditPage: () => void;
+    joinCourse: boolean | undefined;
+    createCourse: boolean | undefined;
+    courseDetails: ICourse | undefined;
+    //activeTab: string;
+    //onTabChange: (tab: string) => void;
+    announcements: IAnnouncements[];
+    assignments: IAssignments[]
+    //onCreate: () => void;
+    onPostAnnouncement: (course:string, message: string) => void;
+    //onEditPage: () => void;
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({
-  courseTitle,
-  courseCode,
-  activeTab,
-  onTabChange,
-  announcements,
-  onCreate,
-  onPostAnnouncement,
-  onCancelAnnouncement,
-  onEditPage
+    joinCourse,
+    createCourse,
+
+    courseDetails,
+    //activeTab,
+    //onTabChange,
+    announcements,
+    assignments,
+    //onCreate,
+    onPostAnnouncement,
+    //onEditPage,
 }) => {
+
+    const [activeTab, setActiveTab] = useState('Overview')
+    const onTabChange = (name:string) => {
+
+        setActiveTab(name)
+    }
+
   return (
     <div className="course-page">
-      <h1 className="course-header">{courseTitle}</h1>
-      <div className="edit-button-container">
+      <h1 className="course-header">{courseDetails?.course_name}</h1>
+      {/* <div className="edit-button-container">
         <Button displayName="Edit Course Page" onClick={onEditPage} variant="primary" icon="/edit.svg"/>
-      </div>
+      </div> */}
       
       <div className="course-content">
         <Tabs
@@ -46,12 +57,12 @@ const CourseHomePageUIController: React.FC<Props> = ({
         {activeTab === 'Overview' && (
           <div className="overview-content">
             <div className="left-overview">
-              <CourseCodeCard code={courseCode} />
-              <Button displayName="Create" onClick={onCreate} variant="primary" icon="/plus.svg" />
+              <CourseCodeCard code={courseDetails?.join_code} />
+              <Button displayName="Create" onClick={(() => (console.log("clicked")))} variant="primary" icon="/plus.svg" />
             </div>
             <div className="right-overview">
               <h3 className="announcements-title">Announcements</h3>
-              <AnnouncementForm onSubmit={onPostAnnouncement} onCancel={onCancelAnnouncement}/>
+              <AnnouncementForm onSubmit={onPostAnnouncement} announcements={announcements}/>
             </div>
           </div>
         )}
