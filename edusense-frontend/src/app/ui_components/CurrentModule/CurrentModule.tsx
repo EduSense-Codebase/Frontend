@@ -1,12 +1,14 @@
 import React from "react";
 import "./CurrentModule.scss";
+import Link from "next/link";
 
-interface CurrentModuleProps {
-  moduleName: string;
-  icon?: string; // e.g., 📘
-}
 
-const CurrentModule: React.FC<CurrentModuleProps> = ({ moduleName, icon = "📘" }) => {
+
+const CurrentModule: React.FC<{ moduleName: string; icon?: string; path?: string }> = ({
+    moduleName,
+    icon = "📘",
+    path = "#"
+  }) => {
   return (
     <div className="current-module-container">
       <div className="current-module-box">
@@ -14,7 +16,7 @@ const CurrentModule: React.FC<CurrentModuleProps> = ({ moduleName, icon = "📘"
         <ul className="current-module-list">
           <li className="current-module-item">
             <span>{icon}</span>
-            <span>{moduleName}</span>
+            <Link href = {path}>{moduleName}</Link>
           </li>
         </ul>
       </div>

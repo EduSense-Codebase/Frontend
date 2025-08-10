@@ -14,6 +14,7 @@ export const Default: Story = {
   args: {
     moduleName: "Unit 1 – Grammar",
     icon: "📘",
+    path: "/nowhere"
   },
 };
 
