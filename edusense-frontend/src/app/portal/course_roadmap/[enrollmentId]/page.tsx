@@ -47,6 +47,7 @@ export default function HomePage() {
     const [bannerImage, setBannerImage] = useState<string | null>(null);
     const [showToDoWidget, setShowToDoWidget] = useState(false);
     const [showModuleWidget, setShowModuleWidget] = useState(false);
+    const [originalValues, setOriginalValues] = useState<any>(null);
 
     const router = useRouter();
 
@@ -114,6 +115,15 @@ export default function HomePage() {
             console.log(enrollmentId);
         });
     };
+
+    const enterEditMode = () => {
+        setEditMode(true);
+        setOriginalValues({
+          bannerImage,
+          showModuleWidget,
+          showToDoWidget,
+        });
+    };
     
 
     return (
@@ -124,12 +134,13 @@ export default function HomePage() {
               editMode={editMode}
               setEditMode={setEditMode}
               bannerImage={bannerImage}
-              setBannerImage={setBannerImage}
               allModules={modules}
               showToDoWidget={showToDoWidget}
-              setShowToDoWidget={setShowToDoWidget}
               showModuleWidget={showModuleWidget}
               setShowModuleWidget={setShowModuleWidget}
+              setBannerImage={setBannerImage}
+              setShowToDoWidget={setShowToDoWidget}
+              originalValues={originalValues}
             />
           ) : (
             <>
@@ -140,12 +151,16 @@ export default function HomePage() {
                 announcements={announcements}
                 assignments={assignments}
                 onPostAnnouncement={handleCreateAnnouncement}
+                bannerImage={bannerImage}
+                allModules={modules}
+                showToDoWidget={showToDoWidget}
+                showModuleWidget={showModuleWidget}
               />
     
               <div className="edit-btn-container">
                 <Button
                   displayName="Edit Page"
-                  onClick={() => setEditMode(true)}
+                  onClick={enterEditMode}
                   variant="primary"
                   icon="/edit.svg"
                 />
