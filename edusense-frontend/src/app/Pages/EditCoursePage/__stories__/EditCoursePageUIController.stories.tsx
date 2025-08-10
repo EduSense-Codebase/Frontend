@@ -16,7 +16,6 @@ export const Primary: Story = {
   args: {
     courseTitle: 'SAT',
     onCustomize: () => alert('Customize clicked'),
-    onAddElement: () => alert('Add Element clicked'),
     onSave: () => alert('Save clicked'),
   }
 };
