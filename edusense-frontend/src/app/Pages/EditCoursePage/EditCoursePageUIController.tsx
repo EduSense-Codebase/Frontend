@@ -6,20 +6,20 @@ import Dropdown from '../../ui_components/Dropdown';
 
 interface Props {
   courseTitle: string;
-	onCustomize: () => void;
-	onSave: () => void;
 }
 
 const EditCoursePageUIController: React.FC<Props> = ({
   courseTitle,
-	onCustomize,
-	onSave
 }) => {
 	const [editMode, setEditMode] = useState(false);
 	const [sideBarOpen, setSidebarOpen] = useState(false);
 	const [textBoxStyle, setTextBoxStyle] = useState('');
 	const [assignmentsType, setAssignmentsType] = useState('');
 	const [classModule, setClassModule] = useState('');
+	const [bannerImage, setBannerImage] = useState<string | null>(null);
+	const [showCustomize, setShowCustomize] = useState(false);
+	const fileInputRef = React.useRef<HTMLInputElement>(null);
+
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
@@ -35,15 +35,36 @@ const EditCoursePageUIController: React.FC<Props> = ({
 		setTextBoxStyle('');
 		setAssignmentsType('');
 		setClassModule('');
-	}
+	};
+
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setBannerImage(reader.result as string);
+        setShowCustomize(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="main-container">
 			<div className="edit-course-page">
 				<div className="header-container">
-					<h1 className="header">{courseTitle}</h1>
+					<div 
+						className="header" 
+						style={{
+							backgroundImage: bannerImage ? `url(${bannerImage})` : 'none',
+							backgroundSize: 'cover',
+							backgroundPosition: 'center',
+						}}
+					>
+						{courseTitle}
+					</div>
 					<div className="customize-button-container">
-						<Button displayName="Customize" onClick={onCustomize} variant="primary" icon="/edit.svg"/>
+						<Button displayName="Customize" onClick={() => setShowCustomize(true)} variant="primary" icon="/edit.svg"/>
 					</div>
 				</div>
 				
@@ -77,7 +98,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 						</button>
 					</div>
 					<div className="save-btn-container">
-						<Button displayName="Save" onClick={onSave} variant="primary" icon="save.svg"/>
+						<Button displayName="Save" onClick={() => alert('Save clicked')} variant="primary" icon="save.svg"/>
 						<Button displayName="Cancel" onClick={cancelEdit} variant="secondary"/>
 
 					</div>
@@ -128,7 +149,48 @@ const EditCoursePageUIController: React.FC<Props> = ({
 					</div>
 				</div>
 			)}
+			{showCustomize && (
+				<div className="modal">
+					<div className="modal-content">
+						<h1>Customize Course Banner</h1>
+						{/* Upload option */}
+						<div>
+							<input 
+								type="file" 
+								accept="image/*" 
+								style={{ display: 'none' }}
+								ref={fileInputRef}
+								onChange={handleFileChange} 
+							/>
+							<div className="upload-btn" onClick={() => fileInputRef.current?.click()}>
+								<img src="/upload.svg" alt="Upload" style={{ width: 40, height: 40 }} />
+								<span>Upload Image</span>
+							</div>
+						</div>
+						<p>or</p>
+						{/* Preset options */}
+						<div className="preset">
+							<h3>Choose from Library</h3>
+							<div className="preset-images">
+								{['/banner1.jpg', '/banner2.jpg', '/banner3.jpg', '/banner4.jpg'].map((img) => (
+									<img 
+										key={img} 
+										src={img} 
+										alt="preset banner" 
+										onClick={() => {
+											setBannerImage(img);
+											setShowCustomize(false);
+										}}
+										className="preset-image"
+									/>
+								))}
+								</div>
+						</div>
 
+						<Button displayName='Close' variant="secondary" onClick={() => setShowCustomize(false)}/>
+					</div>
+				</div>
+			)}
     </div>
   );
 };

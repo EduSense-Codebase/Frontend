@@ -15,7 +15,5 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     courseTitle: 'SAT',
-    onCustomize: () => alert('Customize clicked'),
-    onSave: () => alert('Save clicked'),
   }
 };
