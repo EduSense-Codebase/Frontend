@@ -22,6 +22,8 @@ interface ICustomProps {
     setPermissions: React.Dispatch<React.SetStateAction<IPermissions | undefined>>;
     institution: string;
     setInstitution: React.Dispatch<React.SetStateAction<string>>;
+    courses: ICourse[];
+    setCourses:React.Dispatch<React.SetStateAction<ICourse[]>>;
 }
 
 const mainSteps: Step[] = [
@@ -166,6 +168,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                         setPermissions,
                         institution,
                         setInstitution,
+                        courses,
+                        setCourses
                     }}
                 >
                     {children}

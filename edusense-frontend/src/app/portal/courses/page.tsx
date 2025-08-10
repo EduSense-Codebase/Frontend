@@ -18,14 +18,15 @@ import { create } from 'domain';
 import { error } from 'console';
 
 export default function CourseSection() {
-    const { permissions } = useCustomProp();
+    const { permissions, institution, courses, setCourses } = useCustomProp();
+
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [curAction, setCurAction] = useState('');
     const [createCourseName, setCreateCourseName] = useState('');
     const [joinCode, setJoinCode] = useState('');
     const [loading, setLoading] = useState(false);
-    const [courses, setCourses] = useState<ICourse[]>([]);
+    //const [courses, setCourses] = useState<ICourse[]>([]);
 
     const join_course = permissions?.join_course;
     const create_course = permissions?.create_course;
@@ -49,18 +50,6 @@ export default function CourseSection() {
                   ? 'all_created_courses'
                   : 'null',
         };
-
-        const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
-
-        courseResponse
-            .then((response) => {
-                console.log(response);
-                setCourses(response.data.data);
-            })
-            .catch((err) => {
-                //FIXME: Add Error Handling
-                console.log(err);
-            });
     }, [permissions]);
 
     const handleDialogClose = () => {
@@ -164,7 +153,7 @@ export default function CourseSection() {
                 <div className="container">
                     <h3 className="subheading">My Courses</h3>
                     <div className="cards-container">
-                        {courses.map((course, index) => renderCourseTile(course, index))}
+                        {courses?.map((course, index) => renderCourseTile(course, index))}
                         <button onClick={() => handleAction('enroll_course')}>
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
