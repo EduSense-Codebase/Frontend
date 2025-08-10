@@ -45,6 +45,8 @@ export default function HomePage() {
     const [modules, setModules] = useState<IModules[]>([])
     const [editMode, setEditMode] = useState(false);
     const [bannerImage, setBannerImage] = useState<string | null>(null);
+    const [showToDoWidget, setShowToDoWidget] = useState(false);
+    const [showModuleWidget, setShowModuleWidget] = useState(false);
 
     const router = useRouter();
 
@@ -124,6 +126,10 @@ export default function HomePage() {
               bannerImage={bannerImage}
               setBannerImage={setBannerImage}
               allModules={modules}
+              showToDoWidget={showToDoWidget}
+              setShowToDoWidget={setShowToDoWidget}
+              showModuleWidget={showModuleWidget}
+              setShowModuleWidget={setShowModuleWidget}
             />
           ) : (
             <>

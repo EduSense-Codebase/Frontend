@@ -5,6 +5,7 @@ import Button from '../../ui_components/Button';
 import Dropdown from '../../ui_components/Dropdown';
 import { ICourse, IModules } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
+import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 
 interface Props {
     course: ICourse | undefined;
@@ -13,6 +14,11 @@ interface Props {
     bannerImage: string | null;
     setBannerImage: React.Dispatch<React.SetStateAction<string | null>>;
     allModules: IModules[];
+    showToDoWidget: boolean;
+    setShowToDoWidget:  React.Dispatch<React.SetStateAction<boolean>>;
+    showModuleWidget: boolean; 
+    setShowModuleWidget: React.Dispatch<React.SetStateAction<boolean>>;
+  
   
 }
 
@@ -23,11 +29,16 @@ const EditCoursePageUIController: React.FC<Props> = ({
   bannerImage,
   setBannerImage,
   allModules,
+  showToDoWidget,
+  setShowToDoWidget,
+  showModuleWidget,
+  setShowModuleWidget
   
 
 }) => {
 	// const [editMode, setEditMode] = useState(false);
 	const [sideBarOpen, setSidebarOpen] = useState(false);
+	const [chooseModule, setChooseModule] = useState(false);
 	const [textBoxStyle, setTextBoxStyle] = useState('');
 	const [assignmentsType, setAssignmentsType] = useState('');
 	const [classModule, setClassModule] = useState('');
@@ -35,6 +46,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 	const [showCustomize, setShowCustomize] = useState(false);
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
     const titles = allModules?.map(module => module.title) ?? [];
+
 
 
   const toggleEditMode = () => {
@@ -65,6 +77,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
   };
 
   const renderToDoWidget = () => {
+    console.log("done")
 
     return (
         <ToDo course={course}/>
@@ -74,6 +87,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
   return (
     <div className="main-container">
 			<div className="edit-course-page">
+
 				<div className="header-container">
 					<div 
 						className="course-header" 
@@ -98,13 +112,21 @@ const EditCoursePageUIController: React.FC<Props> = ({
 						<img src="/plus_icon.png" />
 						<p>Add Element</p>
 					</button>
+                    
 				)}
+
+                <div>
+
+                    {showToDoWidget && <ToDo course={course} />}    
+                    {showModuleWidget && <CurrentModule moduleName={classModule} />}
+                </div>
+
 
 
 				
 
 				{editMode && (<div className="edit-footer">
-					<div className="footer-btn-container">
+					{/* <div className="footer-btn-container">
 						<button className="footer-btn" onClick={() => alert('Edit clicked')}>
 							<img src="edit2.svg" alt="Edit" />
 							<p className="footer-btn-description">Edit</p>
@@ -117,7 +139,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 							<img src="cube.svg" alt="Section" />
 							<p className="footer-btn-description">Section</p>
 						</button>
-					</div>
+					</div> */}
 					<div className="save-btn-container">
 						<Button displayName="Save" onClick={() => alert('Save clicked')} variant="primary" icon="/save.svg"/>
 						<Button displayName="Cancel" onClick={cancelEdit} variant="secondary"/>
@@ -149,16 +171,18 @@ const EditCoursePageUIController: React.FC<Props> = ({
 							<h2> Sections </h2>
 						</div>
 						<div className="element-options">
-							<Button displayName='Add To-Do Widget' variant='primary' onClick={(() => (console.log("clicked")))}/>
+                            <Button displayName='Add To-Do Widget' variant='primary' onClick={() => setShowToDoWidget(true)} />
 
-							
-							<h3>Class Modules</h3>
-							<Dropdown 
+                            <Button displayName='Add Current Module Widget' variant='primary' onClick={() => setChooseModule(true)} />
+
+							{chooseModule && (<Dropdown 
 								value={classModule} 
 								options={titles}
 								placeholder="Select Module"
 								onChange={(newValue) => setClassModule(newValue)}
-							/>
+
+							/>)}
+                            {chooseModule && (<Button displayName='Add' variant='primary' onClick={(() => (setShowModuleWidget(true)))} />)}
 						</div>
 					</div>
 				</div>
