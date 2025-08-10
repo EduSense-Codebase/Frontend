@@ -1,0 +1,296 @@
+@use '../../style/_variables.scss' as variables;
+
+.edit-course-page {
+	width: 100%;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: baseline;
+	font-family: variables.$font-jua;
+}
+
+.header-container {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.course-header {
+	width: 100%;
+	font-size: 4rem;
+	color: variables.$dark-blue;
+	text-align: center;
+	padding: 2rem 0;
+	background-color: variables.$light-blue;
+	margin: 0;
+	box-shadow: variables.$dropshadow;
+}
+
+.customize-button-container {
+	position: relative;
+	top: -8rem;
+	left: 35%;
+}
+
+.edit-btn-container {
+	position: absolute;
+	bottom: 2rem;
+	left: 2rem;
+}
+
+.add-element-btn {
+	color: variables.$dark-blue;
+	margin: 2rem 0;
+	padding: 2rem;
+	border: dashed 2px variables.$dark-blue;
+	border-radius: 1rem;
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	cursor: pointer;
+}
+
+.add-element-btn img {
+	width: 3.5rem;
+	height: 3.5rem;
+}
+
+.add-element-btn p {
+	font-size: 1.2rem;
+	text-align: center;
+}
+
+.edit-footer {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem 2rem;
+	background-color: transparent;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.footer-btn-container {
+	padding: 0.5rem 4rem;
+	border-radius: 3rem;
+	background-color: variables.$dark-blue;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 3rem;
+	box-shadow: variables.$dropshadow;
+}
+
+.footer-btn {
+	background: variables.$light-blue;
+	padding: 0.5rem;
+	border-radius: 100%;
+	width: 3rem;
+	height: 3rem;
+	font-size: 1.2rem;
+	font-family: variables.$font-jua;
+	cursor: pointer;
+	box-shadow: variables.$dropshadow;
+}
+
+.footer-btn:hover {
+	background: variables.$white;
+}
+
+.footer-btn-description {
+	position: absolute;
+	top: -0.5rem;
+	opacity: 0;
+	display:none;
+	transition: opacity 0.3s ease;
+	color: variables.$grey;
+	opacity: 1;
+	max-width: 100px;
+}
+
+
+.footer-btn:hover .footer-btn-description {
+	opacity: 1;
+	display: block;
+}
+
+.save-btn-container {
+	display: flex;
+	position: absolute;
+	left: 2rem;
+	gap: 0.5rem;
+}
+
+.sidebar {
+	height: 100vh;
+	width: 40vw;
+	box-shadow: variables.$dropshadow;
+	transition: transform 0.3s ease;
+	overflow-y: auto;
+	padding-bottom: 5rem;
+}
+
+
+.main-container {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	font-family: variables.$font-jua;
+	color: variables.$dark-blue;
+}
+
+.close-sidebar-btn {
+	margin: 0.5rem 1rem;
+	cursor: pointer;
+	width: 2rem;
+	height: 2rem;
+}
+
+.sidebar-icon {
+	background: variables.$light-blue;
+	padding: 0.5rem;
+	border-radius: 100%;
+	width: 3rem;
+	height: 3rem;
+	box-shadow: variables.$dropshadow;
+
+}
+
+.sidebar-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	padding: 0 1rem;
+	color: variables.$dark-blue;
+	font-size: 1.5rem;
+}
+
+.sidebar-content {
+	display: flex;
+	flex-direction: column;
+	align-items: baseline;
+	justify-content: center;
+	gap: 1rem;
+	padding: 0 1rem;
+	border-radius: 1rem;
+}
+
+.element-options {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	padding: 1rem;
+	border-radius: 1rem;
+	background-color: variables.$light-blue;
+	width: 100%;
+}
+
+.element-options button {
+	background-color: variables.$white;
+	color: variables.$dark-blue;
+	padding: 0.5rem 1rem;
+	border-radius: 1rem;
+	font-family: variables.$font-jua;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	box-shadow: variables.$dropshadow;
+}
+
+.element-options button:hover {
+	background-color: variables.$light-blue;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+  }
+
+	.upload-btn {
+		width: 9rem;
+		height: 6rem;
+		border: 2px dashed variables.$dark-blue;
+		border-radius: 1rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+	}
+
+	.upload-btn:hover {
+		background-color: variables.$light-blue;
+	}
+
+  .preset {
+    display: flex;
+		flex-direction: column;
+		align-items: center;
+    gap: 8px;
+
+		.preset-images {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+    .preset-image {
+      width: 6rem;
+      height: 4rem;
+      object-fit: cover;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+
+      &:hover {
+        border-color: variables.$dark-blue;
+      }
+    }
+
+		h3 {
+			font-size: 1.3rem;
+		}
+
+  }
+	h1 {
+			font-size: 1.5rem;
+			background-color: variables.$light-blue;
+			box-shadow: variables.$dropshadow;
+			padding: 1rem 2rem;
+			border-radius: 1rem;
+			text-align: center;
+			margin-bottom: 1rem;
+		}
+}

@@ -31,7 +31,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 }) => {
   return (
     <div className="course-page">
-      <h1 className="header">{courseTitle}</h1>
+      <h1 className="course-header">{courseTitle}</h1>
       <div className="edit-button-container">
         <Button displayName="Edit Course Page" onClick={onEditPage} variant="primary" icon="/edit.svg"/>
       </div>

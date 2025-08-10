@@ -1,0 +1,26 @@
+ @use '../../style/_variables.scss' as variables;
+
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: variables.$dark-blue;
+  margin-bottom: 4px;
+}
+
+.dropdown-select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1.5px solid variables.$dark-blue;
+  font-size: 14px;
+  background-color: variables.$white;
+
+  &:focus {
+    border-color: variables.$dark-blue;
+    box-shadow: variables.$dropshadow;
+  }
+}
