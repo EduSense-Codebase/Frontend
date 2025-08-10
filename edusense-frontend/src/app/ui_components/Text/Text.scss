@@ -1,0 +1,168 @@
+@use '../../style/_variables.scss' as variables;
+
+.text {
+  font-family: variables.$font-jua;
+  color: variables.$dark-blue;
+  line-height: 1.6;
+
+  h1, h2, h3, h4, h5, h6 {
+    color: variables.$dark-blue;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    width: 100%;
+    color: variables.$dark-blue;
+    text-align: center;
+    padding: 2rem 0;
+    background-color: variables.$light-blue;
+    margin: 0;
+    box-shadow: variables.$dropshadow;
+  }
+  h2 {
+    font-size: 2.5rem;
+  }
+  h3 {
+    font-size: 2.25rem;
+  }
+  h4 {
+    font-size: 2rem;
+  }
+  h5 {
+    font-size: 1.5rem;
+  }
+  h6 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  a {
+    color: variables.$blue;
+    text-decoration: underline;
+
+  &:hover {
+    color: variables.$grey;
+  }
+  }
+
+  code {
+    background-color: variables.$light-grey;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  ul, ol {
+    background-color: variables.$light-blue;
+    border-radius: 2rem;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    list-style-position: inside;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  li {
+    background-color: variables.$white;
+    box-shadow: variables.$dropshadow;
+    padding: 0.25rem 1rem;
+    border-radius: 2rem;
+    width: 100%;
+  }
+
+  li::marker {
+    color: variables.$dark-blue;
+    font-size: 1rem;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 1rem;
+    box-shadow: variables.$dropshadow;
+    margin: 1rem 0;
+  }
+
+  blockquote {
+    border-left: 0.5rem solid variables.$light-blue;
+    background-color: variables.$white;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    font-style: italic;
+    border-radius: 0.5rem;
+    color: variables.$dark-blue;
+  }
+
+  .text blockquote p {
+    margin: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    box-shadow: variables.$dropshadow;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid variables.$light-grey;
+    border-left: 1px solid variables.$light-grey;
+    border-right: 1px solid variables.$light-grey;
+  }
+
+  th {
+    background-color: variables.$white;
+    color: variables.$dark-blue;
+    font-family: variables.$font-itim;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) td {
+    background-color: variables.$white;
+  }
+
+  tr:nth-child(odd) td {
+    background-color: variables.$light-blue;
+  }
+
+  code {
+    background-color: variables.$light-grey;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    color: variables.$dark-blue;
+  }
+
+  pre {
+    background-color: variables.$light-grey;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    box-shadow: variables.$dropshadow;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: variables.$dark-blue;
+    font-size: 0.95em;
+  }
+
+}
