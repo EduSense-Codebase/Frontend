@@ -21,6 +21,7 @@ export const Primary: Story = {
       { id: '3', text: 'Munich' },
     ]);
     const [selectedOptionId, setSelectedOptionId] = useState<string>('2');
+    const [isRequired, setIsRequired] = useState(false);
 
     const handleAddOption = () => {
       setOptions([...options, { id: Date.now().toString(), text: '' }]);
@@ -46,6 +47,10 @@ export const Primary: Story = {
       );
     };
 
+    const handleToggleRequired = (required: boolean) => {
+        setIsRequired(required);
+    };
+
     return (
       <MultipleChoiceQ
         mode={mode}
@@ -58,6 +63,8 @@ export const Primary: Story = {
         onRemoveOption={handleRemoveOption}
         onAddOption={handleAddOption}
         onToggleCorrect={handleToggleCorrect}
+        isRequired={isRequired}
+        onToggleRequired={handleToggleRequired}
         onEdit={() => setMode('edit')}
         onAnswerKey={() => setMode('answerKey')}
         onCancel={() => setMode('view')}

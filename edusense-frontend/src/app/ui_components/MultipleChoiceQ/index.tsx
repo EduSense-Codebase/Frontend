@@ -18,14 +18,34 @@ interface MultipleChoiceQProps {
   onSelectOption: (id: string) => void;
   onChangeQuestion: (value: string) => void;
   onChangeOptionText: (id: string, value: string) => void;
-  onRemoveOption?: (id: string) => void;
+  onRemoveOption: (id: string) => void;
   onAddOption: () => void;
-  onToggleCorrect?: (id: string) => void;
+	onToggleCorrect?: (id: string) => void;
+  onToggleRequired?: (required: boolean) => void;
+	isRequired?: boolean;
   onEdit: () => void;
   onAnswerKey: () => void;
   onCancel: () => void;
   onSave: () => void;
 }
+
+const ToggleSwitch: React.FC<{
+	checked: boolean;
+	onChange: (checked: boolean) => void;
+	disabled?: boolean;
+}> = ({ checked, onChange, disabled = false }) => {
+	return (
+		<label className={`toggle-switch ${disabled ? 'toggle-switch--disabled' : ''}`}>
+			<input
+				type="checkbox"
+				checked={checked}
+				onChange={(e) => onChange(e.target.checked)}
+				disabled={disabled}
+			/>
+			<span className="toggle-switch__slider"></span>
+		</label>
+	);
+};
 
 const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   mode,
@@ -38,6 +58,8 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   onRemoveOption,
   onAddOption,
   onToggleCorrect,
+	onToggleRequired,
+	isRequired = false,
   onEdit,
   onAnswerKey,
   onCancel,
@@ -60,9 +82,13 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
           <Button onClick={onEdit} icon="/edit.svg" variant="icon"></Button>
         )}
         {mode !== 'view' && (
-          <Button onClick={onCancel} displayName='Cancel' variant="secondary"></Button>
+					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
         )}
       </div>
+
+			{mode == "answerKey" && (
+				<p>Select the Correct Answer(s):</p>
+			)}
 
       <ul className="mcq__options">
         {options.map((opt) => (
@@ -106,18 +132,27 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
             )}
           </li>
         ))}
+				{mode === 'edit' && (
+					<li>
+						<button onClick={onAddOption} className="add-option-btn">
+							<p>+</p>
+							<p>Add Option</p>
+						</button>
+					</li>
+				)}
       </ul>
 
       {mode === 'edit' && (
         <div className="mcq__footer">
-					<Button onClick={onAddOption} displayName='Add Option' variant="primary" icon="plus.svg"></Button>
+					<div className="mcq__required-toggle">
+            <ToggleSwitch
+              checked={isRequired}
+              onChange={(checked) => onToggleRequired?.(checked)}
+            />
+            <p>Required</p>
+          </div>
 					<Button onClick={onAnswerKey} displayName='Answer Key' variant="primary"></Button>
-        </div>
-      )}
-
-      {mode === 'answerKey' && (
-        <div className="mcq__footer">
-					<Button onClick={onSave} displayName='Save' variant="primary" icon="/save.svg"></Button>
+					<p>Points: ___</p>
         </div>
       )}
     </div>
