@@ -8,7 +8,7 @@ const mockAssignments = [
   "Science Project Proposal",
 ];
 
-export default function ToDo({courses}: {courses:ICourse}) {
+export default function ToDo({course}: {course:ICourse | undefined}) {
   return (
     <div className="todo-container">
       <h3 className="todo-title">Upcoming Assignments</h3>

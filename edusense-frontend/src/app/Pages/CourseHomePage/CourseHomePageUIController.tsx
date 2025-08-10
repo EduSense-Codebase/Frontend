@@ -16,7 +16,7 @@ interface Props {
     announcements: IAnnouncements[];
     assignments: IAssignments[]
     //onCreate: () => void;
-    onPostAnnouncement: (course:string, message: string) => void;
+    onPostAnnouncement: (title:string, message: string) => void;
     //onEditPage: () => void;
 }
 

@@ -4,7 +4,7 @@ import Button from '../Button';
 import { IAnnouncements } from '@/app/typedef';
 
 interface AnnouncementFormProps {
-  onSubmit: (course: string, message: string) => void;
+  onSubmit: (title: string, message: string) => void;
   announcements: IAnnouncements[]
 }
 

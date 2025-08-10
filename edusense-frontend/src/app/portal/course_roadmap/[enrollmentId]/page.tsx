@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { COURSE_ENDPOINT, API_PREFIX } from '@/app/global';
 import { useParams, useRouter } from 'next/navigation';
-import { INewEnrollment, ICourse, IAnnouncements, IAnnouncementsResponse, IAssignments, IAssignmentsResponse } from '@/app/typedef';
+import { INewEnrollment, ICourse, IAnnouncements, IAnnouncementsResponse, IAssignments, IAssignmentsResponse, IModules,IModulesResponse } from '@/app/typedef';
 import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/portal/layout';
@@ -13,6 +13,8 @@ import { motion } from 'framer-motion';
 
 export const runtime = 'edge';
 import CourseHomePageUIController from '@/app/Pages/CourseHomePage/CourseHomePageUIController';
+import EditCoursePageUIController from '@/app/Pages/EditCoursePage/EditCoursePageUIController';
+import Button from '@/app/ui_components/Button';
 
 const sectionSteps: Step[] = [
     {
@@ -40,9 +42,13 @@ export default function HomePage() {
     const [courseDetails, setCourseDetails] = useState<ICourse>();
     const [announcements, setAnnouncements] = useState<IAnnouncements[]>([])
     const [assignments, setAssignments] = useState<IAssignments[]>([])
+    const [modules, setModules] = useState<IModules[]>([])
+    const [editMode, setEditMode] = useState(false);
+    const [bannerImage, setBannerImage] = useState<string | null>(null);
+    const [showToDoWidget, setShowToDoWidget] = useState(false);
+    const [showModuleWidget, setShowModuleWidget] = useState(false);
 
     const router = useRouter();
-
 
 
     useEffect(() => {
@@ -78,6 +84,16 @@ export default function HomePage() {
             console.log(enrollmentId)
         })
 
+        const queryParamsMod = {"section": "get_modules", "course_id":enrollmentId}
+        const requestResponseMod = httpGet<IModulesResponse>(url,queryParamsMod);
+        requestResponseMod.then((res) => {
+            console.log(res.data)
+            setModules(res.data.data)
+        }).catch((err) => {
+            console.log(err)
+            console.log(enrollmentId)
+        })
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -102,9 +118,40 @@ export default function HomePage() {
 
     return (
         <>
-            <CourseHomePageUIController joinCourse={join_course} createCourse = 
-            {create_course} courseDetails={courseDetails} announcements={announcements} assignments={assignments}
-            onPostAnnouncement={handleCreateAnnouncement}  />
+          {editMode ? (
+            <EditCoursePageUIController
+              course={courseDetails}
+              editMode={editMode}
+              setEditMode={setEditMode}
+              bannerImage={bannerImage}
+              setBannerImage={setBannerImage}
+              allModules={modules}
+              showToDoWidget={showToDoWidget}
+              setShowToDoWidget={setShowToDoWidget}
+              showModuleWidget={showModuleWidget}
+              setShowModuleWidget={setShowModuleWidget}
+            />
+          ) : (
+            <>
+              <CourseHomePageUIController
+                joinCourse={true} // or your permission logic here
+                createCourse={true} // likewise
+                courseDetails={courseDetails}
+                announcements={announcements}
+                assignments={assignments}
+                onPostAnnouncement={handleCreateAnnouncement}
+              />
+    
+              <div className="edit-btn-container">
+                <Button
+                  displayName="Edit Page"
+                  onClick={() => setEditMode(true)}
+                  variant="primary"
+                  icon="/edit.svg"
+                />
+              </div>
+            </>
+          )}
         </>
-    );
+      );
 }
