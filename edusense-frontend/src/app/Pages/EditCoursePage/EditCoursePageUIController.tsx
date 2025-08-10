@@ -12,12 +12,13 @@ interface Props {
     editMode: boolean
     setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
     bannerImage: string | null;
-    setBannerImage: React.Dispatch<React.SetStateAction<string | null>>;
     allModules: IModules[];
     showToDoWidget: boolean;
-    setShowToDoWidget:  React.Dispatch<React.SetStateAction<boolean>>;
     showModuleWidget: boolean; 
     setShowModuleWidget: React.Dispatch<React.SetStateAction<boolean>>;
+    setBannerImage: React.Dispatch<React.SetStateAction<string | null>>;
+    setShowToDoWidget:  React.Dispatch<React.SetStateAction<boolean>>;
+    originalValues: any
   
   
 }
@@ -27,12 +28,13 @@ const EditCoursePageUIController: React.FC<Props> = ({
   editMode,
   setEditMode,
   bannerImage,
-  setBannerImage,
   allModules,
   showToDoWidget,
-  setShowToDoWidget,
   showModuleWidget,
-  setShowModuleWidget
+  setShowModuleWidget,
+  setShowToDoWidget,
+  setBannerImage,
+  originalValues
   
 
 }) => {
@@ -57,12 +59,17 @@ const EditCoursePageUIController: React.FC<Props> = ({
 		setSidebarOpen(!sideBarOpen);
 	};
 
-	const cancelEdit = () => {
-		setEditMode(false);
-		setSidebarOpen(false);
-		setTextBoxStyle('');
-		setAssignmentsType('');
-	};
+    const cancelEdit = () => {
+        if (originalValues) {
+          setBannerImage(originalValues.bannerImage);
+          setShowModuleWidget(originalValues.showModuleWidget);
+          setShowToDoWidget(originalValues.showToDoWidget);
+          setAssignmentsType(originalValues.assignmentsType);
+          setTextBoxStyle(originalValues.textBoxStyle);
+        }
+        setEditMode(false);
+        setSidebarOpen(false);
+    };
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -141,7 +148,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 						</button>
 					</div> */}
 					<div className="save-btn-container">
-						<Button displayName="Save" onClick={() => alert('Save clicked')} variant="primary" icon="/save.svg"/>
+						<Button displayName="Save" onClick={() => (setEditMode(false))} variant="primary" icon="/save.svg"/>
 						<Button displayName="Cancel" onClick={cancelEdit} variant="secondary"/>
 
 					</div>
