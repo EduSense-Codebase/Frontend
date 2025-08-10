@@ -54,7 +54,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 			<div className="edit-course-page">
 				<div className="header-container">
 					<div 
-						className="header" 
+						className="course-header" 
 						style={{
 							backgroundImage: bannerImage ? `url(${bannerImage})` : 'none',
 							backgroundSize: 'cover',

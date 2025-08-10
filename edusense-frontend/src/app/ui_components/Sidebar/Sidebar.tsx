@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "./Sidebar.scss";
+import { ICourse } from "@/app/typedef";
 
 
 /* Reusable Sidebar Item */
@@ -24,7 +25,7 @@ function SidebarItem({
       <Link
         href={href}
         className={`sidebar-item ${!isOpen ? "justify-center" : ""} ${
-          small ? "small" : ""
+          small ? "" : ""
         }`}
       >
         {icon}
@@ -33,7 +34,6 @@ function SidebarItem({
     );
 }
   
-
 
 function ChevronDownIcon({ className = "" }: { className?: string }) {
   return (
@@ -50,7 +50,7 @@ function ChevronDownIcon({ className = "" }: { className?: string }) {
 }
 
 
-export default function Sidebar() {
+export default function Sidebar({courses}: {courses:ICourse[]}) {
     const [isOpen, setIsOpen] = useState(false);
     const [coursesOpen, setCoursesOpen] = useState(false);
   
@@ -67,7 +67,7 @@ export default function Sidebar() {
             icon={<Image src="/sidebar/home.png" width={40} height={40} alt="home" />}
             label="Home"
             isOpen={isOpen}
-            href="/"
+            href="/portal/courses"
           />
   
           {/* Courses */}
@@ -89,8 +89,16 @@ export default function Sidebar() {
   
             {coursesOpen && isOpen && (
               <div className="ml-8 space-y-1">
-                <SidebarItem label="SAT" href="/courses/sat" isOpen={isOpen} small />
-                <SidebarItem label="ACT" href="/courses/act" isOpen={isOpen} small />
+                {
+                    courses.map((course, index) => (
+                        <SidebarItem
+                            label={course.course_name}
+                            href= {`/portal/course_roadmap/${course.id}`}
+                            isOpen = {isOpen}
+                         />
+
+                    ))
+                }
               </div>
             )}
           </div>
@@ -100,7 +108,7 @@ export default function Sidebar() {
             icon={<Image src="/sidebar/settings.png" width={30} height={30} alt="settings" />}
             label="Settings"
             isOpen={isOpen}
-            href="/settings"
+            href="/portal/settings"
           />
         </nav>
       </div>
