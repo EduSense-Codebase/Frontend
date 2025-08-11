@@ -1,49 +1,91 @@
 'use client';
-import { useEffect, useState } from 'react';
-import Button from './Button';
-import { AI_ENDPOINT, API_PREFIX } from '../global';
-import { httpPost } from '../utils';
+import React, { useEffect, useState } from 'react';
+import Button from '../Button';
+import { AI_ENDPOINT, API_PREFIX, WS_API_PREFIX, WS_AI_AGENT_ENDPOINT, AUTH_ENDPOINT } from '../../global';
+
+import { io, Manager } from "socket.io-client";
+
+import { httpGet, httpPost } from '../../utils';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
+import { IAIJwtTokenRespose, IAISession, IFetchAllAISessions } from '../../typedef';
+import { createAIConnection } from './websocket';
 
-const ChatWidget = () => {
+interface IMessages {
+    sender: 'user' | 'ai',
+    content?: string
+    progress_information?: {
+        currStep: 0,
+        display: string[]
+    }
+}
+
+interface IAIStreamProgress {
+    step: number,
+    verbose_name: string
+}
+
+interface IAIStream {
+    type: "progress" | "final_content",
+    progress_data?: IAIStreamProgress
+    final_content?: string
+}
+
+const UserMessageRender = (props: { message: IMessages, index: number }) => {
+    return (
+        <div key={props.index}
+            className={`max-w-xs rounded-lg px-4 py-2 ml-auto self-end bg-blue-500 text-white`}>
+                {props.message.content}
+        </div>
+    )
+}
+
+const AIMessageRender = (props: { message: IMessages, index: number }) => {
+    return (
+        <div key={props.index}
+             className={`max-w-xs rounded-lg px-4 py-2 mr-auto self-start bg-gray-200 text-gray-800`}>
+                <ReactMarkdown>{props.message.content}</ReactMarkdown>
+
+        </div>
+    )
+}
+
+const IndividualMessageRender = (props: { message: IMessages, index: number }) => {
+    if (props.message.sender === 'user') {
+        return <UserMessageRender {...props} />
+    }
+    return <AIMessageRender {...props} />
+}
+
+const MessagesRender = (props: { messages: IMessages[] }) => {
+    return (
+        <div className="flex-1 space-y-2 overflow-y-auto p-4">
+            {props.messages.map((message, index) => (
+                <IndividualMessageRender message={message} index={index} />
+            ))}
+        </div>
+    )
+}
+
+export interface IChatWidgetProps {
+    courseId?: number
+}
+
+const ChatWidget = (props: IChatWidgetProps) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
+    const [messages, setMessages] = useState<IMessages[]>([]);
     const [input, setInput] = useState('');
     const [panelWidth, setPanelWidth] = useState(400);
     const [isResizing, setIsResizing] = useState(false);
 
+    const [sessions, setSessions] = useState<IAISession[]>([]);
+    const [currSession, setCurrSession] = useState<number>(0);
+
+    const [websocketConn, setWebsocketConn] = useState<ReturnType<typeof createAIConnection> | null>(null);
+
     const toggleChat = () => setIsOpen(!isOpen);
-
-    useEffect(() => {
-        const greetedBefore = sessionStorage.getItem('new_session') == 'false';
-        if (isOpen && !greetedBefore) {
-            setMessages((currMessages) => [
-                ...currMessages,
-                {
-                    sender: 'ai',
-                    text: "Welcome back! I'm excited to continue learning with you, what should we do next?",
-                },
-            ]);
-            sessionStorage.setItem('new_session', 'false');
-        }
-    }, []);
-
-    useEffect(() => {
-        const usedBefore = localStorage.getItem('new_user') == 'false';
-        if (isOpen && !usedBefore) {
-            setMessages((currMessages) => [
-                ...currMessages,
-                {
-                    sender: 'ai',
-                    text: "Welcome back! I'm excited to continue learning with you, what should we do next?",
-                },
-            ]);
-            localStorage.setItem('new_user', 'false');
-        }
-    }, []);
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -69,6 +111,62 @@ const ChatWidget = () => {
     useEffect(() => {
         document.body.style.userSelect = isResizing ? 'none' : 'auto';
     }, [isResizing]);
+
+    useEffect(() => {
+        let sessionQueryParams: { section: string, course_id?: number} = {
+            section: 'ai_sessions',
+        };
+        if (props.courseId) {
+            sessionQueryParams = {
+                ...sessionQueryParams,
+                course_id: props.courseId
+            };
+        }
+        const getAllSessions = httpGet<IFetchAllAISessions>(`${API_PREFIX}${AUTH_ENDPOINT}`, sessionQueryParams);
+        getAllSessions.then((response) => {
+            setSessions(response.data.data);
+            setWebsocketConn(() => {
+                const conn = createAIConnection(props.courseId, 0, "teacher_agent")
+
+                conn.on("open", () => {
+                    console.log("Socket Connected!");
+                })
+
+                conn.on("message", onAIMessage);
+
+                conn.connect();
+
+                return conn;
+            })
+        }).catch((e) => {
+            console.log("Fetching AI Sessions Failed");
+            throw e;
+        })
+
+        return () => {
+            websocketConn?.disconnect();
+        }
+    }, [props.courseId])
+
+    const sendMessage = () => {
+        if (websocketConn != null) {
+            websocketConn.sendMessage(input);
+
+            setMessages((currMessages) => {
+                return [...currMessages, {
+                    sender: 'user',
+                    content: input
+                }]
+            })
+
+            setInput("");
+        }
+
+    }
+
+    const onAIMessage = (msg: string) => {
+        console.log(msg)
+    }
 
     return (
         <>
@@ -131,26 +229,12 @@ const ChatWidget = () => {
                         </div>
 
                         {/* Chat Messages */}
-                        <div className="flex-1 space-y-2 overflow-y-auto p-4">
-                            {messages.map((msg, index) => (
-                                <div
-                                    key={index}
-                                    className={`max-w-xs rounded-lg px-4 py-2 ${
-                                        msg.sender === 'user'
-                                            ? 'ml-auto self-end bg-blue-500 text-white'
-                                            : 'mr-auto self-start bg-gray-200 text-gray-800'
-                                    }`}
-                                >
-                                    {msg.sender === 'ai' ? (
-                                        <ReactMarkdown>{msg.text}</ReactMarkdown>
-                                    ) : (
-                                        msg.text
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                        <MessagesRender messages={messages} /> 
 
                         {/* Input */}
+                        <select value={currSession} onChange={(e) => setCurrSession(parseInt(e.target.value))}>
+                            {sessions.map(element => <option value={element.id}>{element.name}</option>)}
+                        </select>
                         <div className="flex items-center space-x-2 border-t p-4 text-gray-400">
                             <input
                                 type="text"
@@ -160,7 +244,7 @@ const ChatWidget = () => {
                                 className="flex-1 rounded-lg border px-4 py-2 text-gray-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 placeholder="Ask me anything..."
                             />
-                            <Button displayName="Send" onClick={} />
+                            <Button displayName="Send" onClick={sendMessage} />
                         </div>
                     </motion.div>
                 )}

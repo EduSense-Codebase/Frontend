@@ -18,7 +18,7 @@ import { create } from 'domain';
 import { error } from 'console';
 
 export default function CourseSection() {
-    const { permissions, institution, courses, setCourses } = useCustomProp();
+    const { permissions, institution, courses, setCourses, setCurrCourseId } = useCustomProp();
 
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -42,6 +42,8 @@ export default function CourseSection() {
     useEffect(() => {
         const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
         console.log(permissions?.create_course);
+
+        setCurrCourseId(undefined);
 
         const queryParams = {
             section: join_course
