@@ -1,6 +1,7 @@
 import React from 'react';
 import './MultipleChoiceQ.scss';
 import Button from '../Button';
+import ToggleSwitch from '../ToggleSwitch';
 
 export type Mode = 'view' | 'edit' | 'answerKey';
 
@@ -28,24 +29,6 @@ interface MultipleChoiceQProps {
   onCancel: () => void;
   onSave: () => void;
 }
-
-const ToggleSwitch: React.FC<{
-	checked: boolean;
-	onChange: (checked: boolean) => void;
-	disabled?: boolean;
-}> = ({ checked, onChange, disabled = false }) => {
-	return (
-		<label className={`toggle-switch ${disabled ? 'toggle-switch--disabled' : ''}`}>
-			<input
-				type="checkbox"
-				checked={checked}
-				onChange={(e) => onChange(e.target.checked)}
-				disabled={disabled}
-			/>
-			<span className="toggle-switch__slider"></span>
-		</label>
-	);
-};
 
 const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   mode,
