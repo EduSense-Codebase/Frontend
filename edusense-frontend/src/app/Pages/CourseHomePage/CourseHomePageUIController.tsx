@@ -35,6 +35,9 @@ const CourseHomePageUIController: React.FC<Props> = ({
     showModuleWidget,
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
+    console.log('showToDoWidget:', showModuleWidget, typeof showModuleWidget);
+    
+    console.log('showToDoWidget:', showToDoWidget, typeof showToDoWidget);
 
     const onTabChange = (name: string) => {
         setActiveTab(name);
