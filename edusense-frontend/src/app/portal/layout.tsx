@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Step } from 'react-joyride';
-import ChatWidget from '../ui_components/ChatWidget';
+import ChatWidget from '../ui_components/AIChat/ChatWidget';
 import { IAllEnrolledCourseResponse, IPermissions, IPermissionsResponse } from '../typedef';
 import Logout from '../ui_components/Logout';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { httpGet } from '../utils';
 import { API_PREFIX, AUTH_ENDPOINT,COURSE_ENDPOINT } from '../global';
+
 
 import dynamic from 'next/dynamic';
 import Sidebar from '../ui_components/Sidebar/Sidebar';
@@ -24,6 +25,7 @@ interface ICustomProps {
     setInstitution: React.Dispatch<React.SetStateAction<string>>;
     courses: ICourse[];
     setCourses:React.Dispatch<React.SetStateAction<ICourse[]>>;
+    setCurrCourseId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 const mainSteps: Step[] = [
@@ -72,6 +74,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     const [permissions, setPermissions] = useState<IPermissions>();
     const [institution, setInstitution] = useState<string>('');
     const [courses, setCourses] = useState<ICourse[]>([]);
+
+    const [currCourseId, setCurrCourseId] = useState<number | undefined>(undefined);
 
     useEffect(() => {
         //refreshXP();
@@ -156,11 +160,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
-                {/* {!showChatWidget && (
-                    <ChatWidget
-                    />
-                )} */}
-               
+                    <ChatWidget courseId={currCourseId} />
 
                 <CustomPropContext.Provider
                     value={{
@@ -169,7 +169,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                         institution,
                         setInstitution,
                         courses,
-                        setCourses
+                        setCourses,
+                        setCurrCourseId,
                     }}
                 >
                     {children}

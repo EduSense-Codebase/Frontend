@@ -45,6 +45,11 @@ export interface IModules {
     course: number;
 }
 
+export interface IAISession {
+    id: number,
+    name: string
+}
+
 
 
 /* ********************* Generic Types END *********************** */
@@ -83,6 +88,19 @@ export interface IAssignmentsResponse{
 
 export interface IPermissionsResponse {
     data: IPermissions;
+}
+
+export interface IFetchAllAISessions {
+    data: IAISession[]
+}
+
+export interface IAIJwtTokenRespose {
+    jwt: string 
+}
+
+export interface IBuilderResponse {
+    type: "text" | "quiz_or_assignment",
+    text_content?: string
 }
 
 /* ********************* Axios Response Types END *********************** */
