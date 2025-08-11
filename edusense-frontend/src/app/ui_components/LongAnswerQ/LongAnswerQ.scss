@@ -1,0 +1,48 @@
+@use '../../style/_variables.scss' as variables;
+
+.laq-description-textarea {
+    font-family: variables.$font-jua;
+    font-size: 1rem;
+    color: variables.$dark-blue;
+    border: none;
+    border-bottom: 2px solid variables.$light-grey;
+    outline: none;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.laq-question-input {
+    font-family: variables.$font-jua;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 2px solid variables.$light-grey;
+    outline: none;
+    color: variables.$dark-blue;
+    width: 100%;
+}
+
+.upload-btn {
+    width: 9rem;
+    height: 6rem;
+    border: 2px dashed variables.$dark-blue;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: auto;
+
+    img {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+.laq-description {
+    background-color: variables.$light-blue;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: variables.$dropshadow;
+    margin-bottom: 2rem;
+}
