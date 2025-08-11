@@ -35,7 +35,7 @@ export default function HomePage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
 
-    const { permissions } = useCustomProp();
+    const { permissions, setCurrCourseId } = useCustomProp();
     const join_course = permissions?.join_course;
     const create_course = permissions?.create_course;
 
@@ -60,6 +60,7 @@ export default function HomePage() {
         requestResponse.then((res) => {
             console.log(res.data)
             setCourseDetails(res.data.data)
+            setCurrCourseId(res.data.data.id);
         }).catch((err) => {
             console.log(err)
             console.log(enrollmentId)
