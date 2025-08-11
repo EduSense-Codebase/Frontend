@@ -37,3 +37,29 @@ export const Primary: Story = {
     );
   },
 };
+
+export const Secondary: Story = {
+  render: () => {
+    const [mode, setMode] = useState<Mode>('edit');
+    const [question, setQuestion] = useState('What is the meaning of life?');
+    const [description, setDescription] = useState('Description/Instructions');
+    const [isRequired, setIsRequired] = useState(false);
+
+    const handleToggleRequired = (required: boolean) => {
+        setIsRequired(required);
+    };
+
+    return (
+      <LongAnswerQ
+        mode={mode}
+        question={question}
+        onChangeQuestion={setQuestion}
+        description={description}
+        onChangeDescription={setDescription}
+        isRequired={isRequired}
+        onToggleRequired={handleToggleRequired}
+        onSave={() => setMode('view')}
+      />
+    );
+  },
+};

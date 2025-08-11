@@ -45,14 +45,24 @@ interface ShortAnswerQuestion extends BaseQuestion {
   correctAnswers: CorrectAnswer[];
 }
 
-type Question = LongAnswerQuestion | MultipleChoiceQuestion | ShortAnswerQuestion;
+interface AssignmentBuilderProps {
+  quizQuestions: Question[];
+  title: string;
+  description: string;
+}
 
-const AssignmentBuilder: React.FC = ({  }) => {
-  const [questions, setQuestions] = useState<Question[]>([]);
+export type Question = LongAnswerQuestion | MultipleChoiceQuestion | ShortAnswerQuestion;
+
+const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({ 
+  quizQuestions, 
+  title, 
+  description 
+}) => {
+  const [questions, setQuestions] = useState<Question[]>(quizQuestions);
   const [showAddOptions, setShowAddOptions] = useState(false);
   const [quizMode, setQuizMode] = useState("view");
-  const [quizTitle, setQuizTitle] = useState("Quiz Title");
-  const [quizDescription, setQuizDescription] = useState("Description/Instructions here...");
+  const [quizTitle, setQuizTitle] = useState(title);
+  const [quizDescription, setQuizDescription] = useState(description);
 
   const ToggleAddOptions = () => {
     setShowAddOptions(!showAddOptions);

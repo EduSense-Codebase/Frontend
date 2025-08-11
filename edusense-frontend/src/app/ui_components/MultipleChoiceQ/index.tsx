@@ -54,6 +54,7 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
         ) : (
           <input
             type="text"
+            placeholder="Question*"
             value={question}
             onChange={(e) => onChangeQuestion?.(e.target.value)}
           />

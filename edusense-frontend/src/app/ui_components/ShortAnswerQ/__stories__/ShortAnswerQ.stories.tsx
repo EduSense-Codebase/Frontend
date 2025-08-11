@@ -58,3 +58,50 @@ export const Primary: Story = {
     );
   },
 };
+
+export const Secondary: Story = {
+  render: () => {
+    const [correctAnswers, setCorrectAnswers] = useState<CorrectAnswer[]>([]);
+    const [mode, setMode] = useState<Mode>('edit');
+    const [question, setQuestion] = useState('What is the capital of Germany?');
+    const [answer, setAnswer] = useState('');
+    const [isRequired, setIsRequired] = useState(false);
+
+    const handleAddAnswer = () => {
+      setCorrectAnswers([...correctAnswers, { id: Date.now().toString(), text: '' }]);
+    };
+
+    const handleRemoveAnswer = (id: string) => {
+      setCorrectAnswers(correctAnswers.filter((ans) => ans.id !== id));
+    };
+
+    const handleChangeAnswerText = (id: string, value: string) => {
+      setCorrectAnswers(
+        correctAnswers.map((ans) =>
+          ans.id === id ? { ...ans, text: value } : ans
+        )
+      );
+    };
+
+    const handleToggleRequired = (required: boolean) => {
+        setIsRequired(required);
+    };
+    return (
+      <ShortAnswerQ
+        mode={mode}
+        question={question}
+        correctAnswers={correctAnswers}
+        onChangeCorrectAnswerText={handleChangeAnswerText}
+        onRemoveCorrectAnswer={handleRemoveAnswer}
+        onAddCorrectAnswer={handleAddAnswer}
+        answer={answer}
+        onChangeAnswer={setAnswer}
+        onChangeQuestion={setQuestion}
+        isRequired={isRequired}
+        onToggleRequired={handleToggleRequired}
+        onAnswerKey={() => setMode('answerKey')}
+        onSave={() => setMode('view')}
+      />
+    );
+  },
+};

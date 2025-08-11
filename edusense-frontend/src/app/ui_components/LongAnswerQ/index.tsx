@@ -34,6 +34,7 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
         ) : (
           <input
             type="textarea"
+            placeholder="Question*"
             value={question}
             onChange={(e) => onChangeQuestion?.(e.target.value)}
             className='laq-question-input'
