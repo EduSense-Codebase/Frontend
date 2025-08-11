@@ -3,17 +3,16 @@ import './LongAnswerQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
 
-export type Mode = 'view' | 'edit';
+export type Mode = 'view' | 'edit' | 'answerKey';
 
 interface LongAnswerQProps {
   mode: Mode;
   question: string;
-  description: string;
+  description?: string;
   onChangeDescription: (value: string) => void;
   onChangeQuestion: (value: string) => void;
   onToggleRequired?: (required: boolean) => void;
   isRequired: boolean;
-  onEdit: () => void;
   onSave: () => void;
 }
 
@@ -25,7 +24,6 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
   onChangeQuestion,
   onToggleRequired,
   isRequired,
-  onEdit,
   onSave
 }) => {
   return (
@@ -42,9 +40,6 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
           />
         )}
 
-        {mode === 'view' && (
-          <Button onClick={onEdit} icon="/edit.svg" variant="icon"></Button>
-        )}
         {mode !== 'view' && (
 					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
         )}
@@ -67,7 +62,7 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
         <textarea
           value={description}
           onChange={(e) => onChangeDescription?.(e.target.value)}
-          placeholder="Type your answer here..."
+          placeholder="Write a description here..."
           className="laq-description-textarea"
         />
       )}

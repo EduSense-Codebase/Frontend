@@ -22,7 +22,6 @@ interface ShortAnswerQProps {
   onChangeQuestion: (value: string) => void;
   onToggleRequired?: (required: boolean) => void;
   isRequired?: boolean;
-  onEdit: () => void;
   onAnswerKey: () => void;
   onSave: () => void;
 }
@@ -39,7 +38,6 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
   onChangeQuestion,
 	onToggleRequired,
 	isRequired = false,
-  onEdit,
   onAnswerKey,
   onSave,
  }) => {
@@ -56,9 +54,6 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
           />
         )}
 
-        {mode === 'view' && (
-          <Button onClick={onEdit} icon="/edit.svg" variant="icon"></Button>
-        )}
         {mode !== 'view' && (
 					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
         )}

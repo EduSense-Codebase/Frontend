@@ -24,7 +24,6 @@ interface MultipleChoiceQProps {
 	onToggleCorrect?: (id: string) => void;
   onToggleRequired?: (required: boolean) => void;
 	isRequired?: boolean;
-  onEdit: () => void;
   onAnswerKey: () => void;
   onCancel: () => void;
   onSave: () => void;
@@ -43,7 +42,6 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   onToggleCorrect,
 	onToggleRequired,
 	isRequired = false,
-  onEdit,
   onAnswerKey,
   onCancel,
   onSave,
@@ -61,9 +59,6 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
           />
         )}
 
-        {mode === 'view' && (
-          <Button onClick={onEdit} icon="/edit.svg" variant="icon"></Button>
-        )}
         {mode !== 'view' && (
 					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
         )}

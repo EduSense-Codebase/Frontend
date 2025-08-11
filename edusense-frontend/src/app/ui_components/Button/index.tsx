@@ -1,8 +1,10 @@
 // ui_components/Button.tsx
 import React from 'react';
+import { ReactNode } from 'react';
 import './Button.scss';
 
 export interface IButtonProps {
+    children?: ReactNode; 
     displayName?: string;
     onClick: () => void;
     variant?: 'primary' | 'secondary' | 'danger' | 'icon' | 'icon-secondary';

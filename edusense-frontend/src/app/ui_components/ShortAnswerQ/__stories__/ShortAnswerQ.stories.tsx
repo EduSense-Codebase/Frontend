@@ -52,7 +52,6 @@ export const Primary: Story = {
         onChangeQuestion={setQuestion}
         isRequired={isRequired}
         onToggleRequired={handleToggleRequired}
-        onEdit={() => setMode('edit')}
         onAnswerKey={() => setMode('answerKey')}
         onSave={() => setMode('view')}
       />

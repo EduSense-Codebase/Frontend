@@ -32,7 +32,6 @@ export const Primary: Story = {
         onChangeDescription={setDescription}
         isRequired={isRequired}
         onToggleRequired={handleToggleRequired}
-        onEdit={() => setMode('edit')}
         onSave={() => setMode('view')}
       />
     );
