@@ -6,6 +6,8 @@ import Dropdown from '../../ui_components/Dropdown';
 import { ICourse, IModules } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
+import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
+import { httpPost } from '@/app/utils';
 
 interface Props {
     course: ICourse | undefined;
@@ -71,6 +73,25 @@ const EditCoursePageUIController: React.FC<Props> = ({
         setSidebarOpen(false);
     };
 
+    const saveData = () => {
+        const url  = API_PREFIX + COURSE_ENDPOINT
+        const formData = {
+            course_id: course?.id,
+            config : {
+                moduleWidgetConfig: showModuleWidget,
+                todoWidgetConfig: showToDoWidget,
+                bannerImageConfig: bannerImage,
+            }
+        }
+        console.log("formdata ", formData)
+        const queryParams = {"section": "post_homepage_data"}
+        const requestResponse = httpPost<any>(url, formData, queryParams);
+        requestResponse.then((res) => {
+            console.log('now the configs: ', res.data)
+            setEditMode(false)
+        })
+    }
+
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -83,13 +104,6 @@ const EditCoursePageUIController: React.FC<Props> = ({
     }
   };
 
-  const renderToDoWidget = () => {
-    console.log("done")
-
-    return (
-        <ToDo course={course}/>
-    )
-  }
 
   return (
     <div className="main-container">
@@ -123,7 +137,8 @@ const EditCoursePageUIController: React.FC<Props> = ({
 				)}
 
                 <div>
-
+                    
+                   
                     {showToDoWidget && <ToDo course={course} />}    
                     {showModuleWidget && <CurrentModule moduleName={classModule} />}
                 </div>
@@ -148,7 +163,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 						</button>
 					</div> */}
 					<div className="save-btn-container">
-						<Button displayName="Save" onClick={() => (setEditMode(false))} variant="primary" icon="/save.svg"/>
+						<Button displayName="Save" onClick={saveData} variant="primary" icon="/save.svg"/>
 						<Button displayName="Cancel" onClick={cancelEdit} variant="secondary"/>
 
 					</div>

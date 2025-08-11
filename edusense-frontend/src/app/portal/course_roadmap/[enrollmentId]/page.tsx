@@ -95,6 +95,19 @@ export default function HomePage() {
             console.log(enrollmentId)
         })
 
+        const configParams = {"section": "get_homepage_data", "course_id":enrollmentId}
+        const requestResponseConfig = httpGet<any>(url,configParams);
+        requestResponseConfig.then((res) =>{
+            const config = res?.data?.data ?? {}; // fallback to empty object
+            console.log("`the configs", config)
+            console.log('showToDoWidget:', config.moduleWidgetConfig, typeof Boolean(config.moduleWidgetConfig));
+            setShowModuleWidget(Boolean(config.moduleWidgetConfig) ?? false);
+            setShowToDoWidget(Boolean(config.todoWidgetConfig) ?? false);
+            setBannerImage(config.bannerImageConfig ?? null);
+
+        })
+
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -164,6 +177,7 @@ export default function HomePage() {
                   variant="primary"
                   icon="/edit.svg"
                 />
+    
               </div>
             </>
           )}
