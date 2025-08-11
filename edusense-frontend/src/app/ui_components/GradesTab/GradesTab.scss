@@ -1,0 +1,64 @@
+@use '../../style/_variables.scss' as *;
+
+.grades {
+  padding: 1.5rem;
+  background-color: $light-blue;
+  border-radius: 12px;
+  box-shadow: $dropshadow;
+  font-family: $font-itim;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: $font-jua;
+  color: $dark-grey;
+  margin-bottom: 1rem;
+}
+
+.createBtn {
+  background-color: $blue;
+  color: $white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: $font-jua;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $dark-blue;
+  }
+}
+
+.gradeList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.gradeItem {
+  background-color: $white;
+  margin-bottom: 0.75rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  box-shadow: $dropshadow;
+  color: $dark-grey;
+  font-family: $font-itim;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gradeLabel {
+  font-weight: bold;
+  font-family: $font-jua;
+  color: $dark-blue;
+}
+
+.gradeValue {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: $darker-blue;
+}

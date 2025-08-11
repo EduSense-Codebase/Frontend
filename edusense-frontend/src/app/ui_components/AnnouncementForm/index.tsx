@@ -15,6 +15,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
+  console.log(announcements.length)
   //const [announcements, setAnnouncements] = useState<{ title: string, message: string }[]>([]);
 
 //   const handlePost = () => {
@@ -39,16 +40,16 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
       <div className="announcements-left">
         <h3>Recent Announcements</h3>
         <div className="recent-announcements">
-          {announcements.length === 0 ? (
-            <p className="no-announcements">No announcements yet.</p>
-          ) : (
-            announcements.slice(0, 5).map((announcement, index) => (
-              <div key={index} className="announcement-item">
-                <h2>{announcement.title}</h2>
-                <p className="announcement-message">{announcement.content}</p>
-              </div>
-            ))
-          )}
+            {!Array.isArray(announcements) || announcements.length === 0 ? (
+                <p className="no-announcements">No announcements yet.</p>
+                ) : (
+                announcements.slice(0, 5).map((announcement, index) => (
+                    <div key={index} className="announcement-item">
+                    <h2>{announcement.title}</h2>
+                    <p className="announcement-message">{announcement.content}</p>
+                    </div>
+                ))
+            )}
         </div>
       </div>
       <div className='announcements-right'>

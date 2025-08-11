@@ -155,6 +155,7 @@ export default function HomePage() {
               setBannerImage={setBannerImage}
               setShowToDoWidget={setShowToDoWidget}
               originalValues={originalValues}
+              assignments={assignments}
             />
           ) : (
             <>
