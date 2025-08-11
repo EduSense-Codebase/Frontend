@@ -81,7 +81,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             <div className="widgets-section">
                                 {showToDoWidget && (
                                     <div className="widget-card">
-                                        <ToDo course={courseDetails} />
+                                        <ToDo course={courseDetails} assignments={assignments} />
                                     </div>
                                 )}
                                 {showModuleWidget && allModules?.length > 0 && (

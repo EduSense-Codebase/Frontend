@@ -1,6 +1,6 @@
 import React from "react";
 import './ToDo.scss';
-import { ICourse } from "@/app/typedef";
+import { IAssignments, ICourse } from "@/app/typedef";
 
 const mockAssignments = [
   "Math Homework: Algebra",
@@ -8,13 +8,19 @@ const mockAssignments = [
   "Science Project Proposal",
 ];
 
-export default function ToDo({course}: {course:ICourse | undefined}) {
+export default function ToDo({
+    course,
+    assignments
+  }: {
+    course: ICourse | undefined;
+    assignments: IAssignments[];
+  }) {
   return (
     <div className="todo-container">
       <h3 className="todo-title">Upcoming Assignments</h3>
-      {mockAssignments.map((assignment, idx) => (
+      {assignments.map((assignment, idx) => (
         <div key={idx} className="todo-item">
-          {assignment}
+          {assignment.name}
         </div>
       ))}
     </div>

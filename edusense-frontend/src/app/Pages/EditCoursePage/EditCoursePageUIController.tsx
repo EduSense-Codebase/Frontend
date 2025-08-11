@@ -3,7 +3,7 @@ import { useState } from 'react';
 import './EditCoursePageUIController.scss';
 import Button from '../../ui_components/Button';
 import Dropdown from '../../ui_components/Dropdown';
-import { ICourse, IModules } from '@/app/typedef';
+import { IAssignments, ICourse, IModules } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
@@ -20,8 +20,8 @@ interface Props {
     setShowModuleWidget: React.Dispatch<React.SetStateAction<boolean>>;
     setBannerImage: React.Dispatch<React.SetStateAction<string | null>>;
     setShowToDoWidget:  React.Dispatch<React.SetStateAction<boolean>>;
+    assignments: IAssignments[];
     originalValues: any
-  
   
 }
 
@@ -36,7 +36,8 @@ const EditCoursePageUIController: React.FC<Props> = ({
   setShowModuleWidget,
   setShowToDoWidget,
   setBannerImage,
-  originalValues
+  originalValues,
+  assignments
   
 
 }) => {
@@ -139,7 +140,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                 <div>
                     
                    
-                    {showToDoWidget && <ToDo course={course} />}    
+                    {showToDoWidget && <ToDo course={course} assignments={assignments}/>}    
                     {showModuleWidget && <CurrentModule moduleName={classModule} />}
                 </div>
 
