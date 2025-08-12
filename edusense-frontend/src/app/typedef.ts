@@ -35,6 +35,7 @@ export interface IAssignments {
     description: string;
     points: number;
     module: number;
+    builder: number;
     assignment_data: Record<string, unknown>; // empty or dynamic object
 }
 
@@ -46,8 +47,14 @@ export interface IModules {
 }
 
 export interface IAISession {
-    id: number,
+    id: number;
     name: string
+}
+
+export interface IStudentData{
+    email: string;
+    name: string;
+    overall_grade: number;
 }
 
 
@@ -78,6 +85,9 @@ export interface IModulesResponse{
     data: IModules[];
 }
 
+export interface IModuleResponse{
+    data: IModules;
+}
 
 export interface IAssignmentsResponse{
 
@@ -101,6 +111,10 @@ export interface IAIJwtTokenRespose {
 export interface IBuilderResponse {
     type: "text" | "quiz_or_assignment",
     text_content?: string
+}
+
+export interface IStudentDataResponse {
+    data: IStudentData[];
 }
 
 /* ********************* Axios Response Types END *********************** */

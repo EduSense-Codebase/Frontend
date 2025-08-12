@@ -5,9 +5,11 @@ import Tabs from '../../ui_components/Tabs';
 import CourseCodeCard from '../../ui_components/CourseCodeCard';
 import AnnouncementForm from '../../ui_components/AnnouncementForm';
 import '../../style/theme.scss';
-import { IAnnouncements, IAssignments, ICourse, IModules } from '@/app/typedef';
+import { IAnnouncements, IAssignments, ICourse, IModules, IStudentData } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
+import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
+import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
 
 interface Props {
     joinCourse: boolean | undefined;
@@ -19,7 +21,10 @@ interface Props {
     bannerImage: string | null;
     allModules: IModules[];
     showToDoWidget: boolean;
-    showModuleWidget: boolean; 
+    showModuleWidget: boolean;
+    students: IStudentData[];
+    
+    setModules: React.Dispatch<React.SetStateAction<IModules[]>>;
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({
@@ -33,6 +38,8 @@ const CourseHomePageUIController: React.FC<Props> = ({
     allModules,
     showToDoWidget,
     showModuleWidget,
+    students,
+    setModules
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
     console.log('showToDoWidget:', showModuleWidget, typeof showModuleWidget);
@@ -81,7 +88,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             <div className="widgets-section">
                                 {showToDoWidget && (
                                     <div className="widget-card">
-                                        <ToDo course={courseDetails} />
+                                        <ToDo course={courseDetails} assignments={assignments} />
                                     </div>
                                 )}
                                 {showModuleWidget && allModules?.length > 0 && (
@@ -111,13 +118,13 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Classwork' && (
                     <div>
-                        <h2>Classwork</h2>
+                        <ClassworkTab assignments={assignments} modules={allModules.filter(item => item.title !== "no_module")} setNewModules={setModules} />
                     </div>
                 )}
 
                 {activeTab === 'Grades' && (
                     <div>
-                        <h2>Grades</h2>
+                        <GradesTab grades={students}/>
                     </div>
                 )}
             </div>

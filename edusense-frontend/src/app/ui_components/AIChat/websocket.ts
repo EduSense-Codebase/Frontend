@@ -47,16 +47,19 @@ export const createAIConnection = (courseId: number | undefined, sessionId: numb
             socket.onerror = (err) => {
                 listeners.error.forEach((fn) => fn(err));
             };
-        })
+        });
 
         
+
     };
 
     const sendMessage = (msg: string) => {
         if (socket && isConnected) {
             let agentQuery = {
+                type: "send_message",
                 query: msg,
                 course_id: courseId,
+                session_id: sessionId,
                 agent: agentName
             }
             socket.send(JSON.stringify(agentQuery));
@@ -64,6 +67,18 @@ export const createAIConnection = (courseId: number | undefined, sessionId: numb
             console.warn("🚫 Cannot send message — not connected");
         }
     };
+
+    const sendRequestToGetMessage = () => {
+        if (socket && isConnected) {
+            let agentQuery = {
+                type: "retrieve_message",
+                course_id: courseId,
+                session_id: sessionId,
+                agent: agentName
+            }
+            socket.send(JSON.stringify(agentQuery));
+        }
+    }
 
     const disconnect = () => {
         if (socket) {
@@ -83,6 +98,7 @@ export const createAIConnection = (courseId: number | undefined, sessionId: numb
     return {
         connect,
         sendMessage,
+        sendRequestToGetMessage,
         disconnect,
         on,
     };

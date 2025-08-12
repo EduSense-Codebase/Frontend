@@ -16,10 +16,6 @@ import { createAIConnection } from './websocket';
 interface IMessages {
     sender: 'user' | 'ai',
     content?: string
-    progress_information?: {
-        currStep: 0,
-        display: string[]
-    }
 }
 
 interface IAIStreamProgress {
@@ -32,6 +28,95 @@ interface IAIStream {
     progress_data?: IAIStreamProgress
     final_content?: string
 }
+
+interface AIAgentLoaderProps {
+  agentName?: string;
+  status?: string;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+};
+
+// A lightweight Gemini-style loader component for AI responses.
+// - Uses Tailwind for styling (no external animation libs required)
+// - Accessible: includes aria-live region so screen readers announce status updates
+// - Props: agentName (optional), status (text to show), size (controls dimensions)
+// Example usage:
+// <AIAgentLoader agentName="Gemini" status="Thinking about the best answer..." />
+
+function AIAgentLoader({
+  agentName = "EduSense AI",
+  status = "Thinking...",
+  size = "sm",
+  className = "",
+}: AIAgentLoaderProps) {
+  const dims = {
+    sm: { avatar: 2, dots: 0, text: "text-sm" },
+    md: { avatar: 10, dots: 4, text: "text-base" },
+    lg: { avatar: 14, dots: 5, text: "text-lg" },
+  }[size];
+
+    return (
+    <div className={`flex items-center gap-3 ${className}`}>
+      {/* avatar + pulse ring */}
+      <div className="relative flex-shrink-0">
+        <div
+          className={`rounded-full bg-gradient-to-br from-blue-500 via-blue-400 to-blue-300 shadow-md`} 
+          style={{ width: `${dims.avatar}rem`, height: `${dims.avatar}rem` }}
+          aria-hidden
+        />
+        <span
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{ boxShadow: "0 0 0 6px rgba(59, 130, 246, 0.06)" }}
+        />
+      </div>
+
+      {/* text area + animated dots */}
+      <div>
+        <div className="flex items-center gap-3">
+          <div>
+            <div className={`${dims.text} font-medium leading-snug text-gray-900`}>{agentName}</div>
+            <div className="sr-only" aria-live="polite">{status}</div>
+          </div>
+
+          {/* animated dots box */}
+          <div
+            className="flex items-center gap-1 px-3 py-1 bg-gray-50 rounded-2xl"
+            role="status"
+            aria-hidden={false}
+          >
+            <span className="loader-dot" style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }} />
+            <span className="loader-dot" style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }} />
+            <span className="loader-dot" style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }} />
+          </div>
+        </div>
+
+        {/* status text */}
+        <div className={`mt-1 ${dims.text} text-gray-500`}>{status}</div>
+      </div>
+
+      {/* local styles for the smooth bouncing dots */}
+      <style>{`
+        .loader-dot {
+          display: inline-block;
+          background: linear-gradient(90deg, rgba(59,130,246,1) 0%, rgba(96,165,250,1) 50%, rgba(147,197,253,1) 100%);
+          border-radius: 9999px;
+          transform-origin: center;
+          animation: loader-jump 1s infinite ease-in-out;
+        }
+        .loader-dot:nth-child(2) { animation-delay: 0.15s; }
+        .loader-dot:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes loader-jump {
+          0% { transform: translateY(0) scale(1); opacity: 0.95; }
+          30% { transform: translateY(-6px) scale(1.08); opacity: 1; }
+          60% { transform: translateY(0) scale(1); opacity: 0.95; }
+          100% { transform: translateY(0) scale(1); opacity: 0.95; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 
 const UserMessageRender = (props: { message: IMessages, index: number }) => {
     return (
@@ -59,14 +144,24 @@ const IndividualMessageRender = (props: { message: IMessages, index: number }) =
     return <AIMessageRender {...props} />
 }
 
-const MessagesRender = (props: { messages: IMessages[] }) => {
+const MessagesRender = (props: { messages: IMessages[], thinking: IAIThinking | undefined }) => {
     return (
         <div className="flex-1 space-y-2 overflow-y-auto p-4">
             {props.messages.map((message, index) => (
-                <IndividualMessageRender message={message} index={index} />
+                <>
+                    <IndividualMessageRender message={message} index={index} />
+                </>
             ))}
+            {props.thinking ? (
+                <AIAgentLoader status={props.thinking.verbose_name} />
+            ): null}
         </div>
     )
+}
+
+interface IAIThinking {
+    step: number,
+    verbose_name: string
 }
 
 export interface IChatWidgetProps {
@@ -75,10 +170,12 @@ export interface IChatWidgetProps {
 
 const ChatWidget = (props: IChatWidgetProps) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<IMessages[]>([]);
-    const [input, setInput] = useState('');
     const [panelWidth, setPanelWidth] = useState(400);
     const [isResizing, setIsResizing] = useState(false);
+
+    const [messages, setMessages] = useState<IMessages[]>([]);
+    const [thinking, setThinking] = useState<IAIThinking | undefined>(undefined);
+    const [input, setInput] = useState('');
 
     const [sessions, setSessions] = useState<IAISession[]>([]);
     const [currSession, setCurrSession] = useState<number>(0);
@@ -113,40 +210,38 @@ const ChatWidget = (props: IChatWidgetProps) => {
     }, [isResizing]);
 
     useEffect(() => {
-        let sessionQueryParams: { section: string, course_id?: number} = {
-            section: 'ai_sessions',
-        };
         if (props.courseId) {
-            sessionQueryParams = {
-                ...sessionQueryParams,
+            let sessionQueryParams = {
+                section: 'ai_sessions',
                 course_id: props.courseId
             };
-        }
-        const getAllSessions = httpGet<IFetchAllAISessions>(`${API_PREFIX}${AUTH_ENDPOINT}`, sessionQueryParams);
-        getAllSessions.then((response) => {
-            setSessions(response.data.data);
-            setWebsocketConn(() => {
-                const conn = createAIConnection(props.courseId, 0, "teacher_agent")
+            const getAllSessions = httpGet<IFetchAllAISessions>(`${API_PREFIX}${AUTH_ENDPOINT}`, sessionQueryParams);
+            getAllSessions.then((response) => {
+                setSessions(response.data.data);
+                setWebsocketConn(() => {
+                    const conn = createAIConnection(props.courseId, currSession, "teacher_agent")
 
-                conn.on("open", () => {
-                    console.log("Socket Connected!");
+                    conn.on("open", () => {
+                        console.log("Socket Connected!");
+                        conn.sendRequestToGetMessage();
+                    })
+
+                    conn.on("message", onAIMessage);
+
+                    conn.connect();
+
+                    return conn;
                 })
-
-                conn.on("message", onAIMessage);
-
-                conn.connect();
-
-                return conn;
+            }).catch((e) => {
+                console.log("Fetching AI Sessions Failed");
+                throw e;
             })
-        }).catch((e) => {
-            console.log("Fetching AI Sessions Failed");
-            throw e;
-        })
+        }
 
         return () => {
             websocketConn?.disconnect();
         }
-    }, [props.courseId])
+    }, [props.courseId, currSession])
 
     const sendMessage = () => {
         if (websocketConn != null) {
@@ -165,7 +260,28 @@ const ChatWidget = (props: IChatWidgetProps) => {
     }
 
     const onAIMessage = (msg: string) => {
-        console.log(msg)
+        const jsonMsg = JSON.parse(msg);
+
+        if (jsonMsg.type == "conversation_history") {
+            setMessages(jsonMsg.messages);
+        } else if (jsonMsg.type == "progress") {
+            const progressData: IAIThinking = jsonMsg.progress_data;
+            setThinking((prevThinking) => {
+                if (!prevThinking) {
+                    return progressData;
+                }
+                if (prevThinking.step < progressData.step) {
+                    return progressData;
+                }
+                return prevThinking;
+            })
+        } else if (jsonMsg.type == "final_content") {
+            const aiMessage: string = jsonMsg.final_content
+            setThinking(undefined);
+            setMessages((prevMessages) => {
+                return [...prevMessages, { sender: 'ai', content: aiMessage }];
+            })
+        }
     }
 
     return (
@@ -229,7 +345,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
                         </div>
 
                         {/* Chat Messages */}
-                        <MessagesRender messages={messages} /> 
+                        <MessagesRender messages={messages} thinking={thinking} /> 
 
                         {/* Input */}
                         <select value={currSession} onChange={(e) => setCurrSession(parseInt(e.target.value))}>
