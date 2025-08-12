@@ -1,21 +1,16 @@
 'use client';
 import React, { useState } from 'react';
 import './ClassworkTab.scss';
-
-interface Module {
-  id: number;
-  name: string;
-  assignments: string[];
-}
+import { IModules, IAssignments } from '@/app/typedef';
 
 interface ClassworkProps {
-  modules: Module[];
-  unassignedAssignments: string[];
+  modules: IModules[];
+  assignments: IAssignments[];
 }
 
 export default function ClassworkTab({
   modules,
-  unassignedAssignments
+  assignments
 }: ClassworkProps) {
   const [expandedModules, setExpandedModules] = useState<number[]>([]);
 
@@ -24,6 +19,18 @@ export default function ClassworkTab({
       prev.includes(id) ? prev.filter(mid => mid !== id) : [...prev, id]
     );
   };
+
+  // Assignments grouped by module
+  const assignmentsByModule: Record<number, IAssignments[]> = {};
+
+  modules.forEach((mod) => {
+    assignmentsByModule[mod.id] = assignments.filter(a => a.module === mod.id);
+  });
+
+  // Assignments without a module (module === 0 or null or undefined)
+  const unassignedAssignments = assignments.filter(
+    a => !a.module || a.module === 0 || !modules.some(m => m.id === a.module)
+  );
 
   return (
     <div className="classwork">
@@ -39,19 +46,16 @@ export default function ClassworkTab({
             onClick={() => toggleModule(module.id)}
           >
             <span>
-              <span className="moduleIcon">📦</span>
-              {module.name}
+              <span className="moduleIcon">📦</span> {module.title}
             </span>
-            <span>
-              {expandedModules.includes(module.id) ? '▲' : '▼'}
-            </span>
+            <span>{expandedModules.includes(module.id) ? '▲' : '▼'}</span>
           </div>
 
           {expandedModules.includes(module.id) && (
             <ul className="assignmentList">
-              {module.assignments.map((assignment, idx) => (
-                <li key={idx} className="assignmentItem">
-                  📝 {assignment}
+              {assignmentsByModule[module.id].map(assignment => (
+                <li key={assignment.id} className="assignmentItem">
+                  📝 {assignment.name}
                 </li>
               ))}
             </ul>
@@ -60,11 +64,11 @@ export default function ClassworkTab({
       ))}
 
       {unassignedAssignments.length > 0 && (
-        <div className="module">
+        <div className="module unassigned">
           <ul className="assignmentList">
-            {unassignedAssignments.map((assignment, idx) => (
-              <li key={idx} className="assignmentItem">
-                📝 {assignment}
+            {unassignedAssignments.map(assignment => (
+              <li key={assignment.id} className="assignmentItem">
+                📝 {assignment.name}
               </li>
             ))}
           </ul>

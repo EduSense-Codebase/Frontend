@@ -8,6 +8,7 @@ import '../../style/theme.scss';
 import { IAnnouncements, IAssignments, ICourse, IModules } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
+import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 
 interface Props {
     joinCourse: boolean | undefined;
@@ -111,7 +112,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Classwork' && (
                     <div>
-                        <h2>Classwork</h2>
+                        <ClassworkTab assignments={assignments} modules={allModules.filter(item => item.title !== "no_module")} />
                     </div>
                 )}
 
