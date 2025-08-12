@@ -219,7 +219,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
             getAllSessions.then((response) => {
                 setSessions(response.data.data);
                 setWebsocketConn(() => {
-                    const conn = createAIConnection(props.courseId, 0, "teacher_agent")
+                    const conn = createAIConnection(props.courseId, currSession, "teacher_agent")
 
                     conn.on("open", () => {
                         console.log("Socket Connected!");
@@ -241,7 +241,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
         return () => {
             websocketConn?.disconnect();
         }
-    }, [props.courseId])
+    }, [props.courseId, currSession])
 
     const sendMessage = () => {
         if (websocketConn != null) {
