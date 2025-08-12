@@ -22,7 +22,9 @@ interface Props {
     allModules: IModules[];
     showToDoWidget: boolean;
     showModuleWidget: boolean;
-    students: IStudentData[]
+    students: IStudentData[];
+    
+    setModules: React.Dispatch<React.SetStateAction<IModules[]>>;
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({
@@ -37,6 +39,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     showToDoWidget,
     showModuleWidget,
     students,
+    setModules
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
     console.log('showToDoWidget:', showModuleWidget, typeof showModuleWidget);
@@ -115,7 +118,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Classwork' && (
                     <div>
-                        <ClassworkTab assignments={assignments} modules={allModules.filter(item => item.title !== "no_module")} />
+                        <ClassworkTab assignments={assignments} modules={allModules.filter(item => item.title !== "no_module")} setNewModules={setModules} />
                     </div>
                 )}
 

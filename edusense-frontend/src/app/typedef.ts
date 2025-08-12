@@ -35,6 +35,7 @@ export interface IAssignments {
     description: string;
     points: number;
     module: number;
+    builder: number;
     assignment_data: Record<string, unknown>; // empty or dynamic object
 }
 
@@ -84,6 +85,9 @@ export interface IModulesResponse{
     data: IModules[];
 }
 
+export interface IModuleResponse{
+    data: IModules;
+}
 
 export interface IAssignmentsResponse{
 

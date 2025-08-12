@@ -181,6 +181,7 @@ export default function HomePage() {
                 showToDoWidget={showToDoWidget}
                 showModuleWidget={showModuleWidget}
                 students={students}
+                setModules={setModules}
               />
     
               <div className="edit-btn-container">
