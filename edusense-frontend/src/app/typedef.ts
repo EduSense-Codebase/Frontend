@@ -46,8 +46,14 @@ export interface IModules {
 }
 
 export interface IAISession {
-    id: number,
+    id: number;
     name: string
+}
+
+export interface IStudentData{
+    email: string;
+    name: string;
+    overall_grade: number;
 }
 
 
@@ -101,6 +107,10 @@ export interface IAIJwtTokenRespose {
 export interface IBuilderResponse {
     type: "text" | "quiz_or_assignment",
     text_content?: string
+}
+
+export interface IStudentDataResponse {
+    data: IStudentData[];
 }
 
 /* ********************* Axios Response Types END *********************** */

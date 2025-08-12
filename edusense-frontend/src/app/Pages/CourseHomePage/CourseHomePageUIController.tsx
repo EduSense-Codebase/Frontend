@@ -5,7 +5,7 @@ import Tabs from '../../ui_components/Tabs';
 import CourseCodeCard from '../../ui_components/CourseCodeCard';
 import AnnouncementForm from '../../ui_components/AnnouncementForm';
 import '../../style/theme.scss';
-import { IAnnouncements, IAssignments, ICourse, IModules } from '@/app/typedef';
+import { IAnnouncements, IAssignments, ICourse, IModules, IStudentData } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
@@ -22,7 +22,7 @@ interface Props {
     allModules: IModules[];
     showToDoWidget: boolean;
     showModuleWidget: boolean;
-    students: string[]
+    students: IStudentData[]
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { COURSE_ENDPOINT, API_PREFIX } from '@/app/global';
 import { useParams, useRouter } from 'next/navigation';
-import { INewEnrollment, ICourse, IAnnouncements, IAnnouncementsResponse, IAssignments, IAssignmentsResponse, IModules,IModulesResponse } from '@/app/typedef';
+import { INewEnrollment, ICourse, IAnnouncements, IAnnouncementsResponse, IAssignments, IAssignmentsResponse, IModules,IModulesResponse, IStudentData, IStudentDataResponse } from '@/app/typedef';
 import { Step } from 'react-joyride';
 import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/portal/layout';
@@ -48,7 +48,7 @@ export default function HomePage() {
     const [showToDoWidget, setShowToDoWidget] = useState(false);
     const [showModuleWidget, setShowModuleWidget] = useState(false);
     const [originalValues, setOriginalValues] = useState<any>(null);
-    const [students, setStudents] = useState<string[]>([])
+    const [students, setStudents] = useState<IStudentData[]>([])
 
     const router = useRouter();
 
@@ -110,7 +110,7 @@ export default function HomePage() {
         })
 
         const queryParamsStudents = {"section": "get_students_course", "course_id":enrollmentId}
-        const requestResponseStudents = httpGet<string[]>(url,queryParamsStudents);
+        const requestResponseStudents = httpGet<IStudentDataResponse>(url,queryParamsStudents);
         requestResponseStudents.then((res) => {
             console.log(res.data)
             setStudents(res.data.data)
