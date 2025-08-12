@@ -48,6 +48,7 @@ export default function HomePage() {
     const [showToDoWidget, setShowToDoWidget] = useState(false);
     const [showModuleWidget, setShowModuleWidget] = useState(false);
     const [originalValues, setOriginalValues] = useState<any>(null);
+    const [students, setStudents] = useState<string[]>([])
 
     const router = useRouter();
 
@@ -58,7 +59,7 @@ export default function HomePage() {
         const queryParams = {"section": "course_details", "course_id":enrollmentId}
         const requestResponse = httpGet<INewEnrollment>(url,queryParams);
         requestResponse.then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             setCourseDetails(res.data.data)
             setCurrCourseId(res.data.data.id);
         }).catch((err) => {
@@ -69,7 +70,7 @@ export default function HomePage() {
         const queryParamsAnnounce = {"section": "get_announcements", "course_id":enrollmentId}
         const requestResponseAnnounce = httpGet<IAnnouncementsResponse>(url,queryParamsAnnounce);
         requestResponseAnnounce.then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             setAnnouncements(res.data.data)
         }).catch((err) => {
             console.log(err)
@@ -79,7 +80,7 @@ export default function HomePage() {
         const queryParamsAssign = {"section": "get_assignments", "course_id":enrollmentId}
         const requestResponseAssign = httpGet<IAssignmentsResponse>(url,queryParamsAssign);
         requestResponseAssign.then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             setAssignments(res.data.data)
         }).catch((err) => {
             console.log(err)
@@ -89,7 +90,7 @@ export default function HomePage() {
         const queryParamsMod = {"section": "get_modules", "course_id":enrollmentId}
         const requestResponseMod = httpGet<IModulesResponse>(url,queryParamsMod);
         requestResponseMod.then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             setModules(res.data.data)
         }).catch((err) => {
             console.log(err)
@@ -100,14 +101,23 @@ export default function HomePage() {
         const requestResponseConfig = httpGet<any>(url,configParams);
         requestResponseConfig.then((res) =>{
             const config = res?.data?.data ?? {}; // fallback to empty object
-            console.log("`the configs", config)
-            console.log('showToDoWidget:', config.moduleWidgetConfig, typeof Boolean(config.moduleWidgetConfig));
+            // console.log("`the configs", config)
+            // console.log('showToDoWidget:', config.moduleWidgetConfig, typeof Boolean(config.moduleWidgetConfig));
             setShowModuleWidget(Boolean(config.moduleWidgetConfig) ?? false);
             setShowToDoWidget(Boolean(config.todoWidgetConfig) ?? false);
             setBannerImage(config.bannerImageConfig ?? null);
 
         })
 
+        const queryParamsStudents = {"section": "get_students_course", "course_id":enrollmentId}
+        const requestResponseStudents = httpGet<string[]>(url,queryParamsStudents);
+        requestResponseStudents.then((res) => {
+            console.log(res.data)
+            setStudents(res.data.data)
+        }).catch((err) => {
+            console.log(err)
+            console.log(enrollmentId)
+        })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -170,6 +180,7 @@ export default function HomePage() {
                 allModules={modules}
                 showToDoWidget={showToDoWidget}
                 showModuleWidget={showModuleWidget}
+                students={students}
               />
     
               <div className="edit-btn-container">

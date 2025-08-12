@@ -9,6 +9,7 @@ import { IAnnouncements, IAssignments, ICourse, IModules } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
+import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
 
 interface Props {
     joinCourse: boolean | undefined;
@@ -20,7 +21,8 @@ interface Props {
     bannerImage: string | null;
     allModules: IModules[];
     showToDoWidget: boolean;
-    showModuleWidget: boolean; 
+    showModuleWidget: boolean;
+    students: string[]
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({
@@ -34,6 +36,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     allModules,
     showToDoWidget,
     showModuleWidget,
+    students,
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
     console.log('showToDoWidget:', showModuleWidget, typeof showModuleWidget);
@@ -118,7 +121,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Grades' && (
                     <div>
-                        <h2>Grades</h2>
+                        <GradesTab grades={students}/>
                     </div>
                 )}
             </div>
