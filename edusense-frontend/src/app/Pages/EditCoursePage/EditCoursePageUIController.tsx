@@ -166,7 +166,6 @@ const EditCoursePageUIController: React.FC<Props> = ({
 					<div className="save-btn-container">
 						<Button displayName="Save" onClick={saveData} variant="primary" icon="/save.svg"/>
 						<Button displayName="Cancel" onClick={cancelEdit} variant="secondary"/>
-
 					</div>
 				</div>)}
 			</div>
