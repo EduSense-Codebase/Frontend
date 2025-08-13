@@ -10,6 +10,7 @@ import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
+import { create } from 'domain';
 
 interface Props {
     joinCourse: boolean | undefined;
@@ -42,8 +43,8 @@ const CourseHomePageUIController: React.FC<Props> = ({
     setModules
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
-    // console.log("create course", createCourse)
-    
+   
+    const gradesData = createCourse ? students : assignments;
 
     const onTabChange = (name: string) => {
         setActiveTab(name);
@@ -124,7 +125,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Grades' && (
                     <div>
-                        <GradesTab grades={students}/>
+                        <GradesTab grades={gradesData} create_course={createCourse}/>
                     </div>
                 )}
             </div>

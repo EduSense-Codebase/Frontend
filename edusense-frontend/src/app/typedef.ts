@@ -38,6 +38,7 @@ export interface IAssignments {
     points: number;
     module: number;
     builder: number;
+    graded: number;
     assignment_data: Record<string, unknown>; // empty or dynamic object
 }
 
