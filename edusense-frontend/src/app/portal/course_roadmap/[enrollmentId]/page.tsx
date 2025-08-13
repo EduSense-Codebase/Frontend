@@ -169,18 +169,18 @@ export default function HomePage() {
               assignments={assignments}
             />
           ) : (
-            <div className='view-course-page'>
-							<div className="course-edit-btn">
-								<Button
-									displayName="Edit Page"
-									onClick={enterEditMode}
-									variant="primary"
-									icon="/edit.svg"
-								/>
+            <div className="view-course-page">
+              <div className="course-edit-btn">
+                <Button
+                  displayName="Edit Page"
+                  onClick={enterEditMode}
+                  variant="primary"
+                  icon="/edit.svg"
+                />
               </div>
               <CourseHomePageUIController
-                joinCourse={join_course} // or your permission logic here
-                createCourse={create_course} // likewise
+                joinCourse={join_course}
+                createCourse={create_course}
                 courseDetails={courseDetails}
                 announcements={announcements}
                 assignments={assignments}
@@ -192,18 +192,10 @@ export default function HomePage() {
                 students={students}
                 setModules={setModules}
               />
-    
-              <div className="edit-btn-container">
-                <Button
-                  displayName="Edit Page"
-                  onClick={enterEditMode}
-                  variant="primary"
-                  icon="/edit.svg"
-                />
-    
-              </div>
-            </>
+
+            </div> 
           )}
         </>
       );
+      
 }
