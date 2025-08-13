@@ -42,9 +42,8 @@ const CourseHomePageUIController: React.FC<Props> = ({
     setModules
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
-    console.log('showToDoWidget:', showModuleWidget, typeof showModuleWidget);
+    // console.log("create course", createCourse)
     
-    console.log('showToDoWidget:', showToDoWidget, typeof showToDoWidget);
 
     const onTabChange = (name: string) => {
         setActiveTab(name);
@@ -76,13 +75,13 @@ const CourseHomePageUIController: React.FC<Props> = ({
                 {activeTab === 'Overview' && (
                     <div className="overview-content">
                         <div className="left-overview">
-                            <CourseCodeCard code={courseDetails?.join_code} />
-                            <Button
+                            { createCourse && (<CourseCodeCard code={courseDetails?.join_code} />)}
+                            {/* <Button
                                 displayName="Create"
                                 onClick={() => console.log("clicked")}
                                 variant="primary"
                                 icon="/plus.svg"
-                            />
+                            /> */}
 
                             {/* Widgets Section */}
                             <div className="widgets-section">
@@ -111,6 +110,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             <AnnouncementForm
                                 onSubmit={onPostAnnouncement}
                                 announcements={announcements}
+                                create_course= {createCourse}
                             />
                         </div>
                     </div>
@@ -118,7 +118,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Classwork' && (
                     <div>
-                        <ClassworkTab assignments={assignments} modules={allModules.filter(item => item.title !== "no_module")} setNewModules={setModules} />
+                        <ClassworkTab assignments={assignments} modules={allModules.filter(item => item.title !== "no_module")} setNewModules={setModules} join_course={joinCourse} />
                     </div>
                 )}
 

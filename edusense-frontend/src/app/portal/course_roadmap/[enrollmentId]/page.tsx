@@ -38,6 +38,7 @@ export default function HomePage() {
     const { permissions, setCurrCourseId } = useCustomProp();
     const join_course = permissions?.join_course;
     const create_course = permissions?.create_course;
+    console.log( " home page persmissions", join_course, create_course)
 
     const [courseDetails, setCourseDetails] = useState<ICourse>();
     const [announcements, setAnnouncements] = useState<IAnnouncements[]>([])
@@ -70,7 +71,7 @@ export default function HomePage() {
         const queryParamsAnnounce = {"section": "get_announcements", "course_id":enrollmentId}
         const requestResponseAnnounce = httpGet<IAnnouncementsResponse>(url,queryParamsAnnounce);
         requestResponseAnnounce.then((res) => {
-            // console.log(res.data)
+            console.log("announcemeasdfasdf", res.data)
             setAnnouncements(res.data.data)
         }).catch((err) => {
             console.log(err)
@@ -112,7 +113,7 @@ export default function HomePage() {
         const queryParamsStudents = {"section": "get_students_course", "course_id":enrollmentId}
         const requestResponseStudents = httpGet<IStudentDataResponse>(url,queryParamsStudents);
         requestResponseStudents.then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             setStudents(res.data.data)
         }).catch((err) => {
             console.log(err)
@@ -178,8 +179,8 @@ export default function HomePage() {
 								/>
               </div>
               <CourseHomePageUIController
-                joinCourse={true} // or your permission logic here
-                createCourse={true} // likewise
+                joinCourse={join_course} // or your permission logic here
+                createCourse={create_course} // likewise
                 courseDetails={courseDetails}
                 announcements={announcements}
                 assignments={assignments}
@@ -191,7 +192,17 @@ export default function HomePage() {
                 students={students}
                 setModules={setModules}
               />
-						</div>
+    
+              <div className="edit-btn-container">
+                <Button
+                  displayName="Edit Page"
+                  onClick={enterEditMode}
+                  variant="primary"
+                  icon="/edit.svg"
+                />
+    
+              </div>
+            </>
           )}
         </>
       );
