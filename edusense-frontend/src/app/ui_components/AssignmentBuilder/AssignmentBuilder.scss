@@ -1,0 +1,98 @@
+@use '../../style/_variables.scss' as variables;
+
+.quiz-builder {
+  margin: 0 auto;
+  padding: 20px;
+  background-color: variables.$light-blue;
+  min-height: 100vh;
+  font-family: variables.$font-jua;
+  color: variables.$dark-blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+
+  h1, .quiz-title-input {
+    background-color: variables.$white;
+    padding: 20px 30px;
+    margin: 0 0 20px 0;
+    border-radius: 12px;
+    box-shadow: variables.$dropshadow;
+    font-family: variables.$font-jua;
+    font-size: 3rem;
+    color: variables.$blue;
+    text-align: center;
+    position: relative;
+    width: 100%;
+  }
+
+  .quiz-description, .quiz-description-input {
+    background-color: variables.$white;
+    padding: 20px 30px;
+    margin: 0 0 30px 0;
+    border-radius: 12px;
+    box-shadow: variables.$dropshadow;
+    font-size: 1rem;
+    line-height: 1.5;
+    width: 80%;
+  }
+
+  .add-question-btn {
+    background-color: variables.$white;
+    border-radius: 1rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 75vw;
+    box-shadow: variables.$dropshadow;
+    border: 1px dashed variables.$grey;
+    color: variables.$grey;
+    cursor: pointer;
+    text-align: center;
+
+    &:hover {
+      background-color: variables.$light-grey;
+    }
+  }
+
+  .add-question-options {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .question {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+
+  .edit-mode-btns {
+    display: flex;
+    gap: 1rem;
+    position: absolute;
+    top: 1rem;
+    right: 10%;
+    padding: 0.5rem 1rem;
+    background-color: variables.$white;
+    border-radius: 3rem;
+    box-shadow: variables.$dropshadow;
+  }
+
+  .edit-quiz-btn {
+    position: sticky;
+    bottom: 1rem;
+    left: 2rem;
+    width: 100%;
+  }
+}

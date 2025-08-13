@@ -1,0 +1,45 @@
+@use '../../style/_variables.scss' as variables;
+
+.saq-correct-answer {
+    background-color: variables.$white;
+    border-radius: 1rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: variables.$dropshadow;
+
+    &:hover {
+        background-color: variables.$light-blue;
+    }
+
+    input[type='text'] {
+        font-family: variables.$font-jua;
+        font-size: 1rem;
+        border: none;
+        border-bottom: 2px solid variables.$light-grey;
+        outline: none;
+        color: variables.$dark-blue;
+        width: 100%;
+    }
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: variables.$light-grey;
+        font-size: 1.2rem;
+
+        &:hover {
+            color: variables.$grey;
+        }
+    }
+}
+
+.saq__answer-label input {
+    width: 90%;
+    border: 1px solid variables.$light-grey;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import './MultipleChoiceQ.scss';
 import Button from '../Button';
+import ToggleSwitch from '../ToggleSwitch';
 
 export type Mode = 'view' | 'edit' | 'answerKey';
 
@@ -23,29 +24,10 @@ interface MultipleChoiceQProps {
 	onToggleCorrect?: (id: string) => void;
   onToggleRequired?: (required: boolean) => void;
 	isRequired?: boolean;
-  onEdit: () => void;
   onAnswerKey: () => void;
   onCancel: () => void;
   onSave: () => void;
 }
-
-const ToggleSwitch: React.FC<{
-	checked: boolean;
-	onChange: (checked: boolean) => void;
-	disabled?: boolean;
-}> = ({ checked, onChange, disabled = false }) => {
-	return (
-		<label className={`toggle-switch ${disabled ? 'toggle-switch--disabled' : ''}`}>
-			<input
-				type="checkbox"
-				checked={checked}
-				onChange={(e) => onChange(e.target.checked)}
-				disabled={disabled}
-			/>
-			<span className="toggle-switch__slider"></span>
-		</label>
-	);
-};
 
 const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   mode,
@@ -60,7 +42,6 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   onToggleCorrect,
 	onToggleRequired,
 	isRequired = false,
-  onEdit,
   onAnswerKey,
   onCancel,
   onSave,
@@ -73,14 +54,12 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
         ) : (
           <input
             type="text"
+            placeholder="Question*"
             value={question}
             onChange={(e) => onChangeQuestion?.(e.target.value)}
           />
         )}
 
-        {mode === 'view' && (
-          <Button onClick={onEdit} icon="/edit.svg" variant="icon"></Button>
-        )}
         {mode !== 'view' && (
 					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
         )}
