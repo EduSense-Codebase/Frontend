@@ -160,7 +160,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
+                {currCourseId ? (
                     <ChatWidget courseId={currCourseId} />
+                ): null}
 
                 <CustomPropContext.Provider
                     value={{

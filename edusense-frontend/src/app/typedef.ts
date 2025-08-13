@@ -1,5 +1,7 @@
 /* ********************* Generic Types START ********************* */
 
+import { AssignmentBuilderProps } from "./ui_components/AssignmentBuilder";
+
 export interface IPermissions {
     join_course: boolean;
     create_course: boolean;
@@ -110,7 +112,8 @@ export interface IAIJwtTokenRespose {
 
 export interface IBuilderResponse {
     type: "text" | "quiz_or_assignment",
-    text_content?: string
+    text_content?: string,
+    quiz_or_assignment_content?: AssignmentBuilderProps
 }
 
 export interface IStudentDataResponse {
