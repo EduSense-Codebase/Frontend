@@ -127,7 +127,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     return (
         <div
             id="main"
-            className={`${interClassName} flex min-h-screen flex-col bg-white text-gray-800`}
+            className={`${interClassName} flex min-h-screen flex-col bg-white text-gray-800 pl-[4rem]`}
         >
             {/* <JoyrideWrapper steps={mainSteps} seenKey="1" /> */}
             {/* Sidebar (fixed) */}

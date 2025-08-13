@@ -149,7 +149,7 @@ export default function CourseSection() {
     };
 
     return (
-        <section>
+        <>
             <div className="theme-vars theme">
                 <h1 className="heading">Dashboard</h1>
                 <div className="container">
@@ -243,6 +243,6 @@ export default function CourseSection() {
                     </div>
                 </div>
             )}
-        </section>
+        </>
     );
 }
