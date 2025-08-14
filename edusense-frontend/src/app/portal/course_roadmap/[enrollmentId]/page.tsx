@@ -80,7 +80,7 @@ export default function HomePage() {
     const handleCreateAnnouncement = (title: string, content: string) => {
         const url = API_PREFIX + COURSE_ENDPOINT;
         const formData = { title, content };
-        const queryParams = { section: "make_announcement" };
+        const queryParams = { section: "make_announcement", course_id: enrollmentId };
     
         const requestResponse = httpPost(url, formData, queryParams);
         requestResponse.then((res) => {
