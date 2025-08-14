@@ -3,14 +3,12 @@ import React, { useEffect, useState } from 'react';
 import Button from '../Button';
 import { API_PREFIX, WS_API_PREFIX, WS_AI_AGENT_ENDPOINT, AUTH_ENDPOINT } from '../../global';
 
-import { io, Manager } from "socket.io-client";
-
 import { httpGet, httpPost } from '../../utils';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
-import { IAIJwtTokenRespose, IAISession, IFetchAllAISessions } from '../../typedef';
+import { IAIAgentData, IAIAgentsResponse, IAIJwtTokenRespose, IAISession, IFetchAllAISessions } from '../../typedef';
 import { createAIConnection } from './websocket';
 
 interface IMessages {
@@ -180,6 +178,9 @@ const ChatWidget = (props: IChatWidgetProps) => {
     const [sessions, setSessions] = useState<IAISession[]>([]);
     const [currSession, setCurrSession] = useState<number>(0);
 
+    const [agents, setAgents] = useState<IAIAgentData[]>([]);
+    const [currAgent, setCurrAgent] = useState<string | undefined>(undefined);
+
     const [websocketConn, setWebsocketConn] = useState<ReturnType<typeof createAIConnection> | null>(null);
 
     const toggleChat = () => setIsOpen(!isOpen);
@@ -210,7 +211,20 @@ const ChatWidget = (props: IChatWidgetProps) => {
     }, [isResizing]);
 
     useEffect(() => {
-        if (props.courseId) {
+        let queryParams = {
+            section: 'get_ai_agents'
+        };
+
+        const getAgents = httpGet<IAIAgentsResponse>(`${API_PREFIX}${AUTH_ENDPOINT}`, queryParams);
+
+        getAgents.then((response) => {
+            setAgents(response.data.data);
+            setCurrAgent(response.data.data[0].internal_name);
+        })
+    }, [])
+
+    useEffect(() => {
+        if (props.courseId && currAgent) {
             let sessionQueryParams = {
                 section: 'ai_sessions',
                 course_id: props.courseId
@@ -219,7 +233,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
             getAllSessions.then((response) => {
                 setSessions(response.data.data);
                 setWebsocketConn(() => {
-                    const conn = createAIConnection(props.courseId, currSession, "conversational_agent")
+                    const conn = createAIConnection(props.courseId, currSession, currAgent)
 
                     conn.on("open", () => {
                         console.log("Socket Connected!");
@@ -241,7 +255,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
         return () => {
             websocketConn?.disconnect();
         }
-    }, [props.courseId, currSession])
+    }, [props.courseId, currSession, currAgent])
 
     const sendMessage = () => {
         if (websocketConn != null) {
@@ -298,6 +312,10 @@ const ChatWidget = (props: IChatWidgetProps) => {
         }
     }
 
+    const selectAIAgent = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setCurrAgent(e.target.value);
+    }
+
     return (
         <>
             {/* Floating Button */}
@@ -344,7 +362,15 @@ const ChatWidget = (props: IChatWidgetProps) => {
                         <div className="flex items-center justify-between border-b p-4">
                             <h2 className="text-lg font-semibold text-gray-700">
                                 EduSense AI Chat
+                                
+
                             </h2>
+                            {agents.length > 1 ? (
+                                <select onChange={selectAIAgent}>
+                                    {agents.map(currAgent => <option value={currAgent.internal_name}>{currAgent.external_name}</option>)}
+                                </select>
+
+                            ) : null}
                             <button onClick={toggleChat}>
                                 <svg
                                     className="h-5 w-5 text-gray-600 hover:text-black"

@@ -60,7 +60,10 @@ export interface IStudentData{
     overall_grade: number;
 }
 
-
+export interface IAIAgentData {
+    internal_name: string,
+    external_name: string
+}
 
 /* ********************* Generic Types END *********************** */
 
@@ -119,6 +122,10 @@ export interface IBuilderResponse {
 
 export interface IStudentDataResponse {
     data: IStudentData[];
+}
+
+export interface IAIAgentsResponse {
+    data: IAIAgentData[];
 }
 
 /* ********************* Axios Response Types END *********************** */
