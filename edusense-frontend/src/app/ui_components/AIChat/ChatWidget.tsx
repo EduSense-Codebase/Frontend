@@ -219,7 +219,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
             getAllSessions.then((response) => {
                 setSessions(response.data.data);
                 setWebsocketConn(() => {
-                    const conn = createAIConnection(props.courseId, currSession, "teacher_agent")
+                    const conn = createAIConnection(props.courseId, currSession, "conversational_agent")
 
                     conn.on("open", () => {
                         console.log("Socket Connected!");
@@ -261,7 +261,6 @@ const ChatWidget = (props: IChatWidgetProps) => {
 
     const onAIMessage = (msg: string) => {
         const jsonMsg = JSON.parse(msg);
-
         if (jsonMsg.type == "conversation_history") {
             setMessages(jsonMsg.messages);
         } else if (jsonMsg.type == "progress") {
@@ -280,6 +279,21 @@ const ChatWidget = (props: IChatWidgetProps) => {
             setThinking(undefined);
             setMessages((prevMessages) => {
                 return [...prevMessages, { sender: 'ai', content: aiMessage }];
+            })
+        } else if (jsonMsg.type == "stream_final_content") {
+            setThinking(undefined);
+            console.log(jsonMsg.chunk);
+            const aiMessage: string = jsonMsg.chunk
+            setThinking(undefined);
+            setMessages((prevMessages) => {
+                const lastMessage = prevMessages[prevMessages.length - 1];
+                if (lastMessage.sender == 'user') {
+                    return [...prevMessages, { sender: 'ai', content: aiMessage }];
+                } else if (lastMessage.sender == 'ai') {
+                    const restOfArray = prevMessages.slice(0, -1);
+                    return [...restOfArray, { sender: 'ai', content: lastMessage.content + " " + aiMessage}];
+                }
+                return [];
             })
         }
     }
