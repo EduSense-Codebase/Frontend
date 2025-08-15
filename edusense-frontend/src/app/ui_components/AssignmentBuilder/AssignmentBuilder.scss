@@ -77,16 +77,10 @@
     }
 
 
-  .edit-mode-btns {
-    display: flex;
-    gap: 1rem;
+  .delete-question-btn {
     position: absolute;
-    top: 1rem;
-    right: 10%;
-    padding: 0.5rem 1rem;
-    background-color: variables.$white;
-    border-radius: 3rem;
-    box-shadow: variables.$dropshadow;
+    top: 2%;
+    right: 11%;
   }
 
   .edit-quiz-btn {

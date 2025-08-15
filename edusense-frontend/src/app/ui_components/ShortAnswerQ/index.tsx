@@ -3,7 +3,7 @@ import './ShortAnswerQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
 
-export type Mode = 'view' | 'edit' | 'answerKey';
+export type Mode = 'view' | 'edit';
 
 export interface CorrectAnswer {
   id: string;
@@ -22,7 +22,6 @@ interface ShortAnswerQProps {
   onChangeQuestion: (value: string) => void;
   onToggleRequired?: (required: boolean) => void;
   isRequired?: boolean;
-  onAnswerKey: () => void;
   onSave: () => void;
 }
 
@@ -38,7 +37,6 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
   onChangeQuestion,
 	onToggleRequired,
 	isRequired = false,
-  onAnswerKey,
   onSave,
  }) => {
   return (
@@ -54,13 +52,9 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
             onChange={(e) => onChangeQuestion?.(e.target.value)}
           />
         )}
-
-        {mode !== 'view' && (
-					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
-        )}
       </div>
 
-			{mode === 'answerKey' && (
+			{mode === 'edit' && (
         <>
           <p>List All Correct Answer(s):</p>
           <ul>
@@ -106,7 +100,7 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
             />
             <p>Required</p>
           </div>
-					<Button onClick={onAnswerKey} displayName='Answer Key' variant="primary"></Button>
+					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
 					<p>Points: ___</p>
         </div>
       )}

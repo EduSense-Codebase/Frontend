@@ -56,8 +56,6 @@ export const Primary: Story = {
         mode={mode}
         question={question}
         options={options}
-        selectedOptionId={selectedOptionId}
-        onSelectOption={(id) => setSelectedOptionId(id)}
         onChangeQuestion={setQuestion}
         onChangeOptionText={handleChangeOptionText}
         onRemoveOption={handleRemoveOption}
@@ -65,7 +63,6 @@ export const Primary: Story = {
         onToggleCorrect={handleToggleCorrect}
         isRequired={isRequired}
         onToggleRequired={handleToggleRequired}
-        onAnswerKey={() => setMode('answerKey')}
         onCancel={() => setMode('view')}
         onSave={() => setMode('view')}
       />
@@ -118,8 +115,6 @@ export const Secondary: Story = {
         mode={mode}
         question={question}
         options={options}
-        selectedOptionId={selectedOptionId}
-        onSelectOption={(id) => setSelectedOptionId(id)}
         onChangeQuestion={setQuestion}
         onChangeOptionText={handleChangeOptionText}
         onRemoveOption={handleRemoveOption}
@@ -127,7 +122,6 @@ export const Secondary: Story = {
         onToggleCorrect={handleToggleCorrect}
         isRequired={isRequired}
         onToggleRequired={handleToggleRequired}
-        onAnswerKey={() => setMode('answerKey')}
         onCancel={() => setMode('view')}
         onSave={() => setMode('view')}
       />

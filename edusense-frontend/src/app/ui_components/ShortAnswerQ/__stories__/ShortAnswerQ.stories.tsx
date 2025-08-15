@@ -52,7 +52,6 @@ export const Primary: Story = {
         onChangeQuestion={setQuestion}
         isRequired={isRequired}
         onToggleRequired={handleToggleRequired}
-        onAnswerKey={() => setMode('answerKey')}
         onSave={() => setMode('view')}
       />
     );
@@ -99,7 +98,6 @@ export const Secondary: Story = {
         onChangeQuestion={setQuestion}
         isRequired={isRequired}
         onToggleRequired={handleToggleRequired}
-        onAnswerKey={() => setMode('answerKey')}
         onSave={() => setMode('view')}
       />
     );

@@ -40,10 +40,6 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
             className='laq-question-input'
           />
         )}
-
-        {mode !== 'view' && (
-					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
-        )}
       </div>
 
       {mode === 'view' && (
@@ -77,6 +73,7 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
             />
             <p>Required</p>
           </div>
+					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
 					<p>Points: ___</p>
         </div>
       )}

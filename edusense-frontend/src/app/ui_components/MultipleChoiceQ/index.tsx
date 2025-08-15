@@ -3,7 +3,7 @@ import './MultipleChoiceQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
 
-export type Mode = 'view' | 'edit' | 'answerKey';
+export type Mode = 'view' | 'edit';
 
 export interface Option {
   id: string;
@@ -15,8 +15,6 @@ interface MultipleChoiceQProps {
   mode: Mode;
   question: string;
   options: Option[];
-  selectedOptionId?: string;
-  onSelectOption: (id: string) => void;
   onChangeQuestion: (value: string) => void;
   onChangeOptionText: (id: string, value: string) => void;
   onRemoveOption: (id: string) => void;
@@ -24,7 +22,6 @@ interface MultipleChoiceQProps {
 	onToggleCorrect?: (id: string) => void;
   onToggleRequired?: (required: boolean) => void;
 	isRequired?: boolean;
-  onAnswerKey: () => void;
   onCancel: () => void;
   onSave: () => void;
 }
@@ -33,8 +30,6 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   mode,
   question,
   options,
-  selectedOptionId,
-  onSelectOption,
   onChangeQuestion,
   onChangeOptionText,
   onRemoveOption,
@@ -42,8 +37,6 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   onToggleCorrect,
 	onToggleRequired,
 	isRequired = false,
-  onAnswerKey,
-  onCancel,
   onSave,
 }) => {
   return (
@@ -59,15 +52,7 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
             onChange={(e) => onChangeQuestion?.(e.target.value)}
           />
         )}
-
-        {mode !== 'view' && (
-					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
-        )}
       </div>
-
-			{mode == "answerKey" && (
-				<p>Select the Correct Answer(s):</p>
-			)}
 
       <ul className="mcq__options">
         {options.map((opt) => (
@@ -77,35 +62,26 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
                 <input
                   type="radio"
                   name="mcq"
-                  checked={selectedOptionId === opt.id}
-                  onChange={() => onSelectOption?.(opt.id)}
                 />
                 {opt.text}
               </label>
             )}
 
             {mode === 'edit' && (
-              <>
+              <label className='mcq__option-label'>
+								<input
+                  type="checkbox"
+                  checked={!!opt.isCorrect}
+                  onChange={() => onToggleCorrect?.(opt.id)}
+                />
+
                 <input
                   type="text"
                   value={opt.text}
                   onChange={(e) => onChangeOptionText?.(opt.id, e.target.value)}
+                  style={{ flexGrow: 1 }}
                 />
-                <button onClick={() => onRemoveOption?.(opt.id)}>✕</button>
-              </>
-            )}
 
-            {mode === 'answerKey' && (
-              <label className='mcq__option-label'>
-								<div className="mcq__option-checkbox">
-									<input
-										type="checkbox"
-										checked={!!opt.isCorrect}
-										onChange={() => onToggleCorrect?.(opt.id)}
-									/>
-									{opt.text}
-								</div>
-                
                 <button onClick={() => onRemoveOption?.(opt.id)}>✕</button>
               </label>
             )}
@@ -130,7 +106,7 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
             />
             <p>Required</p>
           </div>
-					<Button onClick={onAnswerKey} displayName='Answer Key' variant="primary"></Button>
+					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
 					<p>Points: ___</p>
         </div>
       )}
