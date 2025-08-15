@@ -38,6 +38,7 @@ export default function HomePage() {
     const { permissions, setCurrCourseId } = useCustomProp();
     const join_course = permissions?.join_course;
     const create_course = permissions?.create_course;
+    console.log( " home page persmissions", join_course, create_course)
 
     const [courseDetails, setCourseDetails] = useState<ICourse>();
     const [announcements, setAnnouncements] = useState<IAnnouncements[]>([])
@@ -52,75 +53,29 @@ export default function HomePage() {
 
     const router = useRouter();
 
-
     useEffect(() => {
-        // Get necessary info to display on Overview page
-        const url = API_PREFIX + COURSE_ENDPOINT
-        const queryParams = {"section": "course_details", "course_id":enrollmentId}
-        const requestResponse = httpGet<INewEnrollment>(url,queryParams);
-        requestResponse.then((res) => {
-            // console.log(res.data)
-            setCourseDetails(res.data.data)
-            setCurrCourseId(res.data.data.id);
-        }).catch((err) => {
-            console.log(err)
-            console.log(enrollmentId)
-        })
-
-        const queryParamsAnnounce = {"section": "get_announcements", "course_id":enrollmentId}
-        const requestResponseAnnounce = httpGet<IAnnouncementsResponse>(url,queryParamsAnnounce);
-        requestResponseAnnounce.then((res) => {
-            // console.log(res.data)
-            setAnnouncements(res.data.data)
-        }).catch((err) => {
-            console.log(err)
-            console.log(enrollmentId)
-        })
-
-        const queryParamsAssign = {"section": "get_assignments", "course_id":enrollmentId}
-        const requestResponseAssign = httpGet<IAssignmentsResponse>(url,queryParamsAssign);
-        requestResponseAssign.then((res) => {
-            // console.log(res.data)
-            setAssignments(res.data.data)
-        }).catch((err) => {
-            console.log(err)
-            console.log(enrollmentId)
-        })
-
-        const queryParamsMod = {"section": "get_modules", "course_id":enrollmentId}
-        const requestResponseMod = httpGet<IModulesResponse>(url,queryParamsMod);
-        requestResponseMod.then((res) => {
-            // console.log(res.data)
-            setModules(res.data.data)
-        }).catch((err) => {
-            console.log(err)
-            console.log(enrollmentId)
-        })
-
-        const configParams = {"section": "get_homepage_data", "course_id":enrollmentId}
-        const requestResponseConfig = httpGet<any>(url,configParams);
-        requestResponseConfig.then((res) =>{
-            const config = res?.data?.data ?? {}; // fallback to empty object
-            // console.log("`the configs", config)
-            // console.log('showToDoWidget:', config.moduleWidgetConfig, typeof Boolean(config.moduleWidgetConfig));
-            setShowModuleWidget(Boolean(config.moduleWidgetConfig) ?? false);
-            setShowToDoWidget(Boolean(config.todoWidgetConfig) ?? false);
-            setBannerImage(config.bannerImageConfig ?? null);
-
-        })
-
-        const queryParamsStudents = {"section": "get_students_course", "course_id":enrollmentId}
-        const requestResponseStudents = httpGet<IStudentDataResponse>(url,queryParamsStudents);
-        requestResponseStudents.then((res) => {
-            console.log(res.data)
-            setStudents(res.data.data)
-        }).catch((err) => {
-            console.log(err)
-            console.log(enrollmentId)
-        })
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        Promise.all([
+          httpGet<INewEnrollment>(url, { section: "course_details", course_id: enrollmentId }),
+          httpGet<IAnnouncementsResponse>(url, { section: "get_announcements", course_id: enrollmentId }),
+          httpGet<IAssignmentsResponse>(url, { section: "get_assignments", course_id: enrollmentId }),
+          httpGet<IModulesResponse>(url, { section: "get_modules", course_id: enrollmentId }),
+          httpGet<any>(url, { section: "get_homepage_data", course_id: enrollmentId }),
+          httpGet<IStudentDataResponse>(url, { section: "get_students_course", course_id: enrollmentId })
+        ])
+          .then(([course, announce, assign, modulesRes, config, studentsRes]) => {
+            setCourseDetails(course.data.data);
+            setAnnouncements(announce.data.data);
+            setAssignments(assign.data.data);
+            setModules(modulesRes.data.data);
+            setShowModuleWidget(Boolean(config.data.data?.moduleWidgetConfig));
+            setShowToDoWidget(Boolean(config.data.data?.todoWidgetConfig));
+            setBannerImage(config.data.data?.bannerImageConfig || null);
+            setStudents(studentsRes.data.data);
+            setCurrCourseId(course.data.data.id);
+          })
+          .catch(console.error);
+      }, [enrollmentId]);
 
     const handleCreateAnnouncement = (title: string, content: string) => {
         const url = API_PREFIX + COURSE_ENDPOINT;
@@ -168,18 +123,23 @@ export default function HomePage() {
               assignments={assignments}
             />
           ) : (
-            <div className='view-course-page'>
-							<div className="course-edit-btn">
-								<Button
-									displayName="Edit Page"
-									onClick={enterEditMode}
-									variant="primary"
-									icon="/edit.svg"
-								/>
+            <div className="view-course-page">
+              <div className="course-edit-btn">
+
+                {create_course && (
+                    <Button
+                        displayName="Edit Page"
+                        onClick={enterEditMode}
+                        variant="primary"
+                        icon="/edit.svg"
+                    />
+
+                )}
+        
               </div>
               <CourseHomePageUIController
-                joinCourse={true} // or your permission logic here
-                createCourse={true} // likewise
+                joinCourse={join_course}
+                createCourse={create_course}
                 courseDetails={courseDetails}
                 announcements={announcements}
                 assignments={assignments}
@@ -191,8 +151,10 @@ export default function HomePage() {
                 students={students}
                 setModules={setModules}
               />
-						</div>
+
+            </div> 
           )}
         </>
       );
+      
 }

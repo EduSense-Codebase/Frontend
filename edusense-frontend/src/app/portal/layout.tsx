@@ -88,7 +88,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
         const requestResponse = httpGet<IPermissionsResponse>(API_URL, queryParams);
         requestResponse.then((res) => {
-            console.log(res.data);
+            console.log("persmissions", res.data);
             setPermissions(res.data.data);
             const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
             console.log(permissions?.create_course);
@@ -160,7 +160,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
+                {currCourseId ? (
                     <ChatWidget courseId={currCourseId} />
+                ): null}
 
                 <CustomPropContext.Provider
                     value={{

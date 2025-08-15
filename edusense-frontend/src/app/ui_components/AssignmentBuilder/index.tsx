@@ -45,7 +45,7 @@ interface ShortAnswerQuestion extends BaseQuestion {
   correctAnswers: CorrectAnswer[];
 }
 
-interface AssignmentBuilderProps {
+export interface AssignmentBuilderProps {
   quizQuestions: Question[];
   title: string;
   description: string;
