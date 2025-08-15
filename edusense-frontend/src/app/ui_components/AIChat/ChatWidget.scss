@@ -211,9 +211,8 @@
     align-items: baseline;
     gap: 1rem;
     .ai-message {
-        margin-right: auto; 
+        margin-right: 5rem; 
         margin-top: 1rem;
-        max-width: 20rem; 
         align-self: flex-start; 
         border-radius: 0 0.5rem 0.5rem; 
         background-color: vars.$light-blue; 
