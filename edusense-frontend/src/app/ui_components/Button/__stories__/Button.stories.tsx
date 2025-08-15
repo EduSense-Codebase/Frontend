@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { fn } from 'storybook/test';
 
-import Button from '../index'
+import Button from '../index';
 
 const meta = {
     title: 'Component/Button',
@@ -16,36 +16,36 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
     args: {
-        displayName: "Primary Button",
+        displayName: 'Primary Button',
         variant: 'primary',
-        icon: '/edit.svg'
+        icon: '/edit.svg',
     },
 };
 
 export const Secondary: Story = {
     args: {
-        displayName: "Secondary",
-        variant: 'secondary'
+        displayName: 'Secondary',
+        variant: 'secondary',
     },
 };
 
 export const Danger: Story = {
     args: {
-        displayName: "Danger Button",
-        variant: 'danger'
+        displayName: 'Danger Button',
+        variant: 'danger',
     },
 };
 
 export const Icon: Story = {
     args: {
         variant: 'icon',
-        icon: '/edit.svg'
+        icon: '/edit.svg',
     },
 };
 
 export const IconSecondary: Story = {
     args: {
         variant: 'icon-secondary',
-        icon: '/edit.svg'
+        icon: '/edit.svg',
     },
 };

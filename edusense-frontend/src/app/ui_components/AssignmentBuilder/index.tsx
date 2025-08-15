@@ -10,23 +10,23 @@ export type QuestionType = 'Long Answer' | 'Multiple Choice' | 'Short Answer';
 type QuestionMode = 'view' | 'edit';
 
 interface Option {
-  id: string;
-  text: string;
-  isCorrect?: boolean;
+    id: string;
+    text: string;
+    isCorrect?: boolean;
 }
 
 interface CorrectAnswer {
-  id: string;
-  text: string;
+    id: string;
+    text: string;
 }
 
 interface BaseQuestion {
-  id: string;
-  type: QuestionType;
-  question: string;
-  description?: string;
-  isRequired: boolean;
-  mode: QuestionMode;
+    id: string;
+    type: QuestionType;
+    question: string;
+    description?: string;
+    isRequired: boolean;
+    mode: QuestionMode;
 }
 
 interface LongAnswerQuestion extends BaseQuestion {
@@ -46,17 +46,17 @@ interface ShortAnswerQuestion extends BaseQuestion {
 }
 
 export interface AssignmentBuilderProps {
-  quizQuestions: Question[];
-  title: string;
-  description: string;
+    quizQuestions: Question[];
+    title: string;
+    description: string;
 }
 
 export type Question = LongAnswerQuestion | MultipleChoiceQuestion | ShortAnswerQuestion;
 
-const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({ 
-  quizQuestions, 
-  title, 
-  description 
+const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
+    quizQuestions,
+    title,
+    description,
 }) => {
   const [questions, setQuestions] = useState<Question[]>(quizQuestions);
   const [showAddOptions, setShowAddOptions] = useState(false);
@@ -67,14 +67,14 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
     setShowAddOptions(!showAddOptions);
   }
 
-  const handleAddQuestion = (type: QuestionType) => {
-    const base: BaseQuestion = {
-      id: Date.now().toString(),
-      type,
-      question: '',
-      isRequired: false,
-      mode: 'edit',
-    };
+    const handleAddQuestion = (type: QuestionType) => {
+        const base: BaseQuestion = {
+            id: Date.now().toString(),
+            type,
+            question: '',
+            isRequired: false,
+            mode: 'edit',
+        };
 
     let newQ: Question;
     if (type === 'Multiple Choice') {
@@ -85,14 +85,14 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
       newQ = { ...base, type: 'Long Answer' };
     }
 
-    setQuestions(prev => [...prev, newQ]);
-  };
+        setQuestions((prev) => [...prev, newQ]);
+    };
 
-  const handleUpdateQuestion = (id: string, updates: Partial<Question>) => {
-    setQuestions(prev =>
-      prev.map(q => (q.id === id ? { ...q, ...updates } as Question : q))
-    );
-  };
+    const handleUpdateQuestion = (id: string, updates: Partial<Question>) => {
+        setQuestions((prev) =>
+            prev.map((q) => (q.id === id ? ({ ...q, ...updates } as Question) : q)),
+        );
+    };
 
   const handleChangeQuestionMode = (id: string, mode: QuestionMode) => {
     setQuestions(prev =>

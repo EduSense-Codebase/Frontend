@@ -1,9 +1,12 @@
-import { API_PREFIX, AUTH_ENDPOINT, WS_AI_AGENT_ENDPOINT, WS_API_PREFIX } from "@/app/global";
-import { IAIJwtTokenRespose } from "@/app/typedef";
-import { httpPost } from "@/app/utils";
+import { API_PREFIX, AUTH_ENDPOINT, WS_AI_AGENT_ENDPOINT, WS_API_PREFIX } from '@/app/global';
+import { IAIJwtTokenRespose } from '@/app/typedef';
+import { httpPost } from '@/app/utils';
 
-
-export const createAIConnection = (courseId: number | undefined, sessionId: number, agentName: string) => {
+export const createAIConnection = (
+    courseId: number | undefined,
+    sessionId: number,
+    agentName: string,
+) => {
     let socket: WebSocket | null = null;
     let isConnected = false;
 
@@ -19,15 +22,19 @@ export const createAIConnection = (courseId: number | undefined, sessionId: numb
         if (isConnected) return;
 
         let createAiSessionQueryParams = {
-            section: 'connect_ai_session'
-        }
+            section: 'connect_ai_session',
+        };
 
         let formData = {
             course_id: courseId,
-            session_id: sessionId
+            session_id: sessionId,
         };
 
-        httpPost<IAIJwtTokenRespose>(`${API_PREFIX}${AUTH_ENDPOINT}`, formData, createAiSessionQueryParams).then((data) => {
+        httpPost<IAIJwtTokenRespose>(
+            `${API_PREFIX}${AUTH_ENDPOINT}`,
+            formData,
+            createAiSessionQueryParams,
+        ).then((data) => {
             socket = new WebSocket(`${WS_API_PREFIX}${WS_AI_AGENT_ENDPOINT}${data.data.jwt}`);
 
             socket.onopen = () => {
@@ -48,37 +55,34 @@ export const createAIConnection = (courseId: number | undefined, sessionId: numb
                 listeners.error.forEach((fn) => fn(err));
             };
         });
-
-        
-
     };
 
     const sendMessage = (msg: string) => {
         if (socket && isConnected) {
             let agentQuery = {
-                type: "send_message",
+                type: 'send_message',
                 query: msg,
                 course_id: courseId,
                 session_id: sessionId,
-                agent: agentName
-            }
+                agent: agentName,
+            };
             socket.send(JSON.stringify(agentQuery));
         } else {
-            console.warn("🚫 Cannot send message — not connected");
+            console.warn('🚫 Cannot send message — not connected');
         }
     };
 
     const sendRequestToGetMessage = () => {
         if (socket && isConnected) {
             let agentQuery = {
-                type: "retrieve_message",
+                type: 'retrieve_message',
                 course_id: courseId,
                 session_id: sessionId,
-                agent: agentName
-            }
+                agent: agentName,
+            };
             socket.send(JSON.stringify(agentQuery));
         }
-    }
+    };
 
     const disconnect = () => {
         if (socket) {
@@ -89,8 +93,8 @@ export const createAIConnection = (courseId: number | undefined, sessionId: numb
     };
 
     const on = (
-        event: "message" | "open" | "close" | "error",
-        handler: (...args: any[]) => void
+        event: 'message' | 'open' | 'close' | 'error',
+        handler: (...args: any[]) => void,
     ) => {
         listeners[event].push(handler);
     };

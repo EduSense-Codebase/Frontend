@@ -12,14 +12,13 @@ import {
 import { httpGet, httpPost } from '../../utils';
 import * as motion from 'motion/react-client';
 //import '../../theme.css';
-import '../../style/index.scss'
+import '../../style/index.scss';
 import { useCustomProp } from '../layout';
 import { create } from 'domain';
 import { error } from 'console';
 
 export default function CourseSection() {
     const { permissions, institution, courses, setCourses, setCurrCourseId } = useCustomProp();
-
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [curAction, setCurAction] = useState('');
@@ -71,11 +70,8 @@ export default function CourseSection() {
         httpPost(apiUrl, formData, queryParams)
             .then((res) => {
                 console.log('Course created:', res.data);
-                setCourses((prev) => [
-                    ...prev,
-                    res.data.data 
-                ]);
-            
+                setCourses((prev) => [...prev, res.data.data]);
+
                 handleDialogClose();
             })
             .catch((err) => {

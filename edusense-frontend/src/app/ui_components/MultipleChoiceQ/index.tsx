@@ -8,9 +8,9 @@ import Dropdown from '../Dropdown';
 export type Mode = 'view' | 'edit';
 
 export interface Option {
-  id: string;
-  text: string;
-  isCorrect?: boolean;
+    id: string;
+    text: string;
+    isCorrect?: boolean;
 }
 
 interface MultipleChoiceQProps {

@@ -5,8 +5,8 @@ import ShortAnswerQ, { Mode, CorrectAnswer } from '../index';
 import { QuestionType } from '../../AssignmentBuilder';
 
 const meta: Meta<typeof ShortAnswerQ> = {
-  title: 'Component/ShortAnswerQ',
-  component: ShortAnswerQ,
+    title: 'Component/ShortAnswerQ',
+    component: ShortAnswerQ,
 };
 
 export default meta;
@@ -26,21 +26,19 @@ export const Primary: Story = {
         setQType(newType);
     }
 
-    const handleAddAnswer = () => {
-      setCorrectAnswers([...correctAnswers, { id: Date.now().toString(), text: '' }]);
-    };
+        const handleAddAnswer = () => {
+            setCorrectAnswers([...correctAnswers, { id: Date.now().toString(), text: '' }]);
+        };
 
-    const handleRemoveAnswer = (id: string) => {
-      setCorrectAnswers(correctAnswers.filter((ans) => ans.id !== id));
-    };
+        const handleRemoveAnswer = (id: string) => {
+            setCorrectAnswers(correctAnswers.filter((ans) => ans.id !== id));
+        };
 
-    const handleChangeAnswerText = (id: string, value: string) => {
-      setCorrectAnswers(
-        correctAnswers.map((ans) =>
-          ans.id === id ? { ...ans, text: value } : ans
-        )
-      );
-    };
+        const handleChangeAnswerText = (id: string, value: string) => {
+            setCorrectAnswers(
+                correctAnswers.map((ans) => (ans.id === id ? { ...ans, text: value } : ans)),
+            );
+        };
 
     const handleToggleRequired = (required: boolean) => {
         setIsRequired(required);
@@ -80,21 +78,19 @@ export const Secondary: Story = {
         setQType(newType);
     }
 
-    const handleAddAnswer = () => {
-      setCorrectAnswers([...correctAnswers, { id: Date.now().toString(), text: '' }]);
-    };
+        const handleAddAnswer = () => {
+            setCorrectAnswers([...correctAnswers, { id: Date.now().toString(), text: '' }]);
+        };
 
-    const handleRemoveAnswer = (id: string) => {
-      setCorrectAnswers(correctAnswers.filter((ans) => ans.id !== id));
-    };
+        const handleRemoveAnswer = (id: string) => {
+            setCorrectAnswers(correctAnswers.filter((ans) => ans.id !== id));
+        };
 
-    const handleChangeAnswerText = (id: string, value: string) => {
-      setCorrectAnswers(
-        correctAnswers.map((ans) =>
-          ans.id === id ? { ...ans, text: value } : ans
-        )
-      );
-    };
+        const handleChangeAnswerText = (id: string, value: string) => {
+            setCorrectAnswers(
+                correctAnswers.map((ans) => (ans.id === id ? { ...ans, text: value } : ans)),
+            );
+        };
 
     const handleToggleRequired = (required: boolean) => {
         setIsRequired(required);

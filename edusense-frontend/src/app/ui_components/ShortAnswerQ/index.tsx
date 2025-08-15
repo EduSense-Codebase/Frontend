@@ -8,8 +8,8 @@ import Dropdown from '../Dropdown';
 export type Mode = 'view' | 'edit';
 
 export interface CorrectAnswer {
-  id: string;
-  text: string;
+    id: string;
+    text: string;
 }
 
 interface ShortAnswerQProps {
@@ -86,16 +86,16 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
       )}
 
 
-      {mode === 'view' && (
-        <label className="saq__answer-label">
-          <input
-            type="text"
-            value={answer}
-            onChange={(e) => onChangeAnswer?.(e.target.value)}
-            placeholder="Type your answer here..."
-          />
-        </label>
-      )}
+            {mode === 'view' && (
+                <label className="saq__answer-label">
+                    <input
+                        type="text"
+                        value={answer}
+                        onChange={(e) => onChangeAnswer?.(e.target.value)}
+                        placeholder="Type your answer here..."
+                    />
+                </label>
+            )}
 
       {mode === 'edit' && (
         <>

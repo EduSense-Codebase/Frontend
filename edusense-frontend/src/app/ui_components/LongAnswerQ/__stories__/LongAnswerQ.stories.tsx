@@ -5,8 +5,8 @@ import LongAnswerQ, { Mode } from '../index';
 import { QuestionType } from '../../AssignmentBuilder';
 
 const meta: Meta<typeof LongAnswerQ> = {
-  title: 'Component/LongAnswerQ',
-  component: LongAnswerQ,
+    title: 'Component/LongAnswerQ',
+    component: LongAnswerQ,
 };
 
 export default meta;
@@ -25,9 +25,9 @@ export const Primary: Story = {
         setQType(newType);
     }
 
-    const handleToggleRequired = (required: boolean) => {
-        setIsRequired(required);
-    };
+        const handleToggleRequired = (required: boolean) => {
+            setIsRequired(required);
+        };
 
     return (
       <LongAnswerQ
@@ -58,9 +58,9 @@ export const Secondary: Story = {
         setQType(newType);
     }
 
-    const handleToggleRequired = (required: boolean) => {
-        setIsRequired(required);
-    };
+        const handleToggleRequired = (required: boolean) => {
+            setIsRequired(required);
+        };
 
     return (
       <LongAnswerQ

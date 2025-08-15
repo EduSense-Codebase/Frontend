@@ -1,6 +1,6 @@
 import React from 'react';
 //import '../theme.css';
-import '../style/index.scss'
+import '../style/index.scss';
 import { motion } from 'framer-motion';
 
 const CompletionMsg: React.FC = () => {

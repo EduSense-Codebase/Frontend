@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import './Button.scss';
 
 export interface IButtonProps {
-    children?: ReactNode; 
+    children?: ReactNode;
     displayName?: string;
     onClick: () => void;
     variant?: 'primary' | 'secondary' | 'danger' | 'icon' | 'icon-secondary';

@@ -48,27 +48,26 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
         )}
       </div>
 
-      {mode === 'view' && (
-        <>
-          <div className="laq-description">
-            <p>{description}</p>
-          </div>
-          <div className="upload-btn">
-            <img src="/upload.svg" alt="Upload"/>
-            <span>Upload PDF</span>
-          </div>
-        </>
-      )}
+            {mode === 'view' && (
+                <>
+                    <div className="laq-description">
+                        <p>{description}</p>
+                    </div>
+                    <div className="upload-btn">
+                        <img src="/upload.svg" alt="Upload" />
+                        <span>Upload PDF</span>
+                    </div>
+                </>
+            )}
 
-
-      {mode === 'edit' && (
-        <textarea
-          value={description}
-          onChange={(e) => onChangeDescription?.(e.target.value)}
-          placeholder="Write a description here..."
-          className="laq-description-textarea"
-        />
-      )}
+            {mode === 'edit' && (
+                <textarea
+                    value={description}
+                    onChange={(e) => onChangeDescription?.(e.target.value)}
+                    placeholder="Write a description here..."
+                    className="laq-description-textarea"
+                />
+            )}
 
       {mode === 'edit' && (
         <>

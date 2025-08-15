@@ -10,7 +10,7 @@ import { useState } from 'react';
 import Button from '../Button';
 
 interface TextProps {
-  content: string;
+    content: string;
 }
 
 const Text: React.FC<TextProps> = ({ content }) => {

@@ -5,8 +5,8 @@ import MultipleChoiceQ, { Mode, Option } from '../index';
 import { QuestionType } from '../../AssignmentBuilder';
 
 const meta: Meta<typeof MultipleChoiceQ> = {
-  title: 'Component/MultipleChoiceQ',
-  component: MultipleChoiceQ,
+    title: 'Component/MultipleChoiceQ',
+    component: MultipleChoiceQ,
 };
 export default meta;
 
@@ -28,33 +28,27 @@ export const Primary: Story = {
         setQType(newType);
     }
 
-    const handleAddOption = () => {
-      setOptions([...options, { id: Date.now().toString(), text: '' }]);
-    };
+        const handleAddOption = () => {
+            setOptions([...options, { id: Date.now().toString(), text: '' }]);
+        };
 
-    const handleRemoveOption = (id: string) => {
-      setOptions(options.filter((opt) => opt.id !== id));
-    };
+        const handleRemoveOption = (id: string) => {
+            setOptions(options.filter((opt) => opt.id !== id));
+        };
 
-    const handleChangeOptionText = (id: string, value: string) => {
-      setOptions(
-        options.map((opt) =>
-          opt.id === id ? { ...opt, text: value } : opt
-        )
-      );
-    };
+        const handleChangeOptionText = (id: string, value: string) => {
+            setOptions(options.map((opt) => (opt.id === id ? { ...opt, text: value } : opt)));
+        };
 
-    const handleToggleCorrect = (id: string) => {
-      setOptions(
-        options.map((opt) =>
-          opt.id === id ? { ...opt, isCorrect: !opt.isCorrect } : opt
-        )
-      );
-    };
+        const handleToggleCorrect = (id: string) => {
+            setOptions(
+                options.map((opt) => (opt.id === id ? { ...opt, isCorrect: !opt.isCorrect } : opt)),
+            );
+        };
 
-    const handleToggleRequired = (required: boolean) => {
-        setIsRequired(required);
-    };
+        const handleToggleRequired = (required: boolean) => {
+            setIsRequired(required);
+        };
 
     return (
       <MultipleChoiceQ
@@ -93,33 +87,27 @@ export const Secondary: Story = {
         setQType(newType);
     }
 
-    const handleAddOption = () => {
-      setOptions([...options, { id: Date.now().toString(), text: '' }]);
-    };
+        const handleAddOption = () => {
+            setOptions([...options, { id: Date.now().toString(), text: '' }]);
+        };
 
-    const handleRemoveOption = (id: string) => {
-      setOptions(options.filter((opt) => opt.id !== id));
-    };
+        const handleRemoveOption = (id: string) => {
+            setOptions(options.filter((opt) => opt.id !== id));
+        };
 
-    const handleChangeOptionText = (id: string, value: string) => {
-      setOptions(
-        options.map((opt) =>
-          opt.id === id ? { ...opt, text: value } : opt
-        )
-      );
-    };
+        const handleChangeOptionText = (id: string, value: string) => {
+            setOptions(options.map((opt) => (opt.id === id ? { ...opt, text: value } : opt)));
+        };
 
-    const handleToggleCorrect = (id: string) => {
-      setOptions(
-        options.map((opt) =>
-          opt.id === id ? { ...opt, isCorrect: !opt.isCorrect } : opt
-        )
-      );
-    };
+        const handleToggleCorrect = (id: string) => {
+            setOptions(
+                options.map((opt) => (opt.id === id ? { ...opt, isCorrect: !opt.isCorrect } : opt)),
+            );
+        };
 
-    const handleToggleRequired = (required: boolean) => {
-        setIsRequired(required);
-    };
+        const handleToggleRequired = (required: boolean) => {
+            setIsRequired(required);
+        };
 
     return (
       <MultipleChoiceQ

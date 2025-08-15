@@ -4,8 +4,8 @@ import AssignmentBuilder from '../index';
 import { Question } from '../index';
 
 const meta: Meta<typeof AssignmentBuilder> = {
-  title: 'Component/AssignmentBuilder',
-  component: AssignmentBuilder,
+    title: 'Component/AssignmentBuilder',
+    component: AssignmentBuilder,
 };
 
 export default meta;
@@ -50,17 +50,21 @@ const primaryQuizQuestions: Question[] = [
 ];
 
 export const Primary: Story = {
-  render: () => <AssignmentBuilder 
-  quizQuestions={primaryQuizQuestions}
-  title="Practice Quiz"
-  description='Test your science knowledge!'
-  />,
+    render: () => (
+        <AssignmentBuilder
+            quizQuestions={primaryQuizQuestions}
+            title="Practice Quiz"
+            description="Test your science knowledge!"
+        />
+    ),
 };
 
 export const Secondary: Story = {
-  render: () => <AssignmentBuilder 
-  quizQuestions={[]}
-  title="Empty Quiz"
-  description='Write a description here...'
-  />,
+    render: () => (
+        <AssignmentBuilder
+            quizQuestions={[]}
+            title="Empty Quiz"
+            description="Write a description here..."
+        />
+    ),
 };
