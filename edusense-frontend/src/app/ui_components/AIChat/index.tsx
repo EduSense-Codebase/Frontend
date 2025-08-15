@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import remarkGfm from 'remark-gfm';
 import Button from '../Button';
 import { API_PREFIX, WS_API_PREFIX, WS_AI_AGENT_ENDPOINT, AUTH_ENDPOINT } from '../../global';
 import "./ChatWidget.scss";
@@ -106,11 +107,12 @@ const AIMessageRender = (props: { message: IMessages; index: number }) => {
     return (
         <div className="ai-message-container">
             <img src="/chat-icon.svg" alt="chatbot icon" className='chat-message-icon'/>
-            <div
-                key={props.index}
-                className="ai-message"
-            >
-                <ReactMarkdown>{props.message.content}</ReactMarkdown>
+            <div key={props.index} className="ai-message">
+                <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                >
+                    {props.message.content}
+                </ReactMarkdown>
             </div>
         </div>
     );
