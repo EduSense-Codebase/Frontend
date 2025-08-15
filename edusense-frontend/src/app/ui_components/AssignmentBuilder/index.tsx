@@ -154,7 +154,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
             return (
               <div 
                 key={q.id} 
-                className="question" 
+                className={`question ${q.mode}-mode`}
                 onClick={(e) => { if ((e.target as HTMLElement).closest("button")) return; handleChangeQuestionMode(q.id, "edit");
               }}>
                 {(q.mode == "edit") && (
@@ -187,7 +187,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
             return (
               <div 
                 key={q.id} 
-                className="question" 
+                className={`question ${q.mode}-mode`}
                 onClick={(e) => { if ((e.target as HTMLElement).closest("button")) return; handleChangeQuestionMode(q.id, "edit");
               }}>
                 {(q.mode == "edit") && (
@@ -244,7 +244,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
             return (
               <div 
                 key={q.id} 
-                className="question" 
+                className={`question ${q.mode}-mode`}
                 onClick={(e) => { if ((e.target as HTMLElement).closest("button")) return; handleChangeQuestionMode(q.id, "edit");
               }}>
                 {(q.mode == "edit") && (

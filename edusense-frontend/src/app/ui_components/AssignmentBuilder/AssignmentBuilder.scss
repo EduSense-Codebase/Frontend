@@ -25,6 +25,9 @@
     text-align: center;
     position: relative;
     width: 100%;
+    &:hover {
+      border: 2px dashed variables.$blue;
+    }
   }
 
   .quiz-description, .quiz-description-input {
@@ -36,6 +39,9 @@
     font-size: 1rem;
     line-height: 1.5;
     width: 80%;
+    &:hover {
+      border: 2px dashed variables.$blue;
+    }
   }
 
   .add-question-btn {
@@ -74,6 +80,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+      &.view-mode { 
+        cursor: text;
+      }
     }
 
 

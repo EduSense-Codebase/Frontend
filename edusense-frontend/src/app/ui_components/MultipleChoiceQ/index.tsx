@@ -64,7 +64,7 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
         {options.map((opt) => (
           <li key={opt.id} className="mcq__option">
             {mode === 'view' && (
-              <label>
+              <label className="view-options">
                 <input
                   type="radio"
                   name="mcq"

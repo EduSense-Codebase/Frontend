@@ -49,7 +49,6 @@
 
         &:hover {
           background-color: variables.$white;
-          cursor: pointer;
         }
 
       label {
@@ -93,6 +92,12 @@
       &.selected {
         background-color: variables.$light-blue;
       }
+    }
+  }
+
+  &.mcq--view {
+    &:hover {
+      border: 2px dashed variables.$blue;
     }
   }
 
@@ -222,4 +227,8 @@
   margin: 1rem 0;
   justify-self: end;
   align-items: baseline;
+}
+
+.view-options {
+  cursor: text !important;
 }

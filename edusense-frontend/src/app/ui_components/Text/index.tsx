@@ -4,7 +4,8 @@ import remarkGfm from 'remark-gfm';
 import './Text.scss';
 import { MDXEditor, toolbarPlugin, markdownShortcutPlugin, codeBlockPlugin, linkPlugin, 
   listsPlugin, headingsPlugin, quotePlugin, tablePlugin, imagePlugin, CreateLink,
-  UndoRedo, BoldItalicUnderlineToggles, ListsToggle, BlockTypeSelect, InsertTable} from '@mdxeditor/editor';
+  UndoRedo, BoldItalicUnderlineToggles, ListsToggle, BlockTypeSelect, InsertTable,
+  linkDialogPlugin} from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css'
 import { useState } from 'react';
 import Button from '../Button';
@@ -57,6 +58,7 @@ const Text: React.FC<TextProps> = ({ content }) => {
                 markdownShortcutPlugin(),
                 codeBlockPlugin(),
                 linkPlugin(),
+                linkDialogPlugin(),
                 listsPlugin(),
                 headingsPlugin(),
                 quotePlugin(),
