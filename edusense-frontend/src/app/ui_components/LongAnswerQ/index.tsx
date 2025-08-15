@@ -2,6 +2,8 @@ import React from 'react';
 import './LongAnswerQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
+import { QuestionType } from '../AssignmentBuilder';
+import Dropdown from '../Dropdown';
 
 export type Mode = 'view' | 'edit' | 'answerKey';
 
@@ -14,6 +16,8 @@ interface LongAnswerQProps {
   onToggleRequired?: (required: boolean) => void;
   isRequired: boolean;
   onSave: () => void;
+  onChangeQType: (newType: QuestionType) => void;
+  qType: QuestionType;
 }
 
 const LongAnswerQ: React.FC<LongAnswerQProps> = ({ 
@@ -24,7 +28,9 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
   onChangeQuestion,
   onToggleRequired,
   isRequired,
-  onSave
+  onSave,
+  onChangeQType,
+  qType
 }) => {
   return (
     <div className={`mcq mcq--${mode}`}>
@@ -65,6 +71,15 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
       )}
 
       {mode === 'edit' && (
+        <>
+        <div className="dropdown">
+          <label>Change Question Type:</label>
+          <Dropdown 
+            value={qType} 
+            options={["Multiple Choice", "Short Answer", "Long Answer" ]} 
+            onChange={(val) => onChangeQType?.(val as QuestionType)}
+          />
+        </div>
         <div className="mcq__footer">
 					<div className="mcq__required-toggle">
             <ToggleSwitch
@@ -76,6 +91,7 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
 					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
 					<p>Points: ___</p>
         </div>
+        </>
       )}
     </div>
   );

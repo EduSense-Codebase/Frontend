@@ -2,6 +2,8 @@ import React from 'react';
 import './MultipleChoiceQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
+import { QuestionType } from '../AssignmentBuilder';
+import Dropdown from '../Dropdown';
 
 export type Mode = 'view' | 'edit';
 
@@ -24,6 +26,8 @@ interface MultipleChoiceQProps {
 	isRequired?: boolean;
   onCancel: () => void;
   onSave: () => void;
+  onChangeQType: (newType: QuestionType) => void;
+  qType: QuestionType;
 }
 
 const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
@@ -38,6 +42,8 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
 	onToggleRequired,
 	isRequired = false,
   onSave,
+  onChangeQType,
+  qType
 }) => {
   return (
     <div className={`mcq mcq--${mode}`}>
@@ -98,6 +104,15 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
       </ul>
 
       {mode === 'edit' && (
+        <>
+        <div className="dropdown">
+          <label>Change Question Type:</label>
+          <Dropdown 
+            value={qType} 
+            options={["Multiple Choice", "Short Answer", "Long Answer" ]} 
+            onChange={(val) => onChangeQType?.(val as QuestionType)}
+          />
+        </div>
         <div className="mcq__footer">
 					<div className="mcq__required-toggle">
             <ToggleSwitch
@@ -109,6 +124,7 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
 					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
 					<p>Points: ___</p>
         </div>
+        </>
       )}
     </div>
   );

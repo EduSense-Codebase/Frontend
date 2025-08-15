@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import type { StoryObj, Meta } from '@storybook/nextjs-vite';
 import LongAnswerQ, { Mode } from '../index';
+import { QuestionType } from '../../AssignmentBuilder';
 
 const meta: Meta<typeof LongAnswerQ> = {
   title: 'Component/LongAnswerQ',
@@ -18,6 +19,11 @@ export const Primary: Story = {
     const [question, setQuestion] = useState('What is the meaning of life?');
     const [description, setDescription] = useState('Description/Instructions');
     const [isRequired, setIsRequired] = useState(false);
+    const [qType, setQType] = useState<QuestionType>("Short Answer")
+    
+    const handleChangeQType = (newType: QuestionType) => {
+        setQType(newType);
+    }
 
     const handleToggleRequired = (required: boolean) => {
         setIsRequired(required);
@@ -33,6 +39,8 @@ export const Primary: Story = {
         isRequired={isRequired}
         onToggleRequired={handleToggleRequired}
         onSave={() => setMode('view')}
+        qType={qType}
+        onChangeQType={handleChangeQType}
       />
     );
   },
@@ -44,6 +52,11 @@ export const Secondary: Story = {
     const [question, setQuestion] = useState('What is the meaning of life?');
     const [description, setDescription] = useState('Description/Instructions');
     const [isRequired, setIsRequired] = useState(false);
+    const [qType, setQType] = useState<QuestionType>("Short Answer")
+    
+    const handleChangeQType = (newType: QuestionType) => {
+        setQType(newType);
+    }
 
     const handleToggleRequired = (required: boolean) => {
         setIsRequired(required);
@@ -59,6 +72,8 @@ export const Secondary: Story = {
         isRequired={isRequired}
         onToggleRequired={handleToggleRequired}
         onSave={() => setMode('view')}
+        qType={qType}
+        onChangeQType={handleChangeQType}
       />
     );
   },

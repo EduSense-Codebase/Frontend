@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import MultipleChoiceQ, { Mode, Option } from '../index';
+import { QuestionType } from '../../AssignmentBuilder';
 
 const meta: Meta<typeof MultipleChoiceQ> = {
   title: 'Component/MultipleChoiceQ',
@@ -20,8 +21,12 @@ export const Primary: Story = {
       { id: '2', text: 'Berlin', isCorrect: true },
       { id: '3', text: 'Munich' },
     ]);
-    const [selectedOptionId, setSelectedOptionId] = useState<string>('2');
     const [isRequired, setIsRequired] = useState(false);
+    const [qType, setQType] = useState<QuestionType>("Short Answer")
+    
+    const handleChangeQType = (newType: QuestionType) => {
+        setQType(newType);
+    }
 
     const handleAddOption = () => {
       setOptions([...options, { id: Date.now().toString(), text: '' }]);
@@ -65,6 +70,8 @@ export const Primary: Story = {
         onToggleRequired={handleToggleRequired}
         onCancel={() => setMode('view')}
         onSave={() => setMode('view')}
+        qType={qType}
+        onChangeQType={handleChangeQType}
       />
     );
   },
@@ -79,8 +86,12 @@ export const Secondary: Story = {
       { id: '2', text: 'Berlin', isCorrect: true },
       { id: '3', text: 'Munich' },
     ]);
-    const [selectedOptionId, setSelectedOptionId] = useState<string>('2');
     const [isRequired, setIsRequired] = useState(false);
+    const [qType, setQType] = useState<QuestionType>("Short Answer")
+    
+    const handleChangeQType = (newType: QuestionType) => {
+        setQType(newType);
+    }
 
     const handleAddOption = () => {
       setOptions([...options, { id: Date.now().toString(), text: '' }]);
@@ -124,6 +135,8 @@ export const Secondary: Story = {
         onToggleRequired={handleToggleRequired}
         onCancel={() => setMode('view')}
         onSave={() => setMode('view')}
+        qType={qType}
+        onChangeQType={handleChangeQType}
       />
     );
   },

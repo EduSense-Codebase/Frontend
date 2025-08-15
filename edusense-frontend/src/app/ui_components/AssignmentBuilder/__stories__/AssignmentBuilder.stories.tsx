@@ -15,7 +15,7 @@ type Story = StoryObj<typeof AssignmentBuilder>;
 const primaryQuizQuestions: Question[] = [
   {
     id: 'q1',
-    type: 'multiple',
+    type: 'Multiple Choice',
     question: 'Which planet is known as the Red Planet?',
     description: 'Select the correct answer from the options below.',
     isRequired: true,
@@ -29,7 +29,7 @@ const primaryQuizQuestions: Question[] = [
   },
   {
     id: 'q2',
-    type: 'short',
+    type: 'Short Answer',
     question: 'What is the chemical symbol for water?',
     isRequired: true,
     mode: 'view',
@@ -41,7 +41,7 @@ const primaryQuizQuestions: Question[] = [
   },
   {
     id: 'q3',
-    type: 'long',
+    type: 'Long Answer',
     question: 'Explain the process of photosynthesis.',
     description: 'Your explanation should include the role of chlorophyll and sunlight.',
     isRequired: false,
