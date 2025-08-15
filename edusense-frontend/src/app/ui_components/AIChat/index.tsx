@@ -62,8 +62,8 @@ function AIAgentLoader({
 
     return (
         <div className={`flex items-start gap-3 ${className}`}>
-            <img className="chat-message-icon" src="chat-icon.svg" alt="chat icon"/>
-
+            <img src="/chat-icon.svg" alt="chatbot icon" className='chat-message-icon'/>
+            
             {/* text area + animated dots */}
             <div>
                 <div className="flex-col items-center mt-4 gap-3">
@@ -105,7 +105,7 @@ const UserMessageRender = (props: { message: IMessages; index: number }) => {
 const AIMessageRender = (props: { message: IMessages; index: number }) => {
     return (
         <div className="ai-message-container">
-            <img className="chat-message-icon" src="chat-icon.svg" alt="chat icon"/>
+            <img src="/chat-icon.svg" alt="chatbot icon" className='chat-message-icon'/>
             <div
                 key={props.index}
                 className="ai-message"
@@ -339,14 +339,13 @@ const ChatWidget : React.FC<IChatWidgetProps> = ({
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    <div className="relative h-6 w-6 scale-180">
+                    <div className="relative h-6 w-6 scale-180 top-[-4px]">
                         <Image
-                            src="/chat_icon.svg"
+                            src="/chat-icon-light.svg"
                             alt="Chat Icon"
                             fill
                             className="object-contain"
-                        />
-                    </div>
+                        />                    </div>
                 </motion.button>
             )}
 

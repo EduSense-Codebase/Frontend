@@ -141,6 +141,7 @@
     flex-direction: column;
     border: 1px solid vars.$light-grey; 
     height: 15vh;
+    min-height: 90px;
 
     .select-mode {
       display: flex;
