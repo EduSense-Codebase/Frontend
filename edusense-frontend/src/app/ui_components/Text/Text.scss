@@ -1,5 +1,14 @@
 @use '../../style/_variables.scss' as variables;
 
+.edit-btns {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  gap: 1rem;
+  z-index: 10;
+}
+
 .text {
   font-family: variables.$font-jua;
   color: variables.$dark-blue;
@@ -120,7 +129,6 @@
 
   th, td {
     padding: 0.75rem 1rem;
-    text-align: left;
     border-bottom: 1px solid variables.$light-grey;
     border-left: 1px solid variables.$light-grey;
     border-right: 1px solid variables.$light-grey;
@@ -165,4 +173,31 @@
     font-size: 0.95em;
   }
 
+}
+
+
+#text-editor > ul, ol {
+  color: variables.$dark-blue;
+}
+
+#text-editor > table > * {
+  color: variables.$dark-blue;
+}
+
+#text-editor > * {
+  font-family: variables.$font-jua;
+  color: variables.$dark-blue;
+
+  th, td {
+    color: variables.$dark-blue;
+    padding: 0;
+  }
+
+  ul, ol {
+    color: variables.$dark-blue;
+  }
+
+  a, strong, em, b, i {
+    color: variables.$dark-blue;
+  }
 }
