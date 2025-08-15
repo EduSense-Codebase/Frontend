@@ -8,31 +8,37 @@ import { httpGet, httpPost } from '../../utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
-import { IAIAgentData, IAIAgentsResponse, IAIJwtTokenRespose, IAISession, IFetchAllAISessions } from '../../typedef';
+import {
+    IAIAgentData,
+    IAIAgentsResponse,
+    IAIJwtTokenRespose,
+    IAISession,
+    IFetchAllAISessions,
+} from '../../typedef';
 import { createAIConnection } from './websocket';
 
 interface IMessages {
-    sender: 'user' | 'ai',
-    content?: string
+    sender: 'user' | 'ai';
+    content?: string;
 }
 
 interface IAIStreamProgress {
-    step: number,
-    verbose_name: string
+    step: number;
+    verbose_name: string;
 }
 
 interface IAIStream {
-    type: "progress" | "final_content",
-    progress_data?: IAIStreamProgress
-    final_content?: string
+    type: 'progress' | 'final_content';
+    progress_data?: IAIStreamProgress;
+    final_content?: string;
 }
 
 interface AIAgentLoaderProps {
-  agentName?: string;
-  status?: string;
-  size?: "sm" | "md" | "lg";
-  className?: string;
-};
+    agentName?: string;
+    status?: string;
+    size?: 'sm' | 'md' | 'lg';
+    className?: string;
+}
 
 // A lightweight Gemini-style loader component for AI responses.
 // - Uses Tailwind for styling (no external animation libs required)
@@ -42,58 +48,71 @@ interface AIAgentLoaderProps {
 // <AIAgentLoader agentName="Gemini" status="Thinking about the best answer..." />
 
 function AIAgentLoader({
-  agentName = "EduSense AI",
-  status = "Thinking...",
-  size = "sm",
-  className = "",
+    agentName = 'EduSense AI',
+    status = 'Thinking...',
+    size = 'sm',
+    className = '',
 }: AIAgentLoaderProps) {
-  const dims = {
-    sm: { avatar: 2, dots: 0, text: "text-sm" },
-    md: { avatar: 10, dots: 4, text: "text-base" },
-    lg: { avatar: 14, dots: 5, text: "text-lg" },
-  }[size];
+    const dims = {
+        sm: { avatar: 2, dots: 0, text: 'text-sm' },
+        md: { avatar: 10, dots: 4, text: 'text-base' },
+        lg: { avatar: 14, dots: 5, text: 'text-lg' },
+    }[size];
 
     return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      {/* avatar + pulse ring */}
-      <div className="relative flex-shrink-0">
-        <div
-          className={`rounded-full bg-gradient-to-br from-blue-500 via-blue-400 to-blue-300 shadow-md`} 
-          style={{ width: `${dims.avatar}rem`, height: `${dims.avatar}rem` }}
-          aria-hidden
-        />
-        <span
-          className="absolute inset-0 rounded-full pointer-events-none"
-          style={{ boxShadow: "0 0 0 6px rgba(59, 130, 246, 0.06)" }}
-        />
-      </div>
+        <div className={`flex items-center gap-3 ${className}`}>
+            {/* avatar + pulse ring */}
+            <div className="relative flex-shrink-0">
+                <div
+                    className={`rounded-full bg-gradient-to-br from-blue-500 via-blue-400 to-blue-300 shadow-md`}
+                    style={{ width: `${dims.avatar}rem`, height: `${dims.avatar}rem` }}
+                    aria-hidden
+                />
+                <span
+                    className="pointer-events-none absolute inset-0 rounded-full"
+                    style={{ boxShadow: '0 0 0 6px rgba(59, 130, 246, 0.06)' }}
+                />
+            </div>
 
-      {/* text area + animated dots */}
-      <div>
-        <div className="flex items-center gap-3">
-          <div>
-            <div className={`${dims.text} font-medium leading-snug text-gray-900`}>{agentName}</div>
-            <div className="sr-only" aria-live="polite">{status}</div>
-          </div>
+            {/* text area + animated dots */}
+            <div>
+                <div className="flex items-center gap-3">
+                    <div>
+                        <div className={`${dims.text} leading-snug font-medium text-gray-900`}>
+                            {agentName}
+                        </div>
+                        <div className="sr-only" aria-live="polite">
+                            {status}
+                        </div>
+                    </div>
 
-          {/* animated dots box */}
-          <div
-            className="flex items-center gap-1 px-3 py-1 bg-gray-50 rounded-2xl"
-            role="status"
-            aria-hidden={false}
-          >
-            <span className="loader-dot" style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }} />
-            <span className="loader-dot" style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }} />
-            <span className="loader-dot" style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }} />
-          </div>
-        </div>
+                    {/* animated dots box */}
+                    <div
+                        className="flex items-center gap-1 rounded-2xl bg-gray-50 px-3 py-1"
+                        role="status"
+                        aria-hidden={false}
+                    >
+                        <span
+                            className="loader-dot"
+                            style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }}
+                        />
+                        <span
+                            className="loader-dot"
+                            style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }}
+                        />
+                        <span
+                            className="loader-dot"
+                            style={{ width: `${dims.dots / 2}rem`, height: `${dims.dots / 2}rem` }}
+                        />
+                    </div>
+                </div>
 
-        {/* status text */}
-        <div className={`mt-1 ${dims.text} text-gray-500`}>{status}</div>
-      </div>
+                {/* status text */}
+                <div className={`mt-1 ${dims.text} text-gray-500`}>{status}</div>
+            </div>
 
-      {/* local styles for the smooth bouncing dots */}
-      <style>{`
+            {/* local styles for the smooth bouncing dots */}
+            <style>{`
         .loader-dot {
           display: inline-block;
           background: linear-gradient(90deg, rgba(59,130,246,1) 0%, rgba(96,165,250,1) 50%, rgba(147,197,253,1) 100%);
@@ -111,38 +130,40 @@ function AIAgentLoader({
           100% { transform: translateY(0) scale(1); opacity: 0.95; }
         }
       `}</style>
-    </div>
-  );
-}
-
-
-const UserMessageRender = (props: { message: IMessages, index: number }) => {
-    return (
-        <div key={props.index}
-            className={`max-w-xs rounded-lg px-4 py-2 ml-auto self-end bg-blue-500 text-white`}>
-                {props.message.content}
         </div>
-    )
+    );
 }
 
-const AIMessageRender = (props: { message: IMessages, index: number }) => {
+const UserMessageRender = (props: { message: IMessages; index: number }) => {
     return (
-        <div key={props.index}
-             className={`max-w-xs rounded-lg px-4 py-2 mr-auto self-start bg-gray-200 text-gray-800`}>
-                <ReactMarkdown>{props.message.content}</ReactMarkdown>
-
+        <div
+            key={props.index}
+            className={`ml-auto max-w-xs self-end rounded-lg bg-blue-500 px-4 py-2 text-white`}
+        >
+            {props.message.content}
         </div>
-    )
-}
+    );
+};
 
-const IndividualMessageRender = (props: { message: IMessages, index: number }) => {
+const AIMessageRender = (props: { message: IMessages; index: number }) => {
+    return (
+        <div
+            key={props.index}
+            className={`mr-auto max-w-xs self-start rounded-lg bg-gray-200 px-4 py-2 text-gray-800`}
+        >
+            <ReactMarkdown>{props.message.content}</ReactMarkdown>
+        </div>
+    );
+};
+
+const IndividualMessageRender = (props: { message: IMessages; index: number }) => {
     if (props.message.sender === 'user') {
-        return <UserMessageRender {...props} />
+        return <UserMessageRender {...props} />;
     }
-    return <AIMessageRender {...props} />
-}
+    return <AIMessageRender {...props} />;
+};
 
-const MessagesRender = (props: { messages: IMessages[], thinking: IAIThinking | undefined }) => {
+const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | undefined }) => {
     return (
         <div className="flex-1 space-y-2 overflow-y-auto p-4">
             {props.messages.map((message, index) => (
@@ -150,20 +171,18 @@ const MessagesRender = (props: { messages: IMessages[], thinking: IAIThinking | 
                     <IndividualMessageRender message={message} index={index} />
                 </>
             ))}
-            {props.thinking ? (
-                <AIAgentLoader status={props.thinking.verbose_name} />
-            ): null}
+            {props.thinking ? <AIAgentLoader status={props.thinking.verbose_name} /> : null}
         </div>
-    )
-}
+    );
+};
 
 interface IAIThinking {
-    step: number,
-    verbose_name: string
+    step: number;
+    verbose_name: string;
 }
 
 export interface IChatWidgetProps {
-    courseId?: number
+    courseId?: number;
 }
 
 const ChatWidget = (props: IChatWidgetProps) => {
@@ -181,7 +200,9 @@ const ChatWidget = (props: IChatWidgetProps) => {
     const [agents, setAgents] = useState<IAIAgentData[]>([]);
     const [currAgent, setCurrAgent] = useState<string | undefined>(undefined);
 
-    const [websocketConn, setWebsocketConn] = useState<ReturnType<typeof createAIConnection> | null>(null);
+    const [websocketConn, setWebsocketConn] = useState<ReturnType<
+        typeof createAIConnection
+    > | null>(null);
 
     const toggleChat = () => setIsOpen(!isOpen);
 
@@ -212,7 +233,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
 
     useEffect(() => {
         let queryParams = {
-            section: 'get_ai_agents'
+            section: 'get_ai_agents',
         };
 
         const getAgents = httpGet<IAIAgentsResponse>(`${API_PREFIX}${AUTH_ENDPOINT}`, queryParams);
@@ -220,64 +241,71 @@ const ChatWidget = (props: IChatWidgetProps) => {
         getAgents.then((response) => {
             setAgents(response.data.data);
             setCurrAgent(response.data.data[0].internal_name);
-        })
-    }, [])
+        });
+    }, []);
 
     useEffect(() => {
         if (props.courseId && currAgent) {
             let sessionQueryParams = {
                 section: 'ai_sessions',
-                course_id: props.courseId
+                course_id: props.courseId,
             };
-            const getAllSessions = httpGet<IFetchAllAISessions>(`${API_PREFIX}${AUTH_ENDPOINT}`, sessionQueryParams);
-            getAllSessions.then((response) => {
-                setSessions(response.data.data);
-                setWebsocketConn(() => {
-                    const conn = createAIConnection(props.courseId, currSession, currAgent)
+            const getAllSessions = httpGet<IFetchAllAISessions>(
+                `${API_PREFIX}${AUTH_ENDPOINT}`,
+                sessionQueryParams,
+            );
+            getAllSessions
+                .then((response) => {
+                    setSessions(response.data.data);
+                    setWebsocketConn(() => {
+                        const conn = createAIConnection(props.courseId, currSession, currAgent);
 
-                    conn.on("open", () => {
-                        console.log("Socket Connected!");
-                        conn.sendRequestToGetMessage();
-                    })
+                        conn.on('open', () => {
+                            console.log('Socket Connected!');
+                            conn.sendRequestToGetMessage();
+                        });
 
-                    conn.on("message", onAIMessage);
+                        conn.on('message', onAIMessage);
 
-                    conn.connect();
+                        conn.connect();
 
-                    return conn;
+                        return conn;
+                    });
                 })
-            }).catch((e) => {
-                console.log("Fetching AI Sessions Failed");
-                throw e;
-            })
+                .catch((e) => {
+                    console.log('Fetching AI Sessions Failed');
+                    throw e;
+                });
         }
 
         return () => {
             websocketConn?.disconnect();
-        }
-    }, [props.courseId, currSession, currAgent])
+        };
+    }, [props.courseId, currSession, currAgent]);
 
     const sendMessage = () => {
         if (websocketConn != null) {
             websocketConn.sendMessage(input);
 
             setMessages((currMessages) => {
-                return [...currMessages, {
-                    sender: 'user',
-                    content: input
-                }]
-            })
+                return [
+                    ...currMessages,
+                    {
+                        sender: 'user',
+                        content: input,
+                    },
+                ];
+            });
 
-            setInput("");
+            setInput('');
         }
-
-    }
+    };
 
     const onAIMessage = (msg: string) => {
         const jsonMsg = JSON.parse(msg);
-        if (jsonMsg.type == "conversation_history") {
+        if (jsonMsg.type == 'conversation_history') {
             setMessages(jsonMsg.messages);
-        } else if (jsonMsg.type == "progress") {
+        } else if (jsonMsg.type == 'progress') {
             const progressData: IAIThinking = jsonMsg.progress_data;
             setThinking((prevThinking) => {
                 if (!prevThinking) {
@@ -287,17 +315,17 @@ const ChatWidget = (props: IChatWidgetProps) => {
                     return progressData;
                 }
                 return prevThinking;
-            })
-        } else if (jsonMsg.type == "final_content") {
-            const aiMessage: string = jsonMsg.final_content
+            });
+        } else if (jsonMsg.type == 'final_content') {
+            const aiMessage: string = jsonMsg.final_content;
             setThinking(undefined);
             setMessages((prevMessages) => {
                 return [...prevMessages, { sender: 'ai', content: aiMessage }];
-            })
-        } else if (jsonMsg.type == "stream_final_content") {
+            });
+        } else if (jsonMsg.type == 'stream_final_content') {
             setThinking(undefined);
             console.log(jsonMsg.chunk);
-            const aiMessage: string = jsonMsg.chunk
+            const aiMessage: string = jsonMsg.chunk;
             setThinking(undefined);
             setMessages((prevMessages) => {
                 const lastMessage = prevMessages[prevMessages.length - 1];
@@ -305,16 +333,19 @@ const ChatWidget = (props: IChatWidgetProps) => {
                     return [...prevMessages, { sender: 'ai', content: aiMessage }];
                 } else if (lastMessage.sender == 'ai') {
                     const restOfArray = prevMessages.slice(0, -1);
-                    return [...restOfArray, { sender: 'ai', content: lastMessage.content + " " + aiMessage}];
+                    return [
+                        ...restOfArray,
+                        { sender: 'ai', content: lastMessage.content + ' ' + aiMessage },
+                    ];
                 }
                 return [];
-            })
+            });
         }
-    }
+    };
 
     const selectAIAgent = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setCurrAgent(e.target.value);
-    }
+    };
 
     return (
         <>
@@ -362,14 +393,15 @@ const ChatWidget = (props: IChatWidgetProps) => {
                         <div className="flex items-center justify-between border-b p-4">
                             <h2 className="text-lg font-semibold text-gray-700">
                                 EduSense AI Chat
-                                
-
                             </h2>
                             {agents.length > 1 ? (
                                 <select onChange={selectAIAgent}>
-                                    {agents.map(currAgent => <option value={currAgent.internal_name}>{currAgent.external_name}</option>)}
+                                    {agents.map((currAgent) => (
+                                        <option value={currAgent.internal_name}>
+                                            {currAgent.external_name}
+                                        </option>
+                                    ))}
                                 </select>
-
                             ) : null}
                             <button onClick={toggleChat}>
                                 <svg
@@ -385,11 +417,16 @@ const ChatWidget = (props: IChatWidgetProps) => {
                         </div>
 
                         {/* Chat Messages */}
-                        <MessagesRender messages={messages} thinking={thinking} /> 
+                        <MessagesRender messages={messages} thinking={thinking} />
 
                         {/* Input */}
-                        <select value={currSession} onChange={(e) => setCurrSession(parseInt(e.target.value))}>
-                            {sessions.map(element => <option value={element.id}>{element.name}</option>)}
+                        <select
+                            value={currSession}
+                            onChange={(e) => setCurrSession(parseInt(e.target.value))}
+                        >
+                            {sessions.map((element) => (
+                                <option value={element.id}>{element.name}</option>
+                            ))}
                         </select>
                         <div className="flex items-center space-x-2 border-t p-4 text-gray-400">
                             <input

@@ -2,7 +2,7 @@ import React from 'react';
 import './CourseCodeCard.scss';
 
 export interface ICourseCodeProps {
-    code: string|undefined;
+    code: string | undefined;
 }
 
 const CourseCode: React.FC<ICourseCodeProps> = ({ code }) => {

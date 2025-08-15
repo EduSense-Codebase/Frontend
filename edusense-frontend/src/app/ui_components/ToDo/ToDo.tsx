@@ -1,28 +1,34 @@
-import React from "react";
+import React from 'react';
 import './ToDo.scss';
-import { IAssignments, ICourse } from "@/app/typedef";
-
-const mockAssignments = [
-  "Math Homework: Algebra",
-  "History Essay Draft",
-  "Science Project Proposal",
-];
+import { IAssignments } from '@/app/typedef';
 
 export default function ToDo({
-    course,
-    assignments
-  }: {
-    course: ICourse | undefined;
+    editMode,
+    setShowToDo,
+    assignments,
+}: {
+    editMode: boolean;
+    setShowToDo: React.Dispatch<React.SetStateAction<boolean>>;
     assignments: IAssignments[];
-  }) {
-  return (
-    <div className="todo-container">
-      <h3 className="todo-title">Upcoming Assignments</h3>
-      {assignments.map((assignment, idx) => (
-        <div key={idx} className="todo-item">
-          {assignment.name}
+}) {
+    return (
+        <div className="todo-container">
+            {editMode && (
+                <button
+                    className="todo-close"
+                    onClick={() => setShowToDo(false)}
+                    aria-label="Close To-Do"
+                >
+                    ×
+                </button>
+            )}
+
+            <h3 className="todo-title">Upcoming Assignments</h3>
+            {assignments.map((assignment, idx) => (
+                <div key={idx} className="todo-item">
+                    {assignment.name}
+                </div>
+            ))}
         </div>
-      ))}
-    </div>
-  );
+    );
 }

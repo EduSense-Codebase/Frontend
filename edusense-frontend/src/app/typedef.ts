@@ -1,6 +1,6 @@
 /* ********************* Generic Types START ********************* */
 
-import { AssignmentBuilderProps } from "./ui_components/AssignmentBuilder";
+import { AssignmentBuilderProps } from './ui_components/AssignmentBuilder';
 
 export interface IPermissions {
     join_course: boolean;
@@ -23,17 +23,16 @@ export interface IOfferedCourse {
     course_name: string;
 }
 
-
-export interface IAnnouncements{
-    title: string,
-    content: string,
+export interface IAnnouncements {
+    title: string;
+    content: string;
 }
 
 export interface IAssignments {
     id: number;
     name: string;
     created: string; // ISO date string from backend
-    due: string;     // ISO date string from backend
+    due: string; // ISO date string from backend
     description: string;
     points: number;
     module: number;
@@ -51,18 +50,18 @@ export interface IModules {
 
 export interface IAISession {
     id: number;
-    name: string
+    name: string;
 }
 
-export interface IStudentData{
+export interface IStudentData {
     email: string;
     name: string;
     overall_grade: number;
 }
 
 export interface IAIAgentData {
-    internal_name: string,
-    external_name: string
+    internal_name: string;
+    external_name: string;
 }
 
 /* ********************* Generic Types END *********************** */
@@ -81,43 +80,38 @@ export interface INewEnrollment {
     data: ICourse;
 }
 
-
-
-export interface IAnnouncementsResponse{
+export interface IAnnouncementsResponse {
     data: IAnnouncements[];
 }
 
-export interface IModulesResponse{
+export interface IModulesResponse {
     data: IModules[];
 }
 
-export interface IModuleResponse{
+export interface IModuleResponse {
     data: IModules;
 }
 
-export interface IAssignmentsResponse{
-
+export interface IAssignmentsResponse {
     data: IAssignments[];
 }
-
-
 
 export interface IPermissionsResponse {
     data: IPermissions;
 }
 
 export interface IFetchAllAISessions {
-    data: IAISession[]
+    data: IAISession[];
 }
 
 export interface IAIJwtTokenRespose {
-    jwt: string 
+    jwt: string;
 }
 
 export interface IBuilderResponse {
-    type: "text" | "quiz_or_assignment",
-    text_content?: string,
-    quiz_or_assignment_content?: AssignmentBuilderProps
+    type: 'text' | 'quiz_or_assignment';
+    text_content?: string;
+    quiz_or_assignment_content?: AssignmentBuilderProps;
 }
 
 export interface IStudentDataResponse {
@@ -131,7 +125,5 @@ export interface IAIAgentsResponse {
 /* ********************* Axios Response Types END *********************** */
 
 /* ********************* Mock Data START *********************** */
-
-
 
 /* ********************* Mock Data END *********************** */

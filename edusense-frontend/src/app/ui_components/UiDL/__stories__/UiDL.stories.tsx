@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { fn } from 'storybook/test';
 
-import { UIDLRenderer } from '../index'
+import { UIDLRenderer } from '../index';
 
 const meta = {
     title: 'Component/Button',
@@ -46,6 +46,6 @@ DATASOURCE:
 
 export const Test: Story = {
     args: {
-        uidlText: exampleUIDL
-    }
+        uidlText: exampleUIDL,
+    },
 };

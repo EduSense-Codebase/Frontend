@@ -9,11 +9,11 @@ interface GradesProps {
 }
 
 function getLetterGrade(score: number): string {
-    if (score >= 90) return "A";
-    if (score >= 80) return "B";
-    if (score >= 70) return "C";
-    if (score >= 60) return "D";
-    return "F";
+    if (score >= 90) return 'A';
+    if (score >= 80) return 'B';
+    if (score >= 70) return 'C';
+    if (score >= 60) return 'D';
+    return 'F';
 }
 
 export default function GradesTab({ grades, create_course }: GradesProps) {
@@ -29,17 +29,15 @@ export default function GradesTab({ grades, create_course }: GradesProps) {
                         <span className="gradeLabel">📋 {item.name}</span>
 
                         <span className="gradeValue">
-                            {create_course ? (
-                                // 📌 Teacher view → show overall student grades
-                                item.overall_grade >= 0
+                            {create_course
+                                ? // 📌 Teacher view → show overall student grades
+                                  item.overall_grade >= 0
                                     ? `${item.overall_grade}% (${getLetterGrade(item.overall_grade)})`
-                                    : "N/A"
-                            ) : (
-                                // 📌 Student view → show per-assignment grades
-                                item.graded >= 0
-                                    ? `${item.graded}/${item.points}`
-                                    : "N/A"
-                            )}
+                                    : 'N/A'
+                                : // 📌 Student view → show per-assignment grades
+                                  item.graded >= 0
+                                  ? `${item.graded}/${item.points}`
+                                  : 'N/A'}
                         </span>
                     </li>
                 ))}

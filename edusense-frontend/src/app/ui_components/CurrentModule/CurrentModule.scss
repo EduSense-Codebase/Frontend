@@ -7,13 +7,14 @@
   box-shadow: variables.$dropshadow;
   width: 100%;
   max-width: 300px;
+  position: relative; // ✅ Needed for absolute-positioned close button
 }
 
 .current-module-box {
   background-color: variables.$white;
   border-radius: 8px;
   padding: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); // not in variables, so kept as-is
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .current-module-title {
@@ -38,4 +39,21 @@
   font-weight: 500;
   font-family: variables.$font-itim;
   color: variables.$dark-blue;
+}
+
+.todo-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: variables.$dark-blue;
+  line-height: 1;
+  padding: 0;
+
+  &:hover {
+    color: variables.$darker-blue;
+  }
 }

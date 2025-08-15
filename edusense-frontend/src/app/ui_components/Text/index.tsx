@@ -4,19 +4,15 @@ import remarkGfm from 'remark-gfm';
 import './Text.scss';
 
 interface TextProps {
-  content: string;
+    content: string;
 }
 
 const Text: React.FC<TextProps> = ({ content }) => {
-  return (
-    <div className="text">
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-      >
-        {content}
-      </ReactMarkdown>
-    </div>
-  );
+    return (
+        <div className="text">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+        </div>
+    );
 };
 
 export default Text;

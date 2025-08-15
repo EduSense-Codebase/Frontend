@@ -24,7 +24,7 @@ interface Props {
     showToDoWidget: boolean;
     showModuleWidget: boolean;
     students: IStudentData[];
-    
+
     setModules: React.Dispatch<React.SetStateAction<IModules[]>>;
 }
 
@@ -40,10 +40,10 @@ const CourseHomePageUIController: React.FC<Props> = ({
     showToDoWidget,
     showModuleWidget,
     students,
-    setModules
+    setModules,
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
-   
+
     const gradesData = createCourse ? students : assignments;
 
     const onTabChange = (name: string) => {
@@ -76,7 +76,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                 {activeTab === 'Overview' && (
                     <div className="overview-content">
                         <div className="left-overview">
-                            { createCourse && (<CourseCodeCard code={courseDetails?.join_code} />)}
+                            {createCourse && <CourseCodeCard code={courseDetails?.join_code} />}
                             {/* <Button
                                 displayName="Create"
                                 onClick={() => console.log("clicked")}
@@ -111,7 +111,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             <AnnouncementForm
                                 onSubmit={onPostAnnouncement}
                                 announcements={announcements}
-                                create_course= {createCourse}
+                                create_course={createCourse}
                             />
                         </div>
                     </div>
@@ -119,13 +119,18 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Classwork' && (
                     <div>
-                        <ClassworkTab assignments={assignments} modules={allModules.filter(item => item.title !== "no_module")} setNewModules={setModules} join_course={joinCourse} />
+                        <ClassworkTab
+                            assignments={assignments}
+                            modules={allModules.filter((item) => item.title !== 'no_module')}
+                            setNewModules={setModules}
+                            join_course={joinCourse}
+                        />
                     </div>
                 )}
 
                 {activeTab === 'Grades' && (
                     <div>
-                        <GradesTab grades={gradesData} create_course={createCourse}/>
+                        <GradesTab grades={gradesData} create_course={createCourse} />
                     </div>
                 )}
             </div>

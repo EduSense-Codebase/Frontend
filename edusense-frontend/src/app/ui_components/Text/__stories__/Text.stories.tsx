@@ -4,7 +4,7 @@ import Text from '../index';
 const meta = {
     title: 'Component/Text',
     component: Text,
-}
+};
 
 export default meta;
 
@@ -81,7 +81,7 @@ Link to [Edusense Github](https://github.com/EduSense-Codebase).
 `;
 
 export const Primary: Story = {
-  args: {
-    content: syllabus
-  },
+    args: {
+        content: syllabus,
+    },
 };

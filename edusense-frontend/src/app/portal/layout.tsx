@@ -9,8 +9,7 @@ import Logout from '../ui_components/Logout';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { httpGet } from '../utils';
-import { API_PREFIX, AUTH_ENDPOINT,COURSE_ENDPOINT } from '../global';
-
+import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from '../global';
 
 import dynamic from 'next/dynamic';
 import Sidebar from '../ui_components/Sidebar/Sidebar';
@@ -24,7 +23,7 @@ interface ICustomProps {
     institution: string;
     setInstitution: React.Dispatch<React.SetStateAction<string>>;
     courses: ICourse[];
-    setCourses:React.Dispatch<React.SetStateAction<ICourse[]>>;
+    setCourses: React.Dispatch<React.SetStateAction<ICourse[]>>;
     setCurrCourseId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
@@ -88,7 +87,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
         const requestResponse = httpGet<IPermissionsResponse>(API_URL, queryParams);
         requestResponse.then((res) => {
-            console.log("persmissions", res.data);
+            console.log('persmissions', res.data);
             setPermissions(res.data.data);
             const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
             console.log(permissions?.create_course);
@@ -96,9 +95,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             const queryParams = {
                 section: res.data.data.join_course
                     ? 'all_enrolled_courses'
-                    : res.data.data.create_course 
-                    ? 'all_created_courses'
-                    : 'null',
+                    : res.data.data.create_course
+                      ? 'all_created_courses'
+                      : 'null',
             };
 
             const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
@@ -127,14 +126,13 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     return (
         <div
             id="main"
-            className={`${interClassName} flex min-h-screen flex-col bg-white text-gray-800 pl-[4rem]`}
+            className={`${interClassName} flex min-h-screen flex-col bg-white pl-[4rem] text-gray-800`}
         >
             {/* <JoyrideWrapper steps={mainSteps} seenKey="1" /> */}
             {/* Sidebar (fixed) */}
-            <Sidebar courses={courses}/>
+            <Sidebar courses={courses} />
 
             <header id="dashboard-nav" className="sticky top-0 z-50 bg-white shadow-sm">
-
                 <div className="z-40 mx-auto flex items-center justify-between bg-white px-4 py-4">
                     <Link
                         href="/portal/courses"
@@ -145,7 +143,6 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     </Link>
 
                     <nav className="flex items-center space-x-6 text-sm font-medium text-gray-700">
-
                         <Link href="/portal/profile" className="ml-3 hover:text-gray-900">
                             Profile
                         </Link>
@@ -157,12 +154,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     </nav>
                 </div>
             </header>
-            
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
-                {currCourseId ? (
-                    <ChatWidget courseId={currCourseId} />
-                ): null}
+                {currCourseId ? <ChatWidget courseId={currCourseId} /> : null}
 
                 <CustomPropContext.Provider
                     value={{
