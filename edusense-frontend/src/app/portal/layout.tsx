@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Step } from 'react-joyride';
-import ChatWidget from '../ui_components/AIChat/ChatWidget';
 import { IAllEnrolledCourseResponse, IPermissions, IPermissionsResponse } from '../typedef';
 import Logout from '../ui_components/Logout';
 import { usePathname } from 'next/navigation';
@@ -14,6 +13,7 @@ import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from '../global';
 import dynamic from 'next/dynamic';
 import Sidebar from '../ui_components/Sidebar/Sidebar';
 import { ICourse } from '../typedef';
+import AIChatController from '../Pages/AIChat/AIChatController';
 
 const JoyrideWrapper = dynamic(() => import('@/app/ui_components/JoyrideWrapper'), { ssr: false });
 
@@ -156,7 +156,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             </header>
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
-                {currCourseId ? <ChatWidget courseId={currCourseId} /> : null}
+                {currCourseId ? (
+                    <AIChatController courseId={currCourseId} />
+                ): null}
 
                 <CustomPropContext.Provider
                     value={{

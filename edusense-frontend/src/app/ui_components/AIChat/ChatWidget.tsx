@@ -1,37 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Button from '../Button';
-import { API_PREFIX, WS_API_PREFIX, WS_AI_AGENT_ENDPOINT, AUTH_ENDPOINT } from '../../global';
-
-import { httpGet, httpPost } from '../../utils';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
-import {
-    IAIAgentData,
-    IAIAgentsResponse,
-    IAIJwtTokenRespose,
-    IAISession,
-    IFetchAllAISessions,
-} from '../../typedef';
-import { createAIConnection } from './websocket';
-
-interface IMessages {
-    sender: 'user' | 'ai';
-    content?: string;
-}
-
-interface IAIStreamProgress {
-    step: number;
-    verbose_name: string;
-}
-
-interface IAIStream {
-    type: 'progress' | 'final_content';
-    progress_data?: IAIStreamProgress;
-    final_content?: string;
-}
+import { IAIAgentData, IAISession } from '../../typedef';
+import { IAIThinking, IMessages } from '@/app/Pages/AIChat/AIChatController';
 
 interface AIAgentLoaderProps {
     agentName?: string;
@@ -39,13 +14,6 @@ interface AIAgentLoaderProps {
     size?: 'sm' | 'md' | 'lg';
     className?: string;
 }
-
-// A lightweight Gemini-style loader component for AI responses.
-// - Uses Tailwind for styling (no external animation libs required)
-// - Accessible: includes aria-live region so screen readers announce status updates
-// - Props: agentName (optional), status (text to show), size (controls dimensions)
-// Example usage:
-// <AIAgentLoader agentName="Gemini" status="Thinking about the best answer..." />
 
 function AIAgentLoader({
     agentName = 'EduSense AI',
@@ -176,13 +144,15 @@ const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | 
     );
 };
 
-interface IAIThinking {
-    step: number;
-    verbose_name: string;
-}
-
 export interface IChatWidgetProps {
-    courseId?: number;
+    messages: IMessages[],
+    thinking: IAIThinking | undefined,
+    sessions: IAISession[],
+    currSession: number,
+    agents: IAIAgentData[],
+    selectAIAgent: (agentId: string) => void,
+    setCurrSession: (currSession: number) => void,
+    sendMessage: (message: string) => void
 }
 
 const ChatWidget = (props: IChatWidgetProps) => {
@@ -190,19 +160,7 @@ const ChatWidget = (props: IChatWidgetProps) => {
     const [panelWidth, setPanelWidth] = useState(400);
     const [isResizing, setIsResizing] = useState(false);
 
-    const [messages, setMessages] = useState<IMessages[]>([]);
-    const [thinking, setThinking] = useState<IAIThinking | undefined>(undefined);
     const [input, setInput] = useState('');
-
-    const [sessions, setSessions] = useState<IAISession[]>([]);
-    const [currSession, setCurrSession] = useState<number>(0);
-
-    const [agents, setAgents] = useState<IAIAgentData[]>([]);
-    const [currAgent, setCurrAgent] = useState<string | undefined>(undefined);
-
-    const [websocketConn, setWebsocketConn] = useState<ReturnType<
-        typeof createAIConnection
-    > | null>(null);
 
     const toggleChat = () => setIsOpen(!isOpen);
 
@@ -231,121 +189,18 @@ const ChatWidget = (props: IChatWidgetProps) => {
         document.body.style.userSelect = isResizing ? 'none' : 'auto';
     }, [isResizing]);
 
-    useEffect(() => {
-        let queryParams = {
-            section: 'get_ai_agents',
-        };
+    const selectAIAgent = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        props.selectAIAgent(e.target.value);
+    }
 
-        const getAgents = httpGet<IAIAgentsResponse>(`${API_PREFIX}${AUTH_ENDPOINT}`, queryParams);
-
-        getAgents.then((response) => {
-            setAgents(response.data.data);
-            setCurrAgent(response.data.data[0].internal_name);
-        });
-    }, []);
-
-    useEffect(() => {
-        if (props.courseId && currAgent) {
-            let sessionQueryParams = {
-                section: 'ai_sessions',
-                course_id: props.courseId,
-            };
-            const getAllSessions = httpGet<IFetchAllAISessions>(
-                `${API_PREFIX}${AUTH_ENDPOINT}`,
-                sessionQueryParams,
-            );
-            getAllSessions
-                .then((response) => {
-                    setSessions(response.data.data);
-                    setWebsocketConn(() => {
-                        const conn = createAIConnection(props.courseId, currSession, currAgent);
-
-                        conn.on('open', () => {
-                            console.log('Socket Connected!');
-                            conn.sendRequestToGetMessage();
-                        });
-
-                        conn.on('message', onAIMessage);
-
-                        conn.connect();
-
-                        return conn;
-                    });
-                })
-                .catch((e) => {
-                    console.log('Fetching AI Sessions Failed');
-                    throw e;
-                });
-        }
-
-        return () => {
-            websocketConn?.disconnect();
-        };
-    }, [props.courseId, currSession, currAgent]);
+    const setCurrSession = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        props.setCurrSession(parseInt(e.target.value));
+    }
 
     const sendMessage = () => {
-        if (websocketConn != null) {
-            websocketConn.sendMessage(input);
-
-            setMessages((currMessages) => {
-                return [
-                    ...currMessages,
-                    {
-                        sender: 'user',
-                        content: input,
-                    },
-                ];
-            });
-
-            setInput('');
-        }
-    };
-
-    const onAIMessage = (msg: string) => {
-        const jsonMsg = JSON.parse(msg);
-        if (jsonMsg.type == 'conversation_history') {
-            setMessages(jsonMsg.messages);
-        } else if (jsonMsg.type == 'progress') {
-            const progressData: IAIThinking = jsonMsg.progress_data;
-            setThinking((prevThinking) => {
-                if (!prevThinking) {
-                    return progressData;
-                }
-                if (prevThinking.step < progressData.step) {
-                    return progressData;
-                }
-                return prevThinking;
-            });
-        } else if (jsonMsg.type == 'final_content') {
-            const aiMessage: string = jsonMsg.final_content;
-            setThinking(undefined);
-            setMessages((prevMessages) => {
-                return [...prevMessages, { sender: 'ai', content: aiMessage }];
-            });
-        } else if (jsonMsg.type == 'stream_final_content') {
-            setThinking(undefined);
-            console.log(jsonMsg.chunk);
-            const aiMessage: string = jsonMsg.chunk;
-            setThinking(undefined);
-            setMessages((prevMessages) => {
-                const lastMessage = prevMessages[prevMessages.length - 1];
-                if (lastMessage.sender == 'user') {
-                    return [...prevMessages, { sender: 'ai', content: aiMessage }];
-                } else if (lastMessage.sender == 'ai') {
-                    const restOfArray = prevMessages.slice(0, -1);
-                    return [
-                        ...restOfArray,
-                        { sender: 'ai', content: lastMessage.content + ' ' + aiMessage },
-                    ];
-                }
-                return [];
-            });
-        }
-    };
-
-    const selectAIAgent = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setCurrAgent(e.target.value);
-    };
+        props.sendMessage(input);
+        setInput("");
+    }
 
     return (
         <>
@@ -394,9 +249,9 @@ const ChatWidget = (props: IChatWidgetProps) => {
                             <h2 className="text-lg font-semibold text-gray-700">
                                 EduSense AI Chat
                             </h2>
-                            {agents.length > 1 ? (
+                            {props.agents.length > 1 ? (
                                 <select onChange={selectAIAgent}>
-                                    {agents.map((currAgent) => (
+                                    {props.agents.map((currAgent) => (
                                         <option value={currAgent.internal_name}>
                                             {currAgent.external_name}
                                         </option>
@@ -417,14 +272,14 @@ const ChatWidget = (props: IChatWidgetProps) => {
                         </div>
 
                         {/* Chat Messages */}
-                        <MessagesRender messages={messages} thinking={thinking} />
+                        <MessagesRender messages={props.messages} thinking={props.thinking} />
 
                         {/* Input */}
                         <select
-                            value={currSession}
-                            onChange={(e) => setCurrSession(parseInt(e.target.value))}
+                            value={props.currSession}
+                            onChange={setCurrSession}
                         >
-                            {sessions.map((element) => (
+                            {props.sessions.map((element) => (
                                 <option value={element.id}>{element.name}</option>
                             ))}
                         </select>
