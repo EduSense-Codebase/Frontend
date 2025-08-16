@@ -2,54 +2,51 @@ import React from 'react';
 import './LongAnswerQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
+import { QuestionType } from '../AssignmentBuilder';
+import Dropdown from '../Dropdown';
 
 export type Mode = 'view' | 'edit' | 'answerKey';
 
 interface LongAnswerQProps {
-    mode: Mode;
-    question: string;
-    description?: string;
-    onChangeDescription: (value: string) => void;
-    onChangeQuestion: (value: string) => void;
-    onToggleRequired?: (required: boolean) => void;
-    isRequired: boolean;
-    onSave: () => void;
+  mode: Mode;
+  question: string;
+  description?: string;
+  onChangeDescription: (value: string) => void;
+  onChangeQuestion: (value: string) => void;
+  onToggleRequired?: (required: boolean) => void;
+  isRequired: boolean;
+  onSave: () => void;
+  onChangeQType: (newType: QuestionType) => void;
+  qType: QuestionType;
 }
 
-const LongAnswerQ: React.FC<LongAnswerQProps> = ({
-    mode,
-    question,
-    description,
-    onChangeDescription,
-    onChangeQuestion,
-    onToggleRequired,
-    isRequired,
-    onSave,
+const LongAnswerQ: React.FC<LongAnswerQProps> = ({ 
+  mode,
+  question,
+  description,
+  onChangeDescription,
+  onChangeQuestion,
+  onToggleRequired,
+  isRequired,
+  onSave,
+  onChangeQType,
+  qType
 }) => {
-    return (
-        <div className={`mcq mcq--${mode}`}>
-            <div className="mcq__header">
-                {mode === 'view' ? (
-                    <h3>{question}</h3>
-                ) : (
-                    <input
-                        type="textarea"
-                        placeholder="Question*"
-                        value={question}
-                        onChange={(e) => onChangeQuestion?.(e.target.value)}
-                        className="laq-question-input"
-                    />
-                )}
-
-                {mode !== 'view' && (
-                    <Button
-                        onClick={onSave}
-                        variant="primary"
-                        displayName="Save"
-                        icon="/save.svg"
-                    ></Button>
-                )}
-            </div>
+  return (
+    <div className={`mcq mcq--${mode}`}>
+      <div className="mcq__header">
+        {mode === 'view' ? (
+          <h3>{question}</h3>
+        ) : (
+          <input
+            type="textarea"
+            placeholder="Question*"
+            value={question}
+            onChange={(e) => onChangeQuestion?.(e.target.value)}
+            className='laq-question-input'
+          />
+        )}
+      </div>
 
             {mode === 'view' && (
                 <>
@@ -72,20 +69,31 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
                 />
             )}
 
-            {mode === 'edit' && (
-                <div className="mcq__footer">
-                    <div className="mcq__required-toggle">
-                        <ToggleSwitch
-                            checked={isRequired}
-                            onChange={(checked) => onToggleRequired?.(checked)}
-                        />
-                        <p>Required</p>
-                    </div>
-                    <p>Points: ___</p>
-                </div>
-            )}
+      {mode === 'edit' && (
+        <>
+        <div className="dropdown">
+          <label>Change Question Type:</label>
+          <Dropdown 
+            value={qType} 
+            options={["Multiple Choice", "Short Answer", "Long Answer" ]} 
+            onChange={(val) => onChangeQType?.(val as QuestionType)}
+          />
         </div>
-    );
+        <div className="mcq__footer">
+					<div className="mcq__required-toggle">
+            <ToggleSwitch
+              checked={isRequired}
+              onChange={(checked) => onToggleRequired?.(checked)}
+            />
+            <p>Required</p>
+          </div>
+					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
+					<p>Points: ___</p>
+        </div>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default LongAnswerQ;
