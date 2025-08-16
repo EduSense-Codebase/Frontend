@@ -132,6 +132,15 @@
           background-color: vars.$lighter-blue;
         }
       }
+
+      .session-selected {
+        background-color: vars.$blue;
+        color: vars.$white;
+        &:hover {
+          background-color: vars.$blue;
+          color: vars.$white;
+        }
+      }
     }
   }
 

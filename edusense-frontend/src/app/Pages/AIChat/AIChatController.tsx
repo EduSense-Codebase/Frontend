@@ -5,7 +5,7 @@ import { IAIAgentData, IAIAgentsResponse, IAISession, IFetchAllAISessions } from
 import { httpGet } from "@/app/utils";
 import { useEffect, useState } from "react";
 import { createAIConnection } from "./websockets";
-import ChatWidget from "@/app/ui_components/AIChat/ChatWidget";
+import ChatWidget from "@/app/ui_components/AIChat";
 
 export interface IMessages {
     sender: 'user' | 'ai',
@@ -147,16 +147,22 @@ export default function AIChatController(props: AIChatControllerProps) {
         setCurrAgent(agentId);
     }
 
+    const createNewSession = () => {
+
+    }
+
     return (
         <ChatWidget 
             messages={messages}
             thinking={thinking}
             sessions={sessions}
             currSession={currSession}
+            currAgent={currAgent}
             agents={agents}
             selectAIAgent={selectAIAgent}
             setCurrSession={setCurrSession}
             sendMessage={sendMessage}
+            createNewSession={createNewSession}
         />
     )
 }
