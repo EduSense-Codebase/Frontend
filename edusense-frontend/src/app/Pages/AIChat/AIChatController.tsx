@@ -1,36 +1,36 @@
 'use client';
 
-import { API_PREFIX, AUTH_ENDPOINT } from "@/app/global";
-import { IAIAgentData, IAIAgentsResponse, IAISession, IFetchAllAISessions } from "@/app/typedef";
-import { httpGet } from "@/app/utils";
-import { useEffect, useState } from "react";
-import { createAIConnection } from "./websockets";
-import ChatWidget from "@/app/ui_components/AIChat";
+import { API_PREFIX, AUTH_ENDPOINT } from '@/app/global';
+import { IAIAgentData, IAIAgentsResponse, IAISession, IFetchAllAISessions } from '@/app/typedef';
+import { httpGet } from '@/app/utils';
+import { useEffect, useState } from 'react';
+import { createAIConnection } from './websockets';
+import ChatWidget from '@/app/ui_components/AIChat';
 
 export interface IMessages {
-    sender: 'user' | 'ai',
-    content?: string
+    sender: 'user' | 'ai';
+    content?: string;
 }
 
 export interface IAIStreamProgress {
-    step: number,
-    verbose_name: string
+    step: number;
+    verbose_name: string;
 }
 
 export interface IAIStream {
-    type: "progress" | "final_content",
-    progress_data?: IAIStreamProgress
-    final_content?: string
+    type: 'progress' | 'final_content';
+    progress_data?: IAIStreamProgress;
+    final_content?: string;
 }
 
 export interface IAIThinking {
-    step: number,
-    verbose_name: string
+    step: number;
+    verbose_name: string;
 }
 
 export interface AIChatControllerProps {
-    courseId?: number
-    builderId?: number
+    courseId?: number;
+    builderId?: number;
 }
 
 export default function AIChatController(props: AIChatControllerProps) {
@@ -43,11 +43,13 @@ export default function AIChatController(props: AIChatControllerProps) {
     const [agents, setAgents] = useState<IAIAgentData[]>([]);
     const [currAgent, setCurrAgent] = useState<string | undefined>(undefined);
 
-    const [websocketConn, setWebsocketConn] = useState<ReturnType<typeof createAIConnection> | null>(null);
+    const [websocketConn, setWebsocketConn] = useState<ReturnType<
+        typeof createAIConnection
+    > | null>(null);
 
     useEffect(() => {
         let queryParams = {
-            section: 'get_ai_agents'
+            section: 'get_ai_agents',
         };
 
         const getAgents = httpGet<IAIAgentsResponse>(`${API_PREFIX}${AUTH_ENDPOINT}`, queryParams);
@@ -55,61 +57,73 @@ export default function AIChatController(props: AIChatControllerProps) {
         getAgents.then((response) => {
             setAgents(response.data.data);
             setCurrAgent(response.data.data[0].internal_name);
-        })
-    }, [])
+        });
+    }, []);
 
     useEffect(() => {
         if (props.courseId && currAgent) {
             let sessionQueryParams = {
                 section: 'ai_sessions',
-                course_id: props.courseId
+                course_id: props.courseId,
             };
-            const getAllSessions = httpGet<IFetchAllAISessions>(`${API_PREFIX}${AUTH_ENDPOINT}`, sessionQueryParams);
-            getAllSessions.then((response) => {
-                setSessions(response.data.data);
-                setWebsocketConn(() => {
-                    const conn = createAIConnection(props.courseId, props.builderId, currSession, currAgent)
+            const getAllSessions = httpGet<IFetchAllAISessions>(
+                `${API_PREFIX}${AUTH_ENDPOINT}`,
+                sessionQueryParams,
+            );
+            getAllSessions
+                .then((response) => {
+                    setSessions(response.data.data);
+                    setWebsocketConn(() => {
+                        const conn = createAIConnection(
+                            props.courseId,
+                            props.builderId,
+                            currSession,
+                            currAgent,
+                        );
 
-                    conn.on("open", () => {
-                        console.log("Socket Connected!");
-                        conn.sendRequestToGetMessage();
-                    })
+                        conn.on('open', () => {
+                            console.log('Socket Connected!');
+                            conn.sendRequestToGetMessage();
+                        });
 
-                    conn.on("message", onAIMessage);
+                        conn.on('message', onAIMessage);
 
-                    conn.connect();
+                        conn.connect();
 
-                    return conn;
+                        return conn;
+                    });
                 })
-            }).catch((e) => {
-                console.log("Fetching AI Sessions Failed");
-                throw e;
-            })
+                .catch((e) => {
+                    console.log('Fetching AI Sessions Failed');
+                    throw e;
+                });
         }
 
         return () => {
             websocketConn?.disconnect();
-        }
-    }, [props.courseId, props.builderId, currSession, currAgent])
+        };
+    }, [props.courseId, props.builderId, currSession, currAgent]);
 
     const sendMessage = (input: string) => {
         if (websocketConn != null) {
             websocketConn.sendMessage(input);
             setMessages((currMessages) => {
-                return [...currMessages, {
-                    sender: 'user',
-                    content: input
-                }]
-            })
+                return [
+                    ...currMessages,
+                    {
+                        sender: 'user',
+                        content: input,
+                    },
+                ];
+            });
         }
-
-    }
+    };
 
     const onAIMessage = (msg: string) => {
         const jsonMsg = JSON.parse(msg);
-        if (jsonMsg.type == "conversation_history") {
+        if (jsonMsg.type == 'conversation_history') {
             setMessages(jsonMsg.messages);
-        } else if (jsonMsg.type == "progress") {
+        } else if (jsonMsg.type == 'progress') {
             const progressData: IAIThinking = jsonMsg.progress_data;
             setThinking((prevThinking) => {
                 if (!prevThinking) {
@@ -119,17 +133,17 @@ export default function AIChatController(props: AIChatControllerProps) {
                     return progressData;
                 }
                 return prevThinking;
-            })
-        } else if (jsonMsg.type == "final_content") {
-            const aiMessage: string = jsonMsg.final_content
+            });
+        } else if (jsonMsg.type == 'final_content') {
+            const aiMessage: string = jsonMsg.final_content;
             setThinking(undefined);
             setMessages((prevMessages) => {
                 return [...prevMessages, { sender: 'ai', content: aiMessage }];
-            })
-        } else if (jsonMsg.type == "stream_final_content") {
+            });
+        } else if (jsonMsg.type == 'stream_final_content') {
             setThinking(undefined);
             console.log(jsonMsg.chunk);
-            const aiMessage: string = jsonMsg.chunk
+            const aiMessage: string = jsonMsg.chunk;
             setThinking(undefined);
             setMessages((prevMessages) => {
                 const lastMessage = prevMessages[prevMessages.length - 1];
@@ -137,23 +151,24 @@ export default function AIChatController(props: AIChatControllerProps) {
                     return [...prevMessages, { sender: 'ai', content: aiMessage }];
                 } else if (lastMessage.sender == 'ai') {
                     const restOfArray = prevMessages.slice(0, -1);
-                    return [...restOfArray, { sender: 'ai', content: lastMessage.content + " " + aiMessage}];
+                    return [
+                        ...restOfArray,
+                        { sender: 'ai', content: lastMessage.content + ' ' + aiMessage },
+                    ];
                 }
                 return [];
-            })
+            });
         }
-    }
+    };
 
     const selectAIAgent = (agentId: string) => {
         setCurrAgent(agentId);
-    }
+    };
 
-    const createNewSession = () => {
-
-    }
+    const createNewSession = () => {};
 
     return (
-        <ChatWidget 
+        <ChatWidget
             messages={messages}
             thinking={thinking}
             sessions={sessions}
@@ -165,5 +180,5 @@ export default function AIChatController(props: AIChatControllerProps) {
             sendMessage={sendMessage}
             createNewSession={createNewSession}
         />
-    )
+    );
 }

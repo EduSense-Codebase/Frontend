@@ -1,6 +1,6 @@
 'use client';
 
-import './builder.scss'
+import './builder.scss';
 
 import { useParams, useRouter } from 'next/navigation';
 import Text from '../../../../ui_components/Text';
@@ -8,15 +8,18 @@ import { useEffect, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { IBuilderResponse, IModules, IModulesResponse } from '@/app/typedef';
-import AssignmentBuilder, { AssignmentBuilderProps, Question } from '@/app/ui_components/AssignmentBuilder';
+import AssignmentBuilder, {
+    AssignmentBuilderProps,
+    Question,
+} from '@/app/ui_components/AssignmentBuilder';
 import { useCustomProp } from '@/app/portal/layout';
 import Button from '@/app/ui_components/Button';
 
 export interface IQuizSubmission {
     type: 'multiple' | 'short' | 'long';
-    multiple_value?: number,
-    short_value?: string,
-    long_value?: string
+    multiple_value?: number;
+    short_value?: string;
+    long_value?: string;
 }
 
 export default function BuilderPage() {
@@ -32,21 +35,23 @@ export default function BuilderPage() {
     const [updatedTextContent, setUpdatedTextContent] = useState<string | undefined>(undefined);
 
     const [quizContent, setQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-    const [updatedQuizContent, setUpdatedQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-    
+    const [updatedQuizContent, setUpdatedQuizContent] = useState<
+        AssignmentBuilderProps | undefined
+    >(undefined);
+
     const [modules, setModules] = useState<IModules[]>([]);
 
     const [isAssignmentCreated, setIsAssignmentCreated] = useState(false);
     const [showAssignmentCreateModal, setShowAssignmentCreateModal] = useState(false);
 
-    const [name, setName] = useState("");
-    const [dueDate, setDueDate] = useState("");
+    const [name, setName] = useState('');
+    const [dueDate, setDueDate] = useState('');
     const [moduleId, setModuleId] = useState(-1);
-    const [assignmentDescription, setAssignmentDescription] = useState("");
+    const [assignmentDescription, setAssignmentDescription] = useState('');
     const [isDraft, setIsDraft] = useState(false);
 
     const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
-        
+
     const url = `${API_PREFIX}${COURSE_ENDPOINT}`;
 
     useEffect(() => {
@@ -57,7 +62,7 @@ export default function BuilderPage() {
         };
 
         const builderRequest = httpGet<IBuilderResponse>(url, queryParams);
-        
+
         builderRequest.then((response) => {
             if (response.data.type === 'text' && response.data.text_content != undefined) {
                 setTextContent(response.data.text_content);
@@ -72,16 +77,18 @@ export default function BuilderPage() {
                     if (response.data.quiz_or_assignment_content == undefined) {
                         return [];
                     }
-                    return response.data.quiz_or_assignment_content.quizQuestions.map(currQuestion => {
-                        if (currQuestion.type == 'multiple') {
-                            return { type: 'multiple', multiple_value: -1 }
-                        } else if (currQuestion.type == 'short') {
-                            return { type: 'short', short_value: "" }
-                        } else {
-                            return { type: 'long', long_value: ""}
-                        }
-                    })
-                })
+                    return response.data.quiz_or_assignment_content.quizQuestions.map(
+                        (currQuestion) => {
+                            if (currQuestion.type == 'multiple') {
+                                return { type: 'multiple', multiple_value: -1 };
+                            } else if (currQuestion.type == 'short') {
+                                return { type: 'short', short_value: '' };
+                            } else {
+                                return { type: 'long', long_value: '' };
+                            }
+                        },
+                    );
+                });
             }
             setIsAssignmentCreated(response.data.is_assignment_created);
         });
@@ -91,12 +98,15 @@ export default function BuilderPage() {
     }, [courseId, builderId]);
 
     useEffect(() => {
-        const moduleRequest = httpGet<IModulesResponse>(url, { section: 'get_modules', course_id: courseId });
+        const moduleRequest = httpGet<IModulesResponse>(url, {
+            section: 'get_modules',
+            course_id: courseId,
+        });
         moduleRequest.then((data) => {
             setModules(data.data.data);
             setModuleId(data.data.data[0].id);
-        })
-    }, [courseId])
+        });
+    }, [courseId]);
 
     const onQuizChange = (newQuestions: Question[]) => {
         setUpdatedQuizContent((prevUpdatedQuizContent) => {
@@ -105,10 +115,10 @@ export default function BuilderPage() {
             }
             return {
                 ...prevUpdatedQuizContent,
-                quizQuestions: newQuestions
+                quizQuestions: newQuestions,
             };
         });
-    }
+    };
 
     const onDescriptionChange = (newDescription: string) => {
         setUpdatedQuizContent((prevUpdatedQuizContent) => {
@@ -118,10 +128,10 @@ export default function BuilderPage() {
 
             return {
                 ...prevUpdatedQuizContent,
-                description: newDescription
+                description: newDescription,
             };
         });
-    }
+    };
 
     const onTitleChange = (newTitle: string) => {
         setUpdatedQuizContent((prevUpdatedQuizContent) => {
@@ -131,14 +141,14 @@ export default function BuilderPage() {
 
             return {
                 ...prevUpdatedQuizContent,
-                title: newTitle
+                title: newTitle,
             };
         });
-    }
+    };
 
     const onTextChange = (newContent: string) => {
         setUpdatedTextContent(newContent);
-    }
+    };
 
     const onUpdate = () => {
         const queryParams = {
@@ -148,8 +158,8 @@ export default function BuilderPage() {
         };
 
         const formData = {
-            new_content: JSON.stringify({})
-        }
+            new_content: JSON.stringify({}),
+        };
 
         if (textContent != undefined) {
             formData.new_content = JSON.stringify({ text: updatedTextContent });
@@ -159,44 +169,44 @@ export default function BuilderPage() {
             formData.new_content = JSON.stringify({ quiz_or_assignment: updatedQuizContent });
         }
 
-        const builderRequest = httpPost(
-            `${API_PREFIX}${COURSE_ENDPOINT}`,
-            formData,
-            queryParams,
-        );
+        const builderRequest = httpPost(`${API_PREFIX}${COURSE_ENDPOINT}`, formData, queryParams);
 
-        builderRequest.then(() => {
-            //TODO: Add some visual notification it has been saved
-            console.log("Updated successfully");
-        }).catch(() => {
-            //TODO: Add some visual notification it has failed
-            console.log("Update failed");
-        })
-    }
+        builderRequest
+            .then(() => {
+                //TODO: Add some visual notification it has been saved
+                console.log('Updated successfully');
+            })
+            .catch(() => {
+                //TODO: Add some visual notification it has failed
+                console.log('Update failed');
+            });
+    };
 
     const onAssignmentCreate = () => {
         const queryParams = {
             section: 'create_builder_assignment',
-            course_id: courseId
-        }
+            course_id: courseId,
+        };
         const formData = {
             builder_id: builderId,
             name: name,
             due_date: new Date(dueDate).toISOString(),
             module_id: moduleId,
             description: assignmentDescription,
-            is_draft: JSON.stringify(isDraft)
-        }
+            is_draft: JSON.stringify(isDraft),
+        };
 
-        const assignmentCreateRequest = httpPost(url, formData, queryParams)
+        const assignmentCreateRequest = httpPost(url, formData, queryParams);
 
-        assignmentCreateRequest.then(() => {
-            console.log("Successfully created assignment")
-            router.push(`/portal/course_roadmap/${courseId}`)
-        }).catch(() => {
-            console.log("Didn't create assignment")
-        })
-    }
+        assignmentCreateRequest
+            .then(() => {
+                console.log('Successfully created assignment');
+                router.push(`/portal/course_roadmap/${courseId}`);
+            })
+            .catch(() => {
+                console.log("Didn't create assignment");
+            });
+    };
 
     const onAnswerSelection = (questionIndex: number, value: string | number | File) => {
         console.log(`Question Index: ${questionIndex}`);
@@ -205,57 +215,68 @@ export default function BuilderPage() {
         setQuizSubmission((prevSubmission) => {
             const newSubmission = [...prevSubmission];
             if (newSubmission[questionIndex].type == 'multiple' && typeof value === 'number') {
-                newSubmission[questionIndex].multiple_value = value
+                newSubmission[questionIndex].multiple_value = value;
             } else if (newSubmission[questionIndex].type == 'short' && typeof value === 'string') {
-                newSubmission[questionIndex].short_value = value
+                newSubmission[questionIndex].short_value = value;
             } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
-                newSubmission[questionIndex].long_value = value
+                newSubmission[questionIndex].long_value = value;
             }
             return newSubmission;
-        })
-    }
+        });
+    };
 
     const onQuizSubmit = () => {
-        console.log("Quiz Submit");
+        console.log('Quiz Submit');
 
         const queryParams = {
             section: 'submit_builder_assignment',
-            course_id: courseId
-        }
+            course_id: courseId,
+        };
 
         const formData = {
             builder_id: builderId,
-            submission: JSON.stringify(quizSubmission)
-        }
+            submission: JSON.stringify(quizSubmission),
+        };
 
         const assignmentSubmit = httpPost(url, formData, queryParams);
-        
-        assignmentSubmit.then(() => {
-            console.log("Successfully submitted assignment")
-            router.push(`/portal/course_roadmap/${courseId}`)
-        }).catch(() => {
-            console.log("Something went wrong with the submission")
-        })
-    }
+
+        assignmentSubmit
+            .then(() => {
+                console.log('Successfully submitted assignment');
+                router.push(`/portal/course_roadmap/${courseId}`);
+            })
+            .catch(() => {
+                console.log('Something went wrong with the submission');
+            });
+    };
 
     const getBody = () => {
         if (textContent != undefined) {
-            return <Text content={textContent} onSave={onTextChange} allowEdit={permissions?.create_course || false} />;
+            return (
+                <Text
+                    content={textContent}
+                    onSave={onTextChange}
+                    allowEdit={permissions?.create_course || false}
+                />
+            );
         }
 
         if (quizContent != undefined) {
-            return <AssignmentBuilder {...quizContent}
-                allowEdit={permissions?.create_course || false}
-                onQuizChange={onQuizChange}
-                onDescriptionChange={onDescriptionChange}
-                onTitleChange={onTitleChange}
-                onAnswerSelection={onAnswerSelection}
-                onSubmit={onQuizSubmit}
-            />;
+            return (
+                <AssignmentBuilder
+                    {...quizContent}
+                    allowEdit={permissions?.create_course || false}
+                    onQuizChange={onQuizChange}
+                    onDescriptionChange={onDescriptionChange}
+                    onTitleChange={onTitleChange}
+                    onAnswerSelection={onAnswerSelection}
+                    onSubmit={onQuizSubmit}
+                />
+            );
         }
 
         return null;
-    }
+    };
 
     const renderAssignmentModal = () => (
         <div className="modalOverlay">
@@ -268,7 +289,7 @@ export default function BuilderPage() {
                     placeholder="Enter assignment name..."
                     className="modalInput"
                 />
-                <label htmlFor={"dueDate"}>Due Date</label>
+                <label htmlFor={'dueDate'}>Due Date</label>
                 <input
                     id="dueDate"
                     type="date"
@@ -277,10 +298,14 @@ export default function BuilderPage() {
                     className="modalInput"
                 />
                 <label>Module</label>
-                <select className="modalInput" value={moduleId} onChange={(e) => setModuleId(parseInt(e.target.value))}>
-                    {modules.map(currModule => 
+                <select
+                    className="modalInput"
+                    value={moduleId}
+                    onChange={(e) => setModuleId(parseInt(e.target.value))}
+                >
+                    {modules.map((currModule) => (
                         <option value={currModule.id}>{currModule.title}</option>
-                    )}
+                    ))}
                 </select>
                 <textarea
                     value={assignmentDescription}
@@ -300,7 +325,10 @@ export default function BuilderPage() {
                     <button className="modalBtn submit" onClick={onAssignmentCreate}>
                         Create
                     </button>
-                    <button className="modalBtn cancel" onClick={() => setShowAssignmentCreateModal(false)}>
+                    <button
+                        className="modalBtn cancel"
+                        onClick={() => setShowAssignmentCreateModal(false)}
+                    >
                         Cancel
                     </button>
                 </div>
@@ -308,19 +336,21 @@ export default function BuilderPage() {
         </div>
     );
 
-
-
     return (
         <div>
             {permissions?.create_course && (
                 <>
-                    <Button displayName={"Update"} onClick={onUpdate} />
-                    {!isAssignmentCreated && <Button displayName={"Create Assignment"} onClick={() => setShowAssignmentCreateModal(true)} />}
+                    <Button displayName={'Update'} onClick={onUpdate} />
+                    {!isAssignmentCreated && (
+                        <Button
+                            displayName={'Create Assignment'}
+                            onClick={() => setShowAssignmentCreateModal(true)}
+                        />
+                    )}
                     {showAssignmentCreateModal && renderAssignmentModal()}
                 </>
             )}
             {getBody()}
         </div>
-    )
-
+    );
 }

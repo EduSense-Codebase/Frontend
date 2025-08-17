@@ -10,7 +10,14 @@ interface DropdownProps {
     placeholder?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, options, values, value, onChange, placeholder }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+    label,
+    options,
+    values,
+    value,
+    onChange,
+    placeholder,
+}) => {
     return (
         <div className="dropdown-container">
             {label && <label className="dropdown-label">{label}</label>}

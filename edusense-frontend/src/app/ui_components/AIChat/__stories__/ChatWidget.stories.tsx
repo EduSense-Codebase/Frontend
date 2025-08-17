@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import ChatWidget from '../index';
-'use client';
+('use client');
 
 import { IMessages, IAIThinking } from '../index';
 import { IAISession } from '@/app/typedef';
@@ -91,7 +91,7 @@ Link to [Edusense Github](https://github.com/EduSense-Codebase).
 | left bar      | right bar     |
 | left baz      | right baz     |
 
-`
+`;
 
 const mockMessages2: IMessages[] = [
     { sender: 'ai', content: 'Hi! Edusense AI here, how can I help?' },
@@ -99,23 +99,22 @@ const mockMessages2: IMessages[] = [
     { sender: 'ai', content: syllabus },
 ];
 
-
 const mockThinking: IAIThinking = {
     step: 2,
     verbose_name: 'Thinking of a great response...',
 };
 
 const mockSessions: IAISession[] = [
-    {id: 0, name: 'Help with Fractions'},
-    {id: 1, name: 'The Great Gatsby Analyisis'},
-    {id: 2, name: 'Homework Help'}
-]
+    { id: 0, name: 'Help with Fractions' },
+    { id: 1, name: 'The Great Gatsby Analyisis' },
+    { id: 2, name: 'Homework Help' },
+];
 
 export const Primary: Story = {
     args: {
         messages: mockMessages,
         thinking: mockThinking,
-        sessions: mockSessions
+        sessions: mockSessions,
     },
 };
 

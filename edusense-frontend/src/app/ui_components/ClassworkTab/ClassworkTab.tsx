@@ -33,7 +33,7 @@ export default function ClassworkTab({
     const [fileDesc, setFileDesc] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [pdfToView, setPdfToView] = useState<string | null>(null);
-    const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false)
+    const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false);
 
     const { enrollmentId } = useParams();
 
@@ -222,40 +222,40 @@ export default function ClassworkTab({
 
             {/* Files Section */}
             {files.length > 0 && (
-            <div className="module filesSection">
-                <div
-                className="moduleHeader"
-                onClick={() => setIsFilesSectionOpen(!isFilesSectionOpen)}
-                >
-                <span>📄 Course Files</span>
-                <span>{isFilesSectionOpen ? '▲' : '▼'}</span>
-                </div>
+                <div className="module filesSection">
+                    <div
+                        className="moduleHeader"
+                        onClick={() => setIsFilesSectionOpen(!isFilesSectionOpen)}
+                    >
+                        <span>📄 Course Files</span>
+                        <span>{isFilesSectionOpen ? '▲' : '▼'}</span>
+                    </div>
 
-                {isFilesSectionOpen && (
-                <ul className="assignmentList">
-                    {files.map((file) => (
-                    <li key={file.id} className="assignmentItem">
-                        {file.filename.toLowerCase().endsWith('.pdf') ? (
-                        <button
-                            onClick={() => setPdfToView(file.url)}
-                            className="pdfBtn"
-                        >
-                            📄 {file.filename}
-                        </button>
-                        ) : (
-                        <a
-                            href={file.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            📄 {file.filename}
-                        </a>
-                        )}
-                    </li>
-                    ))}
-                </ul>
-                )}
-            </div>
+                    {isFilesSectionOpen && (
+                        <ul className="assignmentList">
+                            {files.map((file) => (
+                                <li key={file.id} className="assignmentItem">
+                                    {file.filename.toLowerCase().endsWith('.pdf') ? (
+                                        <button
+                                            onClick={() => setPdfToView(file.url)}
+                                            className="pdfBtn"
+                                        >
+                                            📄 {file.filename}
+                                        </button>
+                                    ) : (
+                                        <a
+                                            href={file.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            📄 {file.filename}
+                                        </a>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             )}
 
             {showModuleModal && renderModuleModal()}
@@ -271,7 +271,7 @@ export default function ClassworkTab({
                             src={pdfToView}
                             width="100%"
                             height="600px"
-                            style={{ border: "none" }}
+                            style={{ border: 'none' }}
                         />
                     </div>
                 </div>

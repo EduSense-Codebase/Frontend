@@ -3,18 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import remarkGfm from 'remark-gfm';
 import Button from '../Button';
 import { API_PREFIX, WS_API_PREFIX, WS_AI_AGENT_ENDPOINT, AUTH_ENDPOINT } from '../../global';
-import "./ChatWidget.scss";
+import './ChatWidget.scss';
 
 import { httpGet, httpPost } from '../../utils';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
-import {
-    IAIAgentData,
-    IAIAgentsResponse,
-    IAISession,
-} from '../../typedef';
+import { IAIAgentData, IAIAgentsResponse, IAISession } from '../../typedef';
 import { IMessages } from '@/app/Pages/AIChat/AIChatController';
 
 interface AIAgentLoaderProps {
@@ -45,11 +41,11 @@ function AIAgentLoader({
 
     return (
         <div className={`flex items-start gap-3 ${className}`}>
-            <img src="/chat-icon.svg" alt="chatbot icon" className='chat-message-icon'/>
-            
+            <img src="/chat-icon.svg" alt="chatbot icon" className="chat-message-icon" />
+
             {/* text area + animated dots */}
             <div>
-                <div className="flex-col items-center mt-4 gap-3">
+                <div className="mt-4 flex-col items-center gap-3">
                     <div>
                         <div className={`${dims.text} leading-snug font-medium text-[#4b76b3]`}>
                             {agentName}
@@ -60,13 +56,22 @@ function AIAgentLoader({
                     </div>
 
                     {/* status text */}
-                <div className={`mt-1 ${dims.text} text-[#6b92d0]`}>{status}</div>
+                    <div className={`mt-1 ${dims.text} text-[#6b92d0]`}>{status}</div>
 
                     {/* animated dots box */}
                     <div className="loader-container" role="status">
-                        <span className="loader-dot" style={{ width: '0.5rem', height: '0.5rem' }} />
-                        <span className="loader-dot" style={{ width: '0.5rem', height: '0.5rem' }} />
-                        <span className="loader-dot" style={{ width: '0.5rem', height: '0.5rem' }} />
+                        <span
+                            className="loader-dot"
+                            style={{ width: '0.5rem', height: '0.5rem' }}
+                        />
+                        <span
+                            className="loader-dot"
+                            style={{ width: '0.5rem', height: '0.5rem' }}
+                        />
+                        <span
+                            className="loader-dot"
+                            style={{ width: '0.5rem', height: '0.5rem' }}
+                        />
                     </div>
                 </div>
             </div>
@@ -76,10 +81,7 @@ function AIAgentLoader({
 
 const UserMessageRender = (props: { message: IMessages; index: number }) => {
     return (
-        <div
-            key={props.index}
-            className="user-message"
-        >
+        <div key={props.index} className="user-message">
             {props.message.content}
         </div>
     );
@@ -88,13 +90,9 @@ const UserMessageRender = (props: { message: IMessages; index: number }) => {
 const AIMessageRender = (props: { message: IMessages; index: number }) => {
     return (
         <div className="ai-message-container">
-            <img src="/chat-icon.svg" alt="chatbot icon" className='chat-message-icon'/>
+            <img src="/chat-icon.svg" alt="chatbot icon" className="chat-message-icon" />
             <div key={props.index} className="ai-message">
-                <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                >
-                    {props.message.content}
-                </ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{props.message.content}</ReactMarkdown>
             </div>
         </div>
     );
@@ -107,7 +105,7 @@ const IndividualMessageRender = (props: { message: IMessages; index: number }) =
     return <AIMessageRender {...props} />;
 };
 
-const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | undefined; }) => {
+const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | undefined }) => {
     return (
         <div className="message-render">
             {props.messages.map((message, index) => (
@@ -116,7 +114,7 @@ const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | 
                 </>
             ))}
             {props.thinking ? <AIAgentLoader status={props.thinking.verbose_name} /> : null}
-            <div style={{display: 'none'}} />
+            <div style={{ display: 'none' }} />
         </div>
     );
 };
@@ -127,19 +125,19 @@ export interface IAIThinking {
 }
 
 export interface IChatWidgetProps {
-    messages: IMessages[],
-    thinking: IAIThinking | undefined,
-    sessions: IAISession[],
-    agents: IAIAgentData[],
-    currSession: number,
-    currAgent: string | undefined,
-    selectAIAgent: (agentId: string) => void,
-    setCurrSession: (currSession: number) => void,
-    sendMessage: (message: string) => void,
-    createNewSession: () => void,
+    messages: IMessages[];
+    thinking: IAIThinking | undefined;
+    sessions: IAISession[];
+    agents: IAIAgentData[];
+    currSession: number;
+    currAgent: string | undefined;
+    selectAIAgent: (agentId: string) => void;
+    setCurrSession: (currSession: number) => void;
+    sendMessage: (message: string) => void;
+    createNewSession: () => void;
 }
 
-const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
+const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const [panelWidth, setPanelWidth] = useState(550);
     const [isResizing, setIsResizing] = useState(false);
@@ -147,8 +145,10 @@ const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
     const [input, setInput] = useState('');
 
     const toggleChat = () => {
-        if (isOpen) { setSidebarOpen(false) }  // close sidebar
-        setIsOpen(!isOpen)
+        if (isOpen) {
+            setSidebarOpen(false);
+        } // close sidebar
+        setIsOpen(!isOpen);
     };
 
     useEffect(() => {
@@ -176,17 +176,16 @@ const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
-    }
+    };
 
     const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         props.sendMessage(input);
-        setInput("");
-    }
-    
+        setInput('');
+    };
 
     return (
-        <div className="z-50 chat-window">
+        <div className="chat-window z-50">
             {/* Floating Button */}
             {!isOpen && (
                 <motion.button
@@ -198,13 +197,14 @@ const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    <div className="relative h-6 w-6 scale-180 top-[-4px]">
+                    <div className="relative top-[-4px] h-6 w-6 scale-180">
                         <Image
                             src="/chat-icon-light.svg"
                             alt="Chat Icon"
                             fill
                             className="object-contain"
-                        />                    </div>
+                        />{' '}
+                    </div>
                 </motion.button>
             )}
 
@@ -225,42 +225,48 @@ const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
                             className="absolute top-0 left-0 z-50 h-full w-2 cursor-ew-resize"
                             onMouseDown={() => setIsResizing(true)}
                         />
-                            {/* Header */}
-                            <div className="header">
-                                <button onClick={toggleSidebar}>
-                                    <img src="/menu.svg" alt="menu icon" className="sidebar-menu"/>
+                        {/* Header */}
+                        <div className="header">
+                            <button onClick={toggleSidebar}>
+                                <img src="/menu.svg" alt="menu icon" className="sidebar-menu" />
+                            </button>
+                            <h2> EduSense AI Chat </h2>
+                            <button onClick={toggleChat}>
+                                <img
+                                    src="/forward-arrow.svg"
+                                    alt="go back"
+                                    className="arrow-icon"
+                                />
+                            </button>
+                        </div>
+                        <div className="chat-body">
+                            <div className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
+                                <button className="new-session" onClick={props.createNewSession}>
+                                    <img src="/blue-plus.png" alt="plus icon" className="add-btn" />
+                                    <h3>New Session</h3>
                                 </button>
-                                <h2> EduSense AI Chat </h2>
-                                <button onClick={toggleChat}>
-                                    <img src="/forward-arrow.svg" alt="go back" className="arrow-icon"/>
-                                </button>
-                            </div>
-                            <div className="chat-body">
-                                <div className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
-                                    <button className="new-session" onClick={props.createNewSession}>
-                                        <img src="/blue-plus.png" alt="plus icon" className="add-btn"/>
-                                        <h3>New Session</h3>
-                                    </button>
-                                    <div className='sessions-wrapper'>
-                                        <h3>Sessions</h3>
-                                        <div className='sessions-container'>
-                                            {(props.sessions.length > 0) ? (
-                                                props.sessions.map((session:IAISession) => (
-                                                    <div className={`session ${props.currSession == session.id ? 'session-selected': ''}`} onClick={() => props.setCurrSession(session.id)}>
-                                                        <p>{session.name}</p>
-                                                    </div>
-                                                ))) : (
-                                                    <div className='session'>
-                                                        <p>No sessions yet.</p>
-                                                    </div>
-                                                )
-                                            }
-                                        </div>
+                                <div className="sessions-wrapper">
+                                    <h3>Sessions</h3>
+                                    <div className="sessions-container">
+                                        {props.sessions.length > 0 ? (
+                                            props.sessions.map((session: IAISession) => (
+                                                <div
+                                                    className={`session ${props.currSession == session.id ? 'session-selected' : ''}`}
+                                                    onClick={() => props.setCurrSession(session.id)}
+                                                >
+                                                    <p>{session.name}</p>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="session">
+                                                <p>No sessions yet.</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                                <MessagesRender messages={props.messages} thinking={props.thinking} />
                             </div>
-
+                            <MessagesRender messages={props.messages} thinking={props.thinking} />
+                        </div>
 
                         {/* Input */}
                         <div className="chat-footer">
@@ -274,29 +280,33 @@ const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
                                     placeholder="Ask me anything..."
                                 />
                                 <button type="submit" className="send-icon">
-                                    <img src="/airplane.svg" alt="send"/>
+                                    <img src="/airplane.svg" alt="send" />
                                 </button>
                             </form>
-                            {props.agents.length > 1 ? (<div className="select-mode">
-                                <p>Mode: </p>
-                                <div className='mode-btns'>
-                                    {props.agents.map((agent, index) => {
-                                        return (
-                                            <>
-                                                <button
-                                                    className={`mode-btn ${props.currAgent == agent.internal_name ? 'selected' : ''}`}
-                                                    onClick={() => props.selectAIAgent(agent.internal_name)}
+                            {props.agents.length > 1 ? (
+                                <div className="select-mode">
+                                    <p>Mode: </p>
+                                    <div className="mode-btns">
+                                        {props.agents.map((agent, index) => {
+                                            return (
+                                                <>
+                                                    <button
+                                                        className={`mode-btn ${props.currAgent == agent.internal_name ? 'selected' : ''}`}
+                                                        onClick={() =>
+                                                            props.selectAIAgent(agent.internal_name)
+                                                        }
                                                     >
-                                                    {agent.external_name}
-                                                </button>
-                                                {index < props.agents.length - 1 ? (
-                                                    <p>|</p>
-                                                ): null}
-                                            </>
-                                        )
-                                    })}
+                                                        {agent.external_name}
+                                                    </button>
+                                                    {index < props.agents.length - 1 ? (
+                                                        <p>|</p>
+                                                    ) : null}
+                                                </>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>) : null}
+                            ) : null}
                         </div>
                     </motion.div>
                 )}

@@ -160,7 +160,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
                 {currCourseId ? (
                     <AIChatController courseId={currCourseId} builderId={currBuilderId} />
-                ): null}
+                ) : null}
 
                 <CustomPropContext.Provider
                     value={{
@@ -171,7 +171,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                         courses,
                         setCourses,
                         setCurrCourseId,
-                        setCurrBuilderId
+                        setCurrBuilderId,
                     }}
                 >
                     {children}
