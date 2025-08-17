@@ -3,7 +3,7 @@ import { IAIJwtTokenRespose } from "@/app/typedef";
 import { httpPost } from "@/app/utils";
 
 
-export const createAIConnection = (courseId: number | undefined, sessionId: number, agentName: string) => {
+export const createAIConnection = (courseId: number | undefined, builderId: number | undefined, sessionId: number, agentName: string) => {
     let socket: WebSocket | null = null;
     let isConnected = false;
 
@@ -59,6 +59,7 @@ export const createAIConnection = (courseId: number | undefined, sessionId: numb
                 type: "send_message",
                 query: msg,
                 course_id: courseId,
+                builder_id: builderId,
                 session_id: sessionId,
                 agent: agentName
             }

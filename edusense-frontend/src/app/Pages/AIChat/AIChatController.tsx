@@ -30,6 +30,7 @@ export interface IAIThinking {
 
 export interface AIChatControllerProps {
     courseId?: number
+    builderId?: number
 }
 
 export default function AIChatController(props: AIChatControllerProps) {
@@ -67,7 +68,7 @@ export default function AIChatController(props: AIChatControllerProps) {
             getAllSessions.then((response) => {
                 setSessions(response.data.data);
                 setWebsocketConn(() => {
-                    const conn = createAIConnection(props.courseId, currSession, currAgent)
+                    const conn = createAIConnection(props.courseId, props.builderId, currSession, currAgent)
 
                     conn.on("open", () => {
                         console.log("Socket Connected!");
@@ -89,7 +90,7 @@ export default function AIChatController(props: AIChatControllerProps) {
         return () => {
             websocketConn?.disconnect();
         }
-    }, [props.courseId, currSession, currAgent])
+    }, [props.courseId, props.builderId, currSession, currAgent])
 
     const sendMessage = (input: string) => {
         if (websocketConn != null) {

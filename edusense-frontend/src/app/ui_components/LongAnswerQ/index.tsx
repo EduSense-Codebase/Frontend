@@ -10,6 +10,7 @@ export type Mode = 'view' | 'edit' | 'answerKey';
 interface LongAnswerQProps {
   mode: Mode;
   question: string;
+  points?: number;
   description?: string;
   onChangeDescription: (value: string) => void;
   onChangeQuestion: (value: string) => void;
@@ -17,12 +18,14 @@ interface LongAnswerQProps {
   isRequired: boolean;
   onSave: () => void;
   onChangeQType: (newType: QuestionType) => void;
+  onChangePoints: (newPoints: number) => void;
   qType: QuestionType;
 }
 
 const LongAnswerQ: React.FC<LongAnswerQProps> = ({ 
   mode,
   question,
+  points,
   description,
   onChangeDescription,
   onChangeQuestion,
@@ -30,8 +33,17 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
   isRequired,
   onSave,
   onChangeQType,
+  onChangePoints,
   qType
 }) => {
+  const PointsRender = () => {
+    console.log(points);
+    if (mode == 'view') {
+      return points ? points : "___";
+    } else {
+      return <input type="number" value={points} onChange={(e) => onChangePoints?.(parseInt(e.target.value))} />
+    }
+  }
   return (
     <div className={`mcq mcq--${mode}`}>
       <div className="mcq__header">
@@ -69,26 +81,34 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
                 />
             )}
 
-      {mode === 'edit' && (
+      {true && (
         <>
         <div className="dropdown">
-          <label>Change Question Type:</label>
-          <Dropdown 
-            value={qType} 
-            options={["Multiple Choice", "Short Answer", "Long Answer" ]} 
-            onChange={(val) => onChangeQType?.(val as QuestionType)}
-          />
+        {mode === 'edit' ? (
+          <>
+            <label>Change Question Type:</label>
+            <Dropdown 
+              value={qType} 
+              values={["multiple", "short", "long" ]} 
+              options={["Multiple Choice", "Short Answer", "Long Answer"]}
+              onChange={(val) => onChangeQType?.(val as QuestionType)}
+            />
+          </>
+        ) : null}
         </div>
         <div className="mcq__footer">
 					<div className="mcq__required-toggle">
-            <ToggleSwitch
-              checked={isRequired}
-              onChange={(checked) => onToggleRequired?.(checked)}
-            />
-            <p>Required</p>
+            {mode === 'edit' ? (
+              <>
+                <ToggleSwitch
+                  checked={isRequired}
+                  onChange={(checked) => onToggleRequired?.(checked)}
+                />
+                <p>Required</p>
+              </>) : null}
           </div>
-					<Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button>
-					<p>Points: ___</p>
+					{mode === 'edit' ? <Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"></Button> : null}
+					<p>Points: {PointsRender()}</p>
         </div>
         </>
       )}

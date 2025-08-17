@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import remarkGfm from 'remark-gfm';
 import Button from '../Button';
 import { API_PREFIX, WS_API_PREFIX, WS_AI_AGENT_ENDPOINT, AUTH_ENDPOINT } from '../../global';
@@ -107,7 +107,7 @@ const IndividualMessageRender = (props: { message: IMessages; index: number }) =
     return <AIMessageRender {...props} />;
 };
 
-const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | undefined }) => {
+const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | undefined; }) => {
     return (
         <div className="message-render">
             {props.messages.map((message, index) => (
@@ -116,6 +116,7 @@ const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | 
                 </>
             ))}
             {props.thinking ? <AIAgentLoader status={props.thinking.verbose_name} /> : null}
+            <div style={{display: 'none'}} />
         </div>
     );
 };
@@ -140,7 +141,7 @@ export interface IChatWidgetProps {
 
 const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [panelWidth, setPanelWidth] = useState(400);
+    const [panelWidth, setPanelWidth] = useState(550);
     const [isResizing, setIsResizing] = useState(false);
 
     const [input, setInput] = useState('');
@@ -172,13 +173,13 @@ const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
     }, [isResizing]);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [selectedMode, setSelectedMode] = useState('Conversational');
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     }
 
-    const sendMessage = () => {
+    const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         props.sendMessage(input);
         setInput("");
     }
@@ -263,7 +264,7 @@ const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
 
                         {/* Input */}
                         <div className="chat-footer">
-                            <div className="chat-footer-input">
+                            <form className="chat-footer-input" onSubmit={sendMessage}>
                                 <input
                                     type="text"
                                     value={input}
@@ -272,22 +273,30 @@ const ChatWidget : React.FC<IChatWidgetProps> = (props) => {
                                     className="flex-1 rounded-lg border px-4 py-2 text-gray-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     placeholder="Ask me anything..."
                                 />
-                                <button onClick={sendMessage} className="send-icon">
+                                <button type="submit" className="send-icon">
                                     <img src="/airplane.svg" alt="send"/>
                                 </button>
-                            </div>
-                            <div className="select-mode">
+                            </form>
+                            {props.agents.length > 1 ? (<div className="select-mode">
                                 <p>Mode: </p>
                                 <div className='mode-btns'>
-                                    <button
-                                        className={`mode-btn ${props.currAgent == 'conversational_agent' ? 'selected' : ''}`}
-                                        onClick={() => props.selectAIAgent('conversational_agent')}> Conversational </button>
-                                    <p>|</p>
-                                    <button
-                                    className={`mode-btn ${props.currAgent == 'teacher_agent' ? 'selected' : ''}`}
-                                    onClick={() => props.selectAIAgent('teacher_agent')}> Content Gen </button>
+                                    {props.agents.map((agent, index) => {
+                                        return (
+                                            <>
+                                                <button
+                                                    className={`mode-btn ${props.currAgent == agent.internal_name ? 'selected' : ''}`}
+                                                    onClick={() => props.selectAIAgent(agent.internal_name)}
+                                                    >
+                                                    {agent.external_name}
+                                                </button>
+                                                {index < props.agents.length - 1 ? (
+                                                    <p>|</p>
+                                                ): null}
+                                            </>
+                                        )
+                                    })}
                                 </div>
-                            </div>
+                            </div>) : null}
                         </div>
                     </motion.div>
                 )}

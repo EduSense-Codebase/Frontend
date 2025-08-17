@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import './AssignmentBuilder.scss';
 import Button from '../Button';
@@ -6,7 +6,7 @@ import MultipleChoiceQ from '../MultipleChoiceQ';
 import LongAnswerQ from '../LongAnswerQ';
 import ShortAnswerQ from '../ShortAnswerQ';
 
-export type QuestionType = 'Long Answer' | 'Multiple Choice' | 'Short Answer';
+export type QuestionType = 'long' | 'multiple' | 'short';
 type QuestionMode = 'view' | 'edit';
 
 interface Option {
@@ -23,6 +23,7 @@ interface CorrectAnswer {
 interface BaseQuestion {
     id: string;
     type: QuestionType;
+    points?: number;
     question: string;
     description?: string;
     isRequired: boolean;
@@ -30,17 +31,17 @@ interface BaseQuestion {
 }
 
 interface LongAnswerQuestion extends BaseQuestion {
-  type: 'Long Answer';
+  type: 'long';
 }
 
 interface MultipleChoiceQuestion extends BaseQuestion {
-  type: 'Multiple Choice';
+  type: 'multiple';
   options: Option[];
   selectedOptionId?: string;
 }
 
 interface ShortAnswerQuestion extends BaseQuestion {
-  type: 'Short Answer';
+  type: 'short';
   answer: string;
   correctAnswers: CorrectAnswer[];
 }
@@ -49,6 +50,9 @@ export interface AssignmentBuilderProps {
     quizQuestions: Question[];
     title: string;
     description: string;
+    onQuizChange: (newQuizQuestions: Question[]) => void;
+    onDescriptionChange: (newDescription: string) => void;
+    onTitleChange: (newTitle: string) => void;
 }
 
 export type Question = LongAnswerQuestion | MultipleChoiceQuestion | ShortAnswerQuestion;
@@ -57,6 +61,9 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
     quizQuestions,
     title,
     description,
+    onQuizChange,
+    onDescriptionChange,
+    onTitleChange
 }) => {
   const [questions, setQuestions] = useState<Question[]>(quizQuestions);
   const [showAddOptions, setShowAddOptions] = useState(false);
@@ -77,12 +84,12 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
         };
 
     let newQ: Question;
-    if (type === 'Multiple Choice') {
-      newQ = { ...base, type: 'Multiple Choice', options: [] };
-    } else if (type === 'Short Answer') {
-      newQ = { ...base, type: 'Short Answer', answer: '', correctAnswers: [] };
+    if (type === 'multiple') {
+      newQ = { ...base, type: 'multiple', options: [] };
+    } else if (type === 'short') {
+      newQ = { ...base, type: 'short', answer: '', correctAnswers: [] };
     } else {
-      newQ = { ...base, type: 'Long Answer' };
+      newQ = { ...base, type: 'long' };
     }
 
         setQuestions((prev) => [...prev, newQ]);
@@ -121,16 +128,30 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
           mode: q.mode,
         };
 
-        if (newType === 'Multiple Choice') {
-          return { ...base, type: 'Multiple Choice', options: [] } as MultipleChoiceQuestion;
-        } else if (newType === 'Short Answer') {
-          return { ...base, type: 'Short Answer', answer: '', correctAnswers: [] } as ShortAnswerQuestion;
+        if (newType === 'multiple') {
+          return { ...base, type: 'multiple', options: [] } as MultipleChoiceQuestion;
+        } else if (newType === 'short') {
+          return { ...base, type: 'short', answer: '', correctAnswers: [] } as ShortAnswerQuestion;
         } else {
-          return { ...base, type: 'Long Answer' } as LongAnswerQuestion;
+          return { ...base, type: 'long' } as LongAnswerQuestion;
         }
       })
     );
   };
+
+  useEffect(() => {
+    onQuizChange?.(questions);
+  }, [questions])
+
+  useEffect(() => {
+    onTitleChange?.(quizTitle);
+  }, [quizTitle])
+
+  useEffect(() => {
+    onDescriptionChange?.(quizDescription);
+  }, [quizDescription])
+
+
 
   return (
     <div className="quiz-builder">
@@ -150,7 +171,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
 
       {questions.map((q) => {
         switch (q.type) {
-          case "Long Answer":
+          case "long":
             return (
               <div 
                 key={q.id} 
@@ -165,6 +186,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                 <LongAnswerQ
                   mode={q.mode}
                   question={q.question}
+                  points={q.points}
                   description={q.description}
                   isRequired={q.isRequired}
                   onChangeQuestion={(val) =>
@@ -178,12 +200,15 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                   }
                   onSave={() => handleChangeQuestionMode(q.id, "view")}
                   onChangeQType={(newType) => handleChangeQuestionType(q.id, newType)}
+                  onChangePoints={(newPoints) => 
+                    handleUpdateQuestion(q.id, { points: newPoints })
+                  }
                   qType={q.type}
                 />
               </div>
             );
 
-          case "Multiple Choice":
+          case "multiple":
             return (
               <div 
                 key={q.id} 
@@ -198,6 +223,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                 <MultipleChoiceQ
                   mode={q.mode}
                   question={q.question}
+                  points={q.points}
                   options={q.options}
                   onChangeQuestion={(val) =>
                     handleUpdateQuestion(q.id, { question: val })
@@ -235,12 +261,15 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                   onCancel={() => handleChangeQuestionMode(q.id, "view")}
                   onSave={() => handleChangeQuestionMode(q.id, "view")}
                   onChangeQType={(newType) => handleChangeQuestionType(q.id, newType)}
+                  onChangePoints={(newPoints) => 
+                    handleUpdateQuestion(q.id, { points: newPoints })
+                  }
                   qType={q.type}
                 />
               </div>
             );
 
-          case "Short Answer":
+          case "short":
             return (
               <div 
                 key={q.id} 
@@ -255,6 +284,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                 <ShortAnswerQ
                   mode={q.mode}
                   question={q.question}
+                  points={q.points}
                   answer={q.answer}
                   correctAnswers={q.correctAnswers}
                   onChangeAnswer={(val) =>
@@ -291,6 +321,9 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                   }
                   onSave={() => handleChangeQuestionMode(q.id, "view")}
                   onChangeQType={(newType) => handleChangeQuestionType(q.id, newType)}
+                  onChangePoints={(newPoints) => 
+                    handleUpdateQuestion(q.id, { points: newPoints })
+                  }
                   qType={q.type}
                 />
               </div>
@@ -305,9 +338,9 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
       </div>
       {showAddOptions && (
         <div className="add-question-options">
-          <Button onClick={() => handleAddQuestion("Multiple Choice")} displayName='Multiple Choice' variant='primary'></Button>
-          <Button onClick={() => handleAddQuestion("Long Answer")} displayName='Long Answer' variant='primary'></Button>
-          <Button onClick={() => handleAddQuestion("Short Answer")} displayName='Short Answer' variant='primary'></Button>
+          <Button onClick={() => handleAddQuestion("multiple")} displayName='Multiple Choice' variant='primary'></Button>
+          <Button onClick={() => handleAddQuestion("long")} displayName='Long Answer' variant='primary'></Button>
+          <Button onClick={() => handleAddQuestion("short")} displayName='Short Answer' variant='primary'></Button>
         </div>
       )}
     </div>

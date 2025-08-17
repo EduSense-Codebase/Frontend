@@ -25,6 +25,7 @@ interface ICustomProps {
     courses: ICourse[];
     setCourses: React.Dispatch<React.SetStateAction<ICourse[]>>;
     setCurrCourseId: React.Dispatch<React.SetStateAction<number | undefined>>;
+    setCurrBuilderId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 const mainSteps: Step[] = [
@@ -75,6 +76,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     const [courses, setCourses] = useState<ICourse[]>([]);
 
     const [currCourseId, setCurrCourseId] = useState<number | undefined>(undefined);
+    const [currBuilderId, setCurrBuilderId] = useState<number | undefined>(undefined);
 
     useEffect(() => {
         //refreshXP();
@@ -157,7 +159,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
                 {currCourseId ? (
-                    <AIChatController courseId={currCourseId} />
+                    <AIChatController courseId={currCourseId} builderId={currBuilderId} />
                 ): null}
 
                 <CustomPropContext.Provider
@@ -169,6 +171,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                         courses,
                         setCourses,
                         setCurrCourseId,
+                        setCurrBuilderId
                     }}
                 >
                     {children}

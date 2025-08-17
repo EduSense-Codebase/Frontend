@@ -12,9 +12,10 @@ import Button from '../Button';
 
 interface TextProps {
     content: string;
+    onSave: (newContent: string) => void;
 }
 
-const Text: React.FC<TextProps> = ({ content }) => {
+const Text: React.FC<TextProps> = ({ content, onSave: passedOnSave }) => {
   const [editMode, setEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
   const [savedContent, setSavedContent] = useState(content);
@@ -22,6 +23,7 @@ const Text: React.FC<TextProps> = ({ content }) => {
   const onSave = () => {
     setSavedContent(editedContent);
     setEditMode(false);
+    passedOnSave?.(editedContent);
   }
 
   const onEdit = () => {

@@ -4,12 +4,13 @@ import './Dropdown.scss';
 interface DropdownProps {
     label?: string;
     options: string[];
+    values?: string[];
     value: string;
     onChange: (value: string) => void;
     placeholder?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, options, value, onChange, placeholder }) => {
+const Dropdown: React.FC<DropdownProps> = ({ label, options, values, value, onChange, placeholder }) => {
     return (
         <div className="dropdown-container">
             {label && <label className="dropdown-label">{label}</label>}
@@ -20,7 +21,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, value, onChange, pl
             >
                 {placeholder && <option value="">{placeholder}</option>}
                 {options.map((option, index) => (
-                    <option key={index} value={option}>
+                    <option key={index} value={values ? values[index] : option}>
                         {option}
                     </option>
                 ))}
