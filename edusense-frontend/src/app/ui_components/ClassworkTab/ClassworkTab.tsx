@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import './ClassworkTab.scss';
-import { IModules, IAssignments, IModuleResponse } from '@/app/typedef';
+import { IModules, IAssignments, IModuleResponse, IFile } from '@/app/typedef';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
@@ -13,6 +13,8 @@ interface ClassworkProps {
     assignments: IAssignments[];
 
     setNewModules: React.Dispatch<React.SetStateAction<IModules[]>>;
+    files: IFile[];
+    setFiles: React.Dispatch<React.SetStateAction<IFile[]>>;
 }
 
 export default function ClassworkTab({
@@ -20,11 +22,17 @@ export default function ClassworkTab({
     assignments,
     setNewModules,
     join_course,
+    files,
+    setFiles,
 }: ClassworkProps) {
     const [expandedModules, setExpandedModules] = useState<number[]>([]);
     const [showCreateMenu, setShowCreateMenu] = useState(false);
     const [showModuleModal, setShowModuleModal] = useState(false);
+    const [showFileModal, setShowFileModal] = useState(false);
     const [moduleTitle, setModuleTitle] = useState('');
+    const [fileDesc, setFileDesc] = useState('');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
     const { enrollmentId } = useParams();
 
     const toggleModule = (id: number) => {
@@ -33,13 +41,14 @@ export default function ClassworkTab({
         );
     };
 
-    const handleCreateSelect = (type: 'assignment' | 'module') => {
+    const handleCreateSelect = (type: 'assignment' | 'module' | 'file') => {
         setShowCreateMenu(false);
         if (type === 'module') {
             setShowModuleModal(true);
+        } else if (type === 'file') {
+            setShowFileModal(true);
         } else {
             console.log('Create assignment clicked');
-            // open assignment modal / navigate here later
         }
     };
 
@@ -60,6 +69,9 @@ export default function ClassworkTab({
             <button className="dropdownItem" onClick={() => handleCreateSelect('module')}>
                 📦 Module
             </button>
+            <button className="dropdownItem" onClick={() => handleCreateSelect('file')}>
+                📄 File
+            </button>
         </div>
     );
 
@@ -71,11 +83,36 @@ export default function ClassworkTab({
         const requestResponse = httpPost<IModuleResponse>(url, formData, queryParams);
         requestResponse.then((res) => {
             console.log('created module', res.data);
-            const newModule = res.data.data; // your new module object from the backend
+            const newModule = res.data.data;
             setNewModules((prevModules) => [...prevModules, newModule]);
         });
 
         setShowModuleModal(false);
+    };
+
+    const uploadFileCallback = async () => {
+        if (!selectedFile) return;
+        const url = API_PREFIX + COURSE_ENDPOINT + `?section=upload_file`;
+
+        const formData = new FormData();
+        formData.append('course_id', enrollmentId as string);
+        formData.append('file', selectedFile);
+        formData.append('description', fileDesc);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            const resJson = await response.json();
+            const newFile = resJson.data;
+            setFiles((prev) => [...prev, newFile]);
+        }
+
+        setShowFileModal(false);
+        setSelectedFile(null);
+        setFileDesc('');
     };
 
     const renderModuleModal = () => (
@@ -101,6 +138,34 @@ export default function ClassworkTab({
         </div>
     );
 
+    const renderFileModal = () => (
+        <div className="modalOverlay">
+            <div className="modalContent">
+                <h3>Upload New File</h3>
+                <input
+                    type="file"
+                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                    className="modalInput"
+                />
+                <input
+                    type="text"
+                    value={fileDesc}
+                    onChange={(e) => setFileDesc(e.target.value)}
+                    placeholder="Enter description..."
+                    className="modalInput"
+                />
+                <div className="modalActions">
+                    <button className="modalBtn submit" onClick={uploadFileCallback}>
+                        Upload
+                    </button>
+                    <button className="modalBtn cancel" onClick={() => setShowFileModal(false)}>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+
     return (
         <div className="classwork">
             <div className="header">
@@ -118,6 +183,7 @@ export default function ClassworkTab({
                 </div>
             </div>
 
+            {/* Modules */}
             {modules.map((module) => (
                 <div key={module.id} className="module">
                     <div className="moduleHeader" onClick={() => toggleModule(module.id)}>
@@ -143,6 +209,7 @@ export default function ClassworkTab({
                 </div>
             ))}
 
+            {/* Unassigned Assignments */}
             {unassignedAssignments.length > 0 && (
                 <div className="module unassigned">
                     <ul className="assignmentList">
@@ -159,7 +226,29 @@ export default function ClassworkTab({
                 </div>
             )}
 
+            {/* Files Section */}
+            {files.length > 0 && (
+                <div className="module filesSection">
+                    <div className="moduleHeader">
+                        <span>📄 Course Files</span>
+                    </div>
+                    <ul className="assignmentList">
+                        {files.map((file) => (
+                            <li key={file.id} className="assignmentItem">
+                                <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                    📄 {file.filename}
+                                </a>
+                                {file.description && (
+                                    <span className="fileDesc"> – {file.description}</span>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
             {showModuleModal && renderModuleModal()}
+            {showFileModal && renderFileModal()}
         </div>
     );
 }

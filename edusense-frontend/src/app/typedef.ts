@@ -1,6 +1,15 @@
 /* ********************* Generic Types START ********************* */
 
 import { AssignmentBuilderProps } from './ui_components/AssignmentBuilder';
+export interface IFile {
+    id: number;
+    filename: string;
+    description: string;
+    uploaded_at: string; // ISO string from backend
+    url: string;
+    student_uploaded: boolean;
+    student_facing: boolean;
+}
 
 export interface IPermissions {
     join_course: boolean;
@@ -67,6 +76,10 @@ export interface IAIAgentData {
 /* ********************* Generic Types END *********************** */
 
 /* ********************* Axios Response Types START ********************* */
+
+export interface IFileResponse {
+    data: IFile[];
+}
 
 export interface IAllOfferedResponse {
     data: IOfferedCourse[];

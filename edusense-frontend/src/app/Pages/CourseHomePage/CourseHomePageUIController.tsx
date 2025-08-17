@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import './CourseHomePageUIController.scss';
-import Button from '../../ui_components/Button';
 import Tabs from '../../ui_components/Tabs';
 import CourseCodeCard from '../../ui_components/CourseCodeCard';
 import AnnouncementForm from '../../ui_components/AnnouncementForm';
 import '../../style/theme.scss';
-import { IAnnouncements, IAssignments, ICourse, IModules, IStudentData } from '@/app/typedef';
+import {
+    IAnnouncements,
+    IAssignments,
+    ICourse,
+    IFile,
+    IModules,
+    IStudentData,
+} from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
-import { create } from 'domain';
 
 interface Props {
     joinCourse: boolean | undefined;
@@ -24,7 +29,10 @@ interface Props {
     showToDoWidget: boolean;
     showModuleWidget: boolean;
     students: IStudentData[];
-
+    files: IFile[];
+    setFiles: React.Dispatch<React.SetStateAction<IFile[]>>;
+    setShowModuleWidget: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowToDoWidget: React.Dispatch<React.SetStateAction<boolean>>;
     setModules: React.Dispatch<React.SetStateAction<IModules[]>>;
 }
 
@@ -41,6 +49,10 @@ const CourseHomePageUIController: React.FC<Props> = ({
     showModuleWidget,
     students,
     setModules,
+    setShowModuleWidget,
+    setShowToDoWidget,
+    files,
+    setFiles,
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
 
@@ -88,12 +100,20 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             <div className="widgets-section">
                                 {showToDoWidget && (
                                     <div className="widget-card">
-                                        <ToDo course={courseDetails} assignments={assignments} />
+                                        <ToDo
+                                            editMode={false}
+                                            assignments={assignments}
+                                            setShowToDo={setShowToDoWidget}
+                                        />
                                     </div>
                                 )}
                                 {showModuleWidget && allModules?.length > 0 && (
                                     <div className="widget-card">
-                                        <CurrentModule moduleName={allModules[0].title} />
+                                        <CurrentModule
+                                            moduleName={allModules[0].title}
+                                            editMode={false}
+                                            setModule={setShowModuleWidget}
+                                        />
                                     </div>
                                 )}
                             </div>
@@ -124,6 +144,8 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             modules={allModules.filter((item) => item.title !== 'no_module')}
                             setNewModules={setModules}
                             join_course={joinCourse}
+                            files={files}
+                            setFiles={setFiles}
                         />
                     </div>
                 )}

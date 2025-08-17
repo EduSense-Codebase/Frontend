@@ -15,6 +15,8 @@ import {
     IModulesResponse,
     IStudentData,
     IStudentDataResponse,
+    IFile,
+    IFileResponse,
 } from '@/app/typedef';
 import { Step } from 'react-joyride';
 // import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
@@ -60,6 +62,7 @@ export default function HomePage() {
     const [showModuleWidget, setShowModuleWidget] = useState(false);
     const [originalValues, setOriginalValues] = useState<any>(null);
     const [students, setStudents] = useState<IStudentData[]>([]);
+    const [files, setFiles] = useState<IFile[]>([])
 
     useEffect(() => {
         const url = API_PREFIX + COURSE_ENDPOINT;
@@ -79,8 +82,9 @@ export default function HomePage() {
                 section: 'get_students_course',
                 course_id: enrollmentId,
             }),
+            httpGet<IFileResponse>(url, {section: 'get_course_files', course_id: enrollmentId, teacher_uploaded:"true"})
         ])
-            .then(([course, announce, assign, modulesRes, config, studentsRes]) => {
+            .then(([course, announce, assign, modulesRes, config, studentsRes, files]) => {
                 setCourseDetails(course.data.data);
                 setAnnouncements(announce.data.data);
                 setAssignments(assign.data.data);
@@ -90,6 +94,8 @@ export default function HomePage() {
                 setBannerImage(config.data.data?.bannerImageConfig || null);
                 setStudents(studentsRes.data.data);
                 setCurrCourseId(course.data.data.id);
+                setFiles(files.data.data)
+                console.log("files for this course", files.data)
             })
             .catch(console.error);
     }, [enrollmentId]);
@@ -165,6 +171,10 @@ export default function HomePage() {
                         showModuleWidget={showModuleWidget}
                         students={students}
                         setModules={setModules}
+                        setShowModuleWidget={setShowModuleWidget}
+                        setShowToDoWidget={setShowToDoWidget}
+                        files={files}
+                        setFiles={setFiles}
                     />
                 </div>
             )}
