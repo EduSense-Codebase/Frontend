@@ -82,7 +82,11 @@ export default function HomePage() {
                 section: 'get_students_course',
                 course_id: enrollmentId,
             }),
-            httpGet<IFileResponse>(url, {section: 'get_course_files', course_id: enrollmentId, teacher_uploaded:"true"})
+            httpGet<IFileResponse>(url, {
+                section: 'get_course_files',
+                course_id: enrollmentId,
+                teacher_uploaded: 'true',
+            }),
         ])
             .then(([course, announce, assign, modulesRes, config, studentsRes, files]) => {
                 setCourseDetails(course.data.data);

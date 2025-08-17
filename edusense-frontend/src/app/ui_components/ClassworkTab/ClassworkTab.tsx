@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import './ClassworkTab.scss';
-import { IModules, IAssignments, IModuleResponse, IFile } from '@/app/typedef';
+import { IModules, IAssignments, IModuleResponse, IFile, IOneFileResponse } from '@/app/typedef';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
@@ -93,6 +93,20 @@ export default function ClassworkTab({
 
     const uploadFileCallback = async () => {
         //make api request here
+        console.log("calling")
+
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        const formData = { file: selectedFile, course_id: enrollmentId, desc: fileDesc };
+        const queryParams = { section: 'upload_file' };
+
+        const requestResponse = httpPost<IOneFileResponse>(url, formData, queryParams);
+        requestResponse.then((res) => {
+            console.log('uploaded file', res.data);
+            const newFile = res.data.data;
+            setFiles((prevFiles) => [...prevFiles, newFile]);
+        });
+
+        setShowFileModal(false);
     };
 
     const renderModuleModal = () => (
@@ -226,12 +240,6 @@ export default function ClassworkTab({
                                     <a href={file.url} target="_blank" rel="noopener noreferrer">
                                         📄 {file.filename}
                                     </a>
-                                )}
-                                {file.description && (
-                                    <span className="fileDesc"> – {file.description}</span>
-                                )}
-                                {file.description && (
-                                    <span className="fileDesc"> – {file.description}</span>
                                 )}
                             </li>
                         ))}

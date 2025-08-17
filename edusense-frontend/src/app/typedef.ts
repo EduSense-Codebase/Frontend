@@ -81,6 +81,10 @@ export interface IFileResponse {
     data: IFile[];
 }
 
+export interface IOneFileResponse {
+    data: IFile;
+}
+
 export interface IAllOfferedResponse {
     data: IOfferedCourse[];
 }
