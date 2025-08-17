@@ -32,6 +32,7 @@ export default function ClassworkTab({
     const [moduleTitle, setModuleTitle] = useState('');
     const [fileDesc, setFileDesc] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [pdfToView, setPdfToView] = useState<string | null>(null);
 
     const { enrollmentId } = useParams();
 
@@ -91,28 +92,8 @@ export default function ClassworkTab({
     };
 
     const uploadFileCallback = async () => {
-        if (!selectedFile) return;
-        const url = API_PREFIX + COURSE_ENDPOINT + `?section=upload_file`;
+        //make api request here
 
-        const formData = new FormData();
-        formData.append('course_id', enrollmentId as string);
-        formData.append('file', selectedFile);
-        formData.append('description', fileDesc);
-
-        const response = await fetch(url, {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (response.ok) {
-            const resJson = await response.json();
-            const newFile = resJson.data;
-            setFiles((prev) => [...prev, newFile]);
-        }
-
-        setShowFileModal(false);
-        setSelectedFile(null);
-        setFileDesc('');
     };
 
     const renderModuleModal = () => (
@@ -235,9 +216,21 @@ export default function ClassworkTab({
                     <ul className="assignmentList">
                         {files.map((file) => (
                             <li key={file.id} className="assignmentItem">
-                                <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                    📄 {file.filename}
-                                </a>
+                                {file.filename.toLowerCase().endsWith('.pdf') ? (
+                                    <button
+                                        onClick={() => setPdfToView(file.url)}
+                                        className="pdfBtn"
+                                    >
+                                        📄 {file.filename}
+                                    </button>
+                                ) : (
+                                    <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                        📄 {file.filename}
+                                    </a>
+                                )}
+                                {file.description && (
+                                    <span className="fileDesc"> – {file.description}</span>
+                                )}
                                 {file.description && (
                                     <span className="fileDesc"> – {file.description}</span>
                                 )}
@@ -249,6 +242,22 @@ export default function ClassworkTab({
 
             {showModuleModal && renderModuleModal()}
             {showFileModal && renderFileModal()}
+
+            {pdfToView && (
+                <div className="pdfViewerModal">
+                    <div className="pdfViewerContent">
+                        <button onClick={() => setPdfToView(null)} className="closeBtn">
+                            ✖ Close
+                        </button>
+                        <iframe
+                            src={pdfToView}
+                            width="100%"
+                            height="600px"
+                            style={{ border: "none" }}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
