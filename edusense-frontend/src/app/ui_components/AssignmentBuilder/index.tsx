@@ -5,6 +5,7 @@ import Button from '../Button';
 import MultipleChoiceQ from '../MultipleChoiceQ';
 import LongAnswerQ from '../LongAnswerQ';
 import ShortAnswerQ from '../ShortAnswerQ';
+import { IModules } from '@/app/typedef';
 
 export type QuestionType = 'long' | 'multiple' | 'short';
 type QuestionMode = 'view' | 'edit';
@@ -50,9 +51,12 @@ export interface AssignmentBuilderProps {
     quizQuestions: Question[];
     title: string;
     description: string;
+    allowEdit: boolean;
     onQuizChange: (newQuizQuestions: Question[]) => void;
     onDescriptionChange: (newDescription: string) => void;
     onTitleChange: (newTitle: string) => void;
+    onAnswerSelection: (index: number, value: string | number | File) => void;
+    onSubmit: () => void;
 }
 
 export type Question = LongAnswerQuestion | MultipleChoiceQuestion | ShortAnswerQuestion;
@@ -61,9 +65,12 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
     quizQuestions,
     title,
     description,
+    allowEdit,
     onQuizChange,
     onDescriptionChange,
-    onTitleChange
+    onTitleChange,
+    onAnswerSelection,
+    onSubmit
 }) => {
   const [questions, setQuestions] = useState<Question[]>(quizQuestions);
   const [showAddOptions, setShowAddOptions] = useState(false);
@@ -151,11 +158,14 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
     onDescriptionChange?.(quizDescription);
   }, [quizDescription])
 
+  
+
 
 
   return (
     <div className="quiz-builder">
         <input
+          disabled={!allowEdit}
           type="text"
           value={quizTitle}
           onChange={(e) => setQuizTitle(e.target.value)}
@@ -163,20 +173,21 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
           className="quiz-title-input"
         />
         <textarea
+          disabled={!allowEdit}
           value={quizDescription}
           onChange={(e) => setQuizDescription(e.target.value)}
           placeholder="Enter quiz description"
           className="quiz-description-input"
         />
 
-      {questions.map((q) => {
+      {questions.map((q, questionIndex) => {
         switch (q.type) {
           case "long":
             return (
               <div 
                 key={q.id} 
                 className={`question ${q.mode}-mode`}
-                onClick={(e) => { if ((e.target as HTMLElement).closest("button")) return; handleChangeQuestionMode(q.id, "edit");
+                onClick={(e) => { if ((e.target as HTMLElement).closest("button") || !allowEdit) return; handleChangeQuestionMode(q.id, "edit");
               }}>
                 {(q.mode == "edit") && (
                   <div className='delete-question-btn'>
@@ -213,7 +224,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
               <div 
                 key={q.id} 
                 className={`question ${q.mode}-mode`}
-                onClick={(e) => { if ((e.target as HTMLElement).closest("button")) return; handleChangeQuestionMode(q.id, "edit");
+                onClick={(e) => { if ((e.target as HTMLElement).closest("button") || !allowEdit) return; handleChangeQuestionMode(q.id, "edit");
               }}>
                 {(q.mode == "edit") && (
                   <div className='delete-question-btn'>
@@ -264,6 +275,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                   onChangePoints={(newPoints) => 
                     handleUpdateQuestion(q.id, { points: newPoints })
                   }
+                  onAnswerSelect={(answerIndex) => onAnswerSelection?.(questionIndex, answerIndex)}
                   qType={q.type}
                 />
               </div>
@@ -274,7 +286,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
               <div 
                 key={q.id} 
                 className={`question ${q.mode}-mode`}
-                onClick={(e) => { if ((e.target as HTMLElement).closest("button")) return; handleChangeQuestionMode(q.id, "edit");
+                onClick={(e) => { if ((e.target as HTMLElement).closest("button") || !allowEdit) return; handleChangeQuestionMode(q.id, "edit");
               }}>
                 {(q.mode == "edit") && (
                   <div className='delete-question-btn'>
@@ -324,6 +336,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                   onChangePoints={(newPoints) => 
                     handleUpdateQuestion(q.id, { points: newPoints })
                   }
+                  onAnswerSelect={(answerString) => onAnswerSelection?.(questionIndex, answerString)}
                   qType={q.type}
                 />
               </div>
@@ -334,7 +347,9 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
       })}
 
       <div>
-        <button onClick={ToggleAddOptions} className="add-question-btn"> Add Question </button>
+        {allowEdit ? (<button onClick={ToggleAddOptions} className="add-question-btn"> Add Question </button>)
+          : (<button onClick={onSubmit} className="add-question-btn"> Submit </button>)
+        }
       </div>
       {showAddOptions && (
         <div className="add-question-options">

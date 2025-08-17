@@ -29,6 +29,7 @@ interface ShortAnswerQProps {
   qType: QuestionType;
   onChangeQType?: (type: QuestionType) => void;
   onChangePoints: (newPoints: number) => void;
+  onAnswerSelect: (answerValue: string) => void;
 }
 
 const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({ 
@@ -47,6 +48,7 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
   onSave,
   onChangeQType,
   onChangePoints,
+  onAnswerSelect,
   qType
  }) => {
   const PointsRender = () => {
@@ -103,7 +105,7 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
                     <input
                         type="text"
                         value={answer}
-                        onChange={(e) => onChangeAnswer?.(e.target.value)}
+                        onChange={(e) => {onChangeAnswer?.(e.target.value); onAnswerSelect?.(e.target.value)}}
                         placeholder="Type your answer here..."
                     />
                 </label>

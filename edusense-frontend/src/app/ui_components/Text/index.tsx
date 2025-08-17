@@ -12,10 +12,11 @@ import Button from '../Button';
 
 interface TextProps {
     content: string;
+    allowEdit: boolean;
     onSave: (newContent: string) => void;
 }
 
-const Text: React.FC<TextProps> = ({ content, onSave: passedOnSave }) => {
+const Text: React.FC<TextProps> = ({ content, allowEdit, onSave: passedOnSave }) => {
   const [editMode, setEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
   const [savedContent, setSavedContent] = useState(content);
@@ -35,10 +36,10 @@ const Text: React.FC<TextProps> = ({ content, onSave: passedOnSave }) => {
     <>
       {editMode ? (
         <div className='text-component'>
-          <div className='edit-btns'>
+          {allowEdit && <div className='edit-btns'>
             <Button onClick={onSave} variant="primary" displayName="Save" icon="/save.svg"/>
             <Button onClick={() => setEditMode(false)} variant="secondary" displayName="Cancel"/>
-          </div>
+          </div>}
           <div className="text" id="text-editor">
             <MDXEditor
               className="text-editor-content"
@@ -72,9 +73,9 @@ const Text: React.FC<TextProps> = ({ content, onSave: passedOnSave }) => {
         </div>
       ) : (
         <div>
-          <div className='edit-btns'>
+          {allowEdit && <div className='edit-btns'>
             <Button onClick={onEdit} variant="primary" displayName="Edit" icon="/edit.svg"></Button>
-          </div>
+          </div>}
           <div className="text">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}

@@ -127,6 +127,7 @@ export interface IAIJwtTokenRespose {
 
 export interface IBuilderResponse {
     type: 'text' | 'quiz_or_assignment';
+    is_assignment_created: boolean;
     text_content?: string;
     quiz_or_assignment_content?: AssignmentBuilderProps;
 }

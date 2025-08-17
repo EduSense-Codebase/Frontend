@@ -29,6 +29,7 @@ interface MultipleChoiceQProps {
   onSave: () => void;
   onChangeQType: (newType: QuestionType) => void;
   onChangePoints: (newPoints: number) => void;
+  onAnswerSelect: (selectedIndex: number) => void;
   qType: QuestionType;
 }
 
@@ -47,6 +48,7 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
   onSave,
   onChangeQType,
   onChangePoints,
+  onAnswerSelect,
   qType
 }) => {
   const PointsRender = () => {
@@ -74,13 +76,14 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
       </div>
 
       <ul className="mcq__options">
-        {options.map((opt) => (
+        {options.map((opt, index) => (
           <li key={opt.id} className="mcq__option">
             {mode === 'view' && (
               <label className="view-options">
                 <input
                   type="radio"
                   name="mcq"
+                  onClick={() => onAnswerSelect?.(index)}
                 />
                 {opt.text}
               </label>

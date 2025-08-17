@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './LongAnswerQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
@@ -36,6 +36,7 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
   onChangePoints,
   qType
 }) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const PointsRender = () => {
     console.log(points);
     if (mode == 'view') {
@@ -65,7 +66,8 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
                     <div className="laq-description">
                         <p>{description}</p>
                     </div>
-                    <div className="upload-btn">
+                    <div className="upload-btn" onClick={() => fileInputRef.current?.click()}>
+                        <input type="file" style={{display: 'none'}} ref={fileInputRef} />
                         <img src="/upload.svg" alt="Upload" />
                         <span>Upload PDF</span>
                     </div>
