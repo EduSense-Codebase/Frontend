@@ -93,7 +93,6 @@ export default function ClassworkTab({
 
     const uploadFileCallback = async () => {
         //make api request here
-        console.log("calling")
 
         const url = API_PREFIX + COURSE_ENDPOINT;
         const formData = { file: selectedFile, course_id: enrollmentId, desc: fileDesc };
