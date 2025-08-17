@@ -93,7 +93,6 @@ export default function ClassworkTab({
 
     const uploadFileCallback = async () => {
         //make api request here
-
     };
 
     const renderModuleModal = () => (
