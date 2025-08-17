@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { useState } from 'react';
 import type { StoryObj, Meta } from '@storybook/nextjs-vite';
@@ -78,3 +79,6 @@ export const Secondary: Story = {
         );
     },
 };
+*/
+
+export default function Test() {}

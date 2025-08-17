@@ -22,11 +22,11 @@ export const createAIConnection = (
     const connect = () => {
         if (isConnected) return;
 
-        let createAiSessionQueryParams = {
+        const createAiSessionQueryParams = {
             section: 'connect_ai_session',
         };
 
-        let formData = {
+        const formData = {
             course_id: courseId,
             session_id: sessionId,
         };
@@ -60,7 +60,7 @@ export const createAIConnection = (
 
     const sendMessage = (msg: string) => {
         if (socket && isConnected) {
-            let agentQuery = {
+            const agentQuery = {
                 type: 'send_message',
                 query: msg,
                 course_id: courseId,
@@ -76,7 +76,7 @@ export const createAIConnection = (
 
     const sendRequestToGetMessage = () => {
         if (socket && isConnected) {
-            let agentQuery = {
+            const agentQuery = {
                 type: 'retrieve_message',
                 course_id: courseId,
                 session_id: sessionId,

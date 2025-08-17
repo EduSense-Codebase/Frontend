@@ -16,7 +16,7 @@ const CompletionMsg: React.FC = () => {
                         transition: { duration: 0.3, ease: 'easeInOut' },
                     }}
                 >
-                    <img src={`/stars.gif?${Date.now()}`} className="w-[70vh]" />
+                    <img src={`/stars.gif?${Date.now()}`} className="w-[70vh]" alt="" />
                 </motion.div>
 
                 <motion.div

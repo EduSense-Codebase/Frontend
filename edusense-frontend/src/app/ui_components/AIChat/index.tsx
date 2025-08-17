@@ -1,16 +1,12 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import remarkGfm from 'remark-gfm';
-import Button from '../Button';
-import { API_PREFIX, WS_API_PREFIX, WS_AI_AGENT_ENDPOINT, AUTH_ENDPOINT } from '../../global';
 import './ChatWidget.scss';
-
-import { httpGet, httpPost } from '../../utils';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
-import { IAIAgentData, IAIAgentsResponse, IAISession } from '../../typedef';
+import { IAIAgentData, IAISession } from '../../typedef';
 import { IMessages } from '@/app/Pages/AIChat/AIChatController';
 
 interface AIAgentLoaderProps {
@@ -249,8 +245,9 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
                                     <h3>Sessions</h3>
                                     <div className="sessions-container">
                                         {props.sessions.length > 0 ? (
-                                            props.sessions.map((session: IAISession) => (
+                                            props.sessions.map((session: IAISession, index) => (
                                                 <div
+                                                    key={index}
                                                     className={`session ${props.currSession == session.id ? 'session-selected' : ''}`}
                                                     onClick={() => props.setCurrSession(session.id)}
                                                 >

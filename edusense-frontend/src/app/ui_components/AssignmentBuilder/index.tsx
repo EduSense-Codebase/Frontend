@@ -5,7 +5,6 @@ import Button from '../Button';
 import MultipleChoiceQ from '../MultipleChoiceQ';
 import LongAnswerQ from '../LongAnswerQ';
 import ShortAnswerQ from '../ShortAnswerQ';
-import { IModules } from '@/app/typedef';
 
 export type QuestionType = 'long' | 'multiple' | 'short';
 type QuestionMode = 'view' | 'edit';

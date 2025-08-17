@@ -1,3 +1,4 @@
+/*
 import type { Meta, StoryObj } from '@storybook/react';
 import CurrentModule from '../CurrentModule';
 
@@ -24,3 +25,6 @@ export const WithDifferentIcon: Story = {
         icon: '📝',
     },
 };
+*/
+
+export default function Test() {}

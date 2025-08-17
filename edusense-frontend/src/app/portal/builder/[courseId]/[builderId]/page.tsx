@@ -1,5 +1,7 @@
 'use client';
 
+export const runtime = 'edge';
+
 import './builder.scss';
 
 import { useParams, useRouter } from 'next/navigation';
@@ -12,7 +14,7 @@ import AssignmentBuilder, {
     AssignmentBuilderProps,
     Question,
 } from '@/app/ui_components/AssignmentBuilder';
-import { useCustomProp } from '@/app/portal/layout';
+import { useCustomProp } from '@/app/typedef';
 import Button from '@/app/ui_components/Button';
 
 export interface IQuizSubmission {
@@ -73,7 +75,7 @@ export default function BuilderPage() {
             ) {
                 setQuizContent(response.data.quiz_or_assignment_content);
                 setUpdatedQuizContent(response.data.quiz_or_assignment_content);
-                setQuizSubmission((_) => {
+                setQuizSubmission(() => {
                     if (response.data.quiz_or_assignment_content == undefined) {
                         return [];
                     }
@@ -303,8 +305,10 @@ export default function BuilderPage() {
                     value={moduleId}
                     onChange={(e) => setModuleId(parseInt(e.target.value))}
                 >
-                    {modules.map((currModule) => (
-                        <option value={currModule.id}>{currModule.title}</option>
+                    {modules.map((currModule, index) => (
+                        <option key={index} value={currModule.id}>
+                            {currModule.title}
+                        </option>
                     ))}
                 </select>
                 <textarea

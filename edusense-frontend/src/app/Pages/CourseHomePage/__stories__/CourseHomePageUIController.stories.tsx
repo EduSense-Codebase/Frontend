@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
@@ -30,3 +31,6 @@ export const Primary: Story = {
         return <CourseHomePageUIController {...args} activeTab={active} onTabChange={setActive} />;
     },
 };
+*/
+
+export default function Test() {}

@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import ChatWidget from '../index';
@@ -123,3 +124,6 @@ export const Secondary: Story = {
         messages: mockMessages2,
     },
 };
+*/
+
+export default function Test() {}

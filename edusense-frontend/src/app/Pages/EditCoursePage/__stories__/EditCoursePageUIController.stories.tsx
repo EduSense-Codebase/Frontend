@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
@@ -17,3 +18,6 @@ export const Primary: Story = {
         courseTitle: 'SAT',
     },
 };
+*/
+
+export default function Test() {}

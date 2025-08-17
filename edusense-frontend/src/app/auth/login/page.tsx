@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { API_PREFIX, AUTH_ENDPOINT, GOOGLE_CLIENT_ID } from '../../global';
+import { API_PREFIX, AUTH_ENDPOINT } from '../../global';
 import { httpPost } from '../../utils';
 import Form, { IFormFieldBase } from '../../ui_components/Form';
 import Link from 'next/link';

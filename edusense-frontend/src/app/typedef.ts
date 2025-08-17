@@ -1,6 +1,8 @@
 /* ********************* Generic Types START ********************* */
 
 import { AssignmentBuilderProps } from './ui_components/AssignmentBuilder';
+import React from 'react';
+
 export interface IFile {
     id: number;
     filename: string;
@@ -140,6 +142,30 @@ export interface IAIAgentsResponse {
     data: IAIAgentData[];
 }
 
+export interface IEnrollOrCreateCourseResponse {
+    data: ICourse;
+}
+
+export interface ICustomProps {
+    permissions: IPermissions | undefined;
+    setPermissions: React.Dispatch<React.SetStateAction<IPermissions | undefined>>;
+    institution: string;
+    setInstitution: React.Dispatch<React.SetStateAction<string>>;
+    courses: ICourse[];
+    setCourses: React.Dispatch<React.SetStateAction<ICourse[]>>;
+    setCurrCourseId: React.Dispatch<React.SetStateAction<number | undefined>>;
+    setCurrBuilderId: React.Dispatch<React.SetStateAction<number | undefined>>;
+}
+
+export const useCustomProp = () => {
+    const value = React.useContext(CustomPropContext);
+    if (value === undefined) {
+        throw new Error('useCustomProp must be used within a CustomPropProvider');
+    }
+    return value;
+};
+
+export const CustomPropContext = React.createContext<ICustomProps | undefined>(undefined);
 /* ********************* Axios Response Types END *********************** */
 
 /* ********************* Mock Data START *********************** */

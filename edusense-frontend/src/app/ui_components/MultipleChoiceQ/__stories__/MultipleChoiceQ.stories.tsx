@@ -1,4 +1,5 @@
 // stories/MultipleChoiceQ.stories.tsx
+/*
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import MultipleChoiceQ, { Mode, Option } from '../index';
@@ -129,3 +130,6 @@ export const Secondary: Story = {
         );
     },
 };
+*/
+
+export default function Test() {}

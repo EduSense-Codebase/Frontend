@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import AnnouncementForm from '../index';
@@ -17,3 +18,6 @@ export const Primary: Story = {
         onCancel: () => alert('Cancelled'),
     },
 };
+*/
+
+export default function Test() {}

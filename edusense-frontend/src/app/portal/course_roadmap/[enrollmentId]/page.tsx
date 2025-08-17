@@ -1,4 +1,5 @@
 'use client';
+
 //import CourseRoadmap from "@/app/ui_components/CourseRoadmap";
 import { useState, useEffect } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
@@ -18,9 +19,8 @@ import {
     IFile,
     IFileResponse,
 } from '@/app/typedef';
-import { Step } from 'react-joyride';
 // import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
-import { useCustomProp } from '@/app/portal/layout';
+import { useCustomProp } from '@/app/typedef';
 import '../../../style/index.scss';
 // import { motion } from 'framer-motion';
 
@@ -28,20 +28,6 @@ export const runtime = 'edge';
 import CourseHomePageUIController from '@/app/Pages/CourseHomePage/CourseHomePageUIController';
 import EditCoursePageUIController from '@/app/Pages/EditCoursePage/EditCoursePageUIController';
 import Button from '@/app/ui_components/Button';
-
-const sectionSteps: Step[] = [
-    {
-        target: 'body',
-        placement: 'center',
-        content: 'This is the section page, where you can go to different sections of the course',
-        disableBeacon: true,
-    },
-    {
-        target: '#section-tile',
-        content: 'Click on a section when your ready to check out the section roadmap!.',
-        disableBeacon: true,
-    },
-];
 
 export default function HomePage() {
     const params = useParams();

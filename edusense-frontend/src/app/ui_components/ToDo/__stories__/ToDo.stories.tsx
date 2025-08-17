@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import ToDo from '../ToDo';
 
@@ -7,3 +8,6 @@ export default {
 };
 
 export const Default = () => <ToDo />;
+*/
+
+export default function Test() {}

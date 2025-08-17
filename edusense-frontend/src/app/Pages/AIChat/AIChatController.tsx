@@ -48,7 +48,7 @@ export default function AIChatController(props: AIChatControllerProps) {
     > | null>(null);
 
     useEffect(() => {
-        let queryParams = {
+        const queryParams = {
             section: 'get_ai_agents',
         };
 
@@ -62,7 +62,7 @@ export default function AIChatController(props: AIChatControllerProps) {
 
     useEffect(() => {
         if (props.courseId && currAgent) {
-            let sessionQueryParams = {
+            const sessionQueryParams = {
                 section: 'ai_sessions',
                 course_id: props.courseId,
             };

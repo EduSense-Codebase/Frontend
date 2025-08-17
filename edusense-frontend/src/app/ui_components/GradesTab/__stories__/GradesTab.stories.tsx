@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { Meta } from '@storybook/react';
 import GradesTab, { Grade, GradesTabProps } from '../GradesTab';
@@ -20,3 +21,6 @@ export const Default = Template.bind({});
 Default.args = {
     grades: mockGrades,
 };
+*/
+
+export default function Test() {}

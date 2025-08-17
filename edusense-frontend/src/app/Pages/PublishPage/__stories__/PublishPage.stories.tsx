@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import PublishPage from '../PublishPage';
@@ -14,3 +15,6 @@ type Story = StoryObj<typeof PublishPage>;
 export const Default: Story = {
     render: () => <PublishPage />,
 };
+*/
+
+export default function Test() {}

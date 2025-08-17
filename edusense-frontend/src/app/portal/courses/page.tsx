@@ -2,26 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { API_PREFIX, COURSE_ENDPOINT } from '../../global';
-import {
-    IAllEnrolledCourseResponse,
-    IAllOfferedResponse,
-    ICourse,
-    IOfferedCourse,
-    INewEnrollment,
-} from '../../typedef';
-import { httpGet, httpPost } from '../../utils';
+import { ICourse, IEnrollOrCreateCourseResponse } from '../../typedef';
+import { httpPost } from '../../utils';
 import * as motion from 'motion/react-client';
 //import '../../theme.css';
 import '../../style/index.scss';
-import { useCustomProp } from '../layout';
-import { create } from 'domain';
-import { error } from 'console';
+import { useCustomProp } from '@/app/typedef';
 
 export default function CourseSection() {
-    const { permissions, institution, courses, setCourses, setCurrCourseId } = useCustomProp();
+    const { permissions, courses, setCourses, setCurrCourseId } = useCustomProp();
 
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [curAction, setCurAction] = useState('');
     const [createCourseName, setCreateCourseName] = useState('');
     const [joinCode, setJoinCode] = useState('');
     const [loading, setLoading] = useState(false);
@@ -39,23 +30,13 @@ export default function CourseSection() {
     ];
 
     useEffect(() => {
-        const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
         console.log(permissions?.create_course);
 
         setCurrCourseId(undefined);
-
-        const queryParams = {
-            section: join_course
-                ? 'all_enrolled_courses'
-                : create_course
-                  ? 'all_created_courses'
-                  : 'null',
-        };
     }, [permissions]);
 
     const handleDialogClose = () => {
         setDialogOpen(false);
-        setCurAction('');
         setCreateCourseName('');
     };
 
@@ -67,7 +48,7 @@ export default function CourseSection() {
         };
         const queryParams = { section: 'create_course' };
 
-        httpPost(apiUrl, formData, queryParams)
+        httpPost<IEnrollOrCreateCourseResponse>(apiUrl, formData, queryParams)
             .then((res) => {
                 console.log('Course created:', res.data);
                 setCourses((prev) => [...prev, res.data.data]);
@@ -79,8 +60,7 @@ export default function CourseSection() {
             });
     };
 
-    const handleAction = (action: string) => {
-        setCurAction(action);
+    const handleAction = () => {
         setDialogOpen(true);
     };
 
@@ -91,7 +71,7 @@ export default function CourseSection() {
         const queryParams = { section: 'enroll_course' };
         const formData = { join_code: joinCode };
 
-        const requestResponse = httpPost(url, formData, queryParams);
+        const requestResponse = httpPost<IEnrollOrCreateCourseResponse>(url, formData, queryParams);
         requestResponse
             .then((res) => {
                 console.log(res.data);
@@ -152,7 +132,7 @@ export default function CourseSection() {
                     <h3 className="subheading">My Courses</h3>
                     <div className="cards-container">
                         {courses?.map((course, index) => renderCourseTile(course, index))}
-                        <button onClick={() => handleAction('enroll_course')}>
+                        <button onClick={() => handleAction()}>
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -165,7 +145,7 @@ export default function CourseSection() {
                                 className="course-tile"
                                 id="enroll-course-tile"
                             >
-                                <img src="/plus_icon.png" className="plus-icon" />
+                                <img src="/plus_icon.png" className="plus-icon" alt="" />
                                 <h3 className="course-tile-name">{new_tile}</h3>
                             </motion.div>
                         </button>

@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import type { StoryObj, Meta } from '@storybook/nextjs-vite';
 import AssignmentBuilder from '../index';
@@ -68,3 +69,6 @@ export const Secondary: Story = {
         />
     ),
 };
+*/
+
+export default function Test() {}

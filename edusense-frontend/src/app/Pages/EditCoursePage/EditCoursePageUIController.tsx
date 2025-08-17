@@ -42,7 +42,6 @@ const EditCoursePageUIController: React.FC<Props> = ({
     const [sideBarOpen, setSidebarOpen] = useState(false);
     const [chooseModule, setChooseModule] = useState(false);
     const [textBoxStyle, setTextBoxStyle] = useState('');
-    const [assignmentsType, setAssignmentsType] = useState('');
     const [classModule, setClassModule] = useState('');
     // const [bannerImage, setBannerImage] = useState<string | null>(null);
     const [showCustomize, setShowCustomize] = useState(false);
@@ -58,7 +57,6 @@ const EditCoursePageUIController: React.FC<Props> = ({
             setBannerImage(originalValues.bannerImage);
             setShowModuleWidget(originalValues.showModuleWidget);
             setShowToDoWidget(originalValues.showToDoWidget);
-            setAssignmentsType(originalValues.assignmentsType);
             setTextBoxStyle(originalValues.textBoxStyle);
         }
         setEditMode(false);
@@ -124,7 +122,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 
                 {editMode && (
                     <button className="add-element-btn" onClick={toggleSidebar}>
-                        <img src="/plus_icon.png" />
+                        <img src="/plus_icon.png" alt="" />
                         <p>Add Element</p>
                     </button>
                 )}

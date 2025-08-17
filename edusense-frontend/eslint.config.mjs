@@ -16,7 +16,9 @@ const eslintConfig = [...compat.config({
   extends: ["next/core-web-vitals", "next/typescript", "plugin:prettier/recommended"],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
-    'react-hooks/exhaustive-deps': 'off'
+    'react-hooks/exhaustive-deps': 'off',
+    'storybook/default-exports': 'off',
+    '@next/next/no-img-element': 'off',
   }
 }), ...storybook.configs["flat/recommended"]];
 

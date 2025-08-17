@@ -91,6 +91,7 @@ export default function Sidebar({ courses }: { courses: ICourse[] }) {
                                     label={course.course_name}
                                     href={`/portal/course_roadmap/${course.id}`}
                                     isOpen={isOpen}
+                                    key={index}
                                 />
                             ))}
                         </div>
