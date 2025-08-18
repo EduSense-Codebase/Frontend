@@ -32,7 +32,6 @@ export default function ClassworkTab({
     const [moduleTitle, setModuleTitle] = useState('');
     const [fileDesc, setFileDesc] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [pdfToView, setPdfToView] = useState<string | null>(null);
     const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false);
 
     const { enrollmentId } = useParams();
@@ -235,22 +234,14 @@ export default function ClassworkTab({
                         <ul className="assignmentList">
                             {files.map((file) => (
                                 <li key={file.id} className="assignmentItem">
-                                    {file.filename.toLowerCase().endsWith('.pdf') ? (
-                                        <button
-                                            onClick={() => setPdfToView(file.url)}
-                                            className="pdfBtn"
-                                        >
-                                            📄 {file.filename}
-                                        </button>
-                                    ) : (
-                                        <a
-                                            href={file.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            📄 {file.filename}
-                                        </a>
-                                    )}
+                                    <a
+                                        key={file.id}
+                                        href={file.url}
+                                        target="_blank"
+                                        className="block px-4 py-2 text-blue-600 hover:underline"
+                                    >
+                                        📄 {file.filename}
+                                    </a>
                                 </li>
                             ))}
                         </ul>
@@ -260,22 +251,6 @@ export default function ClassworkTab({
 
             {showModuleModal && renderModuleModal()}
             {showFileModal && renderFileModal()}
-
-            {pdfToView && (
-                <div className="pdfViewerModal">
-                    <div className="pdfViewerContent">
-                        <button onClick={() => setPdfToView(null)} className="closeBtn">
-                            ✖ Close
-                        </button>
-                        <iframe
-                            src={pdfToView}
-                            width="100%"
-                            height="600px"
-                            style={{ border: 'none' }}
-                        />
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
