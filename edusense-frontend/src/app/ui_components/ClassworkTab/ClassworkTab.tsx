@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { httpPost } from '@/app/utils';
+import Button from '../Button';
 
 interface ClassworkProps {
     join_course: boolean | undefined;
@@ -165,12 +166,11 @@ export default function ClassworkTab({
                 <h2>Classwork</h2>
                 <div className="createContainer">
                     {!join_course && (
-                        <button
-                            className="createBtn"
+                        <Button
+                            displayName="＋ Create"
+                            variant="primary"
                             onClick={() => setShowCreateMenu((prev) => !prev)}
-                        >
-                            ＋ Create
-                        </button>
+                        />
                     )}
                     {showCreateMenu && renderCreateDropdown()}
                 </div>
