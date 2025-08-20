@@ -62,3 +62,38 @@
       background-color: darken(variables.$light-grey, 5%);
     }
   }
+
+  .action-btns {
+    display: flex;
+    gap: 0.5rem;
+    position: fixed;
+    bottom: 1rem;
+    justify-self: center;
+    z-index: 10;
+    padding: 0.25rem 1rem;
+    background-color: variables.$dark-blue;
+    box-shadow: variables.$dropshadow;
+    border-radius: 2rem;
+  }
+
+  .tooltip-text {
+    visibility: hidden;
+    background-color: variables.$darker-blue;
+    color: variables.$white;
+    font-size: 12px;
+    text-align: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.2s;
+    }
+
+    .action-btn:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
