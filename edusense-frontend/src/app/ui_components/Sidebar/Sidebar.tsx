@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import './Sidebar.scss';
 import { ICourse } from '@/app/typedef';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /* Reusable Sidebar Item */
 function SidebarItem({
@@ -23,10 +24,21 @@ function SidebarItem({
     return (
         <Link
             href={href}
-            className={`sidebar-item ${!isOpen ? 'justify-center' : ''} ${small ? '' : ''}`}
+            className={`sidebar-item`}
         >
             {icon}
-            {isOpen && <p>{label}</p>}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.p
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2 }}
+                    >
+                        {label}
+                    </motion.p>
+                )}
+            </AnimatePresence>
         </Link>
     );
 }
@@ -50,64 +62,102 @@ export default function Sidebar({ courses }: { courses: ICourse[] }) {
     const [coursesOpen, setCoursesOpen] = useState(false);
 
     return (
-        <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-            {/* Toggle Button */}
-            <button onClick={() => setIsOpen(!isOpen)} className="p-4 focus:outline-none">
-                <Image src="/sidebar/sidebar.png" width={30} height={30} alt="menu" />
-            </button>
+        <AnimatePresence>
+            <motion.div
+                className={`sidebar ${isOpen ? 'open' : 'closed'}`}
+                initial={false}
+                animate={isOpen ? 'open' : 'closed'}
+                variants={{
+                    open: { width: '14rem' },
+                    closed: { width: '4rem' }
+                }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+                {/* Toggle Button */}
+                <button onClick={() => setIsOpen(!isOpen)} className='mt-2'>
+                    <SidebarItem
+                        icon={<Image src="/sidebar/sidebar.png" width={30} height={30} alt="menu" />}
+                        label=""
+                        isOpen={isOpen}
+                        href=""
+                    />
+                </button>
+                <nav className="flex-1 space-y-1">
+                    {/* Home */}
+                    <SidebarItem
+                        icon={<Image src="/sidebar/home.png" width={40} height={40} alt="home" />}
+                        label="Home"
+                        isOpen={isOpen}
+                        href="/portal/courses"
+                    />
+                    {/* Courses */}
+                    <div className='courses-dropdown'>
+                        <button
+                            onClick={() => setCoursesOpen(!coursesOpen)}
+                            className={`courses-btn ${!isOpen ? 'justify-center' : ''}`}
+                        >
+                            <Image src="/sidebar/course.png" width={27} height={27} alt="courses" />
+                            <AnimatePresence initial={false}>
+                                {isOpen && (
+                                <motion.span
+                                    key="courses-label"
+                                    className="sidebar-item"
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -10 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    Courses
+                                </motion.span>
+                                )}
+                            </AnimatePresence>
 
-            <nav className="flex-1 space-y-1">
-                {/* Home */}
-                <SidebarItem
-                    icon={<Image src="/sidebar/home.png" width={40} height={40} alt="home" />}
-                    label="Home"
-                    isOpen={isOpen}
-                    href="/portal/courses"
-                />
-
-                {/* Courses */}
-                <div>
-                    <button
-                        onClick={() => setCoursesOpen(!coursesOpen)}
-                        className={`flex w-full items-center px-4 py-2 ${
-                            !isOpen ? 'justify-center' : ''
-                        }`}
-                    >
-                        <Image src="/sidebar/course.png" width={27} height={27} alt="courses" />
-                        {isOpen && (
-                            <>
-                                <span className="sidebar-item">Courses</span>
-                                <ChevronDownIcon
-                                    className={`transition-transform ${coursesOpen ? 'rotate-180' : ''}`}
-                                />
-                            </>
-                        )}
-                    </button>
-
+                            <AnimatePresence initial={false}>
+                                {isOpen && (
+                                <motion.span
+                                    key="chevron"
+                                    initial={{ opacity: 0, rotate: -90 }}
+                                    animate={{ opacity: 1, rotate: coursesOpen ? 180 : 0 }}
+                                    exit={{ opacity: 0, rotate: -90 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <ChevronDownIcon />
+                                </motion.span>
+                                )}
+                            </AnimatePresence>
+                            </button>
+                        <AnimatePresence>
                     {coursesOpen && isOpen && (
-                        <div className="ml-8 space-y-1">
-                            {courses.map((course, index) => (
-                                <SidebarItem
-                                    label={course.course_name}
-                                    href={`/portal/course_roadmap/${course.id}`}
-                                    isOpen={isOpen}
-                                    key={index}
-                                />
-                            ))}
-                        </div>
+                        <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="ml-8 space-y-1 overflow-hidden"
+                        >
+                        {courses.map((course, index) => (
+                            <SidebarItem
+                            label={course.course_name}
+                            href={`/portal/course_roadmap/${course.id}`}
+                            isOpen={isOpen}
+                            key={index}
+                            />
+                        ))}
+                        </motion.div>
                     )}
-                </div>
-
-                {/* Settings */}
-                <SidebarItem
-                    icon={
-                        <Image src="/sidebar/settings.png" width={30} height={30} alt="settings" />
-                    }
-                    label="Settings"
-                    isOpen={isOpen}
-                    href="/portal/settings"
-                />
-            </nav>
-        </div>
+                    </AnimatePresence>
+                    </div>
+                    {/* Settings */}
+                    <SidebarItem
+                        icon={
+                            <Image src="/sidebar/settings.png" width={30} height={30} alt="settings" />
+                        }
+                        label="Settings"
+                        isOpen={isOpen}
+                        href="/portal/settings"
+                    />
+                </nav>
+            </motion.div>
+        </AnimatePresence>
     );
 }

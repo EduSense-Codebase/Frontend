@@ -1,6 +1,7 @@
-/*
+
 import type { Meta, StoryObj } from '@storybook/react';
 import Sidebar from '../Sidebar';
+import { ICourse } from '@/app/typedef';
 
 const meta: Meta<typeof Sidebar> = {
     title: 'Components/Sidebar',
@@ -13,8 +14,25 @@ export default meta;
 
 type Story = StoryObj<typeof Sidebar>;
 
+const mockCourses: ICourse[] = [
+  {
+    id: 1,
+    course_name: "Intro to Programming",
+    institution: 101,
+    join_code: "CS101A",
+    teacher_id: 1001,
+  },
+  {
+    id: 2,
+    course_name: "Calculus",
+    institution: 102,
+    join_code: "MATH202B",
+    teacher_id: 1002,
+  },
+]
+
 export const Default: Story = {
-    render: () => <Sidebar />,
+    render: () => <Sidebar courses={mockCourses}/>,
 };
 
 export const Closed: Story = {
@@ -35,6 +53,6 @@ function SidebarWrapper({ initialOpen }: { initialOpen: boolean }) {
     const [open, setOpen] = useState(initialOpen);
     return <Sidebar key={String(open)} />;
 }
-*/
 
-export default function Test() {}
+
+//export default function Test() {}

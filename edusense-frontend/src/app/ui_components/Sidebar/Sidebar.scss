@@ -12,15 +12,22 @@
     transition: width 0.3s ease;
     z-index: 1000;
     box-shadow: $dropshadow;
-  
-    &.open {
-      width: 14rem; // w-56
-    }
-  
-    &.closed {
-      width: 4rem; // w-16
-    }
+
   }
+
+.courses-dropdown {
+  .courses-btn {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 8px 20px;
+    cursor: pointer;
+    &:hover {
+      background-color: $light-blue;
+    }
+    justify-content: flex-start;
+  }
+}
   
 .sidebar-item {
   display: flex;
