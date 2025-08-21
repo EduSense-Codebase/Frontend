@@ -101,7 +101,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                 className="edit-course-page"
                 initial={{ width: '100%' }}
                 animate={{ width: sideBarOpen ? '75%' : '100%' }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
                 <div className="header-container">
                     <div
@@ -178,14 +178,17 @@ const EditCoursePageUIController: React.FC<Props> = ({
                     </div>
                 )}
             </motion.div>
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
                 {sideBarOpen && (
                     <motion.div
-                        className={`edit-sidebar ${sideBarOpen ? 'open' : ''}`}
+                        key="sidebar"
+                        className={"edit-sidebar"}
                         initial={{ x: '100%' }}
-                        animate={{ x: sideBarOpen ? 0 : '100%' }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ duration: 0.5, ease: 'easeInOut' }}
                     >
+
                         <button onClick={toggleSidebar} className="close-sidebar-btn">
                             <img src="/back.svg" alt="back arrow" />
                         </button>
