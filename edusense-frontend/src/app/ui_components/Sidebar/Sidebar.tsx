@@ -33,7 +33,7 @@ function SidebarItem({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ delay: 0.3, duration: 0.2 }}
                     >
                         {label}
                     </motion.p>
@@ -105,7 +105,7 @@ export default function Sidebar({ courses }: { courses: ICourse[] }) {
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: -10 }}
-                                    transition={{ duration: 0.2 }}
+                                    transition={{ delay: 0.3, duration: 0.2 }}
                                 >
                                     Courses
                                 </motion.span>
@@ -119,7 +119,7 @@ export default function Sidebar({ courses }: { courses: ICourse[] }) {
                                     initial={{ opacity: 0, rotate: -90 }}
                                     animate={{ opacity: 1, rotate: coursesOpen ? 180 : 0 }}
                                     exit={{ opacity: 0, rotate: -90 }}
-                                    transition={{ duration: 0.2 }}
+                                    transition={{ delay: 0.3, duration: 0.2 }}
                                 >
                                     <ChevronDownIcon />
                                 </motion.span>
