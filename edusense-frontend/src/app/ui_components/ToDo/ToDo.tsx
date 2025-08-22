@@ -24,11 +24,15 @@ export default function ToDo({
             )}
 
             <h3 className="todo-title">Upcoming Assignments</h3>
-            {assignments.map((assignment, idx) => (
-                <div key={idx} className="todo-item">
-                    {assignment.name}
-                </div>
-            ))}
+            {assignments.length === 0 ? (
+                <p className="text-gray-500 italic">No assignments posted yet</p>
+            ) : (
+                assignments.map((assignment, idx) => (
+                    <div key={idx} className="todo-item">
+                        {assignment.name}
+                    </div>
+                ))
+            )}
         </div>
     );
 }

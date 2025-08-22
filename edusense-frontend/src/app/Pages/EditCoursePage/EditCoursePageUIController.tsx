@@ -20,8 +20,10 @@ interface Props {
     setShowModuleWidget: React.Dispatch<React.SetStateAction<boolean>>;
     setBannerImage: React.Dispatch<React.SetStateAction<string | null>>;
     setShowToDoWidget: React.Dispatch<React.SetStateAction<boolean>>;
+    setClassModule: React.Dispatch<React.SetStateAction<string>>;
     assignments: IAssignments[];
     originalValues: any;
+    classModule: string;
 }
 
 const EditCoursePageUIController: React.FC<Props> = ({
@@ -37,12 +39,14 @@ const EditCoursePageUIController: React.FC<Props> = ({
     setBannerImage,
     originalValues,
     assignments,
+    classModule,
+    setClassModule,
 }) => {
     // const [editMode, setEditMode] = useState(false);
     const [sideBarOpen, setSidebarOpen] = useState(false);
     const [chooseModule, setChooseModule] = useState(false);
     const [textBoxStyle, setTextBoxStyle] = useState('');
-    const [classModule, setClassModule] = useState('');
+    // const [classModule, setClassModule] = useState('');
     // const [bannerImage, setBannerImage] = useState<string | null>(null);
     const [showCustomize, setShowCustomize] = useState(false);
     const fileInputRef = React.useRef<HTMLInputElement>(null);

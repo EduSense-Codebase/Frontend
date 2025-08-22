@@ -49,6 +49,7 @@ export default function HomePage() {
     const [originalValues, setOriginalValues] = useState<any>(null);
     const [students, setStudents] = useState<IStudentData[]>([]);
     const [files, setFiles] = useState<IFile[]>([]);
+    const [classModule, setClassModule] = useState('');
 
     useEffect(() => {
         const url = API_PREFIX + COURSE_ENDPOINT;
@@ -135,6 +136,8 @@ export default function HomePage() {
                     setShowToDoWidget={setShowToDoWidget}
                     originalValues={originalValues}
                     assignments={assignments}
+                    classModule={classModule}
+                    setClassModule={setClassModule}
                 />
             ) : (
                 <div className="view-course-page">
@@ -165,6 +168,7 @@ export default function HomePage() {
                         setShowToDoWidget={setShowToDoWidget}
                         files={files}
                         setFiles={setFiles}
+                        classModule={classModule}
                     />
                 </div>
             )}

@@ -34,6 +34,7 @@ interface Props {
     setShowModuleWidget: React.Dispatch<React.SetStateAction<boolean>>;
     setShowToDoWidget: React.Dispatch<React.SetStateAction<boolean>>;
     setModules: React.Dispatch<React.SetStateAction<IModules[]>>;
+    classModule: string;
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({
@@ -53,6 +54,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     setShowToDoWidget,
     files,
     setFiles,
+    classModule,
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
 
@@ -110,7 +112,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                                 {showModuleWidget && allModules?.length > 0 && (
                                     <div className="widget-card">
                                         <CurrentModule
-                                            moduleName={allModules[0].title}
+                                            moduleName={classModule}
                                             editMode={false}
                                             setModule={setShowModuleWidget}
                                         />

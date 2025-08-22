@@ -22,7 +22,7 @@ const CurrentModule: React.FC<{
                 <ul className="current-module-list">
                     <li className="current-module-item">
                         <span>📘</span>
-                        <p>{moduleName}</p>
+                        {!moduleName ? <p> No module selected</p> : <p>{moduleName}</p>}
                     </li>
                 </ul>
             </div>

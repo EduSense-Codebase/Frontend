@@ -30,13 +30,10 @@ export default function ClassworkTab({
     const [showCreateMenu, setShowCreateMenu] = useState(false);
     const [showModuleModal, setShowModuleModal] = useState(false);
     const [showFileModal, setShowFileModal] = useState(false);
-    const [showAssignmentModal, setShowAssignmentModal] = useState(false);
     const [moduleTitle, setModuleTitle] = useState('');
     const [fileDesc, setFileDesc] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false);
-    const [contentType, setContentType] = useState<"assignment" | "text">("assignment");
-    const [assignmentDesc, setAssignmentDesc] = useState("");
 
     const { enrollmentId } = useParams();
     const toggleModule = (id: number) => {
@@ -45,14 +42,16 @@ export default function ClassworkTab({
         );
     };
 
-    const handleCreateSelect = (type: 'assignment' | 'module' | 'file') => {
+    const handleCreateSelect = (type: 'assignment' | 'module' | 'file' | 'text-content') => {
         setShowCreateMenu(false);
         if (type === 'module') {
             setShowModuleModal(true);
         } else if (type === 'file') {
             setShowFileModal(true);
+        } else if (type == 'assignment') {
+            //redirect to builder page with assignment context
         } else {
-            setShowAssignmentModal(true);
+            //redirect to builder page with text-content context
         }
     };
 
@@ -69,6 +68,9 @@ export default function ClassworkTab({
         <div className="createDropdown">
             <button className="dropdownItem" onClick={() => handleCreateSelect('assignment')}>
                 📝 Assignment
+            </button>
+            <button className="dropdownItem" onClick={() => handleCreateSelect('text-content')}>
+                Text-based Content
             </button>
             <button className="dropdownItem" onClick={() => handleCreateSelect('module')}>
                 📦 Module
@@ -123,8 +125,12 @@ export default function ClassworkTab({
                     className="modalInput"
                 />
                 <div className="modalActions">
-                    <Button displayName='Create' variant='primary' onClick={createModuleCallback}/>
-                    <Button displayName='Cancel' variant='secondary' onClick={() => setShowModuleModal(false)}/>
+                    <Button displayName="Create" variant="primary" onClick={createModuleCallback} />
+                    <Button
+                        displayName="Cancel"
+                        variant="secondary"
+                        onClick={() => setShowModuleModal(false)}
+                    />
                 </div>
             </div>
         </div>
@@ -147,54 +153,16 @@ export default function ClassworkTab({
                     className="modalInput"
                 />
                 <div className="modalActions">
-                    <Button displayName='Create' variant='primary' onClick={uploadFileCallback}/>
-                    <Button displayName='Cancel' variant='secondary' onClick={() => setShowFileModal(false)}/>
-
+                    <Button displayName="Create" variant="primary" onClick={uploadFileCallback} />
+                    <Button
+                        displayName="Cancel"
+                        variant="secondary"
+                        onClick={() => setShowFileModal(false)}
+                    />
                 </div>
             </div>
         </div>
     );
-
-    const renderAssignmentModal = () => (
-        <div className="modalOverlay">
-            <div className="modalContent">
-                <h3>Create New Assignment</h3>
-    
-                {/* Content Type Selection */}
-                <div className="modalInput">
-                    <label>
-                        <input
-                            type="radio"
-                            name="contentType"
-                            value="assignment"
-                            checked={contentType === "assignment"}
-                            onChange={(e) =>setContentType(e.target.value as "assignment" | "text")}
-                        />
-                        Assignment-based Content (Quiz, Homework, etc.)
-                    </label>
-                </div>
-    
-                <div className="modalInput">
-                    <label>
-                        <input
-                            type="radio"
-                            name="contentType"
-                            value="text"
-                            checked={contentType === "text"}
-                            onChange={(e) => setContentType(e.target.value as "assignment" | "text")}
-                        />
-                        Text-based Content (Lecture Notes, Syllabi, etc.)
-                    </label>
-                </div>
-    
-                <div className="modalActions">
-                    <Button displayName='Create' variant='primary' onClick={() => (console.log("clicked"))}/>
-                    <Button displayName='Cancel' variant='secondary' onClick={() => (setShowAssignmentModal(false))}/>
-                </div>
-            </div>
-        </div>
-    );
-    
 
     return (
         <div className="classwork">
@@ -287,7 +255,6 @@ export default function ClassworkTab({
 
             {showModuleModal && renderModuleModal()}
             {showFileModal && renderFileModal()}
-            {showAssignmentModal && renderAssignmentModal()}
         </div>
     );
 }
