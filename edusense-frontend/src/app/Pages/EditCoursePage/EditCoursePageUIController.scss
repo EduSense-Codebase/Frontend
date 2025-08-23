@@ -10,6 +10,7 @@
 	align-items: center;
 	justify-content: baseline;
 	font-family: variables.$font-jua;
+	transition: all 0.3s ease;
 }
 
 .header-container {
@@ -36,6 +37,20 @@
 	position: relative;
 	top: -8rem;
 	left: 35%;
+}
+
+.edit-sidebar {
+	position: fixed;
+	top: 5.5rem;
+	right: 0;
+	height: 100vh;
+	background-color: variables.$white;
+	box-shadow: variables.$dropshadow;
+	overflow-y: auto;
+	padding-bottom: 5rem;
+	flex-shrink: 0; 
+	width: 25vw;
+	z-index: 10;
 }
 
 .edit-btn-container {

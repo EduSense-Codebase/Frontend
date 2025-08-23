@@ -8,6 +8,7 @@ import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { httpPost } from '@/app/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Props {
     course: ICourse | undefined;
@@ -100,7 +101,12 @@ const EditCoursePageUIController: React.FC<Props> = ({
 
     return (
         <div className="main-container">
-            <div className="edit-course-page">
+            <motion.div 
+                className="edit-course-page"
+                initial={{ width: '100%' }}
+                animate={{ width: sideBarOpen ? '75%' : '100%' }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
+            >
                 <div className="header-container">
                     <div
                         className="course-header"
@@ -175,62 +181,70 @@ const EditCoursePageUIController: React.FC<Props> = ({
                         </div>
                     </div>
                 )}
-            </div>
-            {sideBarOpen && (
-                <div className="sidebar">
-                    <button onClick={toggleSidebar} className="close-sidebar-btn">
-                        <img src="/back.svg" alt="back arrow" />
-                    </button>
-                    <div className="sidebar-content">
-                        <div className="sidebar-header">
-                            <img src="/text.svg" alt="Text Box Icon" className="sidebar-icon" />
-                            <h2> Text Box </h2>
-                        </div>
-                        <div className="element-options">
-                            <h3>Text Styles</h3>
-                            <Dropdown
-                                value={textBoxStyle}
-                                options={['Heading', 'Subheading', 'Paragraph']}
-                                placeholder="Select Style"
-                                onChange={(newValue) => setTextBoxStyle(newValue)}
-                            />
-                        </div>
-                        <div className="sidebar-header">
-                            <img src="/cube.svg" alt="Section Icon" className="sidebar-icon" />
-                            <h2> Sections </h2>
-                        </div>
-                        <div className="element-options">
-                            <Button
-                                displayName="Add To-Do Widget"
-                                variant="primary"
-                                onClick={() => setShowToDoWidget(true)}
-                            />
+            </motion.div>
+            <AnimatePresence mode="wait">
+                {sideBarOpen && (
+                    <motion.div
+                        key="sidebar"
+                        className={"edit-sidebar"}
+                        initial={{ x: '100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ duration: 0.5, ease: 'easeInOut' }}
+                    >
 
-                            <Button
-                                displayName="Add Current Module Widget"
-                                variant="primary"
-                                onClick={() => setChooseModule(true)}
-                            />
-
-                            {chooseModule && (
+                        <button onClick={toggleSidebar} className="close-sidebar-btn">
+                            <img src="/back.svg" alt="back arrow" />
+                        </button>
+                        <div className="sidebar-content">
+                            <div className="sidebar-header">
+                                <img src="/text.svg" alt="Text Box Icon" className="sidebar-icon" />
+                                <h2> Text Box </h2>
+                            </div>
+                            <div className="element-options">
+                                <h3>Text Styles</h3>
                                 <Dropdown
-                                    value={classModule}
-                                    options={titles}
-                                    placeholder="Select Module"
-                                    onChange={(newValue) => setClassModule(newValue)}
+                                    value={textBoxStyle}
+                                    options={['Heading', 'Subheading', 'Paragraph']}
+                                    placeholder="Select Style"
+                                    onChange={(newValue) => setTextBoxStyle(newValue)}
                                 />
-                            )}
-                            {chooseModule && (
+                            </div>
+                            <div className="sidebar-header">
+                                <img src="/cube.svg" alt="Section Icon" className="sidebar-icon" />
+                                <h2> Sections </h2>
+                            </div>
+                            <div className="element-options">
                                 <Button
-                                    displayName="Add"
+                                    displayName="Add To-Do Widget"
                                     variant="primary"
-                                    onClick={() => setShowModuleWidget(true)}
+                                    onClick={() => setShowToDoWidget(true)}
                                 />
-                            )}
+                                <Button
+                                    displayName="Add Current Module Widget"
+                                    variant="primary"
+                                    onClick={() => setChooseModule(true)}
+                                />
+                                {chooseModule && (
+                                    <Dropdown
+                                        value={classModule}
+                                        options={titles}
+                                        placeholder="Select Module"
+                                        onChange={(newValue) => setClassModule(newValue)}
+                                    />
+                                )}
+                                {chooseModule && (
+                                    <Button
+                                        displayName="Add"
+                                        variant="primary"
+                                        onClick={() => setShowModuleWidget(true)}
+                                    />
+                                )}
+                            </div>
                         </div>
-                    </div>
-                </div>
-            )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
             {showCustomize && (
                 <div className="modal">
                     <div className="modal-content">

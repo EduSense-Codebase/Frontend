@@ -1,99 +1,158 @@
 @use '../../style/variables' as vars;
 
-.container {
+.publish-container {
   background-color: vars.$light-blue;
-  padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 2rem;
   font-family: vars.$font-itim;
-  color: vars.$darker-blue;
-}
+  color: vars.$dark-blue;
+  box-shadow: vars.$dropshadow;
 
-.header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: vars.$font-jua;
-  font-size: 1.4rem;
-  margin-bottom: 1.5rem;
-
-  .icon {
-    font-size: 1.6rem;
-  }
-}
-
-.form {
-  display: flex;
-  gap: 2rem;
-
-  label {
+  .header {
     display: flex;
-    flex-direction: column;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-  }
-
-  input, textarea, select {
-    margin-top: 0.3rem;
-    padding: 0.5rem;
-    border: 1px solid vars.$grey;
-    border-radius: 6px;
-    font-family: vars.$font-itim;
-    font-size: 0.95rem;
+    align-items: center;
+    justify-content: space-between;
+    font-family: vars.$font-jua;
+    font-size: 1.7rem;
     background-color: vars.$white;
     box-shadow: vars.$dropshadow;
-  }
+    padding: 1rem;
+    width: 100%;
+    border-radius: 2rem 2rem 0 0;
 
-  textarea {
-    resize: vertical;
-    min-height: 70px;
-  }
-}
-
-.left {
-  flex: 2;
-}
-
-.right {
-  flex: 1;
-}
-
-.attach {
-  margin-top: 1rem;
-
-  span {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-
-  .attach-buttons {
-    display: flex;
-    gap: 1rem;
+    .header-left {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
 
     button {
-      flex: 1;
-      padding: 0.7rem;
-      border-radius: 50px;
-      border: none;
       cursor: pointer;
+      margin-right: 1rem;
+      :hover {
+        color: vars.$darker-blue;
+      }
+    }
+
+    .icon {
+      font-size: 1.6rem;
+    }
+  }
+
+  .form {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 2rem;
+
+    label {
+      display: flex;
+      flex-direction: column;
       font-weight: bold;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    input, textarea, select {
+      margin-top: 0.3rem;
+      padding: 0.5rem;
+      border: 1px solid vars.$light-grey;
+      border-radius: 6px;
       font-family: vars.$font-itim;
+      font-size: 0.95rem;
+      background-color: vars.$white;
       box-shadow: vars.$dropshadow;
+      &:focus {
+        outline: none;
+        border: 1px solid vars.$blue;
+      }
     }
 
-    .upload {
-      background-color: vars.$white;
-      color: vars.$dark-blue;
+    input {
+      cursor: text;
     }
 
-    .link {
-      background-color: vars.$white;
-      color: vars.$darker-blue;
+    select.placeholder, input.placeholder {
+        color: #a5bad9;
     }
 
-    button:hover {
-      opacity: 0.85;
+    select.selected, input.selected {
+        color: vars.$dark-blue;
+    }
+
+
+    select {
+      cursor: pointer;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .file-name-display {
+      padding: 0.25rem 1rem;
+      box-shadow: vars.$dropshadow;
+      border-radius: 1rem;
+      background-color: vars.$light-blue;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .left {
+    flex: 2;
+  }
+
+  .right {
+    flex: 1;
+    background-color: vars.$white;
+    padding: 1rem;
+    box-shadow: vars.$dropshadow;
+    border-radius: 1rem;
+    margin-top: 2rem;
+
+    .publish-btn {
+      justify-self: center;
+      padding: 1rem;
+    }
+  }
+
+  .attach {
+    margin-top: 1rem;
+
+    span {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .attach-buttons {
+      display: flex;
+      gap: 1rem;
+
+      button {
+        flex: 1;
+        padding: 0.7rem;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        font-family: vars.$font-itim;
+        box-shadow: vars.$dropshadow;
+        flex-direction: column;
+      }
+
+      .upload {
+        background-color: vars.$white;
+        color: vars.$dark-blue;
+      }
+
+      .link {
+        background-color: vars.$white;
+        color: vars.$dark-blue;
+      }
+
+      button:hover {
+        opacity: 0.85;
+      }
     }
   }
 }

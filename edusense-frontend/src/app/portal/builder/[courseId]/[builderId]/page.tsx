@@ -342,17 +342,24 @@ export default function BuilderPage() {
 
     return (
         <div>
-            {permissions?.create_course && (
-                <>
-                    <Button displayName={'Update'} onClick={onUpdate} />
+            { permissions?.create_course && (
+                <div className='action-btns'>
                     {!isAssignmentCreated && (
-                        <Button
-                            displayName={'Create Assignment'}
-                            onClick={() => setShowAssignmentCreateModal(true)}
-                        />
+                        <div className='action-btn'>
+                            <span className="tooltip-text">Create Assignment</span>
+                            <Button
+                                variant="icon"
+                                icon={'/plus.svg'}
+                                onClick={() => setShowAssignmentCreateModal(true)}
+                            />
+                        </div>
                     )}
                     {showAssignmentCreateModal && renderAssignmentModal()}
-                </>
+                    <div className='action-btn'>
+                        <span className="tooltip-text">Save</span>
+                        <Button variant="icon" onClick={onUpdate} icon={'/save.svg'}/>
+                    </div>
+                </div>
             )}
             {getBody()}
         </div>
