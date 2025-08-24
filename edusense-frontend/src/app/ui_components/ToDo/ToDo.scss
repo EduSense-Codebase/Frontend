@@ -2,7 +2,10 @@
 
 .todo-container {
   background-color: vars.$light-blue;
-  width: 280px;
+  // width: 280px;
+  width: 100%;                   // Fill parent column 
+  max-width: 100%;               // Avoid overflowing parent
+  box-sizing: border-box;        // Prevent padding from causing overflow
   padding: 1rem;
   border-radius: 12px;
   box-shadow: vars.$dropshadow;
