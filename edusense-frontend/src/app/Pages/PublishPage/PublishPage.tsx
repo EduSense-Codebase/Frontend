@@ -41,7 +41,7 @@ const PublishPage: React.FC<PublishPageProps> = ({
     module,
     onModuleChange,
     onPublishClick,
-    onCloseClick
+    onCloseClick,
 }) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedFileName, setSelectedFileName] = useState<string>('No file chosen');
@@ -49,8 +49,13 @@ const PublishPage: React.FC<PublishPageProps> = ({
     return (
         <div className="publish-container">
             <div className="header">
-                <div className='header-left'>
-                    <Image src={'/publish_page/publish.png'} width={50} height={50} alt="file icon" />
+                <div className="header-left">
+                    <Image
+                        src={'/publish_page/publish.png'}
+                        width={50}
+                        height={50}
+                        alt="file icon"
+                    />
                     <h2>New Assignment</h2>
                 </div>
                 <button onClick={onCloseClick}>X</button>
@@ -99,14 +104,18 @@ const PublishPage: React.FC<PublishPageProps> = ({
                                     alt="upload"
                                 />
                                 <p>Upload</p>
-                                <input type="file" style={{ display: "none"}} ref={fileInputRef} 
+                                <input
+                                    type="file"
+                                    style={{ display: 'none' }}
+                                    ref={fileInputRef}
                                     onChange={(e) => {
                                         if (e.target.files && e.target.files.length > 0) {
                                             setSelectedFileName(e.target.files[0].name);
                                         } else {
                                             setSelectedFileName('No file chosen');
                                         }
-                                    }}/>
+                                    }}
+                                />
                                 <span className="file-name-display">{selectedFileName}</span>
                             </button>
                         </div>
@@ -117,7 +126,11 @@ const PublishPage: React.FC<PublishPageProps> = ({
                 <div className="right">
                     <label>
                         Course
-                        <select value={course} onChange={onCourseChange} className={course === '' ? 'placeholder' : 'selected'}>
+                        <select
+                            value={course}
+                            onChange={onCourseChange}
+                            className={course === '' ? 'placeholder' : 'selected'}
+                        >
                             <option value="">Choose Course</option>
                             {/* Add more options dynamically in parent */}
                         </select>
@@ -135,12 +148,21 @@ const PublishPage: React.FC<PublishPageProps> = ({
 
                     <label>
                         Due
-                        <input type="date" value={due} onChange={onDueChange} className={due === '' ? 'placeholder' : 'selected'}/>
+                        <input
+                            type="date"
+                            value={due}
+                            onChange={onDueChange}
+                            className={due === '' ? 'placeholder' : 'selected'}
+                        />
                     </label>
 
                     <label>
                         Module
-                        <select value={module} onChange={onModuleChange} className={due === '' ? 'placeholder' : 'selected'}>
+                        <select
+                            value={module}
+                            onChange={onModuleChange}
+                            className={due === '' ? 'placeholder' : 'selected'}
+                        >
                             <option value="">Choose Module</option>
                             {/* Add more options dynamically in parent */}
                         </select>

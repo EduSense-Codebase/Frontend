@@ -101,7 +101,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 
     return (
         <div className="main-container">
-            <motion.div 
+            <motion.div
                 className="edit-course-page"
                 initial={{ width: '100%' }}
                 animate={{ width: sideBarOpen ? '75%' : '100%' }}
@@ -186,13 +186,12 @@ const EditCoursePageUIController: React.FC<Props> = ({
                 {sideBarOpen && (
                     <motion.div
                         key="sidebar"
-                        className={"edit-sidebar"}
+                        className={'edit-sidebar'}
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ duration: 0.5, ease: 'easeInOut' }}
                     >
-
                         <button onClick={toggleSidebar} className="close-sidebar-btn">
                             <img src="/back.svg" alt="back arrow" />
                         </button>

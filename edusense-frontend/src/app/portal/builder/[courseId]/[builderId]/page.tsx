@@ -342,10 +342,10 @@ export default function BuilderPage() {
 
     return (
         <div>
-            { permissions?.create_course && (
-                <div className='action-btns'>
+            {permissions?.create_course && (
+                <div className="action-btns">
                     {!isAssignmentCreated && (
-                        <div className='action-btn'>
+                        <div className="action-btn">
                             <span className="tooltip-text">Create Assignment</span>
                             <Button
                                 variant="icon"
@@ -355,9 +355,9 @@ export default function BuilderPage() {
                         </div>
                     )}
                     {showAssignmentCreateModal && renderAssignmentModal()}
-                    <div className='action-btn'>
+                    <div className="action-btn">
                         <span className="tooltip-text">Save</span>
-                        <Button variant="icon" onClick={onUpdate} icon={'/save.svg'}/>
+                        <Button variant="icon" onClick={onUpdate} icon={'/save.svg'} />
                     </div>
                 </div>
             )}
