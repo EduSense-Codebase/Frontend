@@ -13,6 +13,42 @@
 	transition: all 0.3s ease;
 }
 
+// Widgets layout container
+.widgets-grid {
+  //Make sure it stretches and centers nicely
+  width: 100%;
+  max-width: 1200px;      // adjust if your page is wider/narrower 
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  display: grid;
+  grid-template-columns: 1fr;   // default: one column
+  gap: 16px;
+}
+
+// Two columns only in edit mode (desktop/tablet)
+.edit-mode.widgets-grid,
+.edit-mode .widgets-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+// Back to one column on small screens
+@media (max-width: 768px) {
+  .edit-mode.widgets-grid,
+  .edit-mode .widgets-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// a common card wrapper if you want consistent padding
+.widget-card {
+  background: variables.$white;
+  border-radius: 12px;
+  box-shadow: variables.$dropshadow;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
 .header-container {
 	width: 100%;
 	margin: 0;
