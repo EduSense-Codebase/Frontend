@@ -12,8 +12,8 @@ export default function ToDo({
     editMode: boolean;
     setShowToDo: React.Dispatch<React.SetStateAction<boolean>>;
     assignments: IAssignments[];
-}){
-    const {enrollmentId} = useParams();
+}) {
+    const { enrollmentId } = useParams();
     return (
         <div className="todo-container">
             {editMode && (
