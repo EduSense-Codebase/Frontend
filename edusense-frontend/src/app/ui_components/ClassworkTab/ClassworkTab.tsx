@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { httpPost } from '@/app/utils';
 import Button from '../Button';
+import { useRouter } from 'next/navigation';
 
 interface ClassworkProps {
     join_course: boolean | undefined;
@@ -42,6 +43,21 @@ export default function ClassworkTab({
         );
     };
 
+    const router = useRouter();
+    const handleCreateBuilderPage = (type_create: string) => {
+        console.log("running");
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        const queryParams = { section: 'make_builder' };
+        const formData = { course_id: enrollmentId, type: type_create };
+
+        const requestResponse = httpPost<any>(url, formData, queryParams);
+
+        requestResponse.then((res) => {
+            console.log(res.data);
+            router.push(`/portal/builder/${enrollmentId}/${res.data.data.id}`);
+        });
+    };
+
     const handleCreateSelect = (type: 'assignment' | 'module' | 'file' | 'text-content') => {
         setShowCreateMenu(false);
         if (type === 'module') {
@@ -50,11 +66,13 @@ export default function ClassworkTab({
             setShowFileModal(true);
         } else if (type == 'assignment') {
             //redirect to builder page with assignment context
+            handleCreateBuilderPage('quiz_or_assignment');
         } else {
             //redirect to builder page with text-content context
+            console.log("entering");
+            handleCreateBuilderPage('text');
         }
     };
-
     const assignmentsByModule: Record<number, IAssignments[]> = {};
     modules.forEach((mod) => {
         assignmentsByModule[mod.id] = assignments.filter((a) => a.module === mod.id);
