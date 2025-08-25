@@ -45,7 +45,6 @@ export default function ClassworkTab({
 
     const router = useRouter();
     const handleCreateBuilderPage = (type_create: string) => {
-        console.log("running");
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParams = { section: 'make_builder' };
         const formData = { course_id: enrollmentId, type: type_create };
@@ -69,7 +68,6 @@ export default function ClassworkTab({
             handleCreateBuilderPage('quiz_or_assignment');
         } else {
             //redirect to builder page with text-content context
-            console.log("entering");
             handleCreateBuilderPage('text');
         }
     };

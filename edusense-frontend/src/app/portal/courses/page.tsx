@@ -8,6 +8,7 @@ import * as motion from 'motion/react-client';
 //import '../../theme.css';
 import '../../style/index.scss';
 import { useCustomProp } from '@/app/typedef';
+import Button from '@/app/ui_components/Button';
 
 export default function CourseSection() {
     const { permissions, courses, setCourses, setCurrCourseId } = useCustomProp();
@@ -176,6 +177,12 @@ export default function CourseSection() {
                                 Close
                             </button>
 
+                            <Button
+                                displayName="Cancel"
+                                variant="secondary"
+                                onClick={handleDialogClose}
+                            />
+
                             <button
                                 onClick={handleJoinCourse}
                                 className="rounded bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
@@ -203,18 +210,16 @@ export default function CourseSection() {
                         />
 
                         <div className="flex justify-end gap-2">
-                            <button
+                            <Button
+                                displayName="Cancel"
+                                variant="secondary"
                                 onClick={handleDialogClose}
-                                className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400"
-                            >
-                                Cancel
-                            </button>
-                            <button
+                            />
+                            <Button
+                                displayName="Create"
+                                variant="primary"
                                 onClick={handleCreateCourseSubmit}
-                                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                            >
-                                Create
-                            </button>
+                            />
                         </div>
                     </div>
                 </div>

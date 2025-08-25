@@ -1,6 +1,8 @@
 import React from 'react';
 import './ToDo.scss';
 import { IAssignments } from '@/app/typedef';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 export default function ToDo({
     editMode,
@@ -10,7 +12,8 @@ export default function ToDo({
     editMode: boolean;
     setShowToDo: React.Dispatch<React.SetStateAction<boolean>>;
     assignments: IAssignments[];
-}) {
+}){
+    const {enrollmentId} = useParams();
     return (
         <div className="todo-container">
             {editMode && (
@@ -29,7 +32,11 @@ export default function ToDo({
             ) : (
                 assignments.map((assignment, idx) => (
                     <div key={idx} className="todo-item">
-                        {assignment.name}
+                        {
+                            <Link href={`/portal/builder/${enrollmentId}/${assignment.builder}`}>
+                                {assignment.name}
+                            </Link>
+                        }
                     </div>
                 ))
             )}

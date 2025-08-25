@@ -82,6 +82,7 @@ export default function HomePage() {
                 setShowModuleWidget(config.data.data?.moduleWidgetConfig === 'true');
                 setShowToDoWidget(config.data.data?.todoWidgetConfig === 'true');
                 setBannerImage(config.data.data?.bannerImageConfig || null);
+                setClassModule(config.data.data.classModuleName);
                 setStudents(studentsRes.data.data);
                 setCurrCourseId(course.data.data.id);
                 setFiles(files.data.data);
