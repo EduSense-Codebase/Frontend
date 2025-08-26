@@ -89,53 +89,38 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Overview' && (
                     <div className="overview-content">
-                        <div className="left-overview">
+                        <section className="announcements-section">
                             {createCourse && <CourseCodeCard code={courseDetails?.join_code} />}
-                            {/* <Button
-                                displayName="Create"
-                                onClick={() => console.log("clicked")}
-                                variant="primary"
-                                icon="/plus.svg"
-                            /> */}
 
-                            {/* Widgets Section */}
-                            <div className="widgets-section">
-                                {showToDoWidget && (
-                                    <div className="widget-card">
-                                        <ToDo
-                                            editMode={false}
-                                            assignments={assignments}
-                                            setShowToDo={setShowToDoWidget}
-                                        />
-                                    </div>
-                                )}
-                                {showModuleWidget && allModules?.length > 0 && (
-                                    <div className="widget-card">
-                                        <CurrentModule
-                                            moduleName={classModule}
-                                            editMode={false}
-                                            setModule={setShowModuleWidget}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Optional: List of all modules */}
-                            {/* <ul className="module-list">
-                                {allModules?.map((mod, idx) => (
-                                    <li key={idx}>{mod.title}</li>
-                                ))}
-                            </ul> */}
-                        </div>
-
-                        <div className="right-overview">
                             <h3 className="announcements-title">Announcements</h3>
                             <AnnouncementForm
                                 onSubmit={onPostAnnouncement}
                                 announcements={announcements}
                                 create_course={createCourse}
                             />
-                        </div>
+                        </section>
+
+                        <section className="widgets-grid">
+                            {showToDoWidget && (
+                                <div className="widget-card">
+                                    <ToDo
+                                        editMode={false}
+                                        assignments={assignments}
+                                        setShowToDo={setShowToDoWidget}
+                                    />
+                                </div>
+                            )}
+
+                            {showModuleWidget && allModules?.length > 0 && (
+                                <div className="widget-card">
+                                    <CurrentModule
+                                        moduleName={classModule}
+                                        editMode={false}
+                                        setModule={setShowModuleWidget}
+                                    />
+                                </div>
+                            )}
+                        </section>
                     </div>
                 )}
 

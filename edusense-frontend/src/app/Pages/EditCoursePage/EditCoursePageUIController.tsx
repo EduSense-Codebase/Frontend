@@ -139,25 +139,25 @@ const EditCoursePageUIController: React.FC<Props> = ({
 
                 {/* Widgets container: one column by default; two columns in edit mode */}
                 <section className={`widgets-grid ${editMode ? 'edit-mode' : ''}`}>
-                {showToDoWidget && (
-                    <div className="widget-card">
-                    <ToDo
-                        editMode={editMode}
-                        setShowToDo={setShowToDoWidget}
-                        assignments={assignments}
-                    />
-                    </div>
-                )}
+                    {showToDoWidget && (
+                        <div className="widget-card">
+                            <ToDo
+                                editMode={editMode}
+                                setShowToDo={setShowToDoWidget}
+                                assignments={assignments}
+                            />
+                        </div>
+                    )}
 
-                {showModuleWidget && (
-                    <div className="widget-card">
-                    <CurrentModule
-                        moduleName={classModule}
-                        editMode={editMode}
-                        setModule={setShowModuleWidget}
-                    />
-                    </div>
-                )}
+                    {showModuleWidget && (
+                        <div className="widget-card">
+                            <CurrentModule
+                                moduleName={classModule}
+                                editMode={editMode}
+                                setModule={setShowModuleWidget}
+                            />
+                        </div>
+                    )}
                 </section>
 
                 {editMode && (
