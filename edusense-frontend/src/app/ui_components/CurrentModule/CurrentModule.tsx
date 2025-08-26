@@ -6,7 +6,6 @@ const CurrentModule: React.FC<{
     editMode: boolean;
     setModule: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ moduleName, editMode, setModule }) => {
-
     return (
         <div className="current-module-container">
             {editMode && (

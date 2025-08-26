@@ -155,12 +155,24 @@ export default function ClassworkTab({
     const renderFileModal = () => (
         <div className="modalOverlay">
             <div className="modalContent">
-                <h3>Upload New File</h3>
+                <h3 className="mb-4">Upload New File</h3>
+
+                {/* Hidden file input */}
                 <input
+                    id="fileUpload"
                     type="file"
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    className="modalInput"
+                    className="hidden"
                 />
+
+                {/* Styled label acts like the button */}
+                <label
+                    htmlFor="fileUpload"
+                    className="modalInput mt-5 cursor-pointer rounded-lg border bg-gray-100 p-2 text-center transition hover:bg-gray-200"
+                >
+                    {selectedFile ? selectedFile.name : 'Choose file'}
+                </label>
+
                 <input
                     type="text"
                     value={fileDesc}
@@ -168,6 +180,7 @@ export default function ClassworkTab({
                     placeholder="Enter description..."
                     className="modalInput"
                 />
+
                 <div className="modalActions">
                     <Button displayName="Create" variant="primary" onClick={uploadFileCallback} />
                     <Button

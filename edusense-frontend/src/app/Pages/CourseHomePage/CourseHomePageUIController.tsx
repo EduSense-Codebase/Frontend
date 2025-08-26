@@ -16,7 +16,6 @@ import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
-
 interface Props {
     joinCourse: boolean | undefined;
     createCourse: boolean | undefined;
@@ -91,12 +90,6 @@ const CourseHomePageUIController: React.FC<Props> = ({
                     <div className="overview-content">
                         <div className="left-overview">
                             {createCourse && <CourseCodeCard code={courseDetails?.join_code} />}
-                            {/* <Button
-                                displayName="Create"
-                                onClick={() => console.log("clicked")}
-                                variant="primary"
-                                icon="/plus.svg"
-                            /> */}
 
                             {/* Widgets Section */}
                             <div className="widgets-section">
