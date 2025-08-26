@@ -2,8 +2,8 @@
 
 .edit-btns {
   position: fixed;
-  bottom: 1rem;
-  left: 2rem;
+  top: 6.8rem;
+  right: 1.2rem;
   display: flex;
   gap: 1rem;
   z-index: 10;
@@ -28,6 +28,7 @@
     padding: 2rem 0;
     background-color: variables.$light-blue;
     margin: 0;
+    margin-bottom: 2rem;
     box-shadow: variables.$dropshadow;
   }
   h2 {
@@ -193,11 +194,29 @@
     padding: 0;
   }
 
-  ul, ol {
+  ul, ol, span {
     color: variables.$dark-blue;
   }
 
   a, strong, em, b, i {
     color: variables.$dark-blue;
+  }
+}
+
+#text-editor {
+  div {
+    position: relative;
+    top: 0;
+    div.mdxeditor-toolbar._toolbarRoot_1e2ox_162 {
+      position: sticky;
+      top: 0;
+      padding: 0.75rem 0.5rem;
+    }
+    div._rootContentEditableWrapper_1e2ox_1119.mdxeditor-root-contenteditable > div > div {
+      height: 60vh;
+      overflow-y: auto;
+      margin-bottom: 0;
+    }
+
   }
 }

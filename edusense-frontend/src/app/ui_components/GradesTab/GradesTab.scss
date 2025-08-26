@@ -62,3 +62,13 @@
   font-weight: bold;
   color: $darker-blue;
 }
+
+.empty-array {
+    background-color: $light-blue;
+    color: $grey;
+    padding:16px;
+    margin-top: 16px;
+    border-radius: 8px;
+    font-style: italic;
+    text-align: center;
+}

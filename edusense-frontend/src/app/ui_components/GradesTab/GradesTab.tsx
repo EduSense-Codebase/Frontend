@@ -17,6 +17,9 @@ function getLetterGrade(score: number): string {
 }
 
 export default function GradesTab({ grades, create_course }: GradesProps) {
+    const emptyMessage = create_course
+        ? 'No students enrolled in course yet'
+        : 'No assignments graded yet';
     return (
         <div className="grades">
             <div className="header">
@@ -24,23 +27,27 @@ export default function GradesTab({ grades, create_course }: GradesProps) {
             </div>
 
             <ul className="gradeList">
-                {grades.map((item: any) => (
-                    <li key={item.email || item.id} className="gradeItem">
-                        <span className="gradeLabel">📋 {item.name}</span>
+                {grades.length === 0 ? (
+                    <p className="empty-array">{emptyMessage}</p>
+                ) : (
+                    grades.map((item: any) => (
+                        <li key={item.email || item.id} className="gradeItem">
+                            <span className="gradeLabel">📋 {item.name}</span>
 
-                        <span className="gradeValue">
-                            {create_course
-                                ? // 📌 Teacher view → show overall student grades
-                                  item.overall_grade >= 0
-                                    ? `${item.overall_grade}% (${getLetterGrade(item.overall_grade)})`
-                                    : 'N/A'
-                                : // 📌 Student view → show per-assignment grades
-                                  item.graded >= 0
-                                  ? `${item.graded}/${item.points}`
-                                  : 'N/A'}
-                        </span>
-                    </li>
-                ))}
+                            <span className="gradeValue">
+                                {create_course
+                                    ? // 📌 Teacher view → show overall student grades
+                                      item.overall_grade >= 0
+                                        ? `${item.overall_grade}% (${getLetterGrade(item.overall_grade)})`
+                                        : 'N/A'
+                                    : // 📌 Student view → show per-assignment grades
+                                      item.graded >= 0
+                                      ? `${item.graded}/${item.points}`
+                                      : 'N/A'}
+                            </span>
+                        </li>
+                    ))
+                )}
             </ul>
         </div>
     );

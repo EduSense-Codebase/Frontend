@@ -1,5 +1,9 @@
 @use '../../../../style/variables' as variables;
 
+.builder-page {
+  width: 100%;
+}
+
 .modalOverlay {
     position: fixed;
     inset: 0;
@@ -68,6 +72,7 @@
     gap: 0.5rem;
     position: fixed;
     bottom: 1rem;
+    left: 5rem;
     justify-self: center;
     z-index: 10;
     padding: 0.25rem 1rem;

@@ -88,7 +88,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             {/* Sidebar (fixed) */}
             <Sidebar courses={courses} />
 
-            <header id="dashboard-nav" className="sticky top-0 z-50 bg-white shadow-sm">
+            <header id="dashboard-nav" className="sticky top-0 z-8 bg-white shadow-sm">
                 <div className="z-40 mx-auto flex items-center justify-between bg-white px-4 py-4">
                     <Link
                         href="/portal/courses"

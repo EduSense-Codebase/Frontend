@@ -106,7 +106,7 @@ export default function BuilderPage() {
         });
         moduleRequest.then((data) => {
             setModules(data.data.data);
-            setModuleId(data.data.data[0].id);
+            // setModuleId(data.data.data[0].id);
         });
     }, [courseId]);
 
@@ -302,15 +302,19 @@ export default function BuilderPage() {
                 <label>Module</label>
                 <select
                     className="modalInput"
-                    value={moduleId}
-                    onChange={(e) => setModuleId(parseInt(e.target.value))}
+                    value={moduleId ?? -1}
+                    onChange={(e) => setModuleId(e.target.value ? parseInt(e.target.value) : -1)}
                 >
+                    <option value={-1} disabled hidden>
+                        No module
+                    </option>
                     {modules.map((currModule, index) => (
                         <option key={index} value={currModule.id}>
                             {currModule.title}
                         </option>
                     ))}
                 </select>
+
                 <textarea
                     value={assignmentDescription}
                     onChange={(e) => setAssignmentDescription(e.target.value)}
@@ -341,11 +345,11 @@ export default function BuilderPage() {
     );
 
     return (
-        <div>
-            { permissions?.create_course && (
-                <div className='action-btns'>
+        <div className="builder-page">
+            {permissions?.create_course && (
+                <div className="action-btns">
                     {!isAssignmentCreated && (
-                        <div className='action-btn'>
+                        <div className="action-btn">
                             <span className="tooltip-text">Create Assignment</span>
                             <Button
                                 variant="icon"
@@ -355,9 +359,9 @@ export default function BuilderPage() {
                         </div>
                     )}
                     {showAssignmentCreateModal && renderAssignmentModal()}
-                    <div className='action-btn'>
+                    <div className="action-btn">
                         <span className="tooltip-text">Save</span>
-                        <Button variant="icon" onClick={onUpdate} icon={'/save.svg'}/>
+                        <Button variant="icon" onClick={onUpdate} icon={'/save.svg'} />
                     </div>
                 </div>
             )}

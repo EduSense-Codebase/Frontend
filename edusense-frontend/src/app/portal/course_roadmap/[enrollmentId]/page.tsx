@@ -36,7 +36,6 @@ export default function HomePage() {
     const { permissions, setCurrCourseId } = useCustomProp();
     const join_course = permissions?.join_course;
     const create_course = permissions?.create_course;
-    console.log(' home page persmissions', join_course, create_course);
 
     const [courseDetails, setCourseDetails] = useState<ICourse>();
     const [announcements, setAnnouncements] = useState<IAnnouncements[]>([]);
@@ -49,6 +48,7 @@ export default function HomePage() {
     const [originalValues, setOriginalValues] = useState<any>(null);
     const [students, setStudents] = useState<IStudentData[]>([]);
     const [files, setFiles] = useState<IFile[]>([]);
+    const [classModule, setClassModule] = useState('');
 
     useEffect(() => {
         const url = API_PREFIX + COURSE_ENDPOINT;
@@ -79,13 +79,15 @@ export default function HomePage() {
                 setAnnouncements(announce.data.data);
                 setAssignments(assign.data.data);
                 setModules(modulesRes.data.data);
-                setShowModuleWidget(Boolean(config.data.data?.moduleWidgetConfig));
-                setShowToDoWidget(Boolean(config.data.data?.todoWidgetConfig));
+                setShowModuleWidget(config.data.data?.moduleWidgetConfig === 'true');
+                setShowToDoWidget(config.data.data?.todoWidgetConfig === 'true');
                 setBannerImage(config.data.data?.bannerImageConfig || null);
+                setClassModule(config.data.data.classModuleName);
                 setStudents(studentsRes.data.data);
                 setCurrCourseId(course.data.data.id);
                 setFiles(files.data.data);
                 console.log('files for this course', files.data);
+                console.log('homepage configs', config.data);
             })
             .catch(console.error);
     }, [enrollmentId]);
@@ -111,6 +113,7 @@ export default function HomePage() {
     };
 
     const enterEditMode = () => {
+        console.log('homepage configs when entering edit mode.', showModuleWidget, showToDoWidget);
         setEditMode(true);
         setOriginalValues({
             bannerImage,
@@ -135,6 +138,8 @@ export default function HomePage() {
                     setShowToDoWidget={setShowToDoWidget}
                     originalValues={originalValues}
                     assignments={assignments}
+                    classModule={classModule}
+                    setClassModule={setClassModule}
                 />
             ) : (
                 <div className="view-course-page">
@@ -165,6 +170,7 @@ export default function HomePage() {
                         setShowToDoWidget={setShowToDoWidget}
                         files={files}
                         setFiles={setFiles}
+                        classModule={classModule}
                     />
                 </div>
             )}

@@ -21,8 +21,10 @@ interface Props {
     setShowModuleWidget: React.Dispatch<React.SetStateAction<boolean>>;
     setBannerImage: React.Dispatch<React.SetStateAction<string | null>>;
     setShowToDoWidget: React.Dispatch<React.SetStateAction<boolean>>;
+    setClassModule: React.Dispatch<React.SetStateAction<string>>;
     assignments: IAssignments[];
     originalValues: any;
+    classModule: string;
 }
 
 const EditCoursePageUIController: React.FC<Props> = ({
@@ -38,12 +40,14 @@ const EditCoursePageUIController: React.FC<Props> = ({
     setBannerImage,
     originalValues,
     assignments,
+    classModule,
+    setClassModule,
 }) => {
     // const [editMode, setEditMode] = useState(false);
     const [sideBarOpen, setSidebarOpen] = useState(false);
     const [chooseModule, setChooseModule] = useState(false);
     const [textBoxStyle, setTextBoxStyle] = useState('');
-    const [classModule, setClassModule] = useState('');
+    // const [classModule, setClassModule] = useState('');
     // const [bannerImage, setBannerImage] = useState<string | null>(null);
     const [showCustomize, setShowCustomize] = useState(false);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -72,6 +76,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                 moduleWidgetConfig: showModuleWidget,
                 todoWidgetConfig: showToDoWidget,
                 bannerImageConfig: bannerImage,
+                classModuleName: classModule,
             },
         };
         console.log('formdata ', formData);
@@ -97,7 +102,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
 
     return (
         <div className="main-container">
-            <motion.div 
+            <motion.div
                 className="edit-course-page"
                 initial={{ width: '100%' }}
                 animate={{ width: sideBarOpen ? '75%' : '100%' }}
@@ -133,7 +138,8 @@ const EditCoursePageUIController: React.FC<Props> = ({
                     </button>
                 )}
 
-                <div>
+                {/* Widgets container: one column by default; two columns in edit mode */}
+                <section className={`widgets-grid ${editMode ? 'edit-mode' : ''}`}>
                     {showToDoWidget && (
                         <ToDo
                             editMode={editMode}
@@ -141,6 +147,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                             assignments={assignments}
                         />
                     )}
+
                     {showModuleWidget && (
                         <CurrentModule
                             moduleName={classModule}
@@ -148,7 +155,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                             setModule={setShowModuleWidget}
                         />
                     )}
-                </div>
+                </section>
 
                 {editMode && (
                     <div className="edit-footer">
@@ -182,13 +189,12 @@ const EditCoursePageUIController: React.FC<Props> = ({
                 {sideBarOpen && (
                     <motion.div
                         key="sidebar"
-                        className={"edit-sidebar"}
+                        className={'edit-sidebar'}
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ duration: 0.5, ease: 'easeInOut' }}
                     >
-
                         <button onClick={toggleSidebar} className="close-sidebar-btn">
                             <img src="/back.svg" alt="back arrow" />
                         </button>

@@ -13,7 +13,6 @@ function SidebarItem({
     label,
     href,
     isOpen,
-    small,
 }: {
     icon?: React.ReactNode;
     label: string;
@@ -22,18 +21,15 @@ function SidebarItem({
     small?: boolean;
 }) {
     return (
-        <Link
-            href={href}
-            className={`sidebar-item`}
-        >
+        <Link href={href} className={`sidebar-item`}>
             {icon}
             <AnimatePresence>
                 {isOpen && (
                     <motion.p
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    transition={{ delay: 0.3, duration: 0.2 }}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        transition={{ delay: 0.3, duration: 0.2 }}
                     >
                         {label}
                     </motion.p>
@@ -69,14 +65,16 @@ export default function Sidebar({ courses }: { courses: ICourse[] }) {
                 animate={isOpen ? 'open' : 'closed'}
                 variants={{
                     open: { width: '14rem' },
-                    closed: { width: '4rem' }
+                    closed: { width: '4rem' },
                 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
                 {/* Toggle Button */}
-                <button onClick={() => setIsOpen(!isOpen)} className='mt-2'>
+                <button onClick={() => setIsOpen(!isOpen)} className="mt-2">
                     <SidebarItem
-                        icon={<Image src="/sidebar/sidebar.png" width={30} height={30} alt="menu" />}
+                        icon={
+                            <Image src="/sidebar/sidebar.png" width={30} height={30} alt="menu" />
+                        }
                         label=""
                         isOpen={isOpen}
                         href=""
@@ -91,7 +89,7 @@ export default function Sidebar({ courses }: { courses: ICourse[] }) {
                         href="/portal/courses"
                     />
                     {/* Courses */}
-                    <div className='courses-dropdown'>
+                    <div className="courses-dropdown">
                         <button
                             onClick={() => setCoursesOpen(!coursesOpen)}
                             className={`courses-btn ${!isOpen ? 'justify-center' : ''}`}
@@ -99,58 +97,63 @@ export default function Sidebar({ courses }: { courses: ICourse[] }) {
                             <Image src="/sidebar/course.png" width={27} height={27} alt="courses" />
                             <AnimatePresence initial={false}>
                                 {isOpen && (
-                                <motion.span
-                                    key="courses-label"
-                                    className="sidebar-item"
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -10 }}
-                                    transition={{ delay: 0.3, duration: 0.2 }}
-                                >
-                                    Courses
-                                </motion.span>
+                                    <motion.span
+                                        key="courses-label"
+                                        className="sidebar-item"
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -10 }}
+                                        transition={{ delay: 0.3, duration: 0.2 }}
+                                    >
+                                        Courses
+                                    </motion.span>
                                 )}
                             </AnimatePresence>
 
                             <AnimatePresence initial={false}>
                                 {isOpen && (
-                                <motion.span
-                                    key="chevron"
-                                    initial={{ opacity: 0, rotate: -90 }}
-                                    animate={{ opacity: 1, rotate: coursesOpen ? 180 : 0 }}
-                                    exit={{ opacity: 0, rotate: -90 }}
-                                    transition={{ delay: 0.3, duration: 0.2 }}
-                                >
-                                    <ChevronDownIcon />
-                                </motion.span>
+                                    <motion.span
+                                        key="chevron"
+                                        initial={{ opacity: 0, rotate: -90 }}
+                                        animate={{ opacity: 1, rotate: coursesOpen ? 180 : 0 }}
+                                        exit={{ opacity: 0, rotate: -90 }}
+                                        transition={{ delay: 0.3, duration: 0.2 }}
+                                    >
+                                        <ChevronDownIcon />
+                                    </motion.span>
                                 )}
                             </AnimatePresence>
-                            </button>
+                        </button>
                         <AnimatePresence>
-                    {coursesOpen && isOpen && (
-                        <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="ml-8 space-y-1 overflow-hidden"
-                        >
-                        {courses.map((course, index) => (
-                            <SidebarItem
-                            label={course.course_name}
-                            href={`/portal/course_roadmap/${course.id}`}
-                            isOpen={isOpen}
-                            key={index}
-                            />
-                        ))}
-                        </motion.div>
-                    )}
-                    </AnimatePresence>
+                            {coursesOpen && isOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                    className="ml-8 space-y-1 overflow-hidden"
+                                >
+                                    {courses.map((course, index) => (
+                                        <SidebarItem
+                                            label={course.course_name}
+                                            href={`/portal/course_roadmap/${course.id}`}
+                                            isOpen={isOpen}
+                                            key={index}
+                                        />
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                     {/* Settings */}
                     <SidebarItem
                         icon={
-                            <Image src="/sidebar/settings.png" width={30} height={30} alt="settings" />
+                            <Image
+                                src="/sidebar/settings.png"
+                                width={30}
+                                height={30}
+                                alt="settings"
+                            />
                         }
                         label="Settings"
                         isOpen={isOpen}

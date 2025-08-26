@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { httpPost } from '@/app/utils';
 import Button from '../Button';
+import { useRouter } from 'next/navigation';
 
 interface ClassworkProps {
     join_course: boolean | undefined;
@@ -30,13 +31,10 @@ export default function ClassworkTab({
     const [showCreateMenu, setShowCreateMenu] = useState(false);
     const [showModuleModal, setShowModuleModal] = useState(false);
     const [showFileModal, setShowFileModal] = useState(false);
-    const [showAssignmentModal, setShowAssignmentModal] = useState(false);
     const [moduleTitle, setModuleTitle] = useState('');
     const [fileDesc, setFileDesc] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false);
-    const [contentType, setContentType] = useState<"assignment" | "text">("assignment");
-    const [assignmentDesc, setAssignmentDesc] = useState("");
 
     const { enrollmentId } = useParams();
     const toggleModule = (id: number) => {
@@ -45,17 +43,34 @@ export default function ClassworkTab({
         );
     };
 
-    const handleCreateSelect = (type: 'assignment' | 'module' | 'file') => {
+    const router = useRouter();
+    const handleCreateBuilderPage = (type_create: string) => {
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        const queryParams = { section: 'make_builder' };
+        const formData = { course_id: enrollmentId, type: type_create };
+
+        const requestResponse = httpPost<any>(url, formData, queryParams);
+
+        requestResponse.then((res) => {
+            console.log(res.data);
+            router.push(`/portal/builder/${enrollmentId}/${res.data.data.id}`);
+        });
+    };
+
+    const handleCreateSelect = (type: 'assignment' | 'module' | 'file' | 'text-content') => {
         setShowCreateMenu(false);
         if (type === 'module') {
             setShowModuleModal(true);
         } else if (type === 'file') {
             setShowFileModal(true);
+        } else if (type == 'assignment') {
+            //redirect to builder page with assignment context
+            handleCreateBuilderPage('quiz_or_assignment');
         } else {
-            setShowAssignmentModal(true);
+            //redirect to builder page with text-content context
+            handleCreateBuilderPage('text');
         }
     };
-
     const assignmentsByModule: Record<number, IAssignments[]> = {};
     modules.forEach((mod) => {
         assignmentsByModule[mod.id] = assignments.filter((a) => a.module === mod.id);
@@ -69,6 +84,9 @@ export default function ClassworkTab({
         <div className="createDropdown">
             <button className="dropdownItem" onClick={() => handleCreateSelect('assignment')}>
                 📝 Assignment
+            </button>
+            <button className="dropdownItem" onClick={() => handleCreateSelect('text-content')}>
+                Text-based Content
             </button>
             <button className="dropdownItem" onClick={() => handleCreateSelect('module')}>
                 📦 Module
@@ -123,8 +141,12 @@ export default function ClassworkTab({
                     className="modalInput"
                 />
                 <div className="modalActions">
-                    <Button displayName='Create' variant='primary' onClick={createModuleCallback}/>
-                    <Button displayName='Cancel' variant='secondary' onClick={() => setShowModuleModal(false)}/>
+                    <Button displayName="Create" variant="primary" onClick={createModuleCallback} />
+                    <Button
+                        displayName="Cancel"
+                        variant="secondary"
+                        onClick={() => setShowModuleModal(false)}
+                    />
                 </div>
             </div>
         </div>
@@ -133,12 +155,24 @@ export default function ClassworkTab({
     const renderFileModal = () => (
         <div className="modalOverlay">
             <div className="modalContent">
-                <h3>Upload New File</h3>
+                <h3 className="mb-4">Upload New File</h3>
+
+                {/* Hidden file input */}
                 <input
+                    id="fileUpload"
                     type="file"
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    className="modalInput"
+                    className="hidden"
                 />
+
+                {/* Styled label acts like the button */}
+                <label
+                    htmlFor="fileUpload"
+                    className="modalInput mt-5 cursor-pointer rounded-lg border bg-gray-100 p-2 text-center transition hover:bg-gray-200"
+                >
+                    {selectedFile ? selectedFile.name : 'Choose file'}
+                </label>
+
                 <input
                     type="text"
                     value={fileDesc}
@@ -146,55 +180,18 @@ export default function ClassworkTab({
                     placeholder="Enter description..."
                     className="modalInput"
                 />
-                <div className="modalActions">
-                    <Button displayName='Create' variant='primary' onClick={uploadFileCallback}/>
-                    <Button displayName='Cancel' variant='secondary' onClick={() => setShowFileModal(false)}/>
 
+                <div className="modalActions">
+                    <Button displayName="Create" variant="primary" onClick={uploadFileCallback} />
+                    <Button
+                        displayName="Cancel"
+                        variant="secondary"
+                        onClick={() => setShowFileModal(false)}
+                    />
                 </div>
             </div>
         </div>
     );
-
-    const renderAssignmentModal = () => (
-        <div className="modalOverlay">
-            <div className="modalContent">
-                <h3>Create New Assignment</h3>
-    
-                {/* Content Type Selection */}
-                <div className="modalInput">
-                    <label>
-                        <input
-                            type="radio"
-                            name="contentType"
-                            value="assignment"
-                            checked={contentType === "assignment"}
-                            onChange={(e) =>setContentType(e.target.value as "assignment" | "text")}
-                        />
-                        Assignment-based Content (Quiz, Homework, etc.)
-                    </label>
-                </div>
-    
-                <div className="modalInput">
-                    <label>
-                        <input
-                            type="radio"
-                            name="contentType"
-                            value="text"
-                            checked={contentType === "text"}
-                            onChange={(e) => setContentType(e.target.value as "assignment" | "text")}
-                        />
-                        Text-based Content (Lecture Notes, Syllabi, etc.)
-                    </label>
-                </div>
-    
-                <div className="modalActions">
-                    <Button displayName='Create' variant='primary' onClick={() => (console.log("clicked"))}/>
-                    <Button displayName='Cancel' variant='secondary' onClick={() => (setShowAssignmentModal(false))}/>
-                </div>
-            </div>
-        </div>
-    );
-    
 
     return (
         <div className="classwork">
@@ -287,7 +284,6 @@ export default function ClassworkTab({
 
             {showModuleModal && renderModuleModal()}
             {showFileModal && renderFileModal()}
-            {showAssignmentModal && renderAssignmentModal()}
         </div>
     );
 }
