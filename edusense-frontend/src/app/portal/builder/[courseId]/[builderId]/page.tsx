@@ -345,7 +345,7 @@ export default function BuilderPage() {
     );
 
     return (
-        <div>
+        <div className="builder-page">
             {permissions?.create_course && (
                 <div className="action-btns">
                     {!isAssignmentCreated && (
