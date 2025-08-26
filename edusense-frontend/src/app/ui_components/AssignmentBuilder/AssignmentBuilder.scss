@@ -1,7 +1,7 @@
 @use '../../style/_variables.scss' as variables;
 
 .quiz-builder {
-  margin: 0 auto;
+  margin: 0;
   padding: 20px;
   background-color: variables.$light-blue;
   min-height: 100vh;
@@ -12,7 +12,6 @@
   align-items: center;
   width: 100%;
   gap: 1rem;
-  margin-left: 10%;
 
   h1, .quiz-title-input {
     background-color: variables.$white;
@@ -25,7 +24,7 @@
     color: variables.$blue;
     text-align: center;
     position: relative;
-    width: 100%;
+    width: 90%;
     &:hover {
       border: 2px dashed variables.$blue;
     }
@@ -39,7 +38,7 @@
     box-shadow: variables.$dropshadow;
     font-size: 1rem;
     line-height: 1.5;
-    width: 80%;
+    width: 90%;
     &:hover {
       border: 2px dashed variables.$blue;
     }
