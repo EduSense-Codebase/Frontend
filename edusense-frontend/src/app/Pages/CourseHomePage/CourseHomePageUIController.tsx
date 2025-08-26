@@ -16,7 +16,6 @@ import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
-
 interface Props {
     joinCourse: boolean | undefined;
     createCourse: boolean | undefined;

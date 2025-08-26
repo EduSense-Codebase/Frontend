@@ -196,6 +196,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                                 {q.mode == 'edit' && (
                                     <div className="delete-question-btn">
                                         <Button
+                                            displayName="testasdfasdfs"
                                             onClick={() => handleDeleteQuestion(q.id)}
                                             variant="icon-secondary"
                                             icon="/delete.svg"

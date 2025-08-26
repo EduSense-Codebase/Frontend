@@ -76,6 +76,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                 moduleWidgetConfig: showModuleWidget,
                 todoWidgetConfig: showToDoWidget,
                 bannerImageConfig: bannerImage,
+                classModuleName: classModule,
             },
         };
         console.log('formdata ', formData);

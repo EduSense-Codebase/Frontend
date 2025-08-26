@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { httpPost } from '@/app/utils';
 import Button from '../Button';
+import { useRouter } from 'next/navigation';
 
 interface ClassworkProps {
     join_course: boolean | undefined;
@@ -42,6 +43,20 @@ export default function ClassworkTab({
         );
     };
 
+    const router = useRouter();
+    const handleCreateBuilderPage = (type_create: string) => {
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        const queryParams = { section: 'make_builder' };
+        const formData = { course_id: enrollmentId, type: type_create };
+
+        const requestResponse = httpPost<any>(url, formData, queryParams);
+
+        requestResponse.then((res) => {
+            console.log(res.data);
+            router.push(`/portal/builder/${enrollmentId}/${res.data.data.id}`);
+        });
+    };
+
     const handleCreateSelect = (type: 'assignment' | 'module' | 'file' | 'text-content') => {
         setShowCreateMenu(false);
         if (type === 'module') {
@@ -50,11 +65,12 @@ export default function ClassworkTab({
             setShowFileModal(true);
         } else if (type == 'assignment') {
             //redirect to builder page with assignment context
+            handleCreateBuilderPage('quiz_or_assignment');
         } else {
             //redirect to builder page with text-content context
+            handleCreateBuilderPage('text');
         }
     };
-
     const assignmentsByModule: Record<number, IAssignments[]> = {};
     modules.forEach((mod) => {
         assignmentsByModule[mod.id] = assignments.filter((a) => a.module === mod.id);
@@ -139,12 +155,24 @@ export default function ClassworkTab({
     const renderFileModal = () => (
         <div className="modalOverlay">
             <div className="modalContent">
-                <h3>Upload New File</h3>
+                <h3 className="mb-4">Upload New File</h3>
+
+                {/* Hidden file input */}
                 <input
+                    id="fileUpload"
                     type="file"
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    className="modalInput"
+                    className="hidden"
                 />
+
+                {/* Styled label acts like the button */}
+                <label
+                    htmlFor="fileUpload"
+                    className="modalInput mt-5 cursor-pointer rounded-lg border bg-gray-100 p-2 text-center transition hover:bg-gray-200"
+                >
+                    {selectedFile ? selectedFile.name : 'Choose file'}
+                </label>
+
                 <input
                     type="text"
                     value={fileDesc}
@@ -152,6 +180,7 @@ export default function ClassworkTab({
                     placeholder="Enter description..."
                     className="modalInput"
                 />
+
                 <div className="modalActions">
                     <Button displayName="Create" variant="primary" onClick={uploadFileCallback} />
                     <Button

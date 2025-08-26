@@ -17,14 +17,24 @@
     font-family: variables.$font-itim;
     text-transform: uppercase;
 
+    .tab.active {
+        color: #007bff;
+    }
+
+
+
     &:hover {
       color: variables.$dark-blue;
     }
-
-    &.active {
-      color: variables.$dark-blue;
-      font-weight: bold;
-      border-bottom-color: variables.$dark-blue;
-    }
   }
+}
+
+
+
+.tab-underline {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background-color: variables.$dark-blue;
+    border-radius: 1px;
 }
