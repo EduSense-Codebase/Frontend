@@ -99,9 +99,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     </Link>
 
                     <nav className="flex items-center space-x-6 text-sm font-medium text-gray-700">
-                        <Link href="/portal/profile" className="ml-3 hover:text-gray-900">
+                        {/* <Link href="/portal/profile" className="ml-3 hover:text-gray-900">
                             Profile
-                        </Link>
+                        </Link> */}
 
                         <Link href="/portal/settings" className="hover:text-gray-900">
                             Settings
