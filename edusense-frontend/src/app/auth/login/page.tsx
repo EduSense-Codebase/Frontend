@@ -50,8 +50,7 @@ export default function LoginPage() {
             password: password,
         };
 
-        const response = httpPost(apiUrl, form, queryParams);
-        response
+        httpPost(apiUrl, form, queryParams)
             .then((response) => {
                 console.log('Login successful:', response.data);
                 router.push('/portal/courses');

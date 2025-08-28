@@ -6,6 +6,7 @@ import { httpGet } from '@/app/utils';
 import { useEffect, useState } from 'react';
 import { createAIConnection } from './websockets';
 import ChatWidget from '@/app/ui_components/AIChat';
+import toast from 'react-hot-toast';
 
 export interface IMessages {
     sender: 'user' | 'ai';
@@ -140,6 +141,7 @@ export default function AIChatController(props: AIChatControllerProps) {
             setMessages((prevMessages) => {
                 return [...prevMessages, { sender: 'ai', content: aiMessage }];
             });
+            toast.success('Content generation complete!');
         } else if (jsonMsg.type == 'stream_final_content') {
             setThinking(undefined);
             console.log(jsonMsg.chunk);

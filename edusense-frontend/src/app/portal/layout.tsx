@@ -16,6 +16,7 @@ import { API_PREFIX, AUTH_ENDPOINT, COURSE_ENDPOINT } from '../global';
 import Sidebar from '../ui_components/Sidebar/Sidebar';
 import { ICourse } from '../typedef';
 import AIChatController from '../Pages/AIChat/AIChatController';
+import { Toaster } from 'react-hot-toast';
 
 const interClassName = 'font-inter';
 
@@ -87,6 +88,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             {/* <JoyrideWrapper steps={mainSteps} seenKey="1" /> */}
             {/* Sidebar (fixed) */}
             <Sidebar courses={courses} />
+            <Toaster position="top-right" />
 
             <header id="dashboard-nav" className="sticky top-0 z-8 bg-white shadow-sm">
                 <div className="z-40 mx-auto flex items-center justify-between bg-white px-4 py-4">
