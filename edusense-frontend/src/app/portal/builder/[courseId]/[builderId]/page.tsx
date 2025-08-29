@@ -16,6 +16,7 @@ import AssignmentBuilder, {
 } from '@/app/ui_components/AssignmentBuilder';
 import { useCustomProp } from '@/app/typedef';
 import Button from '@/app/ui_components/Button';
+import toast from 'react-hot-toast';
 
 export interface IQuizSubmission {
     type: 'multiple' | 'short' | 'long';
@@ -204,6 +205,7 @@ export default function BuilderPage() {
             .then(() => {
                 console.log('Successfully created assignment');
                 router.push(`/portal/course_roadmap/${courseId}`);
+                toast.success('Assignment created successfully!');
             })
             .catch(() => {
                 console.log("Didn't create assignment");

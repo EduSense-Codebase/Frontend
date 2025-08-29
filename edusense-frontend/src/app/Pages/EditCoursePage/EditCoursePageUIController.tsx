@@ -46,7 +46,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
     // const [editMode, setEditMode] = useState(false);
     const [sideBarOpen, setSidebarOpen] = useState(false);
     const [chooseModule, setChooseModule] = useState(false);
-    const [textBoxStyle, setTextBoxStyle] = useState('');
+    // const [textBoxStyle, setTextBoxStyle] = useState('');
     // const [classModule, setClassModule] = useState('');
     // const [bannerImage, setBannerImage] = useState<string | null>(null);
     const [showCustomize, setShowCustomize] = useState(false);
@@ -62,7 +62,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
             setBannerImage(originalValues.bannerImage);
             setShowModuleWidget(originalValues.showModuleWidget);
             setShowToDoWidget(originalValues.showToDoWidget);
-            setTextBoxStyle(originalValues.textBoxStyle);
+            // setTextBoxStyle(originalValues.textBoxStyle);
         }
         setEditMode(false);
         setSidebarOpen(false);
@@ -199,7 +199,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                             <img src="/back.svg" alt="back arrow" />
                         </button>
                         <div className="sidebar-content">
-                            <div className="sidebar-header">
+                            {/* <div className="sidebar-header">
                                 <img src="/text.svg" alt="Text Box Icon" className="sidebar-icon" />
                                 <h2> Text Box </h2>
                             </div>
@@ -215,7 +215,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                             <div className="sidebar-header">
                                 <img src="/cube.svg" alt="Section Icon" className="sidebar-icon" />
                                 <h2> Sections </h2>
-                            </div>
+                            </div> */}
                             <div className="element-options">
                                 <Button
                                     displayName="Add To-Do Widget"
