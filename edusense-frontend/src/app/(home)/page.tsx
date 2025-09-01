@@ -40,27 +40,43 @@ export default function LandingPage() {
             highlightHeading: "Course Content Generation",
             heading: "High Quality Course Material is just a prompt away",
             content: "Empowering teachers with cutting edge technology to make high quality content generation more accessible.",
-            gifPath: "/landing_page/testvideo.mp4"
+            gifPath: "/landing_page/videos/content_gen.mp4"
         },
         {
             highlightHeading: "Conversational Chatbot",
             heading: "Provide personalized learning for students",
             content: "Creating a layer of support to provide students with one-on-one teaching assistance",
-            gifPath: "/landing_page/testvideo.mp4"
+            gifPath: "/landing_page/videos/conversational.mp4"
         },
         {
             highlightHeading: "Enhanced LMS Features",
             heading: "Traditional LMS, modernized by AI",
             content: "Intuitive interface to create, customize, and personalize your classroom",
-            gifPath: "/landing_page/testvideo.mp4"
+            gifPath: "/landing_page/videos/lms.mp4"
         },
         {
             highlightHeading: "Grading Agent",
             heading: "Cut the busy work with AI assisted grading",
             content: "Grades and adds feedback to short answer, long answer, and essay based questions, along with traditional multiple choice grading",
-            gifPath: "/landing_page/testvideo.mp4"
+            gifPath: "/landing_page/videos/coming_soon2.jpg",
+            gifType: "image"
         }
     ]
+
+    const aboutFoundersContent = [
+        {
+            picPath: "/landing_page/founder_pic/divyansh.jpeg",
+            picAlt: "Divyansh Picture",
+            content: "Hey, I’m Divyansh. I’m a fourth-year CS and Managerial Economics student at UC Davis and co-founder of Edusense, where we’re building personalized learning tools to make quality education accessible to every student. I also co-founded Intelligent Workspace, the team behind Accountant Workspace, a SaaS platform supporting tax professionals. Beyond startups, I’ve worked on AI research in biomedical imaging and am now focused on LLM verification to reduce model hallucinations. At the end of the day, I love taking big ideas and turning them into tech that makes a real impact."
+        },
+        {
+            picPath: "/landing_page/founder_pic/soham.jpg",
+            picAlt: "Soham Picture",
+            content: "Hi, I’m Soham Kolhatkar, a UC Davis Computer Science and Managerial Economics student and co-founder of EduSense. I’m passionate about using AI to make high-quality, personalized education accessible to all. My journey started at a scheduling startup improving tools for thousands of students and has taken me through research of AI tools in industry, LLM verification, and medical imaging, as well as industry internships. EduSense is my first startup, built on years of exploring how technology can transform learning and empower both teachers and students."
+        }
+    ]
+
+    const calendlyLink = "https://calendly.com/edusense0114/30min"
 
     // Social links for footer icons
     const socialLinks = [
@@ -108,9 +124,9 @@ export default function LandingPage() {
                     {/* Optional: <span className="text-2xl font-bold">EduSense</span> */}
                 </Link>
                 <nav className="space-x-6 text-[#25436d]">
-                    <Link href="/auth/login" className="transition hover:text-[#6dc4e0]">
+                    {/*<Link href="/auth/login" className="transition hover:text-[#6dc4e0]">
                         Login
-                    </Link>
+                    </Link>*/}
                     <a href="#how-it-works" className="transition hover:text-[#6dc4e0]">
                         How It Works
                     </a>
@@ -170,38 +186,21 @@ export default function LandingPage() {
                 </section>
 
                 {/* Video Section */}
-                {/*<section className="video-demo" id="how-it-works">
-                    <div className="video-container">
-                        <div className="frame">
-                        <img src="/landing_page/videoframe.png" alt="video frame" className="videoframe"/>
-                        <video
-                            src="/landing_page/testvideo.mp4"
-                            title="EduSense Demo Video"
-                            autoPlay
-                            muted
-                            className="video"
-                        ></video>
-                        </div>
-                        <div className="text">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
-                        </p>
-                        </div>
-                    </div>
-                </section>*/}
-
                 {productHighlightsContent.map(content =>
                     <section className="video-demo" id="how-it-works">
                         <div className="video-container">
                             <div className="frame">
                             <img src="/landing_page/videoframe.png" alt="video frame" className="videoframe"/>
-                            <video
+                            {content.gifType ?
+                            <img src={content.gifPath} className="video" />
+                            : <video
                                 src={content.gifPath}
                                 title="EduSense Demo Video"
                                 autoPlay
                                 muted
+                                loop
                                 className="video"
-                            ></video>
+                            ></video>}
                             </div>
                             <div className="text">
                                 <h1>
@@ -233,7 +232,7 @@ export default function LandingPage() {
                         <div className="calendly-container">
                             <button className="calendly-close" onClick={toggleCalendly}>×</button>
                             <iframe
-                                src="https://calendly.com/natalievhoang/30min?embed_domain=localhost&embed_type=Inline"
+                                src={calendlyLink}
                                 width="100%"
                                 height="550"
                                 title="Schedule a Demo"
@@ -259,10 +258,26 @@ export default function LandingPage() {
                         <h2>About the Founders</h2>
                         <img src="/landing_page/laptop.png" alt="laptop" className="laptop"/>
                     </div>
-                    <img src="/landing_page/photoframes.png" alt="photos of the founders" className="photoframes"/>
+                    {/*<img src="/landing_page/photoframes.png" alt="photos of the founders" className="photoframes"/>*/}
+                    <div className="flex gap-70">
+                        <Image 
+                            src={aboutFoundersContent[0].picPath}
+                            alt={aboutFoundersContent[0].picAlt}
+                            width={250} 
+                            height={100} 
+                        />
+                        <Image 
+                            src={aboutFoundersContent[1].picPath}
+                            alt={aboutFoundersContent[1].picAlt}
+                            width={200} 
+                            height={200} 
+                        />
+                    </div>
+
                     <div className='bios'>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        {aboutFoundersContent.map(content =>
+                            <p>{content.content}</p>
+                        )}
                     </div>
                 </section>
                 <img src="/landing_page/grass.png" className="grass"/>
