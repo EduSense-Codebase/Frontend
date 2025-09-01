@@ -7,9 +7,15 @@ import { useState, useEffect } from 'react';
 import './page.scss';
 import Button from '../ui_components/Button/index';
 
+// Content Constants
+
+
+
 export default function LandingPage() {
     const router = useRouter();
     const [showCalendly, setShowCalendly] = useState(false);
+
+    
 
     const toggleCalendly = () => {
         setShowCalendly(!showCalendly);
@@ -18,6 +24,43 @@ export default function LandingPage() {
     const getStarted = () => {
         router.push('/auth/register');
     };
+
+    const missionStatementContent = 
+        <>
+        {'The reality is AI is becoming more and more a part of everyday life. As students ourselves, we saw a paradigm shift in how AI is used in an academic setting. Students are trying to find ways to shortcut their learning, and traditional teaching methods are becoming more and more outdated. To help classrooms adapt to this emerging age of technology, we wanted to equip teachers with the tools necessary to make classrooms more efficient, to encourage smarter and stronger learning for students, and promote the responsible use of artificial intelligence. AI is opening a new frontier in the world, and EduSense’s aim is to bring that change to schools and democratize the use of AI for education.'}
+        <br />
+        <br />
+        <a href="#" onClick={toggleCalendly}>Join us</a>{' in making education more accessible, efficient and personalized for all.'}
+        </>;
+
+    const taglineContent = ["The Modern Classroom", "Smarter Teaching, Stronger Learning"];
+
+    const productHighlightsContent = [
+        {
+            highlightHeading: "Course Content Generation",
+            heading: "High Quality Course Material is just a prompt away",
+            content: "Empowering teachers with cutting edge technology to make high quality content generation more accessible.",
+            gifPath: "/landing_page/testvideo.mp4"
+        },
+        {
+            highlightHeading: "Conversational Chatbot",
+            heading: "Provide personalized learning for students",
+            content: "Creating a layer of support to provide students with one-on-one teaching assistance",
+            gifPath: "/landing_page/testvideo.mp4"
+        },
+        {
+            highlightHeading: "Enhanced LMS Features",
+            heading: "Traditional LMS, modernized by AI",
+            content: "Intuitive interface to create, customize, and personalize your classroom",
+            gifPath: "/landing_page/testvideo.mp4"
+        },
+        {
+            highlightHeading: "Grading Agent",
+            heading: "Cut the busy work with AI assisted grading",
+            content: "Grades and adds feedback to short answer, long answer, and essay based questions, along with traditional multiple choice grading",
+            gifPath: "/landing_page/testvideo.mp4"
+        }
+    ]
 
     // Social links for footer icons
     const socialLinks = [
@@ -119,25 +162,25 @@ export default function LandingPage() {
                         >
                             <img src="/landing_page/chat-bubble.png" alt="chat bubble"/>
                             <div className='chat-bubble-content'>
-                                <p>Your Personal AI Tutor!</p>
-                                <p className='tagline'>Smart, Fun & Reliable</p>
+                                <p className='tagline-header'>{taglineContent[0]}</p>
+                                <p className='tagline'>{taglineContent[1]}</p>
                             </div>
                         </motion.div>
                     </div>
                 </section>
 
                 {/* Video Section */}
-                <section className="video-demo" id="how-it-works">
+                {/*<section className="video-demo" id="how-it-works">
                     <div className="video-container">
                         <div className="frame">
                         <img src="/landing_page/videoframe.png" alt="video frame" className="videoframe"/>
-                        <iframe
-                            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                        <video
+                            src="/landing_page/testvideo.mp4"
                             title="EduSense Demo Video"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
+                            autoPlay
+                            muted
                             className="video"
-                        ></iframe>
+                        ></video>
                         </div>
                         <div className="text">
                         <p>
@@ -145,7 +188,32 @@ export default function LandingPage() {
                         </p>
                         </div>
                     </div>
+                </section>*/}
+
+                {productHighlightsContent.map(content =>
+                    <section className="video-demo" id="how-it-works">
+                        <div className="video-container">
+                            <div className="frame">
+                            <img src="/landing_page/videoframe.png" alt="video frame" className="videoframe"/>
+                            <video
+                                src={content.gifPath}
+                                title="EduSense Demo Video"
+                                autoPlay
+                                muted
+                                className="video"
+                            ></video>
+                            </div>
+                            <div className="text">
+                            <h1>
+                                {content.heading}
+                            </h1>
+                            <h1>
+                                {content.content}
+                            </h1>
+                            </div>
+                        </div>
                 </section>
+                )}
 
                 <img src="/landing_page/wavyline.png" alt="separator" className="wavyline"/>
                 
@@ -180,7 +248,9 @@ export default function LandingPage() {
                         <img src="/landing_page/lightbulb.png" alt="lightbulb" className="lightbulb"/>
                         <h2>Our Mission</h2>
                     </div>
-                    <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p className="description">
+                        {missionStatementContent}
+                    </p>
                 </section>
 
                 {/* Founders Section */}

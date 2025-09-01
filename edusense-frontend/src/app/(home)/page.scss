@@ -89,11 +89,11 @@
                 .chat-bubble-content {
                     position: absolute;
                     top: 35%;
-                    left: 50%;
+                    left: 45%;
                     transform: translate(-40%, -25%);
-                    width: 70%; 
+                    width: 90%; 
                     p {
-                        font-size: clamp(0.9rem, 2.5vw, 5rem);
+                        font-size: clamp(0.9rem, 2.0vw, 5rem);
                         margin: 0.2em 0;
                     }
                 }
@@ -145,7 +145,14 @@
             }
 
             .text {
+                /*
                 p {
+                    font-size: clamp(0.7rem, 1.7vw, 5rem);
+                    line-height: 1.6;
+                }
+                */
+
+                h1 {
                     font-size: clamp(0.7rem, 1.7vw, 5rem);
                     line-height: 1.6;
                 }
