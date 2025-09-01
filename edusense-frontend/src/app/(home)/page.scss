@@ -43,8 +43,8 @@
             position: absolute;
             display: flex;
             flex-direction: column;
-            top: 25%;
-            left: 16%;
+            top: 27%;
+            left: 17%;
             gap: 3rem;
 
             .logo-text {
@@ -55,7 +55,7 @@
             .bookshelf {
                 position: relative;
                 width: 30vw;
-                transform: translateX(-12%);
+                transform: translateX(-15%);
             }
         }
 
@@ -63,7 +63,7 @@
             width: 20vw;
             position: absolute;
             top: 1rem;
-            left: 30vw;
+            left: 33%;
         }
 
         .right-hero {
