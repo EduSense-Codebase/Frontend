@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: 'EduSense',
     icons: {
-        icon: { url: '/EduSense-Sample-Logo.png', type: 'image/png', sizes: '32x32' },
+        icon: { url: '/EduSense-Logo.png', type: 'image/png', sizes: '32x32' },
     },
 };
 
