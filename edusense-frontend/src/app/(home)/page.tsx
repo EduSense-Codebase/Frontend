@@ -9,7 +9,11 @@ import Button from '../ui_components/Button/index';
 
 export default function LandingPage() {
     const router = useRouter();
-    const [showDemo, setShowDemo] = useState(false);
+    const [showCalendly, setShowCalendly] = useState(false);
+
+    const toggleCalendly = () => {
+        setShowCalendly(!showCalendly);
+    }
 
     const getStarted = () => {
         router.push('/auth/register');
@@ -47,36 +51,38 @@ export default function LandingPage() {
         // Add more social icons here if needed
     ];
 
-    const showCalendar = () => {
-        window.open('https://calendly.com/natalievhoang/30min', '_blank');
-    };
-
     return (
         <div className="landing-page">
             {/* Navbar */}
-            <header className="flex items-center justify-between px-8 py-6 shadow-md">
-                <Link href="/" className="flex items-center space-x-2 text-blue-600">
+            <header className="navbar">
+                <Link href="/" className="flex items-center space-x-2 text-[#6dc4e0]">
                     <Image
-                        src="/EduSense-Sample-Logo.png"
+                        src="/landing_page/logo-full.png"
                         alt="EduSense Logo"
                         width={120}
                         height={40}
                     />
                     {/* Optional: <span className="text-2xl font-bold">EduSense</span> */}
                 </Link>
-                <nav className="space-x-6 font-medium text-gray-700">
-                    <Link href="/auth/login" className="transition hover:text-blue-600">
+                <nav className="space-x-6 text-[#25436d]">
+                    <Link href="/auth/login" className="transition hover:text-[#6dc4e0]">
                         Login
                     </Link>
-                    <a href="#features" className="transition hover:text-blue-600">
-                        Features
-                    </a>
-                    <a href="#how-it-works" className="transition hover:text-blue-600">
+                    <a href="#how-it-works" className="transition hover:text-[#6dc4e0]">
                         How It Works
                     </a>
-                    <a href="#contact" className="transition hover:text-blue-600">
+                    <a href="#mission" className="transition hover:text-[#6dc4e0]">
+                        Our Mission
+                    </a>
+                    <a href="#founders" className="transition hover:text-[#6dc4e0]">
+                        About the Founders
+                    </a>
+                    <a href="#contact" className="transition hover:text-[#6dc4e0]">
                         Contact
                     </a>
+                    <button onClick={toggleCalendly} className="transition hover:text-[#6dc4e0] cursor-pointer">
+                        Book A Demo
+                    </button>
                 </nav>
             </header>
 
@@ -121,7 +127,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* Video Section */}
-                <section className="video-demo">
+                <section className="video-demo" id="how-it-works">
                     <div className="video-container">
                         <div className="frame">
                         <img src="/landing_page/videoframe.png" alt="video frame" className="videoframe"/>
@@ -148,13 +154,28 @@ export default function LandingPage() {
                         <img src="/landing_page/calendar.png" alt="calendar" className="calendar-icon"/>
                         <div className="demo-text">
                             <p className="learn-more">Want to Learn More?</p>
-                            <Button onClick={showCalendar} displayName='Book A Demo' variant="primary"/>
+                            <Button onClick={toggleCalendly} displayName='Book A Demo' variant="primary"/>
                         </div>
                     <img src="/landing_page/butterfly.png" alt="butterfly" className="butterfly"/>
                 </section>
 
+                {showCalendly && (
+                    <div className="calendly-modal">
+                        <div className="calendly-overlay" onClick={toggleCalendly}></div>
+                        <div className="calendly-container">
+                            <button className="calendly-close" onClick={toggleCalendly}>×</button>
+                            <iframe
+                                src="https://calendly.com/natalievhoang/30min?embed_domain=localhost&embed_type=Inline"
+                                width="100%"
+                                height="550"
+                                title="Schedule a Demo"
+                            ></iframe>
+                        </div>
+                    </div>
+                )}
+
                 {/* Mission Section */}
-                <section className="mission">
+                <section className="mission" id="mission">
                     <div className="mission-heading">
                         <img src="/landing_page/lightbulb.png" alt="lightbulb" className="lightbulb"/>
                         <h2>Our Mission</h2>
@@ -163,7 +184,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* Founders Section */}
-                <section className="founders">
+                <section className="founders" id="founders">
                     <div className="founders-heading">
                         <h2>About the Founders</h2>
                         <img src="/landing_page/laptop.png" alt="laptop" className="laptop"/>
@@ -178,7 +199,7 @@ export default function LandingPage() {
             </div>
 
             {/* Footer */}
-            <footer className="landing-footer">
+            <footer className="landing-footer" id="contact">
                 <h3>Contact Us</h3>
                 <div className="socials">
                     {socialLinks.map(({ name, href, icon }) => (

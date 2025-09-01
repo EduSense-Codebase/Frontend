@@ -4,7 +4,24 @@
     width: 100%;
     font-family: vars.$font-jua;
     color: vars.$dark-blue;
-    overflow-x: hidden;
+    min-height: 100vh;
+    overflow: visible;
+
+    .navbar {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 2rem;
+        box-shadow: vars.$dropshadow;
+        background-color: vars.$white;
+        z-index: 50;
+        font-size: clamp(0.7rem, 1.3vw, 1.5rem);
+        nav {
+            margin-left: 1rem;
+        }
+    }
 
     .content {
         width: 100%;
@@ -20,6 +37,7 @@
         padding: 3rem;
         min-height: 500px;
         height: 70vw;
+        max-width: 100% !important;
 
         .hero-left {
             position: absolute;
@@ -51,11 +69,10 @@
         .right-hero {
             position: absolute;
             top: 12rem;
-            right: 2rem;
+            right: 0;
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            transform: translateX(10%);
             .logo-icon {
                 width: 25vw;
             }
@@ -103,6 +120,7 @@
             padding: 0 3rem;
             border-radius: 2rem;
             box-shadow: vars.$dropshadow;
+            max-width: 100% !important;
 
             .frame {
             position: relative;
@@ -146,7 +164,8 @@
         align-items: center;
         justify-content: center;
         gap: 2rem;
-        transform: translateX(8%);
+        padding-left: 15%;
+        width: 100% !important;
 
         .demo-text {
             display: flex;
@@ -156,9 +175,11 @@
         }
 
         .learn-more {
-            font-size: clamp(1rem, 4vw, 8rem);
+            font-size: clamp(0.8rem, 3vw, 8rem);
             text-align: center;
             color: #25436d;
+            margin-bottom: 1rem;
+            width: 100%;
         }
 
         p {
@@ -183,7 +204,7 @@
         gap: 2rem;
 
         .lightbulb {
-            width: 15vw;
+            width: 11vw;
             transform: translate(-65%, 70%);
         }
     }
@@ -199,13 +220,13 @@
             display: flex;
             transform: translateX(10%);
             h2 {
-                width: 65vw;
+                width: 55vw;
                 height: min-content;
             }
             .laptop {
                 width: 15vw;
                 height: auto;
-                transform: translateX(-50%);
+                transform: translate(-50%, -10%);
             }
         }
         .bios {
@@ -220,7 +241,7 @@
                 padding: 1rem 2rem;
                 width: 35vw;
                 border-radius: 3rem;
-                font-size: clamp(0.7rem, 1.5vw, 5rem);
+                font-size: clamp(0.7rem, 1.4vw, 5rem);
                 box-shadow: vars.$dropshadow;
             }
         }
@@ -230,11 +251,11 @@
     h2 {
         color: vars.$white;
         background-color: vars.$dark-blue;
-        padding: 1rem 2rem;
+        padding: 0.5rem 2rem;
         border-radius: 4rem;
         width: 40vw;
         text-align: center;
-        font-size: clamp(1rem, 5vw, 10rem);
+        font-size: clamp(1rem, 4vw, 10rem);
         box-shadow: vars.$dropshadow;
     }
 
@@ -244,14 +265,15 @@
         padding: 3rem 4rem;
         width: 80vw;
         border-radius: 3rem;
-        font-size: clamp(0.7rem, 2vw, 5rem);
+        font-size: clamp(0.7rem, 1.7vw, 5rem);
         box-shadow: vars.$dropshadow;
     }
 
     .grass {
         width: 90%;
         justify-self: center;
-        transform: translateY(67%);
+        transform: translateY(66%);
+        z-index: 1;
     }
 
     .landing-footer {
@@ -268,7 +290,8 @@
             color: vars.$white;
             font-size: clamp(2rem, 5vw, 10rem);
             background-color: vars.$dark-blue;
-            padding: 1rem;
+            padding: 0 1rem;
+            margin: 1rem 0;
             z-index: 10;
         }
 
@@ -278,6 +301,7 @@
             align-items: center;
             justify-self: center;
             gap: 2rem;
+            z-index: 2;
             .social-icon {
                 padding: 1rem;
                 border-radius: 100%;
@@ -300,14 +324,14 @@
             gap: 0 !important;
         }
         .frame {
-            width: 120% !important;
+            width: 100% !important;
         }
         h2 {
             width: 100%;
         }
 
         .learn-more {
-            width: 120% !important;
+            width: 100% !important;
         }
         .description {
             padding: 1rem 1.5rem;
@@ -349,23 +373,22 @@
             .right-hero {
                 position: relative;
                 top: 20%;
-                right: 0;
-                left: 25%;
                 transform: none;
+                padding-left: 25%;
                 .logo-icon {
                     width: 50%;
                 }
                 .chat-bubble {
                     transform: none;
-                    width: 80%;
+                    width: 100%;
                     img {
-                        height: 7rem;
+                        height: 8rem;
                     }
                 }
                 .chat-bubble-content {
                     top: 45%;
                     left: 45% !important;
-                    transform: translate(-40%, -25%);
+                    transform: translate(-40%, 0);
                     width: 70%; 
                     p {
                         font-size: 0.9rem !important;
@@ -385,4 +408,81 @@
         }
     }
 
+}
+
+.calendly-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.calendly-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.calendly-container {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    max-width: 900px;
+    width: 100%;
+    overflow: hidden;
+
+    iframe {
+        border-radius: 0 0 12px 12px;
+    }
+}
+
+.calendly-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #e0e0e0;
+        color: #333;
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 768px) {
+    .calendly-modal {
+        padding: 10px;
+    }
+
+    .calendly-close {
+        top: 10px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+    }
 }
