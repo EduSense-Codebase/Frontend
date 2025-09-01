@@ -204,12 +204,12 @@ export default function LandingPage() {
                             ></video>
                             </div>
                             <div className="text">
-                            <h1>
-                                {content.heading}
-                            </h1>
-                            <h1>
-                                {content.content}
-                            </h1>
+                                <h1>
+                                    {content.heading}
+                                </h1>
+                                <p>
+                                    {content.content}
+                                </p>
                             </div>
                         </div>
                 </section>
