@@ -3,100 +3,150 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import './page.scss';
+import Button from '../ui_components/Button/index';
+
+// Content Constants
 
 export default function LandingPage() {
     const router = useRouter();
-    const [showDemo, setShowDemo] = useState(false);
+    const [showCalendly, setShowCalendly] = useState(false);
+
+    const toggleCalendly = () => {
+        setShowCalendly(!showCalendly);
+    };
 
     const getStarted = () => {
         router.push('/auth/register');
     };
 
-    // Updated step info for clarity
-    const stepInfo = (step: string) => {
-        switch (step) {
-            case 'Sign Up':
-                return (
-                    <p className="text-sm text-gray-600">
-                        Sign up for free and create your profile.
-                    </p>
-                );
-            case 'Pick Your Course':
-                return (
-                    <p className="text-sm text-gray-600">
-                        Choose from a variety of courses to start learning.
-                    </p>
-                );
-            case 'Learn & Earn':
-                return (
-                    <p className="text-sm text-gray-600">
-                        Complete activities to earn points and redeem rewards.
-                    </p>
-                );
-            case 'Track Progress':
-                return (
-                    <p className="text-sm text-gray-600">
-                        Set goals and watch your improvement over time.
-                    </p>
-                );
-            default:
-                return null;
-        }
-    };
+    const missionStatementContent = (
+        <>
+            {
+                'The reality is AI is becoming more and more a part of everyday life. As students ourselves, we saw a paradigm shift in how AI is used in an academic setting. Students are trying to find ways to shortcut their learning, and traditional teaching methods are becoming more and more outdated. To help classrooms adapt to this emerging age of technology, we wanted to equip teachers with the tools necessary to make classrooms more efficient, to encourage smarter and stronger learning for students, and promote the responsible use of artificial intelligence. AI is opening a new frontier in the world, and EduSense’s aim is to bring that change to schools and democratize the use of AI for education.'
+            }
+            <br />
+            <br />
+            <a href="#" onClick={toggleCalendly}>
+                Join us
+            </a>
+            {' in making education more accessible, efficient and personalized for all.'}
+        </>
+    );
 
-    // Updated feature info with better descriptions and images
-    const featureInfo = (feature: string) => {
-        let image = '';
-        let content = '';
+    const taglineContent = ['The Modern Classroom', 'Smarter Teaching, Stronger Learning'];
 
-        switch (feature) {
-            case 'AI Lessons':
-                image = '/Ai-lessons.png';
-                content =
-                    'Instantly generated lessons tailored to your learning style using the latest AI technology.';
-                break;
-            case '1-on-1 Tutor':
-                image = '/1-on-1-tutor.png';
-                content =
-                    'Get personalized help from AI tutors that understand your strengths and weaknesses.';
-                break;
-            case 'Gamified Learning':
-                image = '/Gamified-learning.png';
-                content =
-                    'Earn points, badges, and rewards while enjoying fun and interactive lessons.';
-                break;
-            case 'Diagnostics':
-                image = '/Diagnostics.png';
-                content = 'Track your skills and get detailed insights on your progress.';
-                break;
-        }
+    const productHighlightsContent = [
+        {
+            highlightHeading: 'Course Content Generation',
+            heading: 'High Quality Course Material is just a prompt away',
+            content:
+                'Empowering teachers with cutting edge technology to make high quality content generation more accessible.',
+            gifPath: '/landing_page/videos/content_gen.mp4',
+        },
+        {
+            highlightHeading: 'Conversational Chatbot',
+            heading: 'Provide personalized learning for students',
+            content:
+                'Creating a layer of support to provide students with one-on-one teaching assistance',
+            gifPath: '/landing_page/videos/conversational.mp4',
+        },
+        {
+            highlightHeading: 'Enhanced LMS Features',
+            heading: 'Traditional LMS, modernized by AI',
+            content: 'Intuitive interface to create, customize, and personalize your classroom',
+            gifPath: '/landing_page/videos/lms.mp4',
+        },
+        {
+            highlightHeading: 'Grading Agent',
+            heading: 'Cut the busy work with AI assisted grading',
+            content:
+                'Grades and adds feedback to short answer, long answer, and essay based questions, along with traditional multiple choice grading',
+            gifPath: '/landing_page/videos/coming_soon2.jpg',
+            gifType: 'image',
+        },
+    ];
 
-        return (
-            <>
-                <div className="mb-4 flex justify-center">
-                    <Image src={image} alt={feature} width={120} height={120} />
-                </div>
-                <h4 className="mb-2 text-xl font-semibold">{feature}</h4>
-                <p className="text-sm text-gray-600">{content}</p>
-            </>
-        );
-    };
+    const aboutFoundersContent = [
+        {
+            picPath: '/landing_page/founder_pic/divyansh.jpeg',
+            picAlt: 'Divyansh Picture',
+            content:
+                'Hey, I’m Divyansh. I’m a fourth-year CS and Managerial Economics student at UC Davis and co-founder of Edusense, where we’re building personalized learning tools to make quality education accessible to every student. I also co-founded Intelligent Workspace, the team behind Accountant Workspace, a SaaS platform supporting tax professionals. Beyond startups, I’ve worked on AI research in biomedical imaging and am now focused on LLM verification to reduce model hallucinations. At the end of the day, I love taking big ideas and turning them into tech that makes a real impact.',
+        },
+        {
+            picPath: '/landing_page/founder_pic/soham.jpg',
+            picAlt: 'Soham Picture',
+            content:
+                'Hi, I’m Soham Kolhatkar, a UC Davis Computer Science and Managerial Economics student and co-founder of EduSense. I’m passionate about using AI to make high-quality, personalized education accessible to all. My journey started at a scheduling startup improving tools for thousands of students and has taken me through research of AI tools in industry, LLM verification, and medical imaging, as well as industry internships. EduSense is my first startup, built on years of exploring how technology can transform learning and empower both teachers and students.',
+        },
+    ];
+
+    const calendlyLink = 'https://calendly.com/edusense0114/30min';
 
     // Social links for footer icons
     const socialLinks = [
         {
             name: 'Twitter',
-            href: 'https://twitter.com/edusense',
+            href: '#',
             icon: (
                 <svg
-                    className="h-6 w-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
+                    width="44"
+                    height="44"
+                    viewBox="0 0 44 44"
+                    fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                 >
-                    <path d="M23 3a10.9 10.9 0 01-3.14.86 5.48 5.48 0 002.4-3.02 10.8 10.8 0 01-3.44 1.3 5.41 5.41 0 00-9.2 4.94 15.36 15.36 0 01-11.15-5.65 5.39 5.39 0 001.67 7.2 5.38 5.38 0 01-2.45-.67v.07a5.42 5.42 0 004.34 5.31 5.41 5.41 0 01-2.44.09 5.43 5.43 0 005.07 3.77A10.86 10.86 0 010 19.54a15.34 15.34 0 008.29 2.43c9.95 0 15.4-8.25 15.4-15.4 0-.24 0-.48-.02-.71A11.03 11.03 0 0023 3z" />
+                    <path
+                        d="M46 3.00009C44.0848 4.35105 41.9642 5.38431 39.72 6.06009C38.5155 4.67511 36.9147 3.69348 35.1341 3.24794C33.3535 2.80241 31.479 2.91448 29.7642 3.569C28.0493 4.22351 26.5769 5.38889 25.546 6.90753C24.515 8.42616 23.9754 10.2248 24 12.0601V14.0601C20.4853 14.1512 17.0025 13.3717 13.862 11.791C10.7215 10.2103 8.02063 7.87736 6 5.00009C6 5.00009 -2 23.0001 16 31.0001C11.8811 33.796 6.97431 35.198 2 35.0001C20 45.0001 42 35.0001 42 12.0001C41.9982 11.443 41.9446 10.8873 41.84 10.3401C43.8812 8.32708 45.3217 5.78552 46 3.00009Z"
+                        stroke="#4B76B3"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            ),
+        },
+        {
+            name: 'Email',
+            href: '#',
+            icon: (
+                <svg
+                    width="44"
+                    height="44"
+                    viewBox="0 0 44 44"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M42 6C42 3.8 40.2 2 38 2H6C3.8 2 2 3.8 2 6M42 6V30C42 32.2 40.2 34 38 34H6C3.8 34 2 32.2 2 30V6M42 6L22 20L2 6"
+                        stroke="#4B76B3"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            ),
+        },
+        {
+            name: 'Instagram',
+            href: '#',
+            icon: (
+                <svg
+                    width="44"
+                    height="44"
+                    viewBox="0 0 44 44"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M33 11H33.02M12 2H32C37.5228 2 42 6.47715 42 12V32C42 37.5228 37.5228 42 32 42H12C6.47715 42 2 37.5228 2 32V12C2 6.47715 6.47715 2 12 2ZM30 20.74C30.2468 22.4045 29.9625 24.1044 29.1875 25.598C28.4125 27.0916 27.1863 28.3028 25.6833 29.0593C24.1802 29.8159 22.4769 30.0792 20.8156 29.8119C19.1543 29.5445 17.6195 28.7602 16.4297 27.5703C15.2398 26.3805 14.4555 24.8457 14.1881 23.1844C13.9208 21.5231 14.1841 19.8198 14.9407 18.3167C15.6972 16.8137 16.9084 15.5875 18.402 14.8125C19.8956 14.0375 21.5955 13.7532 23.26 14C24.9578 14.2518 26.5297 15.0429 27.7434 16.2566C28.9571 17.4703 29.7482 19.0422 30 20.74Z"
+                        stroke="#4B76B3"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
                 </svg>
             ),
         },
@@ -104,227 +154,234 @@ export default function LandingPage() {
     ];
 
     return (
-        <div className="flex min-h-screen flex-col bg-white text-gray-900">
+        <div className="landing-page">
             {/* Navbar */}
-            <header className="flex items-center justify-between px-8 py-6 shadow-md">
-                <Link href="/" className="flex items-center space-x-2 text-blue-600">
+            <header className="navbar">
+                <Link href="/" className="flex items-center space-x-2 text-[#6dc4e0]">
                     <Image
-                        src="/EduSense-Sample-Logo.png"
+                        src="/landing_page/logo-full.png"
                         alt="EduSense Logo"
                         width={120}
                         height={40}
                     />
                     {/* Optional: <span className="text-2xl font-bold">EduSense</span> */}
                 </Link>
-                <nav className="space-x-6 font-medium text-gray-700">
-                    <Link href="/auth/login" className="transition hover:text-blue-600">
+                <nav className="space-x-6 text-[#25436d]">
+                    {/*<Link href="/auth/login" className="transition hover:text-[#6dc4e0]">
                         Login
-                    </Link>
-                    <a href="#features" className="transition hover:text-blue-600">
-                        Features
-                    </a>
-                    <a href="#how-it-works" className="transition hover:text-blue-600">
+                    </Link>*/}
+                    <a href="#how-it-works" className="transition hover:text-[#6dc4e0]">
                         How It Works
                     </a>
-                    <a href="#contact" className="transition hover:text-blue-600">
+                    <a href="#mission" className="transition hover:text-[#6dc4e0]">
+                        Our Mission
+                    </a>
+                    <a href="#founders" className="transition hover:text-[#6dc4e0]">
+                        About the Founders
+                    </a>
+                    <a href="#contact" className="transition hover:text-[#6dc4e0]">
                         Contact
                     </a>
+                    <button
+                        onClick={toggleCalendly}
+                        className="cursor-pointer transition hover:text-[#6dc4e0]"
+                    >
+                        Book A Demo
+                    </button>
                 </nav>
             </header>
 
-            {/* Hero Section */}
-            {/* Full-width gradient background wrapper */}
-            <motion.div
-                className="w-full bg-gradient-to-r from-blue-50 to-green-50"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-            >
-                {/* Centered content container */}
-                <section className="mx-auto flex max-w-7xl flex-col-reverse items-center gap-10 px-6 py-20 md:flex-row">
-                    <div className="max-w-xl text-center md:text-left">
-                        <h1 className="mb-6 text-5xl leading-tight font-extrabold tracking-tight text-gray-900">
-                            Your Personal AI Tutor —{' '}
-                            <span className="text-blue-600">Free, Smart, Fun.</span>
-                        </h1>
-                        <p className="mb-8 text-lg text-gray-700">
-                            EduSense uses smart AI to create lessons on the fly, adapting to how you
-                            learn so you always get the right content at the right time—making
-                            learning easier and more fun.
-                        </p>
-                        <div className="flex flex-wrap justify-center gap-4 md:justify-start">
-                            <button
-                                onClick={getStarted}
-                                className="rounded-xl bg-blue-600 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-blue-700"
-                            >
-                                Get Started
-                            </button>
-                            {/* <button
-                                onClick={() => setShowDemo(true)}
-                                className="rounded-xl border border-blue-600 px-8 py-3 font-semibold text-blue-600 shadow-sm transition hover:bg-blue-100"
-                            >
-                                Watch Demo
-                            </button> */}
-                        </div>
-                    </div>
-
-                    <div className="w-full max-w-md md:max-w-lg">
-                        <Image
-                            src="/EduSense-Sample-Logo.png"
-                            alt="EduSense app preview"
-                            width={540}
-                            height={400}
-                            className="mx-auto"
+            <div className="content">
+                {/* Hero Section */}
+                <section className="hero">
+                    <div className="hero-left">
+                        <img
+                            src="/landing_page/logo-text.png"
+                            alt="edusense"
+                            className="logo-text"
+                        />
+                        <img
+                            src="/landing_page/bookshelf.png"
+                            alt="bookshelf"
+                            className="bookshelf"
                         />
                     </div>
-                </section>
-            </motion.div>
-
-            {/* Features */}
-            <section
-                id="features"
-                className="mx-auto max-w-6xl px-6 py-20"
-                aria-label="Features of EduSense"
-            >
-                <h2 className="mb-12 text-center text-3xl font-semibold">Features</h2>
-                <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
-                    {['AI Lessons', '1-on-1 Tutor', 'Gamified Learning', 'Diagnostics'].map(
-                        (feature, i) => (
-                            <motion.div
-                                key={i}
-                                className="cursor-pointer rounded-2xl bg-white p-6 text-center shadow-lg transition-transform hover:scale-105 hover:shadow-xl"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.2, duration: 0.5 }}
-                            >
-                                {featureInfo(feature)}
-                            </motion.div>
-                        ),
-                    )}
-                </div>
-            </section>
-
-            {/* How It Works */}
-            <section id="how-it-works" className="bg-gray-50 px-6 py-20">
-                <h2 className="mb-12 text-center text-3xl font-semibold">How It Works</h2>
-                <div className="grid gap-10 text-center sm:grid-cols-2 md:grid-cols-4">
-                    {['Sign Up', 'Pick Your Course', 'Learn & Earn', 'Track Progress'].map(
-                        (step, i) => (
-                            <motion.div
-                                key={i}
-                                className="rounded-xl bg-white p-6 shadow-md"
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: i * 0.2 }}
-                            >
-                                <div className="mb-4 text-5xl font-bold text-blue-500">{i + 1}</div>
-                                <h4 className="mb-2 text-xl font-semibold">{step}</h4>
-                                {stepInfo(step)}
-                            </motion.div>
-                        ),
-                    )}
-                </div>
-            </section>
-
-            {/* Testimonials */}
-            {/* <section className="mx-auto max-w-6xl bg-white px-6 py-20 text-center">
-                <h2 className="mb-12 text-3xl font-semibold">What Students Say</h2>
-                <div className="flex flex-col gap-8 md:flex-row md:justify-center md:gap-10">
-                    {[
-                        {
-                            quote: 'Insert Quote Here',
-                            author: 'Insert Testimonial',
-                        },
-                        {
-                            quote: 'Insert Quote Here',
-                            author: 'Insert Testimonial',
-                        },
-                        {
-                            quote: 'Insert Quote Here',
-                            author: 'Insert Testimonial',
-                        },
-                    ].map(({ quote, author }, i) => (
+                    <img
+                        src="/landing_page/airplane.gif"
+                        alt="paper airplane gif"
+                        className="airplane-gif"
+                    />
+                    <div className="right-hero">
+                        <motion.img
+                            src="/landing_page/logo.png"
+                            alt="edusense logo"
+                            className="logo-icon"
+                            animate={{ y: ['0%', '-4%'] }}
+                            transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                repeatType: 'reverse',
+                                ease: 'easeInOut',
+                            }}
+                        />
                         <motion.div
-                            key={i}
-                            className="mx-auto max-w-sm rounded-lg bg-gray-100 p-6 shadow-md"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.3 }}
+                            className="chat-bubble"
+                            animate={{ y: ['0%', '-4%'], x: ['-20%', '-20%'] }}
+                            transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                repeatType: 'reverse',
+                                ease: 'easeInOut',
+                            }}
                         >
-                            <p className="text-gray-800 italic">“{quote}”</p>
-                            <p className="mt-4 font-semibold text-gray-900">— {author}</p>
+                            <img src="/landing_page/chat-bubble.png" alt="chat bubble" />
+                            <div className="chat-bubble-content">
+                                <p className="tagline-header">{taglineContent[0]}</p>
+                                <p className="tagline">{taglineContent[1]}</p>
+                            </div>
                         </motion.div>
-                    ))}
-                </div>
-            </section> */}
-
-            {/* Footer */}
-            <footer
-                id="contact"
-                className="flex w-full flex-col justify-between gap-10 bg-gray-900 px-6 py-12 text-white md:flex-row"
-            >
-                <div>
-                    <h5 className="mb-4 text-xl font-semibold">EduSense</h5>
-                    <p className="max-w-sm text-gray-400">
-                        Making high-quality tutoring accessible for everyone.
-                    </p>
-                </div>
-
-                <div className="space-y-6 md:text-right">
-                    <div className="flex justify-center space-x-4 md:justify-end">
-                        {socialLinks.map(({ name, href, icon }) => (
-                            <a
-                                key={name}
-                                href={href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label={name}
-                                className="transition hover:text-blue-400"
-                            >
-                                {icon}
-                            </a>
-                        ))}
                     </div>
+                </section>
 
-                    <div>
-                        <p>Contact: </p>
-                        <a href="mailto:info@edusense.ai" className="underline hover:text-blue-400">
-                            info@edusense.ai
-                        </a>
+                {/* Video Section */}
+                {productHighlightsContent.map((content) => (
+                    <section className="video-demo" id="how-it-works">
+                        <div className="video-container">
+                            <div className="frame">
+                                <img
+                                    src="/landing_page/videoframe.png"
+                                    alt="video frame"
+                                    className="videoframe"
+                                />
+                                {content.gifType ? (
+                                    <img src={content.gifPath} className="video" />
+                                ) : (
+                                    <video
+                                        src={content.gifPath}
+                                        title="EduSense Demo Video"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        className="video"
+                                    ></video>
+                                )}
+                            </div>
+                            <div className="text">
+                                <h1>{content.heading}</h1>
+                                <p>{content.content}</p>
+                            </div>
+                        </div>
+                    </section>
+                ))}
+
+                <img src="/landing_page/wavyline.png" alt="separator" className="wavyline" />
+
+                {/* Demo Section */}
+                <section className="demo">
+                    <img
+                        src="/landing_page/calendar.png"
+                        alt="calendar"
+                        className="calendar-icon"
+                    />
+                    <div className="demo-text">
+                        <p className="learn-more">Want to Learn More?</p>
+                        <Button
+                            onClick={toggleCalendly}
+                            displayName="Book A Demo"
+                            variant="primary"
+                        />
                     </div>
+                    <img src="/landing_page/butterfly.png" alt="butterfly" className="butterfly" />
+                </section>
 
-                    <p>© 2025 EduSense. All rights reserved.</p>
-                </div>
-            </footer>
-
-            {/* Demo Modal */}
-            {showDemo && (
-                <div className="bg-opacity-70 fixed inset-0 z-50 flex items-center justify-center bg-black">
-                    <div className="relative w-full max-w-3xl rounded-xl bg-white p-6 shadow-lg">
-                        <button
-                            onClick={() => setShowDemo(false)}
-                            className="absolute top-3 right-3 text-2xl font-bold text-gray-600 hover:text-gray-900"
-                            aria-label="Close Demo"
-                        >
-                            &times;
-                        </button>
-                        <h3 className="mb-4 text-2xl font-semibold">EduSense Demo</h3>
-                        {/* Replace below iframe src with your actual demo video URL */}
-                        <div className="aspect-video">
+                {showCalendly && (
+                    <div className="calendly-modal">
+                        <div className="calendly-overlay" onClick={toggleCalendly}></div>
+                        <div className="calendly-container">
+                            <button className="calendly-close" onClick={toggleCalendly}>
+                                ×
+                            </button>
                             <iframe
-                                src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Example video URL, replace with your real one
-                                title="EduSense Demo Video"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                className="h-full w-full rounded-lg"
+                                src={calendlyLink}
+                                width="100%"
+                                height="550"
+                                title="Schedule a Demo"
                             ></iframe>
                         </div>
                     </div>
+                )}
+
+                {/* Mission Section */}
+                <section className="mission" id="mission">
+                    <div className="mission-heading">
+                        <img
+                            src="/landing_page/lightbulb.png"
+                            alt="lightbulb"
+                            className="lightbulb"
+                        />
+                        <h2>Our Mission</h2>
+                    </div>
+                    <p className="description">{missionStatementContent}</p>
+                </section>
+
+                {/* Founders Section */}
+                <section className="founders" id="founders">
+                    <div className="founders-heading flex flex-col items-center md:flex-row md:justify-between">
+                        <h2 className="mb-4 text-3xl font-bold md:mb-0">About the Founders</h2>
+                        <img
+                            src="/landing_page/laptop.png"
+                            alt="laptop"
+                            className="laptop w-40 md:w-60"
+                        />
+                    </div>
+
+                    <div className="mt-8 flex flex-col items-center justify-center gap-6 sm:gap-8 md:flex-row lg:gap-120">
+                        <Image
+                            src={aboutFoundersContent[0].picPath}
+                            alt={aboutFoundersContent[0].picAlt}
+                            width={250}
+                            height={100}
+                            className="rounded-2xl object-cover"
+                        />
+                        <Image
+                            src={aboutFoundersContent[1].picPath}
+                            alt={aboutFoundersContent[1].picAlt}
+                            width={200}
+                            height={200}
+                            className="rounded-2xl object-cover"
+                        />
+                    </div>
+
+                    <div className="bios mt-6 space-y-4 text-center md:text-left">
+                        {aboutFoundersContent.map((content, idx) => (
+                            <p key={idx}>{content.content}</p>
+                        ))}
+                    </div>
+                </section>
+
+                <img src="/landing_page/grass.png" className="grass" />
+            </div>
+
+            {/* Footer */}
+            <footer className="landing-footer" id="contact">
+                <h3>Contact Us</h3>
+                <div className="socials">
+                    {socialLinks.map(({ name, href, icon }) => (
+                        <a
+                            key={name}
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={name}
+                            className="social-icon"
+                        >
+                            {icon}
+                        </a>
+                    ))}
                 </div>
-            )}
+
+                <p>© 2025 EduSense. All rights reserved.</p>
+            </footer>
         </div>
     );
 }
