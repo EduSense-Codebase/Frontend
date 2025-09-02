@@ -344,20 +344,20 @@ export default function LandingPage() {
                         />
                     </div>
 
-                    <div className="mt-8 flex flex-col items-center justify-center gap-6 sm:gap-8 md:flex-row lg:gap-120">
+                    <div className="mt-8 flex flex-col items-center justify-center gap-6 sm:gap-8 md:flex-row lg:gap-[20vw]">
                         <Image
                             src={aboutFoundersContent[0].picPath}
                             alt={aboutFoundersContent[0].picAlt}
                             width={250}
                             height={100}
-                            className="rounded-2xl object-cover"
+                            className="rounded-2xl object-cover border-[#4b76b3] border-3 shadow-md"
                         />
                         <Image
                             src={aboutFoundersContent[1].picPath}
                             alt={aboutFoundersContent[1].picAlt}
                             width={200}
                             height={200}
-                            className="rounded-2xl object-cover"
+                            className="rounded-2xl object-cover border-[#4b76b3] border-3 shadow-md"
                         />
                     </div>
 
