@@ -39,10 +39,11 @@
     font-size: 4rem;
     color: var(--dark-blue);
     text-align: center;
-    padding: 0.5rem 0;
+    padding: 2rem 0;
     background-color: var(--light-blue);
     margin: 0;
     box-shadow: var(--dropshadow);
+    min-height: 8rem;
 }
 
 .subheading {
@@ -129,6 +130,15 @@
 #enroll-course-tile {
     background-color: var(--white);
     gap: 1rem;
+}
+
+.plus-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 1rem;
 }
 
 .plus-icon {

@@ -127,34 +127,36 @@ export default function CourseSection() {
 
     return (
         <>
-            <div className="theme-vars theme">
+            <div className="theme-vars theme dashboard-container">
                 <h1 className="heading">Dashboard</h1>
                 <div className="container">
                     <h3 className="subheading">My Courses</h3>
                     <div className="cards-container">
-                        {courses?.map((course, index) => renderCourseTile(course, index))}
-                        <button onClick={() => handleAction()}>
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                whileHover={{ scale: 1.05 }}
-                                transition={{
-                                    delay: courses.length * 0.1, // Delay to appear after all courses
-                                    duration: 0.4,
-                                    scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
-                                }}
-                                className="course-tile"
-                                id="enroll-course-tile"
-                            >
-                                <img src="/plus_icon.png" className="plus-icon" alt="" />
-                                <h3 className="course-tile-name">{new_tile}</h3>
-                            </motion.div>
-                        </button>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                            {courses?.map((course, index) => renderCourseTile(course, index))}
+                            <button onClick={() => handleAction()}>
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    whileHover={{ scale: 1.05 }}
+                                    transition={{
+                                        delay: courses.length * 0.1, // Delay to appear after all courses
+                                        duration: 0.4,
+                                        scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
+                                    }}
+                                    className="course-tile"
+                                    id="enroll-course-tile"
+                                >
+                                    <div className="plus-icon-container">
+                                        <img src="/plus_icon.png" className="plus-icon" alt="" />
+                                        <h3 className="course-tile-name">{new_tile}</h3>
+                                    </div>
+                                </motion.div>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Enroll Course Modal */}
+            </div>            {/* Enroll Course Modal */}
             {dialogOpen && join_course && (
                 <div className="bg-opacity-20 fixed inset-0 z-50 flex items-center justify-center bg-gray-400 backdrop-blur-sm">
                     <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-lg">
