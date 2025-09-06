@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import './CourseHomePageUIController.scss';
+// import './CourseHomePageUIController.scss';
+// import '../../style/theme.scss';
+
 import Tabs from '../../ui_components/Tabs';
 import CourseCodeCard from '../../ui_components/CourseCodeCard';
 import AnnouncementForm from '../../ui_components/AnnouncementForm';
-import '../../style/theme.scss';
+
 import {
     IAnnouncements,
     IAssignments,
@@ -12,10 +14,12 @@ import {
     IModules,
     IStudentData,
 } from '@/app/typedef';
+
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
+
 interface Props {
     joinCourse: boolean | undefined;
     createCourse: boolean | undefined;
@@ -64,22 +68,22 @@ const CourseHomePageUIController: React.FC<Props> = ({
     };
 
     return (
-        <div className="course-page">
-            {/* Banner section */}
-            <div
-                className="course-header"
-                style={{
-                    backgroundImage: bannerImage ? `url(${bannerImage})` : 'none',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    padding: '2rem',
-                    borderRadius: '8px',
-                }}
-            >
-                <h1>{courseDetails?.course_name}</h1>
+        <div className="min-h-screen">
+            {/* Banner */}
+            <div className="relative mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+                <div
+                    className="relative flex min-h-[160px] items-end overflow-hidden rounded-2xl bg-neutral-200 bg-cover bg-center md:min-h-[220px] dark:bg-neutral-800"
+                    style={bannerImage ? { backgroundImage: `url(${bannerImage})` } : undefined}
+                >
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    <h1 className="relative z-10 truncate px-4 py-4 text-2xl font-bold text-white drop-shadow sm:px-6 sm:text-3xl md:px-8">
+                        {courseDetails?.course_name}
+                    </h1>
+                </div>
             </div>
 
-            <div className="course-content">
+            {/* Content */}
+            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 <Tabs
                     tabs={['Overview', 'Classwork', 'Grades']}
                     activeTab={activeTab}
@@ -87,11 +91,15 @@ const CourseHomePageUIController: React.FC<Props> = ({
                 />
 
                 {activeTab === 'Overview' && (
-                    <div className="overview-content">
-                        <section className="announcements-section">
-                            {createCourse && <CourseCodeCard code={courseDetails?.join_code} />}
+                    <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr] lg:gap-6">
+                        <section className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm md:p-6 dark:border-neutral-800 dark:bg-neutral-900">
+                            {createCourse && (
+                                <div className="mb-4">
+                                    <CourseCodeCard code={courseDetails?.join_code} />
+                                </div>
+                            )}
 
-                            <h3 className="announcements-title">Announcements</h3>
+                            <h3 className="mb-3 text-base font-semibold">Announcements</h3>
                             <AnnouncementForm
                                 onSubmit={onPostAnnouncement}
                                 announcements={announcements}
@@ -99,9 +107,10 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             />
                         </section>
 
-                        <section className="widgets-grid">
+                        {/* Right: widgets stack */}
+                        <section className="grid grid-cols-1 gap-4">
                             {showToDoWidget && (
-                                <div className="widget-card">
+                                <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm md:p-6 dark:border-neutral-800 dark:bg-neutral-900">
                                     <ToDo
                                         editMode={false}
                                         assignments={assignments}
@@ -111,7 +120,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             )}
 
                             {showModuleWidget && allModules?.length > 0 && (
-                                <div className="widget-card">
+                                <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm md:p-6 dark:border-neutral-800 dark:bg-neutral-900">
                                     <CurrentModule
                                         moduleName={classModule}
                                         editMode={false}
@@ -124,23 +133,30 @@ const CourseHomePageUIController: React.FC<Props> = ({
                 )}
 
                 {activeTab === 'Classwork' && (
-                    <div>
-                        <ClassworkTab
-                            assignments={assignments}
-                            modules={allModules.filter((item) => item.title !== 'no_module')}
-                            setNewModules={setModules}
-                            join_course={joinCourse}
-                            files={files}
-                            setFiles={setFiles}
-                        />
+                    <div className="mt-4">
+                        <section className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm md:p-6 dark:border-neutral-800 dark:bg-neutral-900">
+                            <ClassworkTab
+                                assignments={assignments}
+                                modules={allModules.filter((item) => item.title !== 'no_module')}
+                                setNewModules={setModules}
+                                join_course={joinCourse}
+                                files={files}
+                                setFiles={setFiles}
+                            />
+                        </section>
                     </div>
                 )}
 
                 {activeTab === 'Grades' && (
-                    <div>
-                        <GradesTab grades={gradesData} create_course={createCourse} />
+                    <div className="mt-4">
+                        <section className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm md:p-6 dark:border-neutral-800 dark:bg-neutral-900">
+                            <GradesTab grades={gradesData} create_course={createCourse} />
+                        </section>
                     </div>
                 )}
+
+                {/* Mobile safe-area padding (useful if there is a bottom bar) */}
+                <div className="pb-20 md:pb-0" />
             </div>
         </div>
     );
