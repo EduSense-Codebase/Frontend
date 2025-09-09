@@ -23,6 +23,7 @@ export interface IQuizSubmission {
     multiple_value?: number;
     short_value?: string;
     long_value?: string;
+    question: string | undefined;
 }
 
 export default function BuilderPage() {
@@ -74,6 +75,7 @@ export default function BuilderPage() {
                 response.data.type == 'quiz_or_assignment' &&
                 response.data.quiz_or_assignment_content != undefined
             ) {
+                console.log('What the quiz looks like: ', response);
                 setQuizContent(response.data.quiz_or_assignment_content);
                 setUpdatedQuizContent(response.data.quiz_or_assignment_content);
                 setQuizSubmission(() => {
@@ -82,12 +84,21 @@ export default function BuilderPage() {
                     }
                     return response.data.quiz_or_assignment_content.quizQuestions.map(
                         (currQuestion) => {
+                            const questionContent = currQuestion.question;
                             if (currQuestion.type == 'multiple') {
-                                return { type: 'multiple', multiple_value: -1 };
+                                return {
+                                    type: 'multiple',
+                                    multiple_value: -1,
+                                    question: questionContent,
+                                };
                             } else if (currQuestion.type == 'short') {
-                                return { type: 'short', short_value: '' };
+                                return {
+                                    type: 'short',
+                                    short_value: '',
+                                    question: questionContent,
+                                };
                             } else {
-                                return { type: 'long', long_value: '' };
+                                return { type: 'long', long_value: '', question: questionContent };
                             }
                         },
                     );
@@ -225,6 +236,8 @@ export default function BuilderPage() {
             } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
                 newSubmission[questionIndex].long_value = value;
             }
+            newSubmission[questionIndex].question =
+                quizContent?.quizQuestions[questionIndex].question;
             return newSubmission;
         });
     };
