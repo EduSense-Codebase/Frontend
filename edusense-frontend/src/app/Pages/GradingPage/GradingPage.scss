@@ -76,17 +76,29 @@
 
                 h3 {
                     grid-column: span 1;
-                    color: vars.$dark-blue;
                     text-align: left;
                 }
 
                 p {
                     grid-column: span 1;
-                    color: vars.$dark-blue;
+                    display: flex;
+                    gap: 0.5rem;
                 }
 
                 .points {
                     text-align: right;
+                }
+
+                .status--submitted {
+                    color: #8EC599;
+                }
+
+                .status--late {
+                    color: #EDCF4A;
+                }
+
+                .status--not-submitted {
+                    color: vars.$grey;
                 }
             }
         }

@@ -127,3 +127,18 @@
     display: none;
   }
 }
+
+.assignment-builder__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  background-color: variables.$white;
+  padding: 0.5rem 1rem;
+  font-family: variables.$font-jua;
+  color: variables.$dark-blue;
+  .submission-count {
+    display: flex;
+    gap: 0.5rem;
+  }
+}

@@ -37,14 +37,23 @@ const GradingPage: React.FC<GradingPageProps> = ({
                 <h3>Points</h3>
             </div>
                 <div className="submissions-list">
-                    {assignments.map((assignment) => (
+                    {assignments.map((assignment) => {
+                        const statusClass = 
+                            assignment.status === 'Submitted' ? 'submitted' :
+                            assignment.status === 'Late' ? 'late' :
+                            assignment.status === 'Not Submitted' ? 'not-submitted' :
+                            '';
+                    return (
                         <div key={assignment.id} className="submission-card" onClick={gradeSubmission}>
                             <h3>{assignment.name}</h3>
                             <p>{assignment.id}</p>
-                            <p>{assignment.status || 'Not Submitted'}</p>
+                            <p className={`status--${statusClass}`}>
+                                {assignment.status !== 'Not Submitted' && (<p>● </p>)}
+                                {assignment.status || 'Not Submitted'}
+                            </p>
                             <p className='points'>{assignment.pointsAwarded !== null ? `${assignment.pointsAwarded}/${totalPoints}` : `__/${totalPoints}`}</p>
                         </div>
-                    ))}
+                    );})}
                 </div>
             </div>
             <div className='auto-grade-btn'>

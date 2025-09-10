@@ -302,6 +302,11 @@ export const GradeEdit: Story = {
                 onAnswerSelection={onAnswerSelection}
                 onSubmit={onQuizSubmit}
                 mode={'grade-edit'}
+                studentName={"John Doe"}
+                gradedPoints={95}
+                totalPoints={100}
+                submissionNumber={3}
+                totalSubmissions={8}
             />
         );
     }
