@@ -5,6 +5,7 @@ import Button from '../Button';
 import MultipleChoiceQ from '../MultipleChoiceQ';
 import LongAnswerQ from '../LongAnswerQ';
 import ShortAnswerQ from '../ShortAnswerQ';
+import {Mode} from '../MultipleChoiceQ/index';
 
 export type QuestionType = 'long' | 'multiple' | 'short';
 type QuestionMode = 'view' | 'edit';
@@ -29,10 +30,14 @@ interface BaseQuestion {
     isRequired: boolean;
     mode: QuestionMode;
     order_index: number;
+    feedback?: string[];
+    onChangeFeedback?: (newFeedback: string[]) => void;
 }
 
 interface LongAnswerQuestion extends BaseQuestion {
     type: 'long';
+    files?: File[];
+    onChangeFiles?: (newFiles: File[]) => void;
 }
 
 interface MultipleChoiceQuestion extends BaseQuestion {
@@ -45,6 +50,7 @@ interface ShortAnswerQuestion extends BaseQuestion {
     type: 'short';
     answer: string;
     correctAnswers: CorrectAnswer[];
+    studentAnswer?: string;
 }
 
 export interface AssignmentBuilderProps {
@@ -57,6 +63,7 @@ export interface AssignmentBuilderProps {
     onTitleChange: (newTitle: string) => void;
     onAnswerSelection: (index: number, value: string | number | File) => void;
     onSubmit: () => void;
+    mode: Mode;
 }
 
 export type Question = LongAnswerQuestion | MultipleChoiceQuestion | ShortAnswerQuestion;
@@ -71,6 +78,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
     onTitleChange,
     onAnswerSelection,
     onSubmit,
+    mode
 }) => {
     const [questions, setQuestions] = useState<Question[]>(() => {
         return quizQuestions.sort((left, right) => left.order_index - right.order_index);
@@ -171,7 +179,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
     }, [quizDescription]);
 
     return (
-        <div className="quiz-builder">
+        <div className={`quiz-builder quiz-builder--${mode}`}>
             <input
                 disabled={!allowEdit}
                 type="text"
@@ -211,30 +219,51 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                                         ></Button>
                                     </div>
                                 )}
-                                <LongAnswerQ
-                                    mode={q.mode}
-                                    question={q.question}
-                                    points={q.points}
-                                    description={q.description}
-                                    isRequired={q.isRequired}
-                                    onChangeQuestion={(val) =>
-                                        handleUpdateQuestion(q.id, { question: val })
-                                    }
-                                    onChangeDescription={(val) =>
-                                        handleUpdateQuestion(q.id, { description: val })
-                                    }
-                                    onToggleRequired={() =>
-                                        handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
-                                    }
-                                    onSave={() => handleChangeQuestionMode(q.id, 'view')}
-                                    onChangeQType={(newType) =>
-                                        handleChangeQuestionType(q.id, newType)
-                                    }
-                                    onChangePoints={(newPoints) =>
-                                        handleUpdateQuestion(q.id, { points: newPoints })
-                                    }
-                                    qType={q.type}
-                                />
+                                {(mode === 'view' || mode === 'edit') ?
+                                    (<LongAnswerQ
+                                        mode={q.mode}
+                                        question={q.question}
+                                        points={q.points}
+                                        description={q.description}
+                                        isRequired={q.isRequired}
+                                        onChangeQuestion={(val) =>
+                                            handleUpdateQuestion(q.id, { question: val })
+                                        }
+                                        onChangeDescription={(val) =>
+                                            handleUpdateQuestion(q.id, { description: val })
+                                        }
+                                        onToggleRequired={() =>
+                                            handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
+                                        }
+                                        onSave={() => handleChangeQuestionMode(q.id, 'view')}
+                                        onChangeQType={(newType) =>
+                                            handleChangeQuestionType(q.id, newType)
+                                        }
+                                        onChangePoints={(newPoints) =>
+                                            handleUpdateQuestion(q.id, { points: newPoints })
+                                        }
+                                        qType={q.type}
+                                    />) :
+                                    (<LongAnswerQ
+                                        mode={mode}
+                                        question={q.question}
+                                        points={q.points}
+                                        description={q.description}
+                                        isRequired={q.isRequired}
+                                        onChangePoints={(newPoints) =>
+                                            handleUpdateQuestion(q.id, { points: newPoints })
+                                        }
+                                        qType={q.type}
+                                        feedback={q.feedback}
+                                        onChangeFeedback={(newFeedback) =>
+                                            handleUpdateQuestion(q.id, { feedback: newFeedback })
+                                        }
+                                        files={q.files}
+                                        onChangeFiles={(newFiles) =>
+                                            handleUpdateQuestion(q.id, { files: newFiles })
+                                        }
+                                    />
+                                )}
                             </div>
                         );
 
@@ -258,60 +287,82 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                                         ></Button>
                                     </div>
                                 )}
-                                <MultipleChoiceQ
-                                    mode={q.mode}
-                                    question={q.question}
-                                    points={q.points}
-                                    options={q.options}
-                                    onChangeQuestion={(val) =>
-                                        handleUpdateQuestion(q.id, { question: val })
-                                    }
-                                    onChangeOptionText={(optionId, text) =>
-                                        handleUpdateQuestion(q.id, {
-                                            options: q.options.map((opt) =>
-                                                opt.id === optionId ? { ...opt, text } : opt,
-                                            ),
-                                        })
-                                    }
-                                    onAddOption={() =>
-                                        handleUpdateQuestion(q.id, {
-                                            options: [
-                                                ...q.options,
-                                                { id: Date.now().toString(), text: '' },
-                                            ],
-                                        })
-                                    }
-                                    onRemoveOption={(optionId) =>
-                                        handleUpdateQuestion(q.id, {
-                                            options: q.options.filter((opt) => opt.id !== optionId),
-                                        })
-                                    }
-                                    onToggleCorrect={(optionId) =>
-                                        handleUpdateQuestion(q.id, {
-                                            options: q.options.map((opt) =>
-                                                opt.id === optionId
-                                                    ? { ...opt, isCorrect: !opt.isCorrect }
-                                                    : opt,
-                                            ),
-                                        })
-                                    }
-                                    isRequired={q.isRequired}
-                                    onToggleRequired={() =>
-                                        handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
-                                    }
-                                    onCancel={() => handleChangeQuestionMode(q.id, 'view')}
-                                    onSave={() => handleChangeQuestionMode(q.id, 'view')}
-                                    onChangeQType={(newType) =>
-                                        handleChangeQuestionType(q.id, newType)
-                                    }
-                                    onChangePoints={(newPoints) =>
-                                        handleUpdateQuestion(q.id, { points: newPoints })
-                                    }
-                                    onAnswerSelect={(answerIndex) =>
-                                        onAnswerSelection?.(questionIndex, answerIndex)
-                                    }
-                                    qType={q.type}
-                                />
+                                {(mode === 'view' || mode === 'edit') ? 
+                                (
+                                    <MultipleChoiceQ
+                                        mode={q.mode}
+                                        question={q.question}
+                                        points={q.points}
+                                        options={q.options}
+                                        onChangeQuestion={(val) =>
+                                            handleUpdateQuestion(q.id, { question: val })
+                                        }
+                                        onChangeOptionText={(optionId, text) =>
+                                            handleUpdateQuestion(q.id, {
+                                                options: q.options.map((opt) =>
+                                                    opt.id === optionId ? { ...opt, text } : opt,
+                                                ),
+                                            })
+                                        }
+                                        onAddOption={() =>
+                                            handleUpdateQuestion(q.id, {
+                                                options: [
+                                                    ...q.options,
+                                                    { id: Date.now().toString(), text: '' },
+                                                ],
+                                            })
+                                        }
+                                        onRemoveOption={(optionId) =>
+                                            handleUpdateQuestion(q.id, {
+                                                options: q.options.filter((opt) => opt.id !== optionId),
+                                            })
+                                        }
+                                        onToggleCorrect={(optionId) =>
+                                            handleUpdateQuestion(q.id, {
+                                                options: q.options.map((opt) =>
+                                                    opt.id === optionId
+                                                        ? { ...opt, isCorrect: !opt.isCorrect }
+                                                        : opt,
+                                                ),
+                                            })
+                                        }
+                                        isRequired={q.isRequired}
+                                        onToggleRequired={() =>
+                                            handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
+                                        }
+                                        onCancel={() => handleChangeQuestionMode(q.id, 'view')}
+                                        onSave={() => handleChangeQuestionMode(q.id, 'view')}
+                                        onChangeQType={(newType) =>
+                                            handleChangeQuestionType(q.id, newType)
+                                        }
+                                        onChangePoints={(newPoints) =>
+                                            handleUpdateQuestion(q.id, { points: newPoints })
+                                        }
+                                        onAnswerSelect={(answerIndex) =>
+                                            onAnswerSelection?.(questionIndex, answerIndex)
+                                        }
+                                        qType={q.type}
+                                    />
+                                ) : (
+                                    <MultipleChoiceQ
+                                        mode={mode}
+                                        question={q.question}
+                                        points={q.points}
+                                        options={q.options}
+                                        onChangePoints={(newPoints) =>
+                                            handleUpdateQuestion(q.id, { points: newPoints })
+                                        }
+                                        onAnswerSelect={(answerIndex) =>
+                                            onAnswerSelection?.(questionIndex, answerIndex)
+                                        }
+                                        qType={q.type}
+                                        selectedAnswerId={q.selectedOptionId}
+                                        feedback={q.feedback}
+                                        onChangeFeedback={(newFeedback) =>
+                                            handleUpdateQuestion(q.id, { feedback: newFeedback })
+                                        }
+                                    />
+                                )}
                             </div>
                         );
 
@@ -335,56 +386,71 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                                         ></Button>
                                     </div>
                                 )}
-                                <ShortAnswerQ
-                                    mode={q.mode}
-                                    question={q.question}
-                                    points={q.points}
-                                    answer={q.answer}
-                                    correctAnswers={q.correctAnswers}
-                                    onChangeAnswer={(val) =>
-                                        handleUpdateQuestion(q.id, { answer: val })
-                                    }
-                                    onChangeCorrectAnswerText={(answerId, val) =>
-                                        handleUpdateQuestion(q.id, {
-                                            correctAnswers: q.correctAnswers.map((ans) =>
-                                                ans.id === answerId ? { ...ans, text: val } : ans,
-                                            ),
-                                        })
-                                    }
-                                    onAddCorrectAnswer={() =>
-                                        handleUpdateQuestion(q.id, {
-                                            correctAnswers: [
-                                                ...q.correctAnswers,
-                                                { id: Date.now().toString(), text: '' },
-                                            ],
-                                        })
-                                    }
-                                    onRemoveCorrectAnswer={(answerId) =>
-                                        handleUpdateQuestion(q.id, {
-                                            correctAnswers: q.correctAnswers.filter(
-                                                (ans) => ans.id !== answerId,
-                                            ),
-                                        })
-                                    }
-                                    onChangeQuestion={(val) =>
-                                        handleUpdateQuestion(q.id, { question: val })
-                                    }
-                                    isRequired={q.isRequired}
-                                    onToggleRequired={() =>
-                                        handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
-                                    }
-                                    onSave={() => handleChangeQuestionMode(q.id, 'view')}
-                                    onChangeQType={(newType) =>
-                                        handleChangeQuestionType(q.id, newType)
-                                    }
-                                    onChangePoints={(newPoints) =>
-                                        handleUpdateQuestion(q.id, { points: newPoints })
-                                    }
-                                    onAnswerSelect={(answerString) =>
-                                        onAnswerSelection?.(questionIndex, answerString)
-                                    }
-                                    qType={q.type}
-                                />
+                                {(mode === 'view' || mode === 'edit') ? (
+                                    <ShortAnswerQ
+                                        mode={q.mode}
+                                        question={q.question}
+                                        points={q.points}
+                                        answer={q.answer}
+                                        correctAnswers={q.correctAnswers}
+                                        onChangeAnswer={(val) =>
+                                            handleUpdateQuestion(q.id, { answer: val })
+                                        }
+                                        onChangeCorrectAnswerText={(answerId, val) =>
+                                            handleUpdateQuestion(q.id, {
+                                                correctAnswers: q.correctAnswers.map((ans) =>
+                                                    ans.id === answerId ? { ...ans, text: val } : ans,
+                                                ),
+                                            })
+                                        }
+                                        onAddCorrectAnswer={() =>
+                                            handleUpdateQuestion(q.id, {
+                                                correctAnswers: [
+                                                    ...q.correctAnswers,
+                                                    { id: Date.now().toString(), text: '' },
+                                                ],
+                                            })
+                                        }
+                                        onRemoveCorrectAnswer={(answerId) =>
+                                            handleUpdateQuestion(q.id, {
+                                                correctAnswers: q.correctAnswers.filter(
+                                                    (ans) => ans.id !== answerId,
+                                                ),
+                                            })
+                                        }
+                                        onChangeQuestion={(val) =>
+                                            handleUpdateQuestion(q.id, { question: val })
+                                        }
+                                        isRequired={q.isRequired}
+                                        onToggleRequired={() =>
+                                            handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
+                                        }
+                                        onSave={() => handleChangeQuestionMode(q.id, 'view')}
+                                        onChangeQType={(newType) =>
+                                            handleChangeQuestionType(q.id, newType)
+                                        }
+                                        onChangePoints={(newPoints) =>
+                                            handleUpdateQuestion(q.id, { points: newPoints })
+                                        }
+                                        qType={q.type}
+                                    />) : (
+                                    <ShortAnswerQ
+                                        mode={mode}
+                                        question={q.question}
+                                        points={q.points}
+                                        correctAnswers={q.correctAnswers}
+                                        isRequired={q.isRequired}
+                                        onChangePoints={(newPoints) =>
+                                            handleUpdateQuestion(q.id, { points: newPoints })
+                                        }
+                                        qType={q.type}
+                                        studentAnswer={q.studentAnswer}
+                                        feedback={q.feedback}
+                                        onChangeFeedback={(newFeedback) =>
+                                            handleUpdateQuestion(q.id, { feedback: newFeedback })
+                                        }
+                                    />
+                                )}
                             </div>
                         );
                     default:

@@ -99,3 +99,31 @@
     width: 100%;
   }
 }
+
+.quiz-builder--view {
+  .quiz-title-input,
+  .quiz-description-input {
+    border: none;
+    pointer-events: none;
+  }
+}
+
+.quiz-builder--grade-view {
+  pointer-events: none;
+
+  .delete-question-btn,
+  .add-question-btn {
+    display: none;
+  }
+}
+
+.quiz-builder--grade-edit {
+  .quiz-title-input,
+  .quiz-description-input {
+    pointer-events: none;
+  }
+  .delete-question-btn,
+  .add-question-btn {
+    display: none;
+  }
+}

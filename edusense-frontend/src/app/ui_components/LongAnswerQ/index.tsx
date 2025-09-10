@@ -12,12 +12,12 @@ interface LongAnswerQProps {
     question: string;
     points?: number;
     description?: string;
-    onChangeDescription: (value: string) => void;
-    onChangeQuestion: (value: string) => void;
+    onChangeDescription?: (value: string) => void;
+    onChangeQuestion?: (value: string) => void;
     onToggleRequired?: (required: boolean) => void;
     isRequired: boolean;
-    onSave: () => void;
-    onChangeQType: (newType: QuestionType) => void;
+    onSave?: () => void;
+    onChangeQType?: (newType: QuestionType) => void;
     onChangePoints: (newPoints: number) => void;
     qType: QuestionType;
     feedback?: string[];

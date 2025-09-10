@@ -16,16 +16,16 @@ interface ShortAnswerQProps {
     mode: Mode;
     question: string;
     points?: number;
-    answer: string;
+    answer?: string;
     correctAnswers: CorrectAnswer[];
-    onChangeCorrectAnswerText: (id: string, value: string) => void;
-    onRemoveCorrectAnswer: (id: string) => void;
-    onAddCorrectAnswer: () => void;
-    onChangeAnswer: (value: string) => void;
-    onChangeQuestion: (value: string) => void;
+    onChangeCorrectAnswerText?: (id: string, value: string) => void;
+    onRemoveCorrectAnswer?: (id: string) => void;
+    onAddCorrectAnswer?: () => void;
+    onChangeAnswer?: (value: string) => void;
+    onChangeQuestion?: (value: string) => void;
     onToggleRequired?: (required: boolean) => void;
     isRequired?: boolean;
-    onSave: () => void;
+    onSave?: () => void;
     qType: QuestionType;
     onChangeQType?: (type: QuestionType) => void;
     onChangePoints: (newPoints: number) => void;
@@ -159,7 +159,6 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
                     </div>
                     <div className="mcq__footer">
                         {mode === 'edit' ? (
-                        <>
                             <div className="mcq__required-toggle">
                                 <ToggleSwitch
                                     checked={isRequired}
@@ -167,18 +166,19 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
                                 />
                                 <p>Required</p>
                             </div>
+                            ) : null}
+                        {mode === 'edit' ? (
                             <Button
                                 onClick={onSave}
                                 variant="primary"
                                 displayName="Save"
                                 icon="/save.svg"
                             ></Button>
-                        </>
                         ) : null}
                         {(mode === 'grade-view' || mode === 'grade-edit') && (
                             <p>Accepted Answers: <i>{correctAnswers.map(answer => answer.text).join(", ")}</i></p>
                         )}
-                        <p>Points: {PointsRender()}</p>
+                        <p className={`points-render--${mode}`}>Points: {PointsRender()}</p>
                     </div>
                     <Feedback
                         mode={mode}
