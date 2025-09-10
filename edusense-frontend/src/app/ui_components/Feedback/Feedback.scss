@@ -1,0 +1,67 @@
+@use '../../style/_variables.scss' as vars;
+
+.feedback-component {
+    padding: 1rem;
+    font-family: vars.$font-itim;
+    color: vars.$dark-blue;
+    
+    h2 {
+        font-family: vars.$font-jua;
+        color: vars.$dark-blue;
+        margin: 0;
+        font-size: 1.3rem;
+        margin: 1rem 0 0.5rem;
+    }
+
+    li, input {
+        background-color: vars.$light-blue;
+        padding: 0.25rem 1rem;
+        border-radius: 1rem;
+        box-shadow: vars.$dropshadow;
+        border: none;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+    }
+
+    input {
+        width: 100%;
+        cursor: text;
+        outline: vars.$dark-blue;
+        &:hover {
+            background-color: vars.$lighter-blue;
+        }
+        &:focus {
+            box-shadow: 0 0 0 2px vars.$blue;
+        }
+    }
+
+    .feedback-input {
+        background-color: vars.$white;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        box-shadow: vars.$dropshadow;
+        border: none;
+        width: 100%;
+        color: vars.$dark-blue;
+        font-family: vars.$font-itim;
+        font-size: 1rem;
+        border: 1px solid vars.$light-grey;
+
+        &::placeholder {
+            color: vars.$grey;
+            font-family: vars.$font-itim;
+            font-size: 1rem;
+        }
+
+        &:hover {
+            background-color: vars.$lighter-blue;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 2px vars.$blue;
+            background-color: vars.$white;
+        }
+    }
+}

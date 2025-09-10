@@ -4,8 +4,8 @@ import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
 import { QuestionType } from '../AssignmentBuilder';
 import Dropdown from '../Dropdown';
-
-export type Mode = 'view' | 'edit' | 'answerKey';
+import { Mode } from '../MultipleChoiceQ/index';
+import Feedback from '../Feedback/index';
 
 interface LongAnswerQProps {
     mode: Mode;
@@ -20,6 +20,10 @@ interface LongAnswerQProps {
     onChangeQType: (newType: QuestionType) => void;
     onChangePoints: (newPoints: number) => void;
     qType: QuestionType;
+    feedback?: string[];
+    onChangeFeedback?: (newFeedback: string[]) => void;
+    files?: File[];
+    onChangeFiles?: (newFiles: File[]) => void;
 }
 
 const LongAnswerQ: React.FC<LongAnswerQProps> = ({
@@ -35,11 +39,14 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
     onChangeQType,
     onChangePoints,
     qType,
+    feedback,
+    onChangeFeedback,
+    files,
 }) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const PointsRender = () => {
         console.log(points);
-        if (mode == 'view') {
+        if (mode === 'view' || mode === 'grade-view') {
             return points ? points : '___';
         } else {
             return (
@@ -47,6 +54,7 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
                     type="number"
                     value={points}
                     onChange={(e) => onChangePoints?.(parseInt(e.target.value))}
+                    className="points-input"
                 />
             );
         }
@@ -104,6 +112,18 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
                             </>
                         ) : null}
                     </div>
+                    {(mode !== 'edit') && (
+                        <div className="uploaded-files">
+                            { files && files.length > 0 && (<ul>
+                                <h3>Attached Files:</h3>
+                                {files.map((file, index) => (
+                                    <li key={index}>
+                                        {file.name} - {(file.size / 1024).toFixed(2)} KB
+                                    </li>
+                                ))}
+                            </ul>)}
+                        </div>
+                    )}
                     <div className="mcq__footer">
                         <div className="mcq__required-toggle">
                             {mode === 'edit' ? (
@@ -126,6 +146,11 @@ const LongAnswerQ: React.FC<LongAnswerQProps> = ({
                         ) : null}
                         <p>Points: {PointsRender()}</p>
                     </div>
+                    <Feedback
+                        mode={mode}
+                        feedback={feedback || []}
+                        onChangeFeedback={onChangeFeedback || (() => {})}
+                    />
                 </>
             )}
         </div>
