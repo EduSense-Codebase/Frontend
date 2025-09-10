@@ -28,6 +28,7 @@ interface BaseQuestion {
     description?: string;
     isRequired: boolean;
     mode: QuestionMode;
+    order_index: number;
 }
 
 interface LongAnswerQuestion extends BaseQuestion {
@@ -71,7 +72,10 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
     onAnswerSelection,
     onSubmit,
 }) => {
-    const [questions, setQuestions] = useState<Question[]>(quizQuestions);
+    const [questions, setQuestions] = useState<Question[]>(() => {
+        return quizQuestions.sort((left, right) => left.order_index - right.order_index);
+    });
+    const [currIndex, setCurrIndex] = useState(0);
     const [showAddOptions, setShowAddOptions] = useState(false);
     const [quizTitle, setQuizTitle] = useState(title);
     const [quizDescription, setQuizDescription] = useState(description);
@@ -87,7 +91,10 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
             question: '',
             isRequired: false,
             mode: 'edit',
+            order_index: currIndex
         };
+
+        setCurrIndex(prevCurrIndex => prevCurrIndex + 1);
 
         let newQ: Question;
         if (type === 'multiple') {
@@ -132,6 +139,7 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = ({
                     description: q.description,
                     isRequired: q.isRequired,
                     mode: q.mode,
+                    order_index: q.order_index
                 };
 
                 if (newType === 'multiple') {
