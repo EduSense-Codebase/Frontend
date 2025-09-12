@@ -232,3 +232,45 @@
 .view-options {
   cursor: text !important;
 }
+
+.points-input {
+  width: 3.5rem;
+  text-align: center;
+  border: 1px solid variables.$dark-blue;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  font-size: 1rem;
+  color: variables.$dark-blue;
+
+  &:focus {
+    outline: none;
+    border-color: variables.$dark-blue;
+    box-shadow: variables.$dropshadow;
+  }
+}
+
+.mcq__footer {
+  padding: 0 1rem;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.mcq--view {
+  &:hover {
+    border: none !important;
+  }
+}
+
+.mcq--grade-view * {
+  cursor: default !important;
+  .mcq__option {
+    pointer-events: none !important;
+  }
+}
+
+.mcq--grade-edit {
+  cursor: default !important;
+  .mcq__option {
+    pointer-events: none !important;
+  }
+}

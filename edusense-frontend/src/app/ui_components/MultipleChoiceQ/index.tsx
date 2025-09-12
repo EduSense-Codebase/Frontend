@@ -4,8 +4,10 @@ import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
 import { QuestionType } from '../AssignmentBuilder';
 import Dropdown from '../Dropdown';
+import { useState } from 'react';
+import Feedback from '../Feedback/index';
 
-export type Mode = 'view' | 'edit';
+export type Mode = 'view' | 'edit' | 'grade-view' | 'grade-edit';
 
 export interface Option {
     id: string;
@@ -18,19 +20,22 @@ interface MultipleChoiceQProps {
     question: string;
     points?: number;
     options: Option[];
-    onChangeQuestion: (value: string) => void;
-    onChangeOptionText: (id: string, value: string) => void;
-    onRemoveOption: (id: string) => void;
-    onAddOption: () => void;
+    onChangeQuestion?: (value: string) => void;
+    onChangeOptionText?: (id: string, value: string) => void;
+    onRemoveOption?: (id: string) => void;
+    onAddOption?: () => void;
     onToggleCorrect?: (id: string) => void;
     onToggleRequired?: (required: boolean) => void;
     isRequired?: boolean;
-    onCancel: () => void;
-    onSave: () => void;
-    onChangeQType: (newType: QuestionType) => void;
+    onCancel?: () => void;
+    onSave?: () => void;
+    onChangeQType?: (newType: QuestionType) => void;
     onChangePoints: (newPoints: number) => void;
     onAnswerSelect: (selectedIndex: number) => void;
     qType: QuestionType;
+    selectedAnswerId?: string;
+    feedback?: string[];
+    onChangeFeedback?: (newFeedback: string[]) => void;
 }
 
 const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
@@ -50,10 +55,13 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
     onChangePoints,
     onAnswerSelect,
     qType,
+    selectedAnswerId,
+    feedback,
+    onChangeFeedback
 }) => {
     const PointsRender = () => {
         console.log(points);
-        if (mode == 'view') {
+        if (mode === 'view' || mode === 'grade-view') {
             return points ? points : '___';
         } else {
             return (
@@ -61,15 +69,19 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
                     type="number"
                     value={points}
                     onChange={(e) => onChangePoints?.(parseInt(e.target.value))}
+                    className="points-input"
                 />
             );
         }
     };
 
+    const correctAnswer = options.find((opt) => opt.isCorrect);
+    const [input, setInput] = useState('');
+
     return (
         <div className={`mcq mcq--${mode}`}>
             <div className="mcq__header">
-                {mode === 'view' ? (
+                {mode !== 'edit' ? (
                     <h3>{question}</h3>
                 ) : (
                     <input
@@ -78,6 +90,21 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
                         value={question}
                         onChange={(e) => onChangeQuestion?.(e.target.value)}
                     />
+                )}
+                {(mode === 'grade-edit' || mode === 'grade-view') && (
+                    selectedAnswerId === undefined ? null : (
+                        selectedAnswerId === correctAnswer.id ? (
+                        <div className="question-correct">
+                            <img src="/grading-page/check.svg" alt="checkmark"/>
+                            <p>Correct!</p>
+                        </div>
+                        ) : (
+                        <div className="question-incorrect">
+                            <img src="/grading-page/wrong.svg" alt="X" />
+                            <p>Incorrect</p>
+                        </div>
+                        )
+                    )
                 )}
             </div>
 
@@ -111,6 +138,16 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
                                 />
 
                                 <button onClick={() => onRemoveOption?.(opt.id)}>✕</button>
+                            </label>
+                        )}
+                        {(mode === 'grade-edit' || mode === 'grade-view') && (
+                            <label className="view-options">
+                                <input
+                                    type="radio"
+                                    name="mcq"
+                                    checked={selectedAnswerId === opt.id}
+                                />
+                                {opt.text}
                             </label>
                         )}
                     </li>
@@ -153,15 +190,22 @@ const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = ({
                             ) : null}
                         </div>
                         {mode === 'edit' ? (
-                            <Button
-                                onClick={onSave}
-                                variant="primary"
-                                displayName="Save"
-                                icon="/save.svg"
-                            ></Button>
-                        ) : null}
-                        <p>Points: {PointsRender()}</p>
+                            <>
+                                <Button
+                                    onClick={onSave}
+                                    variant="primary"
+                                    displayName="Save"
+                                    icon="/save.svg"
+                                ></Button>
+                                <p>Points: {PointsRender()}</p>
+                            </>
+                        ) : <p>Points: {PointsRender()}</p>}
                     </div>
+                    <Feedback
+                        mode={mode}
+                        feedback={feedback || []}
+                        onChangeFeedback={onChangeFeedback || (() => {})}
+                    />
                 </>
             )}
         </div>

@@ -4,8 +4,8 @@ import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
 import { QuestionType } from '../AssignmentBuilder';
 import Dropdown from '../Dropdown';
-
-export type Mode = 'view' | 'edit';
+import { Mode } from '../MultipleChoiceQ/index';
+import Feedback from '../Feedback/index';
 
 export interface CorrectAnswer {
     id: string;
@@ -16,20 +16,22 @@ interface ShortAnswerQProps {
     mode: Mode;
     question: string;
     points?: number;
-    answer: string;
+    answer?: string;
     correctAnswers: CorrectAnswer[];
-    onChangeCorrectAnswerText: (id: string, value: string) => void;
-    onRemoveCorrectAnswer: (id: string) => void;
-    onAddCorrectAnswer: () => void;
-    onChangeAnswer: (value: string) => void;
-    onChangeQuestion: (value: string) => void;
+    onChangeCorrectAnswerText?: (id: string, value: string) => void;
+    onRemoveCorrectAnswer?: (id: string) => void;
+    onAddCorrectAnswer?: () => void;
+    onChangeAnswer?: (value: string) => void;
+    onChangeQuestion?: (value: string) => void;
     onToggleRequired?: (required: boolean) => void;
     isRequired?: boolean;
-    onSave: () => void;
+    onSave?: () => void;
     qType: QuestionType;
     onChangeQType?: (type: QuestionType) => void;
     onChangePoints: (newPoints: number) => void;
-    onAnswerSelect: (answerValue: string) => void;
+    studentAnswer?: string;
+    feedback?: string[];
+    onChangeFeedback?: (newFeedback: string[]) => void;
 }
 
 const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
@@ -48,12 +50,14 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
     onSave,
     onChangeQType,
     onChangePoints,
-    onAnswerSelect,
     qType,
+    studentAnswer,
+    feedback,
+    onChangeFeedback,
 }) => {
     const PointsRender = () => {
         console.log(points);
-        if (mode == 'view') {
+        if (mode === 'view' || mode === 'grade-view') {
             return points ? points : '___';
         } else {
             return (
@@ -61,14 +65,15 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
                     type="number"
                     value={points}
                     onChange={(e) => onChangePoints?.(parseInt(e.target.value))}
+                    className="points-input"
                 />
             );
         }
     };
     return (
         <div className={`mcq mcq--${mode}`}>
-            <div className="mcq__header">
-                {mode === 'view' ? (
+            <div className="mcq__header" onClick={() => console.log({studentAnswer, correctAnswers})}>
+                {mode !== 'edit' ? (
                     <h3>{question}</h3>
                 ) : (
                     <input
@@ -77,6 +82,19 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
                         value={question}
                         onChange={(e) => onChangeQuestion?.(e.target.value)}
                     />
+                )}
+                {(mode === 'grade-edit' || mode === 'grade-view') && (
+                    correctAnswers.some(answer => answer.text === studentAnswer)  ? (
+                    <div className="question-correct">
+                        <img src="/grading-page/check.svg" alt="checkmark"/>
+                        <p>Correct!</p>
+                    </div>
+                    ) : (
+                    <div className="question-incorrect">
+                        <img src="/grading-page/wrong.svg" alt="X" />
+                        <p>Incorrect</p>
+                    </div>
+                    )
                 )}
             </div>
 
@@ -114,11 +132,14 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
                         value={answer}
                         onChange={(e) => {
                             onChangeAnswer?.(e.target.value);
-                            onAnswerSelect?.(e.target.value);
                         }}
                         placeholder="Type your answer here..."
                     />
                 </label>
+            )}
+
+            {(mode === 'grade-view' || mode === 'grade-edit') && (
+                <div className="student-answer"> {studentAnswer || 'No answer given.'} </div>
             )}
 
             {true && (
@@ -137,17 +158,15 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
                         ) : null}
                     </div>
                     <div className="mcq__footer">
-                        <div className="mcq__required-toggle">
-                            {mode === 'edit' ? (
-                                <>
-                                    <ToggleSwitch
-                                        checked={isRequired}
-                                        onChange={(checked) => onToggleRequired?.(checked)}
-                                    />
-                                    <p>Required</p>
-                                </>
+                        {mode === 'edit' ? (
+                            <div className="mcq__required-toggle">
+                                <ToggleSwitch
+                                    checked={isRequired}
+                                    onChange={(checked) => onToggleRequired?.(checked)}
+                                />
+                                <p>Required</p>
+                            </div>
                             ) : null}
-                        </div>
                         {mode === 'edit' ? (
                             <Button
                                 onClick={onSave}
@@ -156,8 +175,16 @@ const ShortAnswerQ: React.FC<ShortAnswerQProps> = ({
                                 icon="/save.svg"
                             ></Button>
                         ) : null}
-                        <p>Points: {PointsRender()}</p>
+                        {(mode === 'grade-view' || mode === 'grade-edit') && (
+                            <p>Accepted Answers: <i>{correctAnswers.map(answer => answer.text).join(", ")}</i></p>
+                        )}
+                        <p className={`points-render--${mode}`}>Points: {PointsRender()}</p>
                     </div>
+                    <Feedback
+                        mode={mode}
+                        feedback={feedback || []}
+                        onChangeFeedback={onChangeFeedback || (() => {})}
+                    />
                 </>
             )}
         </div>

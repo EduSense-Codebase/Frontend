@@ -45,3 +45,15 @@
     box-shadow: variables.$dropshadow;
     margin-bottom: 2rem;
 }
+
+.uploaded-files {
+    padding: 0 1rem;
+    h3 {
+        font-size: 1.2rem;
+    }
+    li {
+        color: variables.$grey;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
