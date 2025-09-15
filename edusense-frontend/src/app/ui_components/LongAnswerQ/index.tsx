@@ -43,17 +43,17 @@ const View: React.FC<LongAnswerQProps> = (props) => {
 
     const actualSelectedFile = useMemo(() => {
         if (!isStateSync) {
-            return selectedFile
+            return selectedFile;
         }
 
         if (selectedFile != undefined) {
-            return selectedFile
+            return selectedFile;
         }
         if (props.file != undefined) {
-            return props.file
+            return props.file;
         }
-        return undefined
-    }, [selectedFile, props.file, isStateSync])
+        return undefined;
+    }, [selectedFile, props.file, isStateSync]);
 
     return (
         <div className={`mcq mcq--view`}>
@@ -84,7 +84,8 @@ const View: React.FC<LongAnswerQProps> = (props) => {
                         <h3>Attached Files:</h3>
                         <li className="grid grid-cols-2 gap-0">
                             <div>
-                                {actualSelectedFile.name} - {(actualSelectedFile.size / 1024).toFixed(2)} KB
+                                {actualSelectedFile.name} -{' '}
+                                {(actualSelectedFile.size / 1024).toFixed(2)} KB
                             </div>
                             <div>
                                 <button onClick={() => onFileChange(undefined)}>X</button>

@@ -5,10 +5,10 @@ import { Mode } from './ui_components/AssignmentBuilder';
 import React from 'react';
 
 export interface IFileInfo {
-    file_id: number,
-    name: string,
-    size: number,
-    url: string
+    file_id: number;
+    name: string;
+    size: number;
+    url: string;
 }
 
 export interface IFile {

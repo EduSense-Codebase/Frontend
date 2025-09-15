@@ -9,7 +9,13 @@ import Text from '../../../../ui_components/Text';
 import { useEffect, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
-import { IBuilderResponse, IFileInfo, IModules, IModulesResponse, ISubmitFileResponse } from '@/app/typedef';
+import {
+    IBuilderResponse,
+    IFileInfo,
+    IModules,
+    IModulesResponse,
+    ISubmitFileResponse,
+} from '@/app/typedef';
 import AssignmentBuilder, {
     LongAnswerQuestion,
     Mode,
@@ -236,7 +242,7 @@ export default function BuilderPage() {
                             question.type == 'long' &&
                             submissionData[index].type == 'long'
                         ) {
-                            question.file = submissionData[index].long_value
+                            question.file = submissionData[index].long_value;
                         }
                     });
                 }
@@ -377,41 +383,45 @@ export default function BuilderPage() {
     const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
         if (quizSubmission[questionIndex].type == 'long' && typeof value === 'object') {
             const queryParams = {
-                section: "create_submission_file"
-            }
+                section: 'create_submission_file',
+            };
             const formData = {
                 builder_id: builderId,
-                file: value
-            }
-            const requestResponse = httpPost<ISubmitFileResponse>(url, formData, queryParams)
+                file: value,
+            };
+            const requestResponse = httpPost<ISubmitFileResponse>(url, formData, queryParams);
             requestResponse.then((response) => {
                 setQuizSubmission((prevSubmission) => {
-                    const newSubmission = [...prevSubmission]
+                    const newSubmission = [...prevSubmission];
                     newSubmission[questionIndex].long_value = response.data.data;
-                    return newSubmission
-                })
-            })
+                    return newSubmission;
+                });
+            });
 
             return;
         }
 
-        if (quizSubmission[questionIndex].type == 'long' && quizSubmission[questionIndex].long_value != undefined && value == undefined) {
+        if (
+            quizSubmission[questionIndex].type == 'long' &&
+            quizSubmission[questionIndex].long_value != undefined &&
+            value == undefined
+        ) {
             const queryParams = {
-                section: "delete_submission_file"
-            }
+                section: 'delete_submission_file',
+            };
             const formData = {
                 builder_id: builderId,
-                file_id: quizSubmission[questionIndex].long_value.file_id
-            }
+                file_id: quizSubmission[questionIndex].long_value.file_id,
+            };
 
-            const requestResponse = httpPost(url, formData, queryParams)
+            const requestResponse = httpPost(url, formData, queryParams);
             requestResponse.finally(() => {
                 setQuizSubmission((prevSubmission) => {
-                    const newSubmission = [...prevSubmission]
+                    const newSubmission = [...prevSubmission];
                     newSubmission[questionIndex].long_value = undefined;
                     return newSubmission;
-                })
-            })
+                });
+            });
         }
 
         setQuizSubmission((prevSubmission) => {
