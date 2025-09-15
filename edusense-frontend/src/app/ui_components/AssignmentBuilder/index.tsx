@@ -26,18 +26,18 @@ interface CorrectAnswer {
 export interface BaseQuestion {
     id: string;
     type: QuestionType;
-    points?: number;
     question: string;
-    description?: string;
     isRequired: boolean;
+    orderIndex: number;
+    points?: number;
     mode?: QuestionMode;
-    order_index: number;
-    feedback?: string[];
-    is_correct?: boolean;
+    feedback?: string[]; // For Graded Views
+    isCorrect?: boolean; // For Graded Views
 }
 
 export interface LongAnswerQuestion extends BaseQuestion {
     type: 'long';
+    description?: string;
     file?: File;
 }
 
@@ -49,8 +49,8 @@ export interface MultipleChoiceQuestion extends BaseQuestion {
 
 export interface ShortAnswerQuestion extends BaseQuestion {
     type: 'short';
-    answer: string;
     correctAnswers: CorrectAnswer[];
+    answer?: string;
     studentAnswer?: string;
 }
 
@@ -58,12 +58,11 @@ export interface AssignmentBuilderProps {
     quizQuestions: Question[];
     title: string;
     description: string;
-    allowEdit: boolean;
-    onQuizChange: (newQuizQuestions: Question[]) => void;
-    onDescriptionChange: (newDescription: string) => void;
-    onTitleChange: (newTitle: string) => void;
-    onAnswerSelection: (index: number, value?: string | number | File) => void;
-    onSubmit: () => void;
+    onQuizChange?: (newQuizQuestions: Question[]) => void;
+    onDescriptionChange?: (newDescription: string) => void;
+    onTitleChange?: (newTitle: string) => void;
+    onAnswerSelection?: (index: number, value?: string | number | File) => void;
+    onSubmit?: () => void;
     mode: Mode;
     studentName?: string;
     gradedPoints?: number;
@@ -75,11 +74,23 @@ export interface AssignmentBuilderProps {
 export type Question = LongAnswerQuestion | MultipleChoiceQuestion | ShortAnswerQuestion;
 
 const AssignmentBuilder: React.FC<AssignmentBuilderProps> = (props) => {
-    const [questions, setQuestions] = useState<Question[]>(() => {
-        return props.quizQuestions.sort((left, right) => left.order_index - right.order_index);
-    });
-    const [quizTitle, setQuizTitle] = useState(props.title);
-    const [quizDescription, setQuizDescription] = useState(props.description);
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const [quizTitle, setQuizTitle] = useState('');
+    const [quizDescription, setQuizDescription] = useState('');
+
+    useEffect(() => {
+        setQuestions(() => {
+            return props.quizQuestions.sort((left, right) => left.orderIndex - right.orderIndex);
+        });
+    }, [props.quizQuestions]);
+
+    useEffect(() => {
+        setQuizTitle(props.title);
+    }, [props.title]);
+
+    useEffect(() => {
+        setQuizDescription(props.description);
+    }, [props.description]);
 
     useEffect(() => {
         props.onQuizChange?.(questions);

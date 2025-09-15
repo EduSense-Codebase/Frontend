@@ -60,7 +60,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.is_correct}
+                                    isCorrect={q.isCorrect}
                                 />
                             );
                         case 'short':
@@ -76,7 +76,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.is_correct}
+                                    isCorrect={q.isCorrect}
                                 />
                             );
                         case 'long':
@@ -93,7 +93,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.is_correct}
+                                    isCorrect={q.isCorrect}
                                 />
                             );
                     }

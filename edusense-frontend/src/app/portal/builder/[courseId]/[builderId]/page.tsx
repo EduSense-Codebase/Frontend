@@ -11,8 +11,11 @@ import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { IBuilderResponse, IModules, IModulesResponse } from '@/app/typedef';
 import AssignmentBuilder, {
-    AssignmentBuilderProps,
+    LongAnswerQuestion,
+    Mode,
+    MultipleChoiceQuestion,
     Question,
+    ShortAnswerQuestion,
 } from '@/app/ui_components/AssignmentBuilder';
 import { useCustomProp } from '@/app/typedef';
 import Button from '@/app/ui_components/Button';
@@ -25,6 +28,132 @@ export interface IQuizSubmission {
     long_value?: string;
 }
 
+export interface IBaseQuestionConfiguration {
+    question: string;
+    points: number;
+    order_index: number;
+}
+
+export interface IMultipleChoiceConfiguration extends IBaseQuestionConfiguration {
+    answers: string[]; // Answer Choices
+    correct_index: number; // Index of Answer Choices which is correct
+}
+
+export interface IShortAnswerConfiguration extends IBaseQuestionConfiguration {
+    answers: string[]; // List of answer choices which are considered correct
+}
+
+export interface ILongAnswerConfiguration extends IBaseQuestionConfiguration {
+    description: string;
+}
+
+export interface IQuizConfiguration {
+    title: string;
+    description: string;
+    multiple_choice_questions: IMultipleChoiceConfiguration[];
+    short_answer_questions: IShortAnswerConfiguration[];
+    long_answer_questions: ILongAnswerConfiguration[];
+}
+
+const transformQuizQuestions = (quizConfiguration: IQuizConfiguration): Question[] => {
+    const quizQuestions: Question[] = [];
+
+    // Assemble into Question Array
+
+    quizConfiguration.multiple_choice_questions.forEach((mcConfig, index) => {
+        const assembledQuestion: MultipleChoiceQuestion = {
+            id: `mc-${index}`,
+            type: 'multiple',
+            question: mcConfig.question,
+            isRequired: true,
+            orderIndex: mcConfig.order_index,
+            points: mcConfig.points,
+            options: mcConfig.answers.map((currAnswer, answerIndex) => {
+                return {
+                    id: `mc-${index}-${answerIndex}`,
+                    text: currAnswer,
+                    isCorrect: answerIndex == mcConfig.correct_index,
+                };
+            }),
+        };
+        quizQuestions.push(assembledQuestion);
+    });
+
+    quizConfiguration.short_answer_questions.forEach((shortConfig, index) => {
+        const assembledQuestion: ShortAnswerQuestion = {
+            id: `sa-${index}`,
+            type: 'short',
+            question: shortConfig.question,
+            isRequired: true,
+            orderIndex: shortConfig.order_index,
+            points: shortConfig.points,
+            correctAnswers: shortConfig.answers.map((currAnswer, answerIndex) => {
+                return {
+                    id: `sa-${index}-${answerIndex}`,
+                    text: currAnswer,
+                };
+            }),
+        };
+        quizQuestions.push(assembledQuestion);
+    });
+
+    quizConfiguration.long_answer_questions.forEach((longConfig, index) => {
+        const assembledQuestion: LongAnswerQuestion = {
+            id: `la-${index}`,
+            type: 'long',
+            question: longConfig.question,
+            isRequired: true,
+            orderIndex: longConfig.order_index,
+            points: longConfig.points,
+            description: longConfig.description,
+        };
+        quizQuestions.push(assembledQuestion);
+    });
+
+    // Sort by order index
+
+    return quizQuestions.sort((left, right) => left.orderIndex - right.orderIndex);
+};
+
+const reverseTransformQuizQuestions = (questions: Question[]): Partial<IQuizConfiguration> => {
+    const extractedQuestions: Partial<IQuizConfiguration> = {
+        multiple_choice_questions: [],
+        short_answer_questions: [],
+        long_answer_questions: [],
+    };
+
+    questions.forEach((question) => {
+        if (question.type == 'multiple') {
+            const extractedQuestion: IMultipleChoiceConfiguration = {
+                question: question.question,
+                points: question.points ?? 0,
+                order_index: question.orderIndex,
+                answers: question.options.map((option) => option.text),
+                correct_index: question.options.findIndex((option) => option.isCorrect),
+            };
+            extractedQuestions.multiple_choice_questions?.push(extractedQuestion);
+        } else if (question.type == 'short') {
+            const extractedQuestion: IShortAnswerConfiguration = {
+                question: question.question,
+                points: question.points ?? 0,
+                order_index: question.orderIndex,
+                answers: question.correctAnswers.map((answer) => answer.text),
+            };
+            extractedQuestions.short_answer_questions?.push(extractedQuestion);
+        } else if (question.type == 'long') {
+            const extractedQuestion: ILongAnswerConfiguration = {
+                question: question.question,
+                points: question.points ?? 0,
+                order_index: question.orderIndex,
+                description: question.description ?? '',
+            };
+            extractedQuestions.long_answer_questions?.push(extractedQuestion);
+        }
+    });
+
+    return extractedQuestions;
+};
+
 export default function BuilderPage() {
     const params = useParams();
     const courseId = params.courseId as string;
@@ -34,25 +163,39 @@ export default function BuilderPage() {
 
     const { permissions, setCurrCourseId, setCurrBuilderId } = useCustomProp();
 
+    const [mode, setMode] = useState<Mode | undefined>(undefined);
+
+    /* Fetched Text Content */
     const [textContent, setTextContent] = useState<string | undefined>(undefined);
+
+    /* Change Text Content Tracker */
     const [updatedTextContent, setUpdatedTextContent] = useState<string | undefined>(undefined);
 
-    const [quizContent, setQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-    const [updatedQuizContent, setUpdatedQuizContent] = useState<
-        AssignmentBuilderProps | undefined
-    >(undefined);
+    /* Fetched Quiz Content */
+    const [quizTitle, setQuizTitle] = useState('');
+    const [quizDescription, setQuizDescription] = useState('');
+    const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
 
+    /* Change Quiz Content Tracker */
+    const [updatedQuizTitle, setUpdateQuizTitle] = useState('');
+    const [updatedQuizDescription, setUpdatedQuizDescription] = useState('');
+    const [updatedQuizQuestions, setUpdatedQuizQuestions] = useState<Question[]>([]);
+
+    /* Module Level Information for Assignment Creation */
     const [modules, setModules] = useState<IModules[]>([]);
 
-    const [isAssignmentCreated, setIsAssignmentCreated] = useState(false);
-    const [showAssignmentCreateModal, setShowAssignmentCreateModal] = useState(false);
-
+    /* Publish Assignment State Variables */
     const [name, setName] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [moduleId, setModuleId] = useState(-1);
     const [assignmentDescription, setAssignmentDescription] = useState('');
     const [isDraft, setIsDraft] = useState(false);
 
+    /* Assignment Level Information */
+    const [isAssignmentCreated, setIsAssignmentCreated] = useState(false);
+    const [showAssignmentCreateModal, setShowAssignmentCreateModal] = useState(false);
+
+    /* Quiz Submission Information */
     const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
 
     const url = `${API_PREFIX}${COURSE_ENDPOINT}`;
@@ -74,15 +217,45 @@ export default function BuilderPage() {
                 response.data.type == 'quiz_or_assignment' &&
                 response.data.quiz_or_assignment_content != undefined
             ) {
-                console.log('What the quiz looks like: ', response);
-                setQuizContent(response.data.quiz_or_assignment_content);
-                setUpdatedQuizContent(response.data.quiz_or_assignment_content);
-                setQuizSubmission(() => {
-                    if (response.data.quiz_or_assignment_content == undefined) {
-                        return [];
-                    }
-                    return response.data.quiz_or_assignment_content.quizQuestions.map(
-                        (currQuestion) => {
+                const transformedQuiz = transformQuizQuestions(
+                    response.data.quiz_or_assignment_content,
+                );
+                if (response.data.submission_data != undefined) {
+                    // This means this is a submit submission to show
+                    const submissionData = response.data.submission_data;
+                    transformedQuiz.forEach((question, index) => {
+                        if (
+                            question.type == 'multiple' &&
+                            submissionData[index].type == 'multiple'
+                        ) {
+                            question.selectedOptionId =
+                                question.options[submissionData[index].multiple_value ?? 0].id;
+                        } else if (question.type == 'short' && submissionData[index].type) {
+                            question.answer = submissionData[index].short_value;
+                        } else if (
+                            question.type == 'long' &&
+                            submissionData[index].type == 'long'
+                        ) {
+                            //Todo: Fill in Logic for Long Answer Question
+                        }
+                    });
+                }
+                setMode(response.data.mode);
+                setQuizTitle(response.data.quiz_or_assignment_content.title);
+                setQuizDescription(response.data.quiz_or_assignment_content.description);
+                setQuizQuestions(transformedQuiz);
+                setUpdatedQuizQuestions(transformedQuiz);
+                if (response.data.mode == 'view') {
+                    setQuizSubmission(() => {
+                        if (response.data.quiz_or_assignment_content == undefined) {
+                            return [];
+                        }
+
+                        if (response.data.submission_data != undefined) {
+                            return response.data.submission_data;
+                        }
+
+                        return transformedQuiz.map((currQuestion) => {
                             if (currQuestion.type == 'multiple') {
                                 return {
                                     type: 'multiple',
@@ -99,9 +272,9 @@ export default function BuilderPage() {
                                     long_value: '',
                                 };
                             }
-                        },
-                    );
-                });
+                        });
+                    });
+                }
             }
             setIsAssignmentCreated(response.data.is_assignment_created);
         });
@@ -122,41 +295,15 @@ export default function BuilderPage() {
     }, [courseId]);
 
     const onQuizChange = (newQuestions: Question[]) => {
-        setUpdatedQuizContent((prevUpdatedQuizContent) => {
-            if (prevUpdatedQuizContent == undefined) {
-                return undefined;
-            }
-            return {
-                ...prevUpdatedQuizContent,
-                quizQuestions: newQuestions,
-            };
-        });
+        setUpdatedQuizQuestions(newQuestions);
     };
 
     const onDescriptionChange = (newDescription: string) => {
-        setUpdatedQuizContent((prevUpdatedQuizContent) => {
-            if (prevUpdatedQuizContent == undefined) {
-                return undefined;
-            }
-
-            return {
-                ...prevUpdatedQuizContent,
-                description: newDescription,
-            };
-        });
+        setUpdatedQuizDescription(newDescription);
     };
 
     const onTitleChange = (newTitle: string) => {
-        setUpdatedQuizContent((prevUpdatedQuizContent) => {
-            if (prevUpdatedQuizContent == undefined) {
-                return undefined;
-            }
-
-            return {
-                ...prevUpdatedQuizContent,
-                title: newTitle,
-            };
-        });
+        setUpdateQuizTitle(newTitle);
     };
 
     const onTextChange = (newContent: string) => {
@@ -178,8 +325,13 @@ export default function BuilderPage() {
             formData.new_content = JSON.stringify({ text: updatedTextContent });
         }
 
-        if (quizContent != undefined) {
-            formData.new_content = JSON.stringify({ quiz_or_assignment: updatedQuizContent });
+        if (quizQuestions != undefined) {
+            const backendQuizContent = {
+                title: updatedQuizTitle,
+                description: updatedQuizDescription,
+                ...reverseTransformQuizQuestions(updatedQuizQuestions),
+            };
+            formData.new_content = JSON.stringify({ quiz_or_assignment: backendQuizContent });
         }
 
         const builderRequest = httpPost(`${API_PREFIX}${COURSE_ENDPOINT}`, formData, queryParams);
@@ -272,19 +424,33 @@ export default function BuilderPage() {
             );
         }
 
-        if (quizContent != undefined) {
-            return (
-                <AssignmentBuilder
-                    {...quizContent}
-                    allowEdit={permissions?.create_course || false}
-                    onQuizChange={onQuizChange}
-                    onDescriptionChange={onDescriptionChange}
-                    onTitleChange={onTitleChange}
-                    onAnswerSelection={onAnswerSelection}
-                    onSubmit={onQuizSubmit}
-                    mode={'edit'}
-                />
-            );
+        if (quizQuestions != undefined) {
+            if (mode == 'edit') {
+                return (
+                    <AssignmentBuilder
+                        mode={'edit'}
+                        title={quizTitle}
+                        description={quizDescription}
+                        quizQuestions={quizQuestions}
+                        onQuizChange={onQuizChange}
+                        onDescriptionChange={onDescriptionChange}
+                        onTitleChange={onTitleChange}
+                    />
+                );
+            }
+
+            if (mode == 'view') {
+                return (
+                    <AssignmentBuilder
+                        mode={'view'}
+                        title={quizTitle}
+                        description={quizDescription}
+                        quizQuestions={quizQuestions}
+                        onAnswerSelection={onAnswerSelection}
+                        onSubmit={onQuizSubmit}
+                    />
+                );
+            }
         }
 
         return null;

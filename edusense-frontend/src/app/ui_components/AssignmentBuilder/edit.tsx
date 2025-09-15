@@ -45,7 +45,7 @@ const AssignmentBuilderEdit: React.FC<AssignmentBuilderEditProps> = (props) => {
             question: '',
             isRequired: false,
             mode: 'edit',
-            order_index: currIndex,
+            orderIndex: currIndex,
         };
 
         let newQ: Question;
@@ -54,7 +54,7 @@ const AssignmentBuilderEdit: React.FC<AssignmentBuilderEditProps> = (props) => {
         } else if (type === 'short') {
             newQ = { ...base, type: 'short', answer: '', correctAnswers: [] };
         } else {
-            newQ = { ...base, type: 'long' };
+            newQ = { ...base, type: 'long', description: '' };
         }
 
         setQuestionEditIndex(currIndex);
@@ -67,7 +67,7 @@ const AssignmentBuilderEdit: React.FC<AssignmentBuilderEditProps> = (props) => {
         } else if (newType == 'short') {
             handleUpdateQuestion(questionId, { type: newType, answer: '', correctAnswers: [] });
         } else if (newType == 'long') {
-            handleUpdateQuestion(questionId, { type: newType });
+            handleUpdateQuestion(questionId, { type: newType, description: '' });
         }
     };
 

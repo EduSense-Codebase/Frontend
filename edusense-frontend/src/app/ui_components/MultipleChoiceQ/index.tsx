@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './MultipleChoiceQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
@@ -40,6 +40,15 @@ interface MultipleChoiceQProps {
 const View: React.FC<MultipleChoiceQProps> = (props) => {
     // State Variables to Control Form
     const [selectedIndex, setSelectedIndex] = useState(-1);
+
+    useEffect(() => {
+        setSelectedIndex(() => {
+            if (props.selectedAnswerId != undefined) {
+                return props.options.findIndex((option) => option.id == props.selectedAnswerId);
+            }
+            return -1;
+        });
+    }, [props.selectedAnswerId]);
 
     const onRadioSelect = (newSelectedIndex: number) => {
         setSelectedIndex(newSelectedIndex);

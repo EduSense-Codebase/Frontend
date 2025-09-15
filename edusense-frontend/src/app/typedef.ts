@@ -1,6 +1,7 @@
 /* ********************* Generic Types START ********************* */
 
-import { AssignmentBuilderProps } from './ui_components/AssignmentBuilder';
+import { IQuizConfiguration, IQuizSubmission } from './portal/builder/[courseId]/[builderId]/page';
+import { Mode } from './ui_components/AssignmentBuilder';
 import React from 'react';
 
 export interface IFile {
@@ -130,8 +131,10 @@ export interface IAIJwtTokenRespose {
 export interface IBuilderResponse {
     type: 'text' | 'quiz_or_assignment';
     is_assignment_created: boolean;
+    mode: Mode;
     text_content?: string;
-    quiz_or_assignment_content?: AssignmentBuilderProps;
+    quiz_or_assignment_content?: IQuizConfiguration;
+    submission_data?: IQuizSubmission[];
 }
 
 export interface IStudentDataResponse {

@@ -32,6 +32,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     points={q.points}
                                     options={q.options}
                                     isRequired={q.isRequired}
+                                    selectedAnswerId={q.selectedOptionId}
                                     qType={q.type}
                                     onAnswerSelect={(answerIndex) =>
                                         props.onAnswerSelection?.(questionIndex, answerIndex)
@@ -68,6 +69,12 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                             );
                     }
                 })}
+                <div>
+                    <button onClick={props.onSubmit} className="add-question-btn">
+                        {' '}
+                        Submit{' '}
+                    </button>
+                </div>
             </div>
         </div>
     );
