@@ -9,7 +9,7 @@ import Text from '../../../../ui_components/Text';
 import { useEffect, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
-import { IBuilderResponse, IModules, IModulesResponse } from '@/app/typedef';
+import { IBuilderResponse, IFileInfo, IModules, IModulesResponse, ISubmitFileResponse } from '@/app/typedef';
 import AssignmentBuilder, {
     LongAnswerQuestion,
     Mode,
@@ -25,7 +25,7 @@ export interface IQuizSubmission {
     type: 'multiple' | 'short' | 'long';
     multiple_value?: number;
     short_value?: string;
-    long_value?: string;
+    long_value?: IFileInfo;
 }
 
 export interface IBaseQuestionConfiguration {
@@ -236,7 +236,7 @@ export default function BuilderPage() {
                             question.type == 'long' &&
                             submissionData[index].type == 'long'
                         ) {
-                            //Todo: Fill in Logic for Long Answer Question
+                            question.file = submissionData[index].long_value
                         }
                     });
                 }
@@ -269,7 +269,7 @@ export default function BuilderPage() {
                             } else {
                                 return {
                                     type: 'long',
-                                    long_value: '',
+                                    long_value: undefined,
                                 };
                             }
                         });
@@ -375,14 +375,51 @@ export default function BuilderPage() {
     };
 
     const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
+        if (quizSubmission[questionIndex].type == 'long' && typeof value === 'object') {
+            const queryParams = {
+                section: "create_submission_file"
+            }
+            const formData = {
+                builder_id: builderId,
+                file: value
+            }
+            const requestResponse = httpPost<ISubmitFileResponse>(url, formData, queryParams)
+            requestResponse.then((response) => {
+                setQuizSubmission((prevSubmission) => {
+                    const newSubmission = [...prevSubmission]
+                    newSubmission[questionIndex].long_value = response.data.data;
+                    return newSubmission
+                })
+            })
+
+            return;
+        }
+
+        if (quizSubmission[questionIndex].type == 'long' && quizSubmission[questionIndex].long_value != undefined && value == undefined) {
+            const queryParams = {
+                section: "delete_submission_file"
+            }
+            const formData = {
+                builder_id: builderId,
+                file_id: quizSubmission[questionIndex].long_value.file_id
+            }
+
+            const requestResponse = httpPost(url, formData, queryParams)
+            requestResponse.finally(() => {
+                setQuizSubmission((prevSubmission) => {
+                    const newSubmission = [...prevSubmission]
+                    newSubmission[questionIndex].long_value = undefined;
+                    return newSubmission;
+                })
+            })
+        }
+
         setQuizSubmission((prevSubmission) => {
             const newSubmission = [...prevSubmission];
             if (newSubmission[questionIndex].type == 'multiple' && typeof value === 'number') {
                 newSubmission[questionIndex].multiple_value = value;
             } else if (newSubmission[questionIndex].type == 'short' && typeof value === 'string') {
                 newSubmission[questionIndex].short_value = value;
-            } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
-                newSubmission[questionIndex].long_value = value;
             }
             return newSubmission;
         });

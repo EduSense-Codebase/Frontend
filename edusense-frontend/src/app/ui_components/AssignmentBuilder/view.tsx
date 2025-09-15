@@ -60,6 +60,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     question={q.question}
                                     points={q.points}
                                     description={q.description}
+                                    file={q.file}
                                     isRequired={q.isRequired}
                                     qType={q.type}
                                     onChangeFile={(answerFile) =>

@@ -5,6 +5,7 @@ import AssignmentBuilderView from './view';
 import AssignmentBuilderEdit from './edit';
 import AssignmentBuilderGradeView from './gradeview';
 import AssignmentBuilderGradeEdit from './gradeedit';
+import { IFileInfo } from '@/app/typedef';
 
 export type Mode = 'view' | 'edit' | 'grade-view' | 'grade-edit';
 
@@ -38,7 +39,7 @@ export interface BaseQuestion {
 export interface LongAnswerQuestion extends BaseQuestion {
     type: 'long';
     description?: string;
-    file?: File;
+    file?: IFileInfo;
 }
 
 export interface MultipleChoiceQuestion extends BaseQuestion {

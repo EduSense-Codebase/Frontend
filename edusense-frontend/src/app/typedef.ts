@@ -4,6 +4,13 @@ import { IQuizConfiguration, IQuizSubmission } from './portal/builder/[courseId]
 import { Mode } from './ui_components/AssignmentBuilder';
 import React from 'react';
 
+export interface IFileInfo {
+    file_id: number,
+    name: string,
+    size: number,
+    url: string
+}
+
 export interface IFile {
     id: number;
     filename: string;
@@ -135,6 +142,10 @@ export interface IBuilderResponse {
     text_content?: string;
     quiz_or_assignment_content?: IQuizConfiguration;
     submission_data?: IQuizSubmission[];
+}
+
+export interface ISubmitFileResponse {
+    data: IFileInfo;
 }
 
 export interface IStudentDataResponse {
