@@ -1,4 +1,3 @@
-/*
 import React from 'react';
 import ToDo from '../ToDo';
 
@@ -7,7 +6,4 @@ export default {
     component: ToDo,
 };
 
-export const Default = () => <ToDo />;
-*/
-
-export default function Test() {}
+export const Default = () => <ToDo editMode setShowToDo={() => console.log("Test")} assignments={[]} />;

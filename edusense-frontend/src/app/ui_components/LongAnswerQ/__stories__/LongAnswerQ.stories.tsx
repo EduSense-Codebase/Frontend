@@ -47,8 +47,8 @@ export const Primary: Story = {
                 onChangeQType={handleChangeQType}
                 onChangePoints={(newPoints) => setPoints(newPoints)}
                 points={points}
-                files={files}
-                onChangeFiles={(newFiles) => setFiles(newFiles)}
+                file={files}
+                onChangeFile={(newFiles) => setFiles(newFiles)}
             />
         );
     },
@@ -126,7 +126,7 @@ export const GradeView: Story = {
                 onChangePoints={(newPoints) => setPoints(newPoints)}
                 points={points}
                 feedback={['Good answer', 'Needs more detail']}
-                files={mockFiles}
+                file={mockFiles}
             />
         );
     },
@@ -170,7 +170,7 @@ export const GradeEdit: Story = {
                 points={points}
                 feedback={feedback}
                 onChangeFeedback={(newFeedback) => setFeedback(newFeedback)}
-                files={mockFiles}
+                file={mockFiles}
             />
         );
     },

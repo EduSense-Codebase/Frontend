@@ -1,4 +1,3 @@
-/*
 import type { Meta, StoryObj } from '@storybook/react';
 import CurrentModule from '../CurrentModule';
 
@@ -14,17 +13,11 @@ type Story = StoryObj<typeof CurrentModule>;
 export const Default: Story = {
     args: {
         moduleName: 'Unit 1 – Grammar',
-        icon: '📘',
-        path: '/nowhere',
     },
 };
 
 export const WithDifferentIcon: Story = {
     args: {
         moduleName: 'Unit 2 – Vocabulary',
-        icon: '📝',
     },
 };
-*/
-
-export default function Test() {}

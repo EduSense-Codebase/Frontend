@@ -41,13 +41,15 @@ const primaryQuizQuestions: Question[] = [
         question: 'What is the chemical symbol for water?',
         isRequired: true,
         mode: 'view',
-        answer: '',
+        answer: 'Test Answer',
         correctAnswers: [
             { id: 'a1', text: 'H2O' },
             { id: 'a2', text: 'h2o' },
         ],
         order_index: 1,
         points: 5,
+        feedback: ["This is some feedback"],
+        is_correct: true
     },
     {
         id: 'q3',
@@ -57,7 +59,7 @@ const primaryQuizQuestions: Question[] = [
         isRequired: false,
         mode: 'view',
         order_index: 2,
-        files: [ new File([], 'example.txt') ],
+        file: new File([], 'example.txt'),
         feedback: ['Good explanation! You covered the key points of photosynthesis.'],
         points: 10,
     },
@@ -67,7 +69,13 @@ export const Primary: Story = {
     render: () => {
         const [quizContent, setQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
         const [updatedQuizContent, setUpdatedQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
+        const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>(() => {
+            return primaryQuizQuestions.map((ele) => {
+                return {
+                    type: ele.type
+                }
+            })
+        });
 
         const [title, setTitle] = useState("Practice Quiz");
         const [description, setDescription] = useState('"Test your science knowledge!"');
@@ -84,7 +92,7 @@ export const Primary: Story = {
             });
         };
     
-        const onAnswerSelection = (questionIndex: number, value: string | number | File) => {
+        const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
             console.log(`Question Index: ${questionIndex}`);
             console.log(`Value: ${value}`);
     
@@ -97,8 +105,6 @@ export const Primary: Story = {
                 } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
                     newSubmission[questionIndex].long_value = value;
                 }
-                newSubmission[questionIndex].question =
-                    quizContent?.quizQuestions[questionIndex].question;
                 return newSubmission;
             });
         };
@@ -145,7 +151,7 @@ export const Edit: Story = {
             });
         };
     
-        const onAnswerSelection = (questionIndex: number, value: string | number | File) => {
+        const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
             console.log(`Question Index: ${questionIndex}`);
             console.log(`Value: ${value}`);
     
@@ -158,8 +164,6 @@ export const Edit: Story = {
                 } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
                     newSubmission[questionIndex].long_value = value;
                 }
-                newSubmission[questionIndex].question =
-                    quizContent?.quizQuestions[questionIndex].question;
                 return newSubmission;
             });
         };
@@ -206,7 +210,7 @@ export const GradeView: Story = {
             });
         };
     
-        const onAnswerSelection = (questionIndex: number, value: string | number | File) => {
+        const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
             console.log(`Question Index: ${questionIndex}`);
             console.log(`Value: ${value}`);
     
@@ -219,8 +223,6 @@ export const GradeView: Story = {
                 } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
                     newSubmission[questionIndex].long_value = value;
                 }
-                newSubmission[questionIndex].question =
-                    quizContent?.quizQuestions[questionIndex].question;
                 return newSubmission;
             });
         };
@@ -267,7 +269,7 @@ export const GradeEdit: Story = {
             });
         };
     
-        const onAnswerSelection = (questionIndex: number, value: string | number | File) => {
+        const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
             console.log(`Question Index: ${questionIndex}`);
             console.log(`Value: ${value}`);
     
@@ -280,8 +282,6 @@ export const GradeEdit: Story = {
                 } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
                     newSubmission[questionIndex].long_value = value;
                 }
-                newSubmission[questionIndex].question =
-                    quizContent?.quizQuestions[questionIndex].question;
                 return newSubmission;
             });
         };

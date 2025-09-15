@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { Meta, ComponentStory } from '@storybook/nextjs-vite';
 import EditCoursePageUIController from '../EditCoursePageUIController';
 import { IAssignments, ICourse, IModules } from '@/app/typedef';
+import { fn } from 'storybook/internal/test';
 
 const meta = {
     title: 'Pages/EditCoursePage',
@@ -53,6 +54,8 @@ export const Primary: Story = {
                 setBannerImage={setBannerImage}
                 bannerImage={bannerImage}
                 originalValues={originalValues}
+                classModule=''
+                setClassModule={fn()}
             />
         );
     },

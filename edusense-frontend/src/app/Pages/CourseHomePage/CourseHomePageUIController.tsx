@@ -17,13 +17,13 @@ import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
 interface Props {
-    joinCourse: boolean | undefined;
-    createCourse: boolean | undefined;
-    courseDetails: ICourse | undefined;
+    joinCourse?: boolean | undefined;
+    createCourse?: boolean | undefined;
+    courseDetails?: ICourse | undefined;
     announcements: IAnnouncements[];
     assignments: IAssignments[];
     onPostAnnouncement: (title: string, message: string) => void;
-    bannerImage: string | null;
+    bannerImage?: string | null;
     allModules: IModules[];
     showToDoWidget: boolean;
     showModuleWidget: boolean;

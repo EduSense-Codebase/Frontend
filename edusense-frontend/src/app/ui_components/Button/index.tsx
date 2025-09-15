@@ -6,7 +6,7 @@ import './Button.scss';
 export interface IButtonProps {
     children?: ReactNode;
     displayName?: string;
-    onClick: () => void;
+    onClick?: () => void;
     variant?: 'primary' | 'secondary' | 'danger' | 'icon' | 'icon-secondary';
     icon?: string;
 }
@@ -18,7 +18,7 @@ const Button: React.FC<IButtonProps> = ({ displayName, onClick, variant = 'prima
                 className={`button button--${variant}`}
                 onClick={(e) => {
                     e.preventDefault();
-                    onClick();
+                    onClick?.();
                 }}
             >
                 {icon && <img src={icon} alt={`${displayName} icon`} className="button-icon" />}

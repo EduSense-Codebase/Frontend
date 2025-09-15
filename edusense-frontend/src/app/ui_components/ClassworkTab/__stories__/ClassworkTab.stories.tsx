@@ -1,4 +1,3 @@
-/*
 import type { Meta, StoryObj } from '@storybook/react';
 import Classwork from '../ClassworkTab';
 
@@ -15,18 +14,16 @@ export const Default: Story = {
         modules: [
             {
                 id: 1,
-                name: 'Module 1: Introduction',
-                assignments: ['Assignment 1', 'Assignment 2'],
+                title: 'Module 1: Introduction',
+                created: "",
+                course: 0
             },
             {
                 id: 2,
-                name: 'Module 2: Advanced Topics',
-                assignments: ['Assignment 3', 'Assignment 4', 'Assignment 5'],
+                title: 'Module 2: Advanced Topics',
+                created: "",
+                course: 0
             },
         ],
-        unassignedAssignments: ['Assignment X', 'Assignment Y'],
     },
 };
-*/
-
-export default function Test() {}

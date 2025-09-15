@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
-import { Mode } from '../MultipleChoiceQ/index';
 import './Feedback.scss';
+import { Mode } from '../AssignmentBuilder';
 
 interface FeedbackProps {
     mode: Mode;
     feedback: string[];
-    onChangeFeedback: (newFeedback: string[]) => void;
+    onChangeFeedback?: (newFeedback: string[]) => void;
 }
 
 const Feedback: React.FC<FeedbackProps> = ({

@@ -1,11 +1,11 @@
-/*
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import ChatWidget from '../index';
 ('use client');
 
-import { IMessages, IAIThinking } from '../index';
+import { IAIThinking } from '../index';
 import { IAISession } from '@/app/typedef';
+import { IMessages } from '@/app/Pages/AIChat/AIChatController';
 
 const meta: Meta<typeof ChatWidget> = {
     title: 'Components/ChatWidget',
@@ -124,6 +124,3 @@ export const Secondary: Story = {
         messages: mockMessages2,
     },
 };
-*/
-
-export default function Test() {}

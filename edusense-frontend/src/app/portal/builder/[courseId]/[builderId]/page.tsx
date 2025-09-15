@@ -23,7 +23,6 @@ export interface IQuizSubmission {
     multiple_value?: number;
     short_value?: string;
     long_value?: string;
-    question: string | undefined;
 }
 
 export default function BuilderPage() {
@@ -223,7 +222,7 @@ export default function BuilderPage() {
             });
     };
 
-    const onAnswerSelection = (questionIndex: number, value: string | number | File) => {
+    const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
         console.log(`Question Index: ${questionIndex}`);
         console.log(`Value: ${value}`);
 
@@ -236,8 +235,6 @@ export default function BuilderPage() {
             } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
                 newSubmission[questionIndex].long_value = value;
             }
-            newSubmission[questionIndex].question =
-                quizContent?.quizQuestions[questionIndex].question;
             return newSubmission;
         });
     };
@@ -288,6 +285,7 @@ export default function BuilderPage() {
                     onTitleChange={onTitleChange}
                     onAnswerSelection={onAnswerSelection}
                     onSubmit={onQuizSubmit}
+                    mode={'edit'}
                 />
             );
         }

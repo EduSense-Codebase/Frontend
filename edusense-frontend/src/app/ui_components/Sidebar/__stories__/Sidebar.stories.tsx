@@ -50,7 +50,7 @@ import { useState } from 'react';
 
 function SidebarWrapper({ initialOpen }: { initialOpen: boolean }) {
     const [open, setOpen] = useState(initialOpen);
-    return <Sidebar key={String(open)} />;
+    return <Sidebar key={String(open)} courses={[]} />;
 }
 
 //export default function Test() {}
