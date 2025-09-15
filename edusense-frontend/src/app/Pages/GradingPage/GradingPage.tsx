@@ -6,7 +6,7 @@ export interface StudentAssignment {
     id: number;
     name: string;
     status?: 'Submitted' | 'Late' | 'Not Submitted';
-    pointsAwarded?: number | null;
+    pointsAwarded?: number;
 }
 
 interface GradingPageProps {
@@ -57,7 +57,7 @@ const GradingPage: React.FC<GradingPageProps> = ({
                                     {assignment.status || 'Not Submitted'}
                                 </p>
                                 <p className="points">
-                                    {assignment.pointsAwarded !== null
+                                    {assignment.pointsAwarded != undefined
                                         ? `${assignment.pointsAwarded}/${totalPoints}`
                                         : `__/${totalPoints}`}
                                 </p>
