@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Classwork from '../ClassworkTab';
 
 const meta: Meta<typeof Classwork> = {
@@ -15,14 +15,14 @@ export const Default: Story = {
             {
                 id: 1,
                 title: 'Module 1: Introduction',
-                created: "",
-                course: 0
+                created: '',
+                course: 0,
             },
             {
                 id: 2,
                 title: 'Module 2: Advanced Topics',
-                created: "",
-                course: 0
+                created: '',
+                course: 0,
             },
         ],
     },

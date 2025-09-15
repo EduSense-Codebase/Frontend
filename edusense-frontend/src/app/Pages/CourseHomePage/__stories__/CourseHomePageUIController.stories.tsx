@@ -1,8 +1,6 @@
 import React from 'react';
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CourseHomePageUIController from '../CourseHomePageUIController';
-import { TURBO_TRACE_DEFAULT_MEMORY_LIMIT } from 'next/dist/shared/lib/constants';
 import { IFile, IModules } from '@/app/typedef';
 import { fn } from 'storybook/internal/test';
 
@@ -26,14 +24,13 @@ export const Primary: Story = {
         showModuleWidget: true,
         students: [],
         files: [],
-        classModule: "",
+        classModule: '',
         setFiles: fn() as React.Dispatch<React.SetStateAction<IFile[]>>,
         setShowModuleWidget: fn() as React.Dispatch<React.SetStateAction<boolean>>,
         setShowToDoWidget: fn() as React.Dispatch<React.SetStateAction<boolean>>,
-        setModules: fn() as React.Dispatch<React.SetStateAction<IModules[]>>
+        setModules: fn() as React.Dispatch<React.SetStateAction<IModules[]>>,
     },
     render: (args) => {
-        const [active, setActive] = useState('Overview');
         return <CourseHomePageUIController {...args} />;
     },
 };

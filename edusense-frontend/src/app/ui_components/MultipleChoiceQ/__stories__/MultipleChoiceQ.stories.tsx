@@ -1,9 +1,9 @@
 // stories/MultipleChoiceQ.stories.tsx
 
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import MultipleChoiceQ, { Mode, Option } from '../index';
-import { QuestionType } from '../../AssignmentBuilder';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import MultipleChoiceQ, { Option } from '../index';
+import { Mode, QuestionType } from '../../AssignmentBuilder';
 
 const meta: Meta<typeof MultipleChoiceQ> = {
     title: 'Component/MultipleChoiceQ',
@@ -25,7 +25,6 @@ export const Primary: Story = {
         const [isRequired, setIsRequired] = useState(false);
         const [qType, setQType] = useState<QuestionType>('short');
         const [points, setPoints] = useState<number>(10);
-        const [selectedAnswerId, setSelectedAnswerId] = useState('1');
 
         const handleChangeQType = (newType: QuestionType) => {
             setQType(newType);
@@ -69,7 +68,7 @@ export const Primary: Story = {
                 onSave={() => setMode('view')}
                 qType={qType}
                 onChangeQType={handleChangeQType}
-                onAnswerSelect={(index) => setSelectedAnswerId(index.toString())}
+                onAnswerSelect={(index) => console.log(index.toString())}
                 onChangePoints={(newPoints) => setPoints(newPoints)}
                 points={points}
             />
@@ -89,7 +88,6 @@ export const Secondary: Story = {
         const [isRequired, setIsRequired] = useState(false);
         const [qType, setQType] = useState<QuestionType>('short');
         const [points, setPoints] = useState<number>(10);
-        const [selectedAnswerId, setSelectedAnswerId] = useState('1');
 
         const handleChangeQType = (newType: QuestionType) => {
             setQType(newType);
@@ -133,14 +131,13 @@ export const Secondary: Story = {
                 onSave={() => setMode('view')}
                 qType={qType}
                 onChangeQType={handleChangeQType}
-                onAnswerSelect={(index) => setSelectedAnswerId(index.toString())}
+                onAnswerSelect={(index) => console.log(index.toString())}
                 onChangePoints={(newPoints) => setPoints(newPoints)}
                 points={points}
             />
         );
     },
 };
-
 
 export const GradeView: Story = {
     render: () => {
@@ -202,12 +199,14 @@ export const GradeView: Story = {
                 onChangePoints={(newPoints) => setPoints(newPoints)}
                 points={points}
                 selectedAnswerId={selectedAnswerId}
-                feedback={['Wrong. The correct answer is Berlin', 'Make sure to review European capitals before the next exam!']}
+                feedback={[
+                    'Wrong. The correct answer is Berlin',
+                    'Make sure to review European capitals before the next exam!',
+                ]}
             />
         );
     },
 };
-
 
 export const GradeEdit: Story = {
     render: () => {
@@ -276,6 +275,5 @@ export const GradeEdit: Story = {
         );
     },
 };
-
 
 //export default function Test() {}

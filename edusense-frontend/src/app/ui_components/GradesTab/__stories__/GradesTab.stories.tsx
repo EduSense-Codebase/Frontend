@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/nextjs-vite';
 import GradesTab from '../GradesTab';
 
 export default {
@@ -11,12 +11,6 @@ type Story = StoryObj<typeof GradesTab>;
 
 export const Primary: Story = {
     render: () => {
-
-        return (
-            <GradesTab
-                grades={[]}
-                create_course={false}
-            />
-        );
+        return <GradesTab grades={[]} create_course={false} />;
     },
 };

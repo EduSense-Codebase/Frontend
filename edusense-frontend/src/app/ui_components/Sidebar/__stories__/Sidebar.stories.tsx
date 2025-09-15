@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Sidebar from '../Sidebar';
 import { ICourse } from '@/app/typedef';
 
@@ -46,11 +46,8 @@ export const Closed: Story = {
 };
 
 // Small wrapper to force starting state in stories
-import { useState } from 'react';
-
 function SidebarWrapper({ initialOpen }: { initialOpen: boolean }) {
-    const [open, setOpen] = useState(initialOpen);
-    return <Sidebar key={String(open)} courses={[]} />;
+    return <Sidebar key={String(initialOpen)} courses={[]} />;
 }
 
 //export default function Test() {}

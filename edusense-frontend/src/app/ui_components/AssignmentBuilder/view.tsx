@@ -1,14 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import { AssignmentBuilderProps } from ".";
-import MultipleChoiceQ from "../MultipleChoiceQ";
-import ShortAnswerQ from "../ShortAnswerQ";
-import LongAnswerQ from "../LongAnswerQ";
+import { AssignmentBuilderProps } from '.';
+import MultipleChoiceQ from '../MultipleChoiceQ';
+import ShortAnswerQ from '../ShortAnswerQ';
+import LongAnswerQ from '../LongAnswerQ';
 
-interface AssignmentBuilderViewProps extends AssignmentBuilderProps {
-}
-
-const AssignmentBuilderView : React.FC<AssignmentBuilderViewProps> = (props) => {
+const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
     return (
         <div>
             <div className={`quiz-builder quiz-builder--view`}>
@@ -28,46 +25,52 @@ const AssignmentBuilderView : React.FC<AssignmentBuilderViewProps> = (props) => 
                 {props.quizQuestions.map((q, questionIndex) => {
                     switch (q.type) {
                         case 'multiple':
-                            return <MultipleChoiceQ
-                                        mode="view"
-                                        question={q.question}
-                                        points={q.points}
-                                        options={q.options}
-                                        isRequired={q.isRequired}
-                                        qType={q.type}
-                                        onAnswerSelect={(answerIndex) =>
-                                            props.onAnswerSelection?.(questionIndex, answerIndex)
-                                        }
-                                    />
+                            return (
+                                <MultipleChoiceQ
+                                    mode="view"
+                                    question={q.question}
+                                    points={q.points}
+                                    options={q.options}
+                                    isRequired={q.isRequired}
+                                    qType={q.type}
+                                    onAnswerSelect={(answerIndex) =>
+                                        props.onAnswerSelection?.(questionIndex, answerIndex)
+                                    }
+                                />
+                            );
                         case 'short':
-                            return <ShortAnswerQ
-                                            mode="view"
-                                            question={q.question}
-                                            points={q.points}
-                                            answer={q.answer}
-                                            isRequired={q.isRequired}
-                                            qType={q.type}
-                                            onChangeAnswer={(answerValue) =>
-                                                props.onAnswerSelection?.(questionIndex, answerValue)
-                                            } 
-                                        />
+                            return (
+                                <ShortAnswerQ
+                                    mode="view"
+                                    question={q.question}
+                                    points={q.points}
+                                    answer={q.answer}
+                                    isRequired={q.isRequired}
+                                    qType={q.type}
+                                    onChangeAnswer={(answerValue) =>
+                                        props.onAnswerSelection?.(questionIndex, answerValue)
+                                    }
+                                />
+                            );
                         case 'long':
-                            return <LongAnswerQ
-                                            mode="view"
-                                            question={q.question}
-                                            points={q.points}
-                                            description={q.description}
-                                            isRequired={q.isRequired}
-                                            qType={q.type}
-                                            onChangeFile={(answerFile) => 
-                                                props.onAnswerSelection?.(questionIndex, answerFile)
-                                            }
-                                        />
+                            return (
+                                <LongAnswerQ
+                                    mode="view"
+                                    question={q.question}
+                                    points={q.points}
+                                    description={q.description}
+                                    isRequired={q.isRequired}
+                                    qType={q.type}
+                                    onChangeFile={(answerFile) =>
+                                        props.onAnswerSelection?.(questionIndex, answerFile)
+                                    }
+                                />
+                            );
                     }
                 })}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default AssignmentBuilderView;

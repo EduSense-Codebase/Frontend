@@ -6,4 +6,6 @@ export default {
     component: ToDo,
 };
 
-export const Default = () => <ToDo editMode setShowToDo={() => console.log("Test")} assignments={[]} />;
+export const Default = () => (
+    <ToDo editMode setShowToDo={() => console.log('Test')} assignments={[]} />
+);

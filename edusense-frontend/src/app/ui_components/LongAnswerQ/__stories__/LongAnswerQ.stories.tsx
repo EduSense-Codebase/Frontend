@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useState } from 'react';
 import type { StoryObj, Meta } from '@storybook/nextjs-vite';
@@ -98,9 +97,9 @@ export const GradeView: Story = {
         const [isRequired, setIsRequired] = useState(false);
         const [qType, setQType] = useState<QuestionType>('short');
         const [points, setPoints] = useState<number>(10);
-        const mockFiles:File[] = [
-            new File(["Sample file content"], "example.txt", { type: "text/plain" }), 
-            new File(["Another file content"], "notes.pdf", { type: "application/pdf" })
+        const mockFiles: File[] = [
+            new File(['Sample file content'], 'example.txt', { type: 'text/plain' }),
+            new File(['Another file content'], 'notes.pdf', { type: 'application/pdf' }),
         ];
 
         const handleChangeQType = (newType: QuestionType) => {
@@ -141,9 +140,9 @@ export const GradeEdit: Story = {
         const [qType, setQType] = useState<QuestionType>('short');
         const [points, setPoints] = useState<number>(10);
         const [feedback, setFeedback] = useState<string[]>(['Good answer', 'Needs more detail']);
-        const mockFiles:File[] = [
-            new File(["Sample file content"], "example.txt", { type: "text/plain" }), 
-            new File(["Another file content"], "notes.pdf", { type: "application/pdf" })
+        const mockFiles: File[] = [
+            new File(['Sample file content'], 'example.txt', { type: 'text/plain' }),
+            new File(['Another file content'], 'notes.pdf', { type: 'application/pdf' }),
         ];
 
         const handleChangeQType = (newType: QuestionType) => {
@@ -175,6 +174,5 @@ export const GradeEdit: Story = {
         );
     },
 };
-
 
 //export default function Test() {}

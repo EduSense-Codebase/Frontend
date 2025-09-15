@@ -41,7 +41,7 @@ const View: React.FC<ShortAnswerQProps> = (props) => {
     const onTextAreaChange = (newValue: string) => {
         setAnswer(newValue);
         props.onChangeAnswer?.(newValue);
-    }
+    };
 
     return (
         <div className={`mcq mcq--view`}>
@@ -58,24 +58,23 @@ const View: React.FC<ShortAnswerQProps> = (props) => {
             </label>
             <div className="dropdown"></div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
+                <div className="mcq__required-toggle"></div>
                 <p>Points: {props.points ? props.points : '___'}</p>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const Edit: React.FC<ShortAnswerQProps> = (props) => {
     return (
         <div className={`mcq mcq--view`}>
             <div className="mcq__header">
                 <input
-                        type="text"
-                        placeholder="Question*"
-                        value={props.question}
-                        onChange={(e) => props.onChangeQuestion?.(e.target.value)}
-                    />
+                    type="text"
+                    placeholder="Question*"
+                    value={props.question}
+                    onChange={(e) => props.onChangeQuestion?.(e.target.value)}
+                />
             </div>
             <>
                 <p>List All Correct Answer(s):</p>
@@ -123,42 +122,43 @@ const Edit: React.FC<ShortAnswerQProps> = (props) => {
                     </div>
                 </div>
                 <>
-                <Button
-                    onClick={props.onSave}
-                    variant="primary"
-                    displayName="Save"
-                    icon="/save.svg"
-                ></Button>
-                <p>Points: <input
-                    type="number"
-                    value={props.points}
-                    onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
-                    className="points-input"
-                /></p>
+                    <Button
+                        onClick={props.onSave}
+                        variant="primary"
+                        displayName="Save"
+                        icon="/save.svg"
+                    ></Button>
+                    <p>
+                        Points:{' '}
+                        <input
+                            type="number"
+                            value={props.points}
+                            onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
+                            className="points-input"
+                        />
+                    </p>
                 </>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const GradeView: React.FC<ShortAnswerQProps> = (props) => {
     return (
         <div className={`mcq mcq--view`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {
-                    props.isCorrect ? (
+                {props.isCorrect ? (
                     <div className="question-correct">
-                        <img src="/grading-page/check.svg" alt="checkmark"/>
+                        <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
                     </div>
-                    ) : (
+                ) : (
                     <div className="question-incorrect">
                         <img src="/grading-page/wrong.svg" alt="X" />
                         <p>Incorrect</p>
                     </div>
-                    )
-                }
+                )}
             </div>
             <label className="saq__answer-label">
                 <input
@@ -169,36 +169,30 @@ const GradeView: React.FC<ShortAnswerQProps> = (props) => {
             </label>
             <div className="dropdown"></div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
+                <div className="mcq__required-toggle"></div>
                 <p>Points: {props.points ? props.points : '___'}</p>
             </div>
-            <Feedback
-                mode="grade-view"
-                feedback={props.feedback || []}
-            />
+            <Feedback mode="grade-view" feedback={props.feedback || []} />
         </div>
-    )
-}
+    );
+};
 
 const GradeEdit: React.FC<ShortAnswerQProps> = (props) => {
     return (
         <div className={`mcq mcq--grade-edit`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {
-                    props.isCorrect ? (
+                {props.isCorrect ? (
                     <div className="question-correct">
-                        <img src="/grading-page/check.svg" alt="checkmark"/>
+                        <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
                     </div>
-                    ) : (
+                ) : (
                     <div className="question-incorrect">
                         <img src="/grading-page/wrong.svg" alt="X" />
                         <p>Incorrect</p>
                     </div>
-                    )
-                }
+                )}
             </div>
             <label className="saq__answer-label">
                 <input
@@ -209,14 +203,16 @@ const GradeEdit: React.FC<ShortAnswerQProps> = (props) => {
             </label>
             <div className="dropdown"></div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
-                <p>Points: <input
-                    type="number"
-                    value={props.points}
-                    onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
-                    className="points-input"
-                /></p>
+                <div className="mcq__required-toggle"></div>
+                <p>
+                    Points:{' '}
+                    <input
+                        type="number"
+                        value={props.points}
+                        onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
+                        className="points-input"
+                    />
+                </p>
             </div>
             <Feedback
                 mode="grade-edit"
@@ -224,26 +220,25 @@ const GradeEdit: React.FC<ShortAnswerQProps> = (props) => {
                 onChangeFeedback={props.onChangeFeedback}
             />
         </div>
-    )
-}
+    );
+};
 
 const ShortAnswerQ: React.FC<ShortAnswerQProps> = (props) => {
     if (props.mode == 'view') {
-        return <View {...props} />
+        return <View {...props} />;
     }
 
     if (props.mode == 'edit') {
-        return <Edit {...props} />
+        return <Edit {...props} />;
     }
 
     if (props.mode == 'grade-view') {
-        return <GradeView {...props} />
+        return <GradeView {...props} />;
     }
 
     if (props.mode == 'grade-edit') {
-        return <GradeEdit {...props} />
+        return <GradeEdit {...props} />;
     }
-
 };
 
 export default ShortAnswerQ;

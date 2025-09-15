@@ -54,7 +54,7 @@ export const Primary: Story = {
                 setBannerImage={setBannerImage}
                 bannerImage={bannerImage}
                 originalValues={originalValues}
-                classModule=''
+                classModule=""
                 setClassModule={fn()}
             />
         );

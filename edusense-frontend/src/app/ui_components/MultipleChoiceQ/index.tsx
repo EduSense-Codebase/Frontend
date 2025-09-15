@@ -44,7 +44,7 @@ const View: React.FC<MultipleChoiceQProps> = (props) => {
     const onRadioSelect = (newSelectedIndex: number) => {
         setSelectedIndex(newSelectedIndex);
         props.onAnswerSelect?.(newSelectedIndex);
-    }
+    };
 
     return (
         <div className={`mcq mcq--view`}>
@@ -52,62 +52,63 @@ const View: React.FC<MultipleChoiceQProps> = (props) => {
                 <h3>{props.question}</h3>
             </div>
             <ul className="mcq__options">
-                {props.options.map((option, index) =>
+                {props.options.map((option, index) => (
                     <li key={option.id} className="mcq__option">
                         <label className="view-options">
                             <input
                                 type="radio"
                                 name="mcq"
-                                checked={index == selectedIndex} 
+                                checked={index == selectedIndex}
                                 onClick={() => onRadioSelect(index)}
                             />
                             {option.text}
                         </label>
                     </li>
-                )} 
+                ))}
             </ul>
             <div className="dropdown"></div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
+                <div className="mcq__required-toggle"></div>
                 <p>Points: {props.points ? props.points : '___'}</p>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const Edit: React.FC<MultipleChoiceQProps> = (props) => {
     return (
         <div className={`mcq mcq--edit`}>
             <div className="mcq__header">
                 <input
-                        type="text"
-                        placeholder="Question*"
-                        value={props.question}
-                        onChange={(e) => props.onChangeQuestion?.(e.target.value)}
-                    />
+                    type="text"
+                    placeholder="Question*"
+                    value={props.question}
+                    onChange={(e) => props.onChangeQuestion?.(e.target.value)}
+                />
             </div>
             <ul className="mcq__options">
-                {props.options.map((option, index) =>
+                {props.options.map((option) => (
                     <li key={option.id} className="mcq__option">
                         <label className="mcq__option-label">
-                                <input
-                                    type="checkbox"
-                                    checked={option.isCorrect}
-                                    onChange={() => props.onToggleCorrect?.(option.id)}
-                                />
+                            <input
+                                type="checkbox"
+                                checked={option.isCorrect}
+                                onChange={() => props.onToggleCorrect?.(option.id)}
+                            />
 
-                                <input
-                                    type="text"
-                                    value={option.text}
-                                    onChange={(e) => props.onChangeOptionText?.(option.id, e.target.value)}
-                                    style={{ flexGrow: 1 }}
-                                />
+                            <input
+                                type="text"
+                                value={option.text}
+                                onChange={(e) =>
+                                    props.onChangeOptionText?.(option.id, e.target.value)
+                                }
+                                style={{ flexGrow: 1 }}
+                            />
 
-                                <button onClick={() => props.onRemoveOption?.(option.id)}>✕</button>
-                            </label>
+                            <button onClick={() => props.onRemoveOption?.(option.id)}>✕</button>
+                        </label>
                     </li>
-                )}
+                ))}
                 <li>
                     <button onClick={props.onAddOption} className="add-option-btn">
                         <p>+</p>
@@ -143,39 +144,40 @@ const Edit: React.FC<MultipleChoiceQProps> = (props) => {
                         displayName="Save"
                         icon="/save.svg"
                     ></Button>
-                    <p>Points: <input
-                    type="number"
-                    value={props.points}
-                    onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
-                    className="points-input"
-                /></p>
+                    <p>
+                        Points:{' '}
+                        <input
+                            type="number"
+                            value={props.points}
+                            onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
+                            className="points-input"
+                        />
+                    </p>
                 </>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const GradeView: React.FC<MultipleChoiceQProps> = (props) => {
     return (
         <div className={`mcq mcq--grade-view`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {
-                    props.isCorrect ? (
+                {props.isCorrect ? (
                     <div className="question-correct">
-                        <img src="/grading-page/check.svg" alt="checkmark"/>
+                        <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
                     </div>
-                    ) : (
+                ) : (
                     <div className="question-incorrect">
                         <img src="/grading-page/wrong.svg" alt="X" />
                         <p>Incorrect</p>
                     </div>
-                    )
-                }
+                )}
             </div>
             <ul className="mcq__options">
-                {props.options.map((option, index) =>
+                {props.options.map((option) => (
                     <li key={option.id} className="mcq__option">
                         <label className="view-options">
                             <input
@@ -186,43 +188,37 @@ const GradeView: React.FC<MultipleChoiceQProps> = (props) => {
                             {option.text}
                         </label>
                     </li>
-                )} 
+                ))}
             </ul>
             <div className="dropdown"></div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
+                <div className="mcq__required-toggle"></div>
                 <p>Points: {props.points ? props.points : '___'}</p>
             </div>
-            <Feedback
-                mode="grade-view"
-                feedback={props.feedback || []}
-            />
+            <Feedback mode="grade-view" feedback={props.feedback || []} />
         </div>
-    )
-}
+    );
+};
 
 const GradeEdit: React.FC<MultipleChoiceQProps> = (props) => {
     return (
         <div className={`mcq mcq--grade-edit`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {
-                    props.isCorrect ? (
+                {props.isCorrect ? (
                     <div className="question-correct">
-                        <img src="/grading-page/check.svg" alt="checkmark"/>
+                        <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
                     </div>
-                    ) : (
+                ) : (
                     <div className="question-incorrect">
                         <img src="/grading-page/wrong.svg" alt="X" />
                         <p>Incorrect</p>
                     </div>
-                    )
-                }
+                )}
             </div>
             <ul className="mcq__options">
-                {props.options.map((option, index) =>
+                {props.options.map((option) => (
                     <li key={option.id} className="mcq__option">
                         <label className="view-options">
                             <input
@@ -233,18 +229,20 @@ const GradeEdit: React.FC<MultipleChoiceQProps> = (props) => {
                             {option.text}
                         </label>
                     </li>
-                )} 
+                ))}
             </ul>
             <div className="dropdown"></div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
-                <p>Points: <input
-                    type="number"
-                    value={props.points}
-                    onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
-                    className="points-input"
-                /></p>
+                <div className="mcq__required-toggle"></div>
+                <p>
+                    Points:{' '}
+                    <input
+                        type="number"
+                        value={props.points}
+                        onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
+                        className="points-input"
+                    />
+                </p>
             </div>
             <Feedback
                 mode="grade-edit"
@@ -252,24 +250,24 @@ const GradeEdit: React.FC<MultipleChoiceQProps> = (props) => {
                 onChangeFeedback={props.onChangeFeedback}
             />
         </div>
-    )
-}
+    );
+};
 
 const MultipleChoiceQ: React.FC<MultipleChoiceQProps> = (props) => {
     if (props.mode == 'view') {
-        return <View {...props} />
+        return <View {...props} />;
     }
 
     if (props.mode == 'edit') {
-        return <Edit {...props} />
+        return <Edit {...props} />;
     }
 
     if (props.mode == 'grade-view') {
-        return <GradeView {...props} />
+        return <GradeView {...props} />;
     }
 
     if (props.mode == 'grade-edit') {
-        return <GradeEdit {...props} />
+        return <GradeEdit {...props} />;
     }
 };
 

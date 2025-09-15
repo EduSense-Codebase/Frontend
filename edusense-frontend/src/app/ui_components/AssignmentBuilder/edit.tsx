@@ -1,27 +1,36 @@
-import React from "react";
+import React from 'react';
 
-import { AssignmentBuilderProps, Mode, Question, BaseQuestion, QuestionType, MultipleChoiceQuestion, ShortAnswerQuestion, LongAnswerQuestion } from ".";
-import MultipleChoiceQ from "../MultipleChoiceQ";
-import ShortAnswerQ from "../ShortAnswerQ";
-import LongAnswerQ from "../LongAnswerQ";
-import Button from "../Button";
+import {
+    AssignmentBuilderProps,
+    Mode,
+    Question,
+    BaseQuestion,
+    QuestionType,
+    MultipleChoiceQuestion,
+    ShortAnswerQuestion,
+    LongAnswerQuestion,
+} from '.';
+import MultipleChoiceQ from '../MultipleChoiceQ';
+import ShortAnswerQ from '../ShortAnswerQ';
+import LongAnswerQ from '../LongAnswerQ';
+import Button from '../Button';
 
 interface AssignmentBuilderEditProps extends AssignmentBuilderProps {
-    setQuestions: React.Dispatch<React.SetStateAction<Question[]>>,
-    setQuizTitle: React.Dispatch<React.SetStateAction<string>>,
-    setQuizDescription: React.Dispatch<React.SetStateAction<string>>,
+    setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
+    setQuizTitle: React.Dispatch<React.SetStateAction<string>>;
+    setQuizDescription: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => {
+const AssignmentBuilderEdit: React.FC<AssignmentBuilderEditProps> = (props) => {
     const [questionEditIndex, setQuestionEditIndex] = React.useState(-1);
 
-    const currIndex = React.useMemo(() => props.quizQuestions.length, [props.quizQuestions.length])
+    const currIndex = React.useMemo(() => props.quizQuestions.length, [props.quizQuestions.length]);
 
     const handleDeleteQuestion = (questionId: string) => {
         props.setQuestions((prevQuestions) => {
-            return prevQuestions.filter(ele => ele.id !== questionId)
-        })
-    }
+            return prevQuestions.filter((ele) => ele.id !== questionId);
+        });
+    };
 
     const handleUpdateQuestion = (id: string, updates: Partial<Question>) => {
         props.setQuestions((prev) =>
@@ -53,16 +62,20 @@ const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => 
     };
 
     const onChangeQType = (questionId: string, newType: QuestionType) => {
-        if (newType == "multiple") {
-            handleUpdateQuestion(questionId, { type: newType, options: []})
-        } else if (newType == "short") {
-            handleUpdateQuestion(questionId, { type: newType, answer: "", correctAnswers: []})
-        } else if (newType == "long") {
-            handleUpdateQuestion(questionId, { type: newType })
+        if (newType == 'multiple') {
+            handleUpdateQuestion(questionId, { type: newType, options: [] });
+        } else if (newType == 'short') {
+            handleUpdateQuestion(questionId, { type: newType, answer: '', correctAnswers: [] });
+        } else if (newType == 'long') {
+            handleUpdateQuestion(questionId, { type: newType });
         }
-    }
+    };
 
-    const renderMultipleChoiceQuestion = (q: MultipleChoiceQuestion , questionIndex: number, mode: Mode) => {
+    const renderMultipleChoiceQuestion = (
+        q: MultipleChoiceQuestion,
+        questionIndex: number,
+        mode: Mode,
+    ) => {
         return (
             <MultipleChoiceQ
                 mode={mode}
@@ -70,9 +83,7 @@ const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => 
                 options={q.options}
                 points={q.points}
                 isRequired={q.isRequired}
-                onChangeQuestion={(val) =>
-                    handleUpdateQuestion(q.id, { question: val })
-                }
+                onChangeQuestion={(val) => handleUpdateQuestion(q.id, { question: val })}
                 onChangeOptionText={(optionId, text) =>
                     handleUpdateQuestion(q.id, {
                         options: q.options.map((opt) =>
@@ -82,10 +93,7 @@ const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => 
                 }
                 onAddOption={() =>
                     handleUpdateQuestion(q.id, {
-                        options: [
-                            ...q.options,
-                            { id: Date.now().toString(), text: '' },
-                        ],
+                        options: [...q.options, { id: Date.now().toString(), text: '' }],
                     })
                 }
                 onRemoveOption={(optionId) =>
@@ -96,26 +104,18 @@ const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => 
                 onToggleCorrect={(optionId) =>
                     handleUpdateQuestion(q.id, {
                         options: q.options.map((opt) =>
-                            opt.id === optionId
-                                ? { ...opt, isCorrect: !opt.isCorrect }
-                                : opt,
+                            opt.id === optionId ? { ...opt, isCorrect: !opt.isCorrect } : opt,
                         ),
                     })
                 }
-                onToggleRequired={() =>
-                    handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
-                }
+                onToggleRequired={() => handleUpdateQuestion(q.id, { isRequired: !q.isRequired })}
                 onSave={() => setQuestionEditIndex(-1)}
-                onChangeQType={(newType) =>
-                    onChangeQType(q.id, newType) 
-                }
-                onChangePoints={(newPoints) =>
-                    handleUpdateQuestion(q.id, { points: newPoints })
-                }
+                onChangeQType={(newType) => onChangeQType(q.id, newType)}
+                onChangePoints={(newPoints) => handleUpdateQuestion(q.id, { points: newPoints })}
                 qType={q.type}
             />
-        )
-    }
+        );
+    };
 
     const renderShortQuestion = (q: ShortAnswerQuestion, questionIndex: number, mode: Mode) => {
         return (
@@ -125,9 +125,7 @@ const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => 
                 points={q.points}
                 isRequired={q.isRequired}
                 correctAnswers={q.correctAnswers}
-                onChangeQuestion={(val) =>
-                    handleUpdateQuestion(q.id, { question: val })
-                }
+                onChangeQuestion={(val) => handleUpdateQuestion(q.id, { question: val })}
                 onChangeCorrectAnswerText={(answerId, val) =>
                     handleUpdateQuestion(q.id, {
                         correctAnswers: q.correctAnswers.map((ans) =>
@@ -145,25 +143,17 @@ const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => 
                 }
                 onRemoveCorrectAnswer={(answerId) =>
                     handleUpdateQuestion(q.id, {
-                        correctAnswers: q.correctAnswers.filter(
-                            (ans) => ans.id !== answerId,
-                        ),
+                        correctAnswers: q.correctAnswers.filter((ans) => ans.id !== answerId),
                     })
                 }
-                onToggleRequired={() =>
-                    handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
-                }
+                onToggleRequired={() => handleUpdateQuestion(q.id, { isRequired: !q.isRequired })}
                 onSave={() => setQuestionEditIndex(-1)}
-                onChangeQType={(newType) =>
-                    onChangeQType(q.id, newType) 
-                }
-                onChangePoints={(newPoints) =>
-                    handleUpdateQuestion(q.id, { points: newPoints })
-                }
+                onChangeQType={(newType) => onChangeQType(q.id, newType)}
+                onChangePoints={(newPoints) => handleUpdateQuestion(q.id, { points: newPoints })}
                 qType={q.type}
             />
-        )
-    }
+        );
+    };
 
     const renderLongQuestion = (q: LongAnswerQuestion, questionIndex: number, mode: Mode) => {
         return (
@@ -173,59 +163,51 @@ const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => 
                 points={q.points}
                 description={q.description}
                 isRequired={q.isRequired}
-                onChangeQuestion={(val) =>
-                    handleUpdateQuestion(q.id, { question: val })
-                }
-                onChangeDescription={(val) =>
-                    handleUpdateQuestion(q.id, { description: val })
-                }
-                onToggleRequired={() =>
-                    handleUpdateQuestion(q.id, { isRequired: !q.isRequired })
-                }
+                onChangeQuestion={(val) => handleUpdateQuestion(q.id, { question: val })}
+                onChangeDescription={(val) => handleUpdateQuestion(q.id, { description: val })}
+                onToggleRequired={() => handleUpdateQuestion(q.id, { isRequired: !q.isRequired })}
                 onSave={() => setQuestionEditIndex(-1)}
-                onChangeQType={(newType) =>
-                    onChangeQType(q.id, newType) 
-                }
-                onChangePoints={(newPoints) =>
-                    handleUpdateQuestion(q.id, { points: newPoints })
-                }
+                onChangeQType={(newType) => onChangeQType(q.id, newType)}
+                onChangePoints={(newPoints) => handleUpdateQuestion(q.id, { points: newPoints })}
                 qType={q.type}
             />
-        )
-    }
+        );
+    };
 
     const renderQuestion = (q: Question, questionIndex: number) => {
-        let mode: Mode = "view";
+        let mode: Mode = 'view';
         if (questionEditIndex == questionIndex) {
-            mode = "edit";
+            mode = 'edit';
         }
 
-        return <div key={q.id}
-            className={`question ${mode}-mode`}
-            onClick={(e) => {
-                if ((e.target as HTMLElement).closest('button'))
-                    return;
-                setQuestionEditIndex(questionIndex);
-            }}>
-            
-            {mode == 'edit' && (
-                <div className="delete-question-btn">
-                    <Button
-                        displayName=""
-                        onClick={() => handleDeleteQuestion(q.id)}
-                        variant="icon-secondary"
-                        icon="/delete.svg"
-                    ></Button>
-                </div>
-            )}
+        return (
+            <div
+                key={q.id}
+                className={`question ${mode}-mode`}
+                onClick={(e) => {
+                    if ((e.target as HTMLElement).closest('button')) return;
+                    setQuestionEditIndex(questionIndex);
+                }}
+            >
+                {mode == 'edit' && (
+                    <div className="delete-question-btn">
+                        <Button
+                            displayName=""
+                            onClick={() => handleDeleteQuestion(q.id)}
+                            variant="icon-secondary"
+                            icon="/delete.svg"
+                        ></Button>
+                    </div>
+                )}
 
-            {q.type == "multiple" && renderMultipleChoiceQuestion(q, questionIndex, mode)}
+                {q.type == 'multiple' && renderMultipleChoiceQuestion(q, questionIndex, mode)}
 
-            {q.type == "short" && renderShortQuestion(q, questionIndex, mode)}
+                {q.type == 'short' && renderShortQuestion(q, questionIndex, mode)}
 
-            {q.type == "long" && renderLongQuestion(q, questionIndex, mode)}
-        </div>
-    }
+                {q.type == 'long' && renderLongQuestion(q, questionIndex, mode)}
+            </div>
+        );
+    };
 
     return (
         <div>
@@ -246,17 +228,20 @@ const AssignmentBuilderEdit : React.FC<AssignmentBuilderEditProps> = (props) => 
                     className="quiz-description-input"
                 />
                 {props.quizQuestions.map((q, questionIndex) => {
-                    return renderQuestion(q, questionIndex)
+                    return renderQuestion(q, questionIndex);
                 })}
                 <div>
-                    <button onClick={() => handleAddQuestion('multiple')} className="add-question-btn">
+                    <button
+                        onClick={() => handleAddQuestion('multiple')}
+                        className="add-question-btn"
+                    >
                         {' '}
                         Add Question{' '}
                     </button>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default AssignmentBuilderEdit;

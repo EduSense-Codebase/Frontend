@@ -1,7 +1,5 @@
-import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ChatWidget from '../index';
-('use client');
 
 import { IAIThinking } from '../index';
 import { IAISession } from '@/app/typedef';

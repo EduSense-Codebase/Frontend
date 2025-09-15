@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Feedback from '../index';
 
 const meta: Meta<typeof Feedback> = {
@@ -13,7 +12,10 @@ type Story = StoryObj<typeof Feedback>;
 
 export const Primary: Story = {
     render: () => {
-        const mockFeedback = ['Wrong. Correct answer is Berlin', 'Make sure to review European capitals before the next exam!'];
+        const mockFeedback = [
+            'Wrong. Correct answer is Berlin',
+            'Make sure to review European capitals before the next exam!',
+        ];
         const [feedback, setFeedback] = useState<string[]>(mockFeedback);
 
         return (
@@ -28,7 +30,10 @@ export const Primary: Story = {
 
 export const ViewGrade: Story = {
     render: () => {
-        const mockFeedback = ['Wrong. Correct answer is Berlin', 'Make sure to review European capitals before the next exam!'];
+        const mockFeedback = [
+            'Wrong. Correct answer is Berlin',
+            'Make sure to review European capitals before the next exam!',
+        ];
         const [feedback, setFeedback] = useState<string[]>(mockFeedback);
 
         return (

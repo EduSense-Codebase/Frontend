@@ -35,7 +35,7 @@ const View: React.FC<LongAnswerQProps> = (props) => {
     const onFileChange = (file?: File) => {
         setSelectedFile(file);
         props.onChangeFile?.(file);
-    }
+    };
 
     return (
         <div className={`mcq mcq--view`}>
@@ -48,46 +48,51 @@ const View: React.FC<LongAnswerQProps> = (props) => {
                 </div>
                 {!selectedFile && (
                     <div className="upload-btn" onClick={() => fileInputRef.current?.click()}>
-                        <input type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={(e) => onFileChange(e.target.files?.[0])} />
+                        <input
+                            type="file"
+                            style={{ display: 'none' }}
+                            ref={fileInputRef}
+                            onChange={(e) => onFileChange(e.target.files?.[0])}
+                        />
                         <img src="/upload.svg" alt="Upload" />
                         <span>Upload PDF</span>
                     </div>
-                    )
-                }
+                )}
             </>
             <div className="dropdown"></div>
             <div className="uploaded-files">
-                {selectedFile && (<ul>
-                    <h3>Attached Files:</h3>
-                    <li className="grid grid-cols-2 gap-0">
-                        <div>
-                            {selectedFile.name} - {(selectedFile.size / 1024).toFixed(2)} KB
-                        </div>
-                        <div>
-                            <button onClick={() => onFileChange(undefined)}>X</button>
-                        </div>
-                    </li>
-                </ul>)}
+                {selectedFile && (
+                    <ul>
+                        <h3>Attached Files:</h3>
+                        <li className="grid grid-cols-2 gap-0">
+                            <div>
+                                {selectedFile.name} - {(selectedFile.size / 1024).toFixed(2)} KB
+                            </div>
+                            <div>
+                                <button onClick={() => onFileChange(undefined)}>X</button>
+                            </div>
+                        </li>
+                    </ul>
+                )}
             </div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
+                <div className="mcq__required-toggle"></div>
                 <p>Points: {props.points ? props.points : '___'}</p>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const Edit: React.FC<LongAnswerQProps> = (props) => {
     return (
         <div className={`mcq mcq--view`}>
             <div className="mcq__header">
                 <input
-                        type="text"
-                        placeholder="Question*"
-                        value={props.question}
-                        onChange={(e) => props.onChangeQuestion?.(e.target.value)}
-                    />
+                    type="text"
+                    placeholder="Question*"
+                    value={props.question}
+                    onChange={(e) => props.onChangeQuestion?.(e.target.value)}
+                />
             </div>
             <>
                 <div className="laq-description">
@@ -127,36 +132,37 @@ const Edit: React.FC<LongAnswerQProps> = (props) => {
                         displayName="Save"
                         icon="/save.svg"
                     ></Button>
-                    <p>Points: <input
-                    type="number"
-                    value={props.points}
-                    onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
-                    className="points-input"
-                /></p>
+                    <p>
+                        Points:{' '}
+                        <input
+                            type="number"
+                            value={props.points}
+                            onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
+                            className="points-input"
+                        />
+                    </p>
                 </>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const GradeView: React.FC<LongAnswerQProps> = (props) => {
     return (
         <div className={`mcq mcq--view`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {
-                    props.isCorrect ? (
+                {props.isCorrect ? (
                     <div className="question-correct">
-                        <img src="/grading-page/check.svg" alt="checkmark"/>
+                        <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
                     </div>
-                    ) : (
+                ) : (
                     <div className="question-incorrect">
                         <img src="/grading-page/wrong.svg" alt="X" />
                         <p>Incorrect</p>
                     </div>
-                    )
-                }
+                )}
             </div>
             <>
                 <div className="laq-description">
@@ -175,36 +181,30 @@ const GradeView: React.FC<LongAnswerQProps> = (props) => {
                 </ul>
             </div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
+                <div className="mcq__required-toggle"></div>
                 <p>Points: {props.points ? props.points : '___'}</p>
             </div>
-            <Feedback
-                mode="grade-view"
-                feedback={props.feedback || []}
-            />
+            <Feedback mode="grade-view" feedback={props.feedback || []} />
         </div>
-    )
-}
+    );
+};
 
 const GradeEdit: React.FC<LongAnswerQProps> = (props) => {
     return (
         <div className={`mcq mcq--grade-edit`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {
-                    props.isCorrect ? (
+                {props.isCorrect ? (
                     <div className="question-correct">
-                        <img src="/grading-page/check.svg" alt="checkmark"/>
+                        <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
                     </div>
-                    ) : (
+                ) : (
                     <div className="question-incorrect">
                         <img src="/grading-page/wrong.svg" alt="X" />
                         <p>Incorrect</p>
                     </div>
-                    )
-                }
+                )}
             </div>
             <>
                 <div className="laq-description">
@@ -223,14 +223,16 @@ const GradeEdit: React.FC<LongAnswerQProps> = (props) => {
                 </ul>
             </div>
             <div className="mcq__footer">
-                <div className="mcq__required-toggle">
-                </div>
-                <p>Points: <input
-                    type="number"
-                    value={props.points}
-                    onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
-                    className="points-input"
-                /></p>
+                <div className="mcq__required-toggle"></div>
+                <p>
+                    Points:{' '}
+                    <input
+                        type="number"
+                        value={props.points}
+                        onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
+                        className="points-input"
+                    />
+                </p>
             </div>
             <Feedback
                 mode="grade-edit"
@@ -238,24 +240,24 @@ const GradeEdit: React.FC<LongAnswerQProps> = (props) => {
                 onChangeFeedback={props.onChangeFeedback}
             />
         </div>
-    )
-}
+    );
+};
 
 const LongAnswerQ: React.FC<LongAnswerQProps> = (props) => {
     if (props.mode == 'view') {
-        return <View {...props} />
+        return <View {...props} />;
     }
 
     if (props.mode == 'edit') {
-        return <Edit {...props} />
+        return <Edit {...props} />;
     }
 
     if (props.mode == 'grade-view') {
-        return <GradeView {...props} />
+        return <GradeView {...props} />;
     }
 
     if (props.mode == 'grade-edit') {
-        return <GradeEdit {...props} />
+        return <GradeEdit {...props} />;
     }
 };
 

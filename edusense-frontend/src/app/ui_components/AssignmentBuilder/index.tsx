@@ -94,22 +94,41 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = (props) => {
     }, [quizDescription]);
 
     if (props.mode == 'view') {
-        return <AssignmentBuilderView {...props} />
+        return <AssignmentBuilderView {...props} />;
     }
 
     if (props.mode == 'edit') {
-        return <AssignmentBuilderEdit {...props} quizQuestions={questions} 
-                    title={quizTitle} description={quizDescription}
-                    setQuestions={setQuestions} setQuizDescription={setQuizDescription} 
-                    setQuizTitle={setQuizTitle} />
+        return (
+            <AssignmentBuilderEdit
+                {...props}
+                quizQuestions={questions}
+                title={quizTitle}
+                description={quizDescription}
+                setQuestions={setQuestions}
+                setQuizDescription={setQuizDescription}
+                setQuizTitle={setQuizTitle}
+            />
+        );
     }
 
     if (props.mode == 'grade-view') {
-        return <AssignmentBuilderGradeView {...props} quizQuestions={questions} setQuestions={setQuestions} />
+        return (
+            <AssignmentBuilderGradeView
+                {...props}
+                quizQuestions={questions}
+                setQuestions={setQuestions}
+            />
+        );
     }
 
     if (props.mode == 'grade-edit') {
-        return <AssignmentBuilderGradeEdit {...props} quizQuestions={questions} setQuestions={setQuestions} />
+        return (
+            <AssignmentBuilderGradeEdit
+                {...props}
+                quizQuestions={questions}
+                setQuestions={setQuestions}
+            />
+        );
     }
 };
 

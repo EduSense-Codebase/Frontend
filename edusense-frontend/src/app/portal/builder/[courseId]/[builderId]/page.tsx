@@ -83,21 +83,21 @@ export default function BuilderPage() {
                     }
                     return response.data.quiz_or_assignment_content.quizQuestions.map(
                         (currQuestion) => {
-                            const questionContent = currQuestion.question;
                             if (currQuestion.type == 'multiple') {
                                 return {
                                     type: 'multiple',
                                     multiple_value: -1,
-                                    question: questionContent,
                                 };
                             } else if (currQuestion.type == 'short') {
                                 return {
                                     type: 'short',
                                     short_value: '',
-                                    question: questionContent,
                                 };
                             } else {
-                                return { type: 'long', long_value: '', question: questionContent };
+                                return {
+                                    type: 'long',
+                                    long_value: '',
+                                };
                             }
                         },
                     );
@@ -223,9 +223,6 @@ export default function BuilderPage() {
     };
 
     const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
-        console.log(`Question Index: ${questionIndex}`);
-        console.log(`Value: ${value}`);
-
         setQuizSubmission((prevSubmission) => {
             const newSubmission = [...prevSubmission];
             if (newSubmission[questionIndex].type == 'multiple' && typeof value === 'number') {

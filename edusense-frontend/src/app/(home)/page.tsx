@@ -2,23 +2,17 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './page.scss';
 import Button from '../ui_components/Button/index';
 
 // Content Constants
 
 export default function LandingPage() {
-    const router = useRouter();
     const [showCalendly, setShowCalendly] = useState(false);
 
     const toggleCalendly = () => {
         setShowCalendly(!showCalendly);
-    };
-
-    const getStarted = () => {
-        router.push('/auth/register');
     };
 
     const missionStatementContent = (
@@ -244,8 +238,8 @@ export default function LandingPage() {
                 </section>
 
                 {/* Video Section */}
-                {productHighlightsContent.map((content) => (
-                    <section className="video-demo" id="how-it-works">
+                {productHighlightsContent.map((content, idx) => (
+                    <section className="video-demo" id="how-it-works" key={idx}>
                         <div className="video-container">
                             <div className="frame">
                                 <img
@@ -341,14 +335,14 @@ export default function LandingPage() {
                             alt={aboutFoundersContent[0].picAlt}
                             width={250}
                             height={100}
-                            className="rounded-2xl object-cover border-[#4b76b3] border-3 shadow-md"
+                            className="rounded-2xl border-3 border-[#4b76b3] object-cover shadow-md"
                         />
                         <Image
                             src={aboutFoundersContent[1].picPath}
                             alt={aboutFoundersContent[1].picAlt}
                             width={200}
                             height={200}
-                            className="rounded-2xl object-cover border-[#4b76b3] border-3 shadow-md"
+                            className="rounded-2xl border-3 border-[#4b76b3] object-cover shadow-md"
                         />
                     </div>
 

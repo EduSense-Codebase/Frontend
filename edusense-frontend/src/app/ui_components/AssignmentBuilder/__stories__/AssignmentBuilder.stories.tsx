@@ -1,11 +1,8 @@
-
 import React from 'react';
 import type { StoryObj, Meta } from '@storybook/nextjs-vite';
-import AssignmentBuilder, {AssignmentBuilderProps} from '../index';
+import AssignmentBuilder from '../index';
 import { Question } from '../index';
-import { on } from 'events';
 import { useState } from 'react';
-import { IQuizSubmission } from '../../../portal/builder/[courseId]/[builderId]/page';
 
 const meta: Meta<typeof AssignmentBuilder> = {
     title: 'Component/AssignmentBuilder',
@@ -48,8 +45,8 @@ const primaryQuizQuestions: Question[] = [
         ],
         order_index: 1,
         points: 5,
-        feedback: ["This is some feedback"],
-        is_correct: true
+        feedback: ['This is some feedback'],
+        is_correct: true,
     },
     {
         id: 'q3',
@@ -67,52 +64,24 @@ const primaryQuizQuestions: Question[] = [
 
 export const Primary: Story = {
     render: () => {
-        const [quizContent, setQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [updatedQuizContent, setUpdatedQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>(() => {
-            return primaryQuizQuestions.map((ele) => {
-                return {
-                    type: ele.type
-                }
-            })
-        });
-
-        const [title, setTitle] = useState("Practice Quiz");
+        const [title, setTitle] = useState('Practice Quiz');
         const [description, setDescription] = useState('"Test your science knowledge!"');
-    
+
         const onQuizChange = (newQuestions: Question[]) => {
-            setUpdatedQuizContent((prevUpdatedQuizContent) => {
-                if (prevUpdatedQuizContent == undefined) {
-                    return undefined;
-                }
-                return {
-                    ...prevUpdatedQuizContent,
-                    quizQuestions: newQuestions,
-                };
-            });
+            console.log(newQuestions);
         };
-    
+
         const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
             console.log(`Question Index: ${questionIndex}`);
             console.log(`Value: ${value}`);
-    
-            setQuizSubmission((prevSubmission) => {
-                const newSubmission = [...prevSubmission];
-                if (newSubmission[questionIndex].type == 'multiple' && typeof value === 'number') {
-                    newSubmission[questionIndex].multiple_value = value;
-                } else if (newSubmission[questionIndex].type == 'short' && typeof value === 'string') {
-                    newSubmission[questionIndex].short_value = value;
-                } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
-                    newSubmission[questionIndex].long_value = value;
-                }
-                return newSubmission;
-            });
+
+            console.log(value);
         };
-    
+
         const onQuizSubmit = () => {
             console.log('Quiz Submit');
         };
-    
+
         return (
             <AssignmentBuilder
                 quizQuestions={primaryQuizQuestions}
@@ -127,51 +96,29 @@ export const Primary: Story = {
                 mode={'view'}
             />
         );
-    }
+    },
 };
 
 export const Edit: Story = {
     render: () => {
-        const [quizContent, setQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [updatedQuizContent, setUpdatedQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
-
-        const [title, setTitle] = useState("Practice Quiz");
+        const [title, setTitle] = useState('Practice Quiz');
         const [description, setDescription] = useState('"Test your science knowledge!"');
-    
+
         const onQuizChange = (newQuestions: Question[]) => {
-            setUpdatedQuizContent((prevUpdatedQuizContent) => {
-                if (prevUpdatedQuizContent == undefined) {
-                    return undefined;
-                }
-                return {
-                    ...prevUpdatedQuizContent,
-                    quizQuestions: newQuestions,
-                };
-            });
+            console.log(newQuestions);
         };
-    
+
         const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
             console.log(`Question Index: ${questionIndex}`);
             console.log(`Value: ${value}`);
-    
-            setQuizSubmission((prevSubmission) => {
-                const newSubmission = [...prevSubmission];
-                if (newSubmission[questionIndex].type == 'multiple' && typeof value === 'number') {
-                    newSubmission[questionIndex].multiple_value = value;
-                } else if (newSubmission[questionIndex].type == 'short' && typeof value === 'string') {
-                    newSubmission[questionIndex].short_value = value;
-                } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
-                    newSubmission[questionIndex].long_value = value;
-                }
-                return newSubmission;
-            });
+
+            console.log(value);
         };
-    
+
         const onQuizSubmit = () => {
             console.log('Quiz Submit');
         };
-    
+
         return (
             <AssignmentBuilder
                 quizQuestions={primaryQuizQuestions}
@@ -186,51 +133,29 @@ export const Edit: Story = {
                 mode={'edit'}
             />
         );
-    }
+    },
 };
 
 export const GradeView: Story = {
     render: () => {
-        const [quizContent, setQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [updatedQuizContent, setUpdatedQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
-
-        const [title, setTitle] = useState("Practice Quiz");
+        const [title, setTitle] = useState('Practice Quiz');
         const [description, setDescription] = useState('"Test your science knowledge!"');
-    
+
         const onQuizChange = (newQuestions: Question[]) => {
-            setUpdatedQuizContent((prevUpdatedQuizContent) => {
-                if (prevUpdatedQuizContent == undefined) {
-                    return undefined;
-                }
-                return {
-                    ...prevUpdatedQuizContent,
-                    quizQuestions: newQuestions,
-                };
-            });
+            console.log(newQuestions);
         };
-    
+
         const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
             console.log(`Question Index: ${questionIndex}`);
             console.log(`Value: ${value}`);
-    
-            setQuizSubmission((prevSubmission) => {
-                const newSubmission = [...prevSubmission];
-                if (newSubmission[questionIndex].type == 'multiple' && typeof value === 'number') {
-                    newSubmission[questionIndex].multiple_value = value;
-                } else if (newSubmission[questionIndex].type == 'short' && typeof value === 'string') {
-                    newSubmission[questionIndex].short_value = value;
-                } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
-                    newSubmission[questionIndex].long_value = value;
-                }
-                return newSubmission;
-            });
+
+            console.log(value);
         };
-    
+
         const onQuizSubmit = () => {
             console.log('Quiz Submit');
         };
-    
+
         return (
             <AssignmentBuilder
                 quizQuestions={primaryQuizQuestions}
@@ -245,51 +170,29 @@ export const GradeView: Story = {
                 mode={'grade-view'}
             />
         );
-    }
+    },
 };
 
 export const GradeEdit: Story = {
     render: () => {
-        const [quizContent, setQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [updatedQuizContent, setUpdatedQuizContent] = useState<AssignmentBuilderProps | undefined>(undefined);
-        const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
-
-        const [title, setTitle] = useState("Practice Quiz");
+        const [title, setTitle] = useState('Practice Quiz');
         const [description, setDescription] = useState('"Test your science knowledge!"');
-    
+
         const onQuizChange = (newQuestions: Question[]) => {
-            setUpdatedQuizContent((prevUpdatedQuizContent) => {
-                if (prevUpdatedQuizContent == undefined) {
-                    return undefined;
-                }
-                return {
-                    ...prevUpdatedQuizContent,
-                    quizQuestions: newQuestions,
-                };
-            });
+            console.log(newQuestions);
         };
-    
+
         const onAnswerSelection = (questionIndex: number, value?: string | number | File) => {
             console.log(`Question Index: ${questionIndex}`);
             console.log(`Value: ${value}`);
-    
-            setQuizSubmission((prevSubmission) => {
-                const newSubmission = [...prevSubmission];
-                if (newSubmission[questionIndex].type == 'multiple' && typeof value === 'number') {
-                    newSubmission[questionIndex].multiple_value = value;
-                } else if (newSubmission[questionIndex].type == 'short' && typeof value === 'string') {
-                    newSubmission[questionIndex].short_value = value;
-                } else if (newSubmission[questionIndex].type == 'long' && typeof value === 'string') {
-                    newSubmission[questionIndex].long_value = value;
-                }
-                return newSubmission;
-            });
+
+            console.log(value);
         };
-    
+
         const onQuizSubmit = () => {
             console.log('Quiz Submit');
         };
-    
+
         return (
             <AssignmentBuilder
                 quizQuestions={primaryQuizQuestions}
@@ -302,14 +205,14 @@ export const GradeEdit: Story = {
                 onAnswerSelection={onAnswerSelection}
                 onSubmit={onQuizSubmit}
                 mode={'grade-edit'}
-                studentName={"John Doe"}
+                studentName={'John Doe'}
                 gradedPoints={95}
                 totalPoints={100}
                 submissionNumber={3}
                 totalSubmissions={8}
             />
         );
-    }
+    },
 };
 
 //export default function Test() {}
