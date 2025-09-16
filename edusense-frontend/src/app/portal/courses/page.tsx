@@ -170,27 +170,17 @@ export default function CourseSection() {
                                 className="w-full rounded border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             />
                         </div>
-                        <div className="mt-4 flex justify-end">
-                            <button
-                                onClick={handleDialogClose}
-                                className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400"
-                            >
-                                Close
-                            </button>
-
+                        <div className="mt-4 flex justify-end space-x-4">
                             <Button
                                 displayName="Cancel"
                                 variant="secondary"
                                 onClick={handleDialogClose}
                             />
-
-                            <button
+                            <Button
+                                displayName="Join"
+                                variant="primary"
                                 onClick={handleJoinCourse}
-                                className="rounded bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
-                                disabled={loading || !joinCode}
-                            >
-                                {loading ? 'Joining...' : 'Join Course'}
-                            </button>
+                            />
                         </div>
                     </div>
                 </div>

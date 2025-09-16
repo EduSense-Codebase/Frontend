@@ -31,7 +31,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
         setSelectedAnnouncement(null);
     };
 
-    const recentAnnouncements = Array.isArray(announcements) ? announcements.slice(0, 5) : [];
+    const recentAnnouncements = Array.isArray(announcements) ? announcements : [];
 
     return (
         <div className="announcements">

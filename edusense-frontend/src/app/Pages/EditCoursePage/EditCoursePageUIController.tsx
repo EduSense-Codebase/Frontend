@@ -159,20 +159,6 @@ const EditCoursePageUIController: React.FC<Props> = ({
 
                 {editMode && (
                     <div className="edit-footer">
-                        {/* <div className="footer-btn-container">
-						<button className="footer-btn" onClick={() => alert('Edit clicked')}>
-							<img src="edit2.svg" alt="Edit" />
-							<p className="footer-btn-description">Edit</p>
-						</button>
-						<button className="footer-btn" onClick={() => alert('Text Box clicked')}>
-							<img src="text.svg" alt="Text Box" />
-							<p className="footer-btn-description">Text Box</p>
-						</button>
-						<button className="footer-btn" onClick={() => alert('Section clicked')}>
-							<img src="cube.svg" alt="Section" />
-							<p className="footer-btn-description">Section</p>
-						</button>
-					</div> */}
                         <div className="save-btn-container">
                             <Button
                                 displayName="Save"
