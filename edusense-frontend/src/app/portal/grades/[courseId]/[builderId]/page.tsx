@@ -1,12 +1,14 @@
 'use client';
 
+export const runtime = 'edge';
+
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import GradingPage, { StudentAssignment } from '@/app/Pages/GradingPage/GradingPage';
-import { httpGet } from '@/app/utils';
-import { useParams } from 'next/navigation';
+import { httpGet, httpPost } from '@/app/utils';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
-export const runtime = 'edge';
 
 interface IStudentSubmissionFetch {
     data: StudentAssignment[];
@@ -20,6 +22,8 @@ export default function Grades() {
     const params = useParams();
     const courseId = params.courseId as string;
     const builderId = params.builderId as string;
+
+    const router = useRouter();
 
     const [assignmentTitle, setAssignmentTitle] = useState('');
     const [assignmentPoints, setAssignmentPoints] = useState(0);
@@ -41,13 +45,33 @@ export default function Grades() {
         });
     }, [courseId, builderId]);
 
+    const handleGradeSubmission = (id: number) => {
+        router.push(`/portal/builder/${courseId}/${builderId}/?mode=grade&userId=${id}`)
+    }
+
+    const handleAutoGrade = () => {
+        const formData = {
+            course_id: courseId,
+            builder_id: builderId
+        }
+
+        const queryParams = {
+            section: "ai_grade_assignment"
+        }
+
+        const requestResponse = httpPost(url, formData, queryParams)
+        requestResponse.then(() => {
+            toast.success("Auto Grading Started. You will receive an email once the AI finishes grading!")
+        })
+    }
+
     return (
         <GradingPage
             title={assignmentTitle}
             assignments={assignments}
             totalPoints={assignmentPoints}
-            handleAutoGrade={() => alert('Auto grading...')}
-            gradeSubmission={() => alert('Going to View Submission Page...')}
+            handleAutoGrade={handleAutoGrade}
+            gradeSubmission={handleGradeSubmission}
         />
     );
 }

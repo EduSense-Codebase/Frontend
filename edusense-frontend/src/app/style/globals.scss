@@ -1,12 +1,5 @@
 @use 'tailwindcss';
 
-/*
-:root {
-    --background: #40d6ba;
-    --foreground: #40d6ba;
-}
-*/
-
 html {
     scroll-behavior: smooth;
 }
@@ -17,15 +10,6 @@ html {
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
 }
-
-/*
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #40d6ba;
-        --foreground: #40d6ba;
-    }
-}
-*/
 
 body {
     background: var(--background);

@@ -4,7 +4,7 @@ export const runtime = 'edge';
 
 import './builder.scss';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Text from '../../../../ui_components/Text';
 import { useEffect, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
@@ -165,6 +165,10 @@ export default function BuilderPage() {
     const courseId = params.courseId as string;
     const builderId = params.builderId as string;
 
+    const searchParams = useSearchParams();
+    const passedMode = searchParams.get("mode") as string | undefined;
+    const passedUserId = searchParams.get("userId") as string | undefined;
+
     const router = useRouter();
 
     const { permissions, setCurrCourseId, setCurrBuilderId } = useCustomProp();
@@ -206,7 +210,7 @@ export default function BuilderPage() {
 
     const url = `${API_PREFIX}${COURSE_ENDPOINT}`;
 
-    useEffect(() => {
+    const fetchBuilderData = () => {
         const queryParams = {
             section: 'get_builder',
             course_id: courseId,
@@ -226,8 +230,9 @@ export default function BuilderPage() {
                 const transformedQuiz = transformQuizQuestions(
                     response.data.quiz_or_assignment_content,
                 );
+
                 if (response.data.submission_data != undefined) {
-                    // This means this is a submit submission to show
+                    // This means this is an already submitted submission to show
                     const submissionData = response.data.submission_data;
                     transformedQuiz.forEach((question, index) => {
                         if (
@@ -284,6 +289,15 @@ export default function BuilderPage() {
             }
             setIsAssignmentCreated(response.data.is_assignment_created);
         });
+    }
+
+    useEffect(() => {
+        if (passedMode == undefined) {
+            fetchBuilderData();
+        } else if (passedMode == "grade" && passedUserId != undefined) { 
+            //TODO: Fetch the correct graded information
+            fetchBuilderData();
+        }
 
         setCurrCourseId(parseInt(courseId));
         setCurrBuilderId(parseInt(builderId));
@@ -345,7 +359,7 @@ export default function BuilderPage() {
         builderRequest
             .then(() => {
                 //TODO: Add some visual notification it has been saved
-                console.log('Updated successfully');
+                toast.success("Saved Successfully!");
             })
             .catch(() => {
                 //TODO: Add some visual notification it has failed
@@ -452,7 +466,7 @@ export default function BuilderPage() {
 
         assignmentSubmit
             .then(() => {
-                console.log('Successfully submitted assignment');
+                toast.success('Successfully submitted assignment');
                 router.push(`/portal/course_roadmap/${courseId}`);
             })
             .catch(() => {

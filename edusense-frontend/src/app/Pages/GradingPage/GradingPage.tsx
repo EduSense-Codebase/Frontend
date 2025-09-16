@@ -2,10 +2,12 @@ import React from 'react';
 import './GradingPage.scss';
 import Button from '@/app/ui_components/Button/index';
 
+export type AssignmentStatus = "Submitted" | "Late" | "Not Submitted";
+
 export interface StudentAssignment {
     id: number;
     name: string;
-    status?: 'Submitted' | 'Late' | 'Not Submitted';
+    status?: AssignmentStatus;
     pointsAwarded?: number;
 }
 
@@ -14,7 +16,7 @@ interface GradingPageProps {
     assignments: StudentAssignment[];
     totalPoints: number;
     handleAutoGrade: () => void;
-    gradeSubmission: () => void;
+    gradeSubmission: (id: number) => void;
 }
 
 const GradingPage: React.FC<GradingPageProps> = ({
@@ -24,6 +26,13 @@ const GradingPage: React.FC<GradingPageProps> = ({
     handleAutoGrade,
     gradeSubmission,
 }) => {
+
+    const localGradeSubmission = (id: number, status?: AssignmentStatus) => {
+        if (status !== "Not Submitted") {
+            gradeSubmission(id);
+        }
+    }
+
     return (
         <div className="grading-container">
             <h1>{title}</h1>
@@ -44,11 +53,17 @@ const GradingPage: React.FC<GradingPageProps> = ({
                                   : assignment.status === 'Not Submitted'
                                     ? 'not-submitted'
                                     : '';
+
+                        const submissionCardClass = 
+                            `submission-card ${assignment.status == "Not Submitted" 
+                                ? "" 
+                                : "cursor-pointer"
+                            }`
                         return (
                             <div
                                 key={assignment.id}
-                                className="submission-card"
-                                onClick={gradeSubmission}
+                                className={submissionCardClass}
+                                onClick={() => localGradeSubmission(assignment.id, assignment.status)}
                             >
                                 <h3>{assignment.name}</h3>
                                 <p>{assignment.id}</p>
