@@ -32,7 +32,7 @@ const AssignmentBuilderGradeView: React.FC<AssignmentBuilderGradeViewProps> = (p
                     placeholder="Enter quiz description"
                     className="quiz-description-input"
                 />
-                {props.quizQuestions.map((q) => {
+                {props.quizQuestions.map((q, questionIndex) => {
                     switch (q.type) {
                         case 'multiple':
                             return (
@@ -44,6 +44,7 @@ const AssignmentBuilderGradeView: React.FC<AssignmentBuilderGradeViewProps> = (p
                                     options={q.options}
                                     selectedAnswerId={q.selectedOptionId}
                                     isRequired={q.isRequired}
+                                    keyPrefix={questionIndex.toString()}
                                     qType={q.type}
                                     feedback={q.feedback}
                                     onChangeFeedback={(newFeedback) =>

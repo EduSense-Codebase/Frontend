@@ -43,7 +43,7 @@ export interface IQuizFeedback {
 
 export interface IQuizPerStudentInformation {
     answers: IQuizSubmission[];
-    ai_grade: IQuizFeedback[];
+    ai_grade: IQuizFeedback[] | number;
 }
 
 export interface IBaseQuestionConfiguration {
@@ -305,11 +305,28 @@ export default function BuilderPage() {
         });
     };
 
+    const setDefaultFeedbackDataOnQuizContent = () => {
+        setQuizQuestions((prevQuizQuestions) => {
+            return prevQuizQuestions.map((question) => {
+                return {
+                    ...question,
+                    feedback: [],
+                    totalPoints: question.points,
+                    points: 0
+                }
+            })
+        })
+    }
+
     useEffect(() => {
         const studentData = allStudentQuizSubmission[currentDisplayStudentSubmission];
         if (studentData != undefined) {
             setSubmissionDataOnQuizContent(studentData.answers);
-            setFeedbackDataOnQuizContent(studentData.ai_grade);
+            if (typeof studentData.ai_grade !== 'number') {
+                setFeedbackDataOnQuizContent(studentData.ai_grade);
+            } else {
+                setDefaultFeedbackDataOnQuizContent()
+            }
         }
     }, [allStudentQuizSubmission, currentDisplayStudentSubmission]);
 
@@ -529,6 +546,8 @@ export default function BuilderPage() {
                     return newSubmission;
                 });
             });
+
+            return;
         }
 
         setQuizSubmission((prevSubmission) => {
@@ -609,7 +628,7 @@ export default function BuilderPage() {
             if (mode == 'grade-edit') {
                 return (
                     <AssignmentBuilder
-                        mode="grade-view"
+                        mode="grade-edit"
                         title={quizTitle}
                         description={quizDescription}
                         quizQuestions={quizQuestions}

@@ -200,8 +200,9 @@ const GradeEdit: React.FC<ShortAnswerQProps> = (props) => {
             <label className="saq__answer-label">
                 <input
                     type="text"
-                    value={props.studentAnswer}
+                    value={props.studentAnswer ?? ""}
                     placeholder="Type your answer here..."
+                    readOnly
                 />
             </label>
             <div className="dropdown"></div>

@@ -26,7 +26,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                     switch (q.type) {
                         case 'multiple':
                             return (
-                                <MultipleChoiceQ
+                                <MultipleChoiceQ key={`mc-${questionIndex}`}
                                     mode="view"
                                     question={q.question}
                                     points={q.points}
@@ -34,6 +34,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     isRequired={q.isRequired}
                                     selectedAnswerId={q.selectedOptionId}
                                     qType={q.type}
+                                    keyPrefix={questionIndex.toString()}
                                     onAnswerSelect={(answerIndex) =>
                                         props.onAnswerSelection?.(questionIndex, answerIndex)
                                     }
@@ -41,7 +42,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                             );
                         case 'short':
                             return (
-                                <ShortAnswerQ
+                                <ShortAnswerQ key={`sa-${questionIndex}`}
                                     mode="view"
                                     question={q.question}
                                     points={q.points}
@@ -56,6 +57,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                         case 'long':
                             return (
                                 <LongAnswerQ
+                                    key={`la-${questionIndex}`}
                                     mode="view"
                                     question={q.question}
                                     points={q.points}

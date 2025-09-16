@@ -95,10 +95,9 @@ export default function CourseSection() {
     const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
         const bgImage = getBackgroundImage(courseTileArgs);
         return (
-            <>
                 <Link
+                    key={`course-title-${index}`}
                     id="tile-course-btn"
-                    key={courseTileArgs.id}
                     href={`/portal/course_roadmap/${courseTileArgs.id}`}
                     className="inline-block no-underline"
                 >
@@ -122,7 +121,6 @@ export default function CourseSection() {
                         <h3 className="course-tile-name">{courseTileArgs.course_name}</h3>
                     </motion.div>
                 </Link>
-            </>
         );
     };
 

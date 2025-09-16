@@ -82,6 +82,7 @@ const AssignmentBuilderEdit: React.FC<AssignmentBuilderEditProps> = (props) => {
                 question={q.question}
                 options={q.options}
                 points={q.points}
+                keyPrefix={questionIndex.toString()}
                 isRequired={q.isRequired}
                 onChangeQuestion={(val) => handleUpdateQuestion(q.id, { question: val })}
                 onChangeOptionText={(optionId, text) =>

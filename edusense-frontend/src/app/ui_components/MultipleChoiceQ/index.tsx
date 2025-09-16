@@ -18,6 +18,7 @@ interface MultipleChoiceQProps {
     question: string;
     options: Option[];
     qType: QuestionType;
+    keyPrefix: string;
     isRequired?: boolean;
     points?: number;
     totalPoints?: number;
@@ -67,9 +68,11 @@ const View: React.FC<MultipleChoiceQProps> = (props) => {
                         <label className="view-options">
                             <input
                                 type="radio"
-                                name="mcq"
-                                checked={index == selectedIndex}
-                                onClick={() => onRadioSelect(index)}
+                                name={`mcq-${props.keyPrefix}`}
+                                key={`${props.keyPrefix}-${index}`}
+                                value={`${props.keyPrefix}-${index}`}
+                                checked={index === selectedIndex}
+                                onChange={() => onRadioSelect(index)}
                             />
                             {option.text}
                         </label>
@@ -187,12 +190,14 @@ const GradeView: React.FC<MultipleChoiceQProps> = (props) => {
                 )}
             </div>
             <ul className="mcq__options">
-                {props.options.map((option) => (
+                {props.options.map((option, index) => (
                     <li key={option.id} className="mcq__option">
                         <label className="view-options">
                             <input
                                 type="radio"
-                                name="mcq"
+                                name={`mcq-${props.keyPrefix}`}
+                                key={`${props.keyPrefix}-${index}`}
+                                value={`${props.keyPrefix}-${index}`}
                                 checked={props.selectedAnswerId == option.id}
                             />
                             {option.text}
@@ -230,13 +235,16 @@ const GradeEdit: React.FC<MultipleChoiceQProps> = (props) => {
                 )}
             </div>
             <ul className="mcq__options">
-                {props.options.map((option) => (
+                {props.options.map((option, index) => (
                     <li key={option.id} className="mcq__option">
                         <label className="view-options">
                             <input
                                 type="radio"
-                                name="mcq"
+                                name={`mcq-${props.keyPrefix}`}
+                                key={`${props.keyPrefix}-${index}`}
+                                value={`${props.keyPrefix}-${index}`}
                                 checked={props.selectedAnswerId == option.id}
+                                readOnly
                             />
                             {option.text}
                         </label>

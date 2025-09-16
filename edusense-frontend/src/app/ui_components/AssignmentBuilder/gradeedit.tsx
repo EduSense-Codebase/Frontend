@@ -44,11 +44,11 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                     placeholder="Enter quiz description"
                     className="quiz-description-input"
                 />
-                {props.quizQuestions.map((q) => {
+                {props.quizQuestions.map((q, questionIndex) => {
                     switch (q.type) {
                         case 'multiple':
                             return (
-                                <MultipleChoiceQ
+                                <MultipleChoiceQ key={`mc-${questionIndex}`}
                                     mode="grade-edit"
                                     question={q.question}
                                     points={q.points}
@@ -57,6 +57,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                                     selectedAnswerId={q.selectedOptionId}
                                     isRequired={q.isRequired}
                                     qType={q.type}
+                                    keyPrefix={questionIndex.toString()}
                                     feedback={q.feedback}
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
@@ -66,7 +67,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                             );
                         case 'short':
                             return (
-                                <ShortAnswerQ
+                                <ShortAnswerQ key={`sa-${questionIndex}`}
                                     mode="grade-edit"
                                     question={q.question}
                                     points={q.points}
@@ -83,7 +84,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                             );
                         case 'long':
                             return (
-                                <LongAnswerQ
+                                <LongAnswerQ key={`la-${questionIndex}`}
                                     mode="grade-edit"
                                     question={q.question}
                                     points={q.points}
