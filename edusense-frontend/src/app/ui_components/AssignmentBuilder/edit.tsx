@@ -104,8 +104,22 @@ const AssignmentBuilderEdit: React.FC<AssignmentBuilderEditProps> = (props) => {
                 }
                 onToggleCorrect={(optionId) =>
                     handleUpdateQuestion(q.id, {
-                        options: q.options.map((opt) =>
-                            opt.id === optionId ? { ...opt, isCorrect: !opt.isCorrect } : opt,
+                        options: q.options.map((opt) => {
+                            if (opt.isCorrect && opt.id != optionId) {
+                                return {
+                                    ...opt,
+                                    isCorrect: false
+                                }
+                            }
+
+                            if (opt.id == optionId) {
+                                return {
+                                    ...opt,
+                                    isCorrect: true
+                                }
+                            }
+                            return opt
+                        }
                         ),
                     })
                 }

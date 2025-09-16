@@ -100,11 +100,14 @@ const Edit: React.FC<MultipleChoiceQProps> = (props) => {
                 />
             </div>
             <ul className="mcq__options">
-                {props.options.map((option) => (
+                {props.options.map((option, index) => (
                     <li key={option.id} className="mcq__option">
                         <label className="mcq__option-label">
                             <input
-                                type="checkbox"
+                                type="radio"
+                                name={`mcq-${props.keyPrefix}`}
+                                key={`${props.keyPrefix}-${index}`}
+                                value={`${props.keyPrefix}-${index}`}
                                 checked={option.isCorrect}
                                 onChange={() => props.onToggleCorrect?.(option.id)}
                             />
