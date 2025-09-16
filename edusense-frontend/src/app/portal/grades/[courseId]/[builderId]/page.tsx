@@ -4,11 +4,11 @@ export const runtime = 'edge';
 
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import GradingPage, { StudentAssignment } from '@/app/Pages/GradingPage/GradingPage';
+import { useCustomProp } from '@/app/typedef';
 import { httpGet, httpPost } from '@/app/utils';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-
 
 interface IStudentSubmissionFetch {
     data: StudentAssignment[];
@@ -23,6 +23,8 @@ export default function Grades() {
     const courseId = params.courseId as string;
     const builderId = params.builderId as string;
 
+    const { setCurrCourseId, setCurrBuilderId } = useCustomProp();
+
     const router = useRouter();
 
     const [assignmentTitle, setAssignmentTitle] = useState('');
@@ -36,6 +38,9 @@ export default function Grades() {
             builder_id: builderId,
         };
 
+        setCurrCourseId(parseInt(courseId));
+        setCurrBuilderId(parseInt(builderId));
+
         const requestResponse = httpGet<IStudentSubmissionFetch>(url, queryParams);
 
         requestResponse.then((response) => {
@@ -46,24 +51,26 @@ export default function Grades() {
     }, [courseId, builderId]);
 
     const handleGradeSubmission = (id: number) => {
-        router.push(`/portal/builder/${courseId}/${builderId}/?mode=grade&userId=${id}`)
-    }
+        router.push(`/portal/builder/${courseId}/${builderId}/?mode=grade&userId=${id}`);
+    };
 
     const handleAutoGrade = () => {
         const formData = {
             course_id: courseId,
-            builder_id: builderId
-        }
+            builder_id: builderId,
+        };
 
         const queryParams = {
-            section: "ai_grade_assignment"
-        }
+            section: 'ai_grade_assignment',
+        };
 
-        const requestResponse = httpPost(url, formData, queryParams)
+        const requestResponse = httpPost(url, formData, queryParams);
         requestResponse.then(() => {
-            toast.success("Auto Grading Started. You will receive an email once the AI finishes grading!")
-        })
-    }
+            toast.success(
+                'Auto Grading Started. You will receive an email once the AI finishes grading!',
+            );
+        });
+    };
 
     return (
         <GradingPage

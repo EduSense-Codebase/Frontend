@@ -171,7 +171,9 @@ const GradeView: React.FC<ShortAnswerQProps> = (props) => {
             <div className="dropdown"></div>
             <div className="mcq__footer">
                 <div className="mcq__required-toggle"></div>
-                <p>Points: {props.points != undefined ? props.points : '___'} / {props.totalPoints}</p>
+                <p>
+                    Points: {props.points != undefined ? props.points : '___'} / {props.totalPoints}
+                </p>
             </div>
             <Feedback mode="grade-view" feedback={props.feedback || []} />
         </div>
@@ -212,7 +214,8 @@ const GradeEdit: React.FC<ShortAnswerQProps> = (props) => {
                         value={props.points}
                         onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
                         className="points-input"
-                    /> / {props.totalPoints}
+                    />{' '}
+                    / {props.totalPoints}
                 </p>
             </div>
             <Feedback

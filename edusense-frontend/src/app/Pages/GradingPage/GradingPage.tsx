@@ -2,7 +2,7 @@ import React from 'react';
 import './GradingPage.scss';
 import Button from '@/app/ui_components/Button/index';
 
-export type AssignmentStatus = "Submitted" | "Late" | "Not Submitted";
+export type AssignmentStatus = 'Submitted' | 'Late' | 'Not Submitted';
 
 export interface StudentAssignment {
     id: number;
@@ -26,12 +26,11 @@ const GradingPage: React.FC<GradingPageProps> = ({
     handleAutoGrade,
     gradeSubmission,
 }) => {
-
     const localGradeSubmission = (id: number, status?: AssignmentStatus) => {
-        if (status !== "Not Submitted") {
+        if (status !== 'Not Submitted') {
             gradeSubmission(id);
         }
-    }
+    };
 
     return (
         <div className="grading-container">
@@ -54,16 +53,16 @@ const GradingPage: React.FC<GradingPageProps> = ({
                                     ? 'not-submitted'
                                     : '';
 
-                        const submissionCardClass = 
-                            `submission-card ${assignment.status == "Not Submitted" 
-                                ? "" 
-                                : "cursor-pointer"
-                            }`
+                        const submissionCardClass = `submission-card ${
+                            assignment.status == 'Not Submitted' ? '' : 'cursor-pointer'
+                        }`;
                         return (
                             <div
                                 key={assignment.id}
                                 className={submissionCardClass}
-                                onClick={() => localGradeSubmission(assignment.id, assignment.status)}
+                                onClick={() =>
+                                    localGradeSubmission(assignment.id, assignment.status)
+                                }
                             >
                                 <h3>{assignment.name}</h3>
                                 <p>{assignment.id}</p>

@@ -33,7 +33,7 @@ export default function HomePage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
 
-    const { permissions, setCurrCourseId } = useCustomProp();
+    const { permissions, setCurrCourseId, setCurrBuilderId } = useCustomProp();
     const join_course = permissions?.join_course;
     const create_course = permissions?.create_course;
 
@@ -52,6 +52,7 @@ export default function HomePage() {
 
     useEffect(() => {
         const url = API_PREFIX + COURSE_ENDPOINT;
+        setCurrBuilderId(undefined);
         Promise.all([
             httpGet<INewEnrollment>(url, { section: 'course_details', course_id: enrollmentId }),
             httpGet<IAnnouncementsResponse>(url, {

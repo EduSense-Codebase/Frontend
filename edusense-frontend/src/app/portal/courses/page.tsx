@@ -11,7 +11,7 @@ import { useCustomProp } from '@/app/typedef';
 import Button from '@/app/ui_components/Button';
 
 export default function CourseSection() {
-    const { permissions, courses, setCourses, setCurrCourseId } = useCustomProp();
+    const { permissions, courses, setCourses, setCurrCourseId, setCurrBuilderId } = useCustomProp();
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [createCourseName, setCreateCourseName] = useState('');
@@ -34,6 +34,7 @@ export default function CourseSection() {
         console.log(permissions?.create_course);
 
         setCurrCourseId(undefined);
+        setCurrBuilderId(undefined);
     }, [permissions]);
 
     const handleDialogClose = () => {
