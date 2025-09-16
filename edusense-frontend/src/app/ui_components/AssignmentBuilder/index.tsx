@@ -31,6 +31,7 @@ export interface BaseQuestion {
     isRequired: boolean;
     orderIndex: number;
     points?: number;
+    totalPoints?: number;
     mode?: QuestionMode;
     feedback?: string[]; // For Graded Views
     isCorrect?: boolean; // For Graded Views

@@ -11,6 +11,7 @@ interface LongAnswerQProps {
     mode: Mode;
     question: string;
     points?: number;
+    totalPoints?: number;
     description?: string;
     onChangeDescription?: (value: string) => void;
     onChangeQuestion?: (value: string) => void;
@@ -201,7 +202,7 @@ const GradeView: React.FC<LongAnswerQProps> = (props) => {
             </div>
             <div className="mcq__footer">
                 <div className="mcq__required-toggle"></div>
-                <p>Points: {props.points ? props.points : '___'}</p>
+                <p>Points: {props.points != undefined ? props.points : '___'} / {props.totalPoints}</p>
             </div>
             <Feedback mode="grade-view" feedback={props.feedback || []} />
         </div>
@@ -250,7 +251,7 @@ const GradeEdit: React.FC<LongAnswerQProps> = (props) => {
                         value={props.points}
                         onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
                         className="points-input"
-                    />
+                    /> / {props.totalPoints}
                 </p>
             </div>
             <Feedback

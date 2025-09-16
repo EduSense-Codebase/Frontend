@@ -1,6 +1,6 @@
 /* ********************* Generic Types START ********************* */
 
-import { IQuizConfiguration, IQuizSubmission } from './portal/builder/[courseId]/[builderId]/page';
+import { IQuizConfiguration, IQuizPerStudentInformation, IQuizSubmission } from './portal/builder/[courseId]/[builderId]/page';
 import { Mode } from './ui_components/AssignmentBuilder';
 import React from 'react';
 
@@ -142,6 +142,7 @@ export interface IBuilderResponse {
     text_content?: string;
     quiz_or_assignment_content?: IQuizConfiguration;
     submission_data?: IQuizSubmission[];
+    all_students_submission_data?: Record<number,IQuizPerStudentInformation>
 }
 
 export interface ISubmitFileResponse {
