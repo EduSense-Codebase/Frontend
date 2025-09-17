@@ -243,15 +243,18 @@ export default function ClassworkTab({
                                                 )
                                             }
                                         />
-                                        <Button
-                                            displayName="Grade"
-                                            variant="secondary"
-                                            onClick={() =>
-                                                router.push(
-                                                    `/portal/grades/${enrollmentId}/${assignment.builder}`,
-                                                )
-                                            }
-                                        />
+                                        {assignment.assignment_data['type'] ==
+                                            'quiz_or_assignment' && (
+                                            <Button
+                                                displayName="Grade"
+                                                variant="secondary"
+                                                onClick={() =>
+                                                    router.push(
+                                                        `/portal/grades/${enrollmentId}/${assignment.builder}`,
+                                                    )
+                                                }
+                                            />
+                                        )}
                                     </div>
                                 </li>
                             ))}
