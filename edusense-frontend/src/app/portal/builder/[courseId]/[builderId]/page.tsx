@@ -26,7 +26,6 @@ import AssignmentBuilder, {
 import { useCustomProp } from '@/app/typedef';
 import Button from '@/app/ui_components/Button';
 import toast from 'react-hot-toast';
-import { cursorTo } from 'readline';
 
 export interface IQuizSubmission {
     type: 'multiple' | 'short' | 'long';
@@ -220,7 +219,6 @@ export default function BuilderPage() {
 
     /* Quiz Submission Information */
     const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
-    const [quizFeedback, setQuizFeedback] = useState<IQuizFeedback[]>([]);
     const [isQuizSubmitted, setIsQuizSubmitted] = useState(false);
 
     /* Grade Edit Student Submission Information */
@@ -335,7 +333,7 @@ export default function BuilderPage() {
                 }
             });
         });
-    }
+    };
 
     const populateDefaultFeedbackData = () => {
         const defaultFeedbackData: IQuizFeedback[] = quizQuestions.map((question) => {
@@ -402,22 +400,22 @@ export default function BuilderPage() {
     }, [allStudentQuizSubmission, currentDisplayStudentSubmission]);
 
     const isQuizSubmitDisabled = useMemo(() => {
-        return quizSubmission.some(currSubmission => {
-            if (currSubmission.type == "multiple" && currSubmission.multiple_value == -1) {
+        return quizSubmission.some((currSubmission) => {
+            if (currSubmission.type == 'multiple' && currSubmission.multiple_value == -1) {
                 return true;
             }
 
-            if (currSubmission.type == "short" && currSubmission.short_value == '') {
+            if (currSubmission.type == 'short' && currSubmission.short_value == '') {
                 return true;
             }
 
-            if (currSubmission.type == "long" && currSubmission.long_value == undefined) {
+            if (currSubmission.type == 'long' && currSubmission.long_value == undefined) {
                 return true;
             }
 
             return false;
-        })
-    }, [quizSubmission])
+        });
+    }, [quizSubmission]);
 
     const fetchBuilderData = (fetchMode?: 'grade') => {
         const queryParams = {
@@ -436,7 +434,10 @@ export default function BuilderPage() {
             if (response.data.type === 'text' && response.data.text_content != undefined) {
                 setTextContent(response.data.text_content);
                 setUpdatedTextContent(response.data.text_content);
-            } else if (response.data.type == 'quiz_or_assignment' && response.data.quiz_or_assignment_content != undefined) {
+            } else if (
+                response.data.type == 'quiz_or_assignment' &&
+                response.data.quiz_or_assignment_content != undefined
+            ) {
                 const transformedQuiz = transformQuizQuestions(
                     response.data.quiz_or_assignment_content,
                 );
@@ -460,13 +461,15 @@ export default function BuilderPage() {
                         }
 
                         if (response.data.feedback_data != undefined) {
-                            setQuizFeedback(response.data.feedback_data)
                             setFeedbackDataOnQuizContent(response.data.feedback_data);
                         }
-                    } 
+                    }
                 }
 
-                if (fetchMode == 'grade' && response.data.all_students_submission_data != undefined) {
+                if (
+                    fetchMode == 'grade' &&
+                    response.data.all_students_submission_data != undefined
+                ) {
                     setAllStudentQuizSubmission(
                         response.data.all_students_submission_data.submissions,
                     );
@@ -539,8 +542,7 @@ export default function BuilderPage() {
             .then(() => {
                 toast.success('Saved Successfully!');
             })
-            .catch(() => {
-            });
+            .catch(() => {});
     };
 
     const onAssignmentCreate = () => {
@@ -766,7 +768,7 @@ export default function BuilderPage() {
             }
 
             if (mode == 'view') {
-                console.log(isQuizSubmitDisabled)
+                console.log(isQuizSubmitDisabled);
                 return (
                     <AssignmentBuilder
                         mode={'view'}
@@ -808,15 +810,17 @@ export default function BuilderPage() {
             }
 
             if (mode == 'grade-view') {
-                return <AssignmentBuilder
-                            mode="grade-view"
-                            title={quizTitle}
-                            description={quizDescription}
-                            quizQuestions={quizQuestions}
-                            setQuestions={setQuizQuestions}
-                            setQuizDescription={setQuizDescription}
-                            setQuizTitle={setQuizTitle}
-                            />
+                return (
+                    <AssignmentBuilder
+                        mode="grade-view"
+                        title={quizTitle}
+                        description={quizDescription}
+                        quizQuestions={quizQuestions}
+                        setQuestions={setQuizQuestions}
+                        setQuizDescription={setQuizDescription}
+                        setQuizTitle={setQuizTitle}
+                    />
+                );
             }
         }
 

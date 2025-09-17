@@ -20,7 +20,7 @@ import {
     BlockTypeSelect,
     InsertTable,
     linkDialogPlugin,
-    thematicBreakPlugin
+    thematicBreakPlugin,
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
 import { useState } from 'react';
@@ -94,7 +94,7 @@ const Text: React.FC<TextProps> = ({ content, allowEdit, onSave: passedOnSave })
                                 quotePlugin(),
                                 tablePlugin(),
                                 imagePlugin(),
-                                thematicBreakPlugin()
+                                thematicBreakPlugin(),
                             ]}
                         />
                     </div>

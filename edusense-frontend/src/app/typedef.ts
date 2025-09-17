@@ -148,7 +148,7 @@ export interface IBuilderResponse {
     text_content?: string;
     quiz_or_assignment_content?: IQuizConfiguration;
     submission_data?: IQuizSubmission[];
-    feedback_data?: IQuizFeedback[]
+    feedback_data?: IQuizFeedback[];
     all_students_submission_data?: {
         submissions: Record<number, IQuizPerStudentInformation>;
         submitted_students: ISubmittedStudents[];

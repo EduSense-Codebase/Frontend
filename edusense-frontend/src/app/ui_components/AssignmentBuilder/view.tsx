@@ -112,11 +112,17 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                     }
                 })}
                 <div>
-                    {props.isQuizSubmiited == undefined || !props.isQuizSubmiited &&
-                    <button onClick={props.onSubmit} className="add-question-btn" disabled={props.isQuizSubmitDisabled}>
-                        {' '}
-                        Submit{' '}
-                    </button>}
+                    {props.isQuizSubmiited == undefined ||
+                        (!props.isQuizSubmiited && (
+                            <button
+                                onClick={props.onSubmit}
+                                className="add-question-btn"
+                                disabled={props.isQuizSubmitDisabled}
+                            >
+                                {' '}
+                                Submit{' '}
+                            </button>
+                        ))}
                 </div>
             </div>
         </div>
