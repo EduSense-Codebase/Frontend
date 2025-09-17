@@ -16,6 +16,7 @@ export default function ToDo({
 }) {
     const { enrollmentId } = useParams();
     const [isVisible, setIsVisible] = useState(true);
+    assignments = assignments.slice(0, 3);
 
     const handleClose = () => {
         // Trigger animation

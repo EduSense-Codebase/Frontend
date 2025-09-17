@@ -6,7 +6,7 @@ import './builder.scss';
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Text from '../../../../ui_components/Text';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import {
