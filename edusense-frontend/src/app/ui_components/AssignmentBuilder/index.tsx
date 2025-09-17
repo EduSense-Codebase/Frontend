@@ -58,6 +58,8 @@ export interface AssignmentBuilderProps {
     quizQuestions: Question[];
     title: string;
     description: string;
+    isQuizSubmiited?: boolean;
+    isQuizSubmitDisabled?: boolean;
     setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
     setQuizTitle: React.Dispatch<React.SetStateAction<string>>;
     setQuizDescription: React.Dispatch<React.SetStateAction<string>>;

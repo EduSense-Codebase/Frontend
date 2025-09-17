@@ -6,7 +6,7 @@ import './builder.scss';
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Text from '../../../../ui_components/Text';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import {
@@ -219,6 +219,7 @@ export default function BuilderPage() {
 
     /* Quiz Submission Information */
     const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
+    const [isQuizSubmitted, setIsQuizSubmitted] = useState(false);
 
     /* Grade Edit Student Submission Information */
     const [allStudentQuizSubmission, setAllStudentQuizSubmission] = useState<
@@ -312,6 +313,29 @@ export default function BuilderPage() {
         });
     };
 
+    const populateDefautlSubmissionData = (transformedQuiz: Question[]) => {
+        setQuizSubmission(() => {
+            return transformedQuiz.map((currQuestion) => {
+                if (currQuestion.type == 'multiple') {
+                    return {
+                        type: 'multiple',
+                        multiple_value: -1,
+                    };
+                } else if (currQuestion.type == 'short') {
+                    return {
+                        type: 'short',
+                        short_value: '',
+                    };
+                } else {
+                    return {
+                        type: 'long',
+                        long_value: undefined,
+                    };
+                }
+            });
+        });
+    }
+
     const populateDefaultFeedbackData = () => {
         const defaultFeedbackData: IQuizFeedback[] = quizQuestions.map((question) => {
             return {
@@ -376,6 +400,12 @@ export default function BuilderPage() {
         }
     }, [allStudentQuizSubmission, currentDisplayStudentSubmission]);
 
+    const isQuizSubmitDisabled = useMemo(() => {
+        return quizSubmission.some(currSubmission => {
+
+        })
+    }, quizSubmission)
+
     const fetchBuilderData = (fetchMode?: 'grade') => {
         const queryParams = {
             section: 'get_builder',
@@ -388,13 +418,12 @@ export default function BuilderPage() {
 
         builderRequest.then((response) => {
             setMode(response.data.mode);
+            setIsAssignmentCreated(response.data.is_assignment_created);
+
             if (response.data.type === 'text' && response.data.text_content != undefined) {
                 setTextContent(response.data.text_content);
                 setUpdatedTextContent(response.data.text_content);
-            } else if (
-                response.data.type == 'quiz_or_assignment' &&
-                response.data.quiz_or_assignment_content != undefined
-            ) {
+            } else if (response.data.type == 'quiz_or_assignment' && response.data.quiz_or_assignment_content != undefined) {
                 const transformedQuiz = transformQuizQuestions(
                     response.data.quiz_or_assignment_content,
                 );
@@ -402,43 +431,24 @@ export default function BuilderPage() {
                 setQuizTitle(response.data.quiz_or_assignment_content.title);
                 setQuizDescription(response.data.quiz_or_assignment_content.description);
                 setQuizQuestions(transformedQuiz);
-                if (response.data.submission_data != undefined) {
-                    setSubmissionDataOnQuizContent(response.data.submission_data);
-                }
+
                 if (response.data.mode == 'view') {
-                    setQuizSubmission(() => {
-                        if (response.data.quiz_or_assignment_content == undefined) {
-                            return [];
+                    if (response.data.quiz_or_assignment_content == undefined) {
+                        setQuizSubmission([]);
+                    } else {
+                        if (response.data.submission_data == undefined) {
+                            populateDefautlSubmissionData(transformedQuiz);
                         }
 
                         if (response.data.submission_data != undefined) {
-                            return response.data.submission_data;
+                            setQuizSubmission(response.data.submission_data);
+                            setSubmissionDataOnQuizContent(response.data.submission_data);
+                            setIsQuizSubmitted(true);
                         }
-
-                        return transformedQuiz.map((currQuestion) => {
-                            if (currQuestion.type == 'multiple') {
-                                return {
-                                    type: 'multiple',
-                                    multiple_value: -1,
-                                };
-                            } else if (currQuestion.type == 'short') {
-                                return {
-                                    type: 'short',
-                                    short_value: '',
-                                };
-                            } else {
-                                return {
-                                    type: 'long',
-                                    long_value: undefined,
-                                };
-                            }
-                        });
-                    });
+                    } 
                 }
-                if (
-                    fetchMode == 'grade' &&
-                    response.data.all_students_submission_data != undefined
-                ) {
+
+                if (fetchMode == 'grade' && response.data.all_students_submission_data != undefined) {
                     setAllStudentQuizSubmission(
                         response.data.all_students_submission_data.submissions,
                     );
@@ -452,7 +462,6 @@ export default function BuilderPage() {
                     setTotalPoints(totalPoints);
                 }
             }
-            setIsAssignmentCreated(response.data.is_assignment_created);
         });
     };
 
@@ -497,7 +506,7 @@ export default function BuilderPage() {
             formData.new_content = JSON.stringify({ text: updatedTextContent });
         }
 
-        if (quizQuestions != undefined) {
+        if (quizQuestions.length > 0) {
             const backendQuizContent = {
                 title: quizTitle,
                 description: quizDescription,
@@ -510,12 +519,9 @@ export default function BuilderPage() {
 
         builderRequest
             .then(() => {
-                //TODO: Add some visual notification it has been saved
                 toast.success('Saved Successfully!');
             })
             .catch(() => {
-                //TODO: Add some visual notification it has failed
-                console.log('Update failed');
             });
     };
 
@@ -748,6 +754,7 @@ export default function BuilderPage() {
                         title={quizTitle}
                         description={quizDescription}
                         quizQuestions={quizQuestions}
+                        isQuizSubmiited={isQuizSubmitted}
                         setQuestions={setQuizQuestions}
                         setQuizDescription={setQuizDescription}
                         setQuizTitle={setQuizTitle}
