@@ -13,6 +13,7 @@ interface LongAnswerQProps {
     points?: number;
     totalPoints?: number;
     description?: string;
+    disabled?: boolean;
     onChangeDescription?: (value: string) => void;
     onChangeQuestion?: (value: string) => void;
     onToggleRequired?: (required: boolean) => void;

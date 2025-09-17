@@ -70,6 +70,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     selectedAnswerId={q.selectedOptionId}
                                     qType={q.type}
                                     keyPrefix={questionIndex.toString()}
+                                    disabled={props.isQuizSubmiited}
                                     onAnswerSelect={(answerIndex) =>
                                         onMcAnswerSelection(questionIndex, answerIndex)
                                     }
@@ -85,6 +86,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     answer={q.answer}
                                     isRequired={q.isRequired}
                                     qType={q.type}
+                                    disabled={props.isQuizSubmiited}
                                     onChangeAnswer={(answerValue) =>
                                         onSaAnswerSelection(questionIndex, answerValue)
                                     }
@@ -101,6 +103,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     file={q.file}
                                     isRequired={q.isRequired}
                                     qType={q.type}
+                                    disabled={props.isQuizSubmiited}
                                     onChangeFile={(answerFile) =>
                                         onLaAnswerSelection(questionIndex, answerFile)
                                     }

@@ -26,6 +26,7 @@ import AssignmentBuilder, {
 import { useCustomProp } from '@/app/typedef';
 import Button from '@/app/ui_components/Button';
 import toast from 'react-hot-toast';
+import { cursorTo } from 'readline';
 
 export interface IQuizSubmission {
     type: 'multiple' | 'short' | 'long';
@@ -219,6 +220,7 @@ export default function BuilderPage() {
 
     /* Quiz Submission Information */
     const [quizSubmission, setQuizSubmission] = useState<IQuizSubmission[]>([]);
+    const [quizFeedback, setQuizFeedback] = useState<IQuizFeedback[]>([]);
     const [isQuizSubmitted, setIsQuizSubmitted] = useState(false);
 
     /* Grade Edit Student Submission Information */
@@ -251,7 +253,6 @@ export default function BuilderPage() {
                         };
                     }
                 } else if (question.type == 'short') {
-                    saIndex += 1;
                     if (saAnswers[saIndex + 1] != undefined) {
                         saIndex += 1;
                         return {
@@ -402,9 +403,21 @@ export default function BuilderPage() {
 
     const isQuizSubmitDisabled = useMemo(() => {
         return quizSubmission.some(currSubmission => {
+            if (currSubmission.type == "multiple" && currSubmission.multiple_value == -1) {
+                return true;
+            }
 
+            if (currSubmission.type == "short" && currSubmission.short_value == '') {
+                return true;
+            }
+
+            if (currSubmission.type == "long" && currSubmission.long_value == undefined) {
+                return true;
+            }
+
+            return false;
         })
-    }, quizSubmission)
+    }, [quizSubmission])
 
     const fetchBuilderData = (fetchMode?: 'grade') => {
         const queryParams = {
@@ -432,7 +445,7 @@ export default function BuilderPage() {
                 setQuizDescription(response.data.quiz_or_assignment_content.description);
                 setQuizQuestions(transformedQuiz);
 
-                if (response.data.mode == 'view') {
+                if (response.data.mode == 'view' || response.data.mode == 'grade-view') {
                     if (response.data.quiz_or_assignment_content == undefined) {
                         setQuizSubmission([]);
                     } else {
@@ -444,6 +457,11 @@ export default function BuilderPage() {
                             setQuizSubmission(response.data.submission_data);
                             setSubmissionDataOnQuizContent(response.data.submission_data);
                             setIsQuizSubmitted(true);
+                        }
+
+                        if (response.data.feedback_data != undefined) {
+                            setQuizFeedback(response.data.feedback_data)
+                            setFeedbackDataOnQuizContent(response.data.feedback_data);
                         }
                     } 
                 }
@@ -748,6 +766,7 @@ export default function BuilderPage() {
             }
 
             if (mode == 'view') {
+                console.log(isQuizSubmitDisabled)
                 return (
                     <AssignmentBuilder
                         mode={'view'}
@@ -755,6 +774,7 @@ export default function BuilderPage() {
                         description={quizDescription}
                         quizQuestions={quizQuestions}
                         isQuizSubmiited={isQuizSubmitted}
+                        isQuizSubmitDisabled={isQuizSubmitDisabled}
                         setQuestions={setQuizQuestions}
                         setQuizDescription={setQuizDescription}
                         setQuizTitle={setQuizTitle}
@@ -785,6 +805,18 @@ export default function BuilderPage() {
                         studentName={allSubmittedStudents[selectedStudentIndex].name}
                     />
                 );
+            }
+
+            if (mode == 'grade-view') {
+                return <AssignmentBuilder
+                            mode="grade-view"
+                            title={quizTitle}
+                            description={quizDescription}
+                            quizQuestions={quizQuestions}
+                            setQuestions={setQuizQuestions}
+                            setQuizDescription={setQuizDescription}
+                            setQuizTitle={setQuizTitle}
+                            />
             }
         }
 

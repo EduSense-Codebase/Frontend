@@ -37,6 +37,7 @@ const AssignmentBuilderGradeView: React.FC<AssignmentBuilderGradeViewProps> = (p
                         case 'multiple':
                             return (
                                 <MultipleChoiceQ
+                                    key={`mc-${questionIndex}`}
                                     mode="grade-view"
                                     question={q.question}
                                     points={q.points}
@@ -50,12 +51,12 @@ const AssignmentBuilderGradeView: React.FC<AssignmentBuilderGradeViewProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.isCorrect}
                                 />
                             );
                         case 'short':
                             return (
                                 <ShortAnswerQ
+                                    key={`sa-${questionIndex}`}
                                     mode="grade-view"
                                     question={q.question}
                                     points={q.points}
@@ -67,12 +68,12 @@ const AssignmentBuilderGradeView: React.FC<AssignmentBuilderGradeViewProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.isCorrect}
                                 />
                             );
                         case 'long':
                             return (
                                 <LongAnswerQ
+                                    key={`la-${questionIndex}`}
                                     mode="grade-view"
                                     question={q.question}
                                     points={q.points}
@@ -85,7 +86,6 @@ const AssignmentBuilderGradeView: React.FC<AssignmentBuilderGradeViewProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.isCorrect}
                                 />
                             );
                     }

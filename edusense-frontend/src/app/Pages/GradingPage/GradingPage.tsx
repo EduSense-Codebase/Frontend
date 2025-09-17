@@ -16,6 +16,7 @@ interface GradingPageProps {
     assignments: StudentAssignment[];
     totalPoints: number;
     handleAutoGrade: () => void;
+    handlePublishGrade: () => void;
     gradeSubmission: (id: number) => void;
 }
 
@@ -24,6 +25,7 @@ const GradingPage: React.FC<GradingPageProps> = ({
     assignments,
     totalPoints,
     handleAutoGrade,
+    handlePublishGrade,
     gradeSubmission,
 }) => {
     const localGradeSubmission = (id: number, status?: AssignmentStatus) => {
@@ -84,6 +86,13 @@ const GradingPage: React.FC<GradingPageProps> = ({
                 <Button
                     displayName="Auto Grade"
                     onClick={handleAutoGrade}
+                    icon="/grading-page/refresh.png"
+                />
+            </div>
+            <div className="auto-grade-btn">
+                <Button
+                    displayName="Publish Grades"
+                    onClick={handlePublishGrade}
                     icon="/grading-page/refresh.png"
                 />
             </div>

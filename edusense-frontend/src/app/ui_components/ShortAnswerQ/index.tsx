@@ -22,6 +22,7 @@ interface ShortAnswerQProps {
     isRequired?: boolean;
     studentAnswer?: string;
     feedback?: string[];
+    disabled?: boolean;
     onChangeCorrectAnswerText?: (id: string, value: string) => void;
     onRemoveCorrectAnswer?: (id: string) => void;
     onAddCorrectAnswer?: () => void;
@@ -50,6 +51,7 @@ const View: React.FC<ShortAnswerQProps> = (props) => {
                     value={props.answer ?? ''}
                     onChange={(e) => onTextAreaChange(e.target.value)}
                     placeholder="Type your answer here..."
+                    disabled={props.disabled}
                 />
             </label>
             <div className="dropdown"></div>
@@ -161,6 +163,7 @@ const GradeView: React.FC<ShortAnswerQProps> = (props) => {
                     type="text"
                     value={props.studentAnswer ?? ''}
                     placeholder="Type your answer here..."
+                    readOnly
                 />
             </label>
             <div className="dropdown"></div>

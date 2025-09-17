@@ -72,12 +72,29 @@ export default function Grades() {
         });
     };
 
+    const handlePublishGrade = () => {
+        const formData = {
+            course_id: courseId,
+            builder_id: builderId
+        }
+
+        const queryParams = {
+            section: "publish_grades_assignment"
+        }
+
+        const requestResponse = httpPost(url, formData, queryParams);
+        requestResponse.then(() => {
+            toast.success("Grades Published!")
+        })
+    }
+
     return (
         <GradingPage
             title={assignmentTitle}
             assignments={assignments}
             totalPoints={assignmentPoints}
             handleAutoGrade={handleAutoGrade}
+            handlePublishGrade={handlePublishGrade}
             gradeSubmission={handleGradeSubmission}
         />
     );

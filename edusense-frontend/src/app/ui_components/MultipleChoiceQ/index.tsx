@@ -23,6 +23,7 @@ interface MultipleChoiceQProps {
     totalPoints?: number;
     selectedAnswerId?: string;
     feedback?: string[];
+    disabled?: boolean;
     onChangeQuestion?: (value: string) => void;
     onChangeOptionText?: (id: string, value: string) => void;
     onRemoveOption?: (id: string) => void;
@@ -58,6 +59,7 @@ const View: React.FC<MultipleChoiceQProps> = (props) => {
                                 value={`${props.keyPrefix}-${index}`}
                                 checked={option.id === props.selectedAnswerId}
                                 onChange={() => onRadioSelect(index)}
+                                disabled={props.disabled}
                             />
                             {option.text}
                         </label>
@@ -187,6 +189,7 @@ const GradeView: React.FC<MultipleChoiceQProps> = (props) => {
                                 key={`${props.keyPrefix}-${index}`}
                                 value={`${props.keyPrefix}-${index}`}
                                 checked={props.selectedAnswerId == option.id}
+                                readOnly
                             />
                             {option.text}
                         </label>
