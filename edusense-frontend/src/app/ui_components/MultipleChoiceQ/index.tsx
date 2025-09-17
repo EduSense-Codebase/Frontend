@@ -24,7 +24,6 @@ interface MultipleChoiceQProps {
     totalPoints?: number;
     selectedAnswerId?: string;
     feedback?: string[];
-    isCorrect?: boolean;
     onChangeQuestion?: (value: string) => void;
     onChangeOptionText?: (id: string, value: string) => void;
     onRemoveOption?: (id: string) => void;
@@ -40,20 +39,7 @@ interface MultipleChoiceQProps {
 }
 
 const View: React.FC<MultipleChoiceQProps> = (props) => {
-    // State Variables to Control Form
-    const [selectedIndex, setSelectedIndex] = useState(-1);
-
-    useEffect(() => {
-        setSelectedIndex(() => {
-            if (props.selectedAnswerId != undefined) {
-                return props.options.findIndex((option) => option.id == props.selectedAnswerId);
-            }
-            return -1;
-        });
-    }, [props.selectedAnswerId]);
-
     const onRadioSelect = (newSelectedIndex: number) => {
-        setSelectedIndex(newSelectedIndex);
         props.onAnswerSelect?.(newSelectedIndex);
     };
 
@@ -71,7 +57,7 @@ const View: React.FC<MultipleChoiceQProps> = (props) => {
                                 name={`mcq-${props.keyPrefix}`}
                                 key={`${props.keyPrefix}-${index}`}
                                 value={`${props.keyPrefix}-${index}`}
-                                checked={index === selectedIndex}
+                                checked={option.id === props.selectedAnswerId}
                                 onChange={() => onRadioSelect(index)}
                             />
                             {option.text}
@@ -180,7 +166,7 @@ const GradeView: React.FC<MultipleChoiceQProps> = (props) => {
         <div className={`mcq mcq--grade-view`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {props.isCorrect ? (
+                {props.points == props.totalPoints ? (
                     <div className="question-correct">
                         <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
@@ -221,11 +207,14 @@ const GradeView: React.FC<MultipleChoiceQProps> = (props) => {
 };
 
 const GradeEdit: React.FC<MultipleChoiceQProps> = (props) => {
+    const onChangePoints = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.onChangePoints?.(parseInt(e.target.value));
+    }
     return (
         <div className={`mcq mcq--grade-edit`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {props.isCorrect ? (
+                {props.points == props.totalPoints ? (
                     <div className="question-correct">
                         <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
@@ -262,7 +251,7 @@ const GradeEdit: React.FC<MultipleChoiceQProps> = (props) => {
                     <input
                         type="number"
                         value={props.points}
-                        onChange={(e) => props.onChangePoints?.(parseInt(e.target.value))}
+                        onChange={onChangePoints}
                         className="points-input"
                     />{' '}
                     / {props.totalPoints}

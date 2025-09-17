@@ -286,7 +286,7 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
                                     <div className="mode-btns">
                                         {props.agents.map((agent, index) => {
                                             return (
-                                                <>
+                                                <React.Fragment key={`ai-agent-${index}`}>
                                                     <button
                                                         className={`mode-btn ${props.currAgent == agent.internal_name ? 'selected' : ''}`}
                                                         onClick={() =>
@@ -298,7 +298,7 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
                                                     {index < props.agents.length - 1 ? (
                                                         <p>|</p>
                                                     ) : null}
-                                                </>
+                                                </React.Fragment>
                                             );
                                         })}
                                     </div>

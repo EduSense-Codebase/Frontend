@@ -22,7 +22,6 @@ interface LongAnswerQProps {
     onChangePoints?: (newPoints: number) => void;
     qType: QuestionType;
     feedback?: string[];
-    isCorrect?: boolean;
     onChangeFeedback?: (newFeedback: string[]) => void;
     file?: IFileInfo;
     onChangeFile?: (newFiles?: File) => void;
@@ -32,29 +31,9 @@ const View: React.FC<LongAnswerQProps> = (props) => {
     // File Input Reference
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
-
-    const [isStateSync, setIsStateSync] = React.useState(true);
-
     const onFileChange = (file?: File) => {
-        setIsStateSync(false);
-        setSelectedFile(file);
         props.onChangeFile?.(file);
     };
-
-    const actualSelectedFile = useMemo(() => {
-        if (!isStateSync) {
-            return selectedFile;
-        }
-
-        if (selectedFile != undefined) {
-            return selectedFile;
-        }
-        if (props.file != undefined) {
-            return props.file;
-        }
-        return undefined;
-    }, [selectedFile, props.file, isStateSync]);
 
     return (
         <div className={`mcq mcq--view`}>
@@ -65,7 +44,7 @@ const View: React.FC<LongAnswerQProps> = (props) => {
                 <div className="laq-description">
                     <p>{props.description}</p>
                 </div>
-                {!actualSelectedFile && (
+                {!props.file && (
                     <div className="upload-btn" onClick={() => fileInputRef.current?.click()}>
                         <input
                             type="file"
@@ -80,13 +59,13 @@ const View: React.FC<LongAnswerQProps> = (props) => {
             </>
             <div className="dropdown"></div>
             <div className="uploaded-files">
-                {actualSelectedFile && (
+                {props.file && (
                     <ul>
                         <h3>Attached Files:</h3>
                         <li className="grid grid-cols-2 gap-0">
                             <div>
-                                {actualSelectedFile.name} -{' '}
-                                {(actualSelectedFile.size / 1024).toFixed(2)} KB
+                                {props.file.name} -{' '}
+                                {(props.file.size / 1024).toFixed(2)} KB
                             </div>
                             <div>
                                 <button onClick={() => onFileChange(undefined)}>X</button>
@@ -172,7 +151,7 @@ const GradeView: React.FC<LongAnswerQProps> = (props) => {
         <div className={`mcq mcq--view`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {props.isCorrect ? (
+                {props.points == props.totalPoints ? (
                     <div className="question-correct">
                         <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
@@ -216,7 +195,7 @@ const GradeEdit: React.FC<LongAnswerQProps> = (props) => {
         <div className={`mcq mcq--grade-edit`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {props.isCorrect ? (
+                {props.points == props.totalPoints ? (
                     <div className="question-correct">
                         <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>

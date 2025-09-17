@@ -67,7 +67,7 @@ const GradingPage: React.FC<GradingPageProps> = ({
                                 <h3>{assignment.name}</h3>
                                 <p>{assignment.id}</p>
                                 <p className={`status--${statusClass}`}>
-                                    {assignment.status !== 'Not Submitted' && <p>● </p>}
+                                    {assignment.status !== 'Not Submitted' && '● '}
                                     {assignment.status || 'Not Submitted'}
                                 </p>
                                 <p className="points">

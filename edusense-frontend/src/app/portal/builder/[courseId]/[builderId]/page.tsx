@@ -6,7 +6,7 @@ import './builder.scss';
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Text from '../../../../ui_components/Text';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import {
@@ -38,12 +38,11 @@ export interface IQuizFeedback {
     type: 'multiple' | 'short' | 'long';
     score: number;
     feedback: string[];
-    is_correct: boolean;
 }
 
 export interface IQuizPerStudentInformation {
     answers: IQuizSubmission[];
-    ai_grade: IQuizFeedback[] | number;
+    ai_grade?: IQuizFeedback[] | number;
 }
 
 export interface IBaseQuestionConfiguration {
@@ -64,6 +63,11 @@ export interface IShortAnswerConfiguration extends IBaseQuestionConfiguration {
 export interface ILongAnswerConfiguration extends IBaseQuestionConfiguration {
     description: string;
 }
+
+export interface ISubmittedStudents {
+    id: number,
+    name: string
+};
 
 export interface IQuizConfiguration {
     title: string;
@@ -86,6 +90,7 @@ const transformQuizQuestions = (quizConfiguration: IQuizConfiguration): Question
             isRequired: true,
             orderIndex: mcConfig.order_index,
             points: mcConfig.points,
+            totalPoints: mcConfig.points,
             options: mcConfig.answers.map((currAnswer, answerIndex) => {
                 return {
                     id: `mc-${index}-${answerIndex}`,
@@ -105,6 +110,7 @@ const transformQuizQuestions = (quizConfiguration: IQuizConfiguration): Question
             isRequired: true,
             orderIndex: shortConfig.order_index,
             points: shortConfig.points,
+            totalPoints: shortConfig.points,
             correctAnswers: shortConfig.answers.map((currAnswer, answerIndex) => {
                 return {
                     id: `sa-${index}-${answerIndex}`,
@@ -123,12 +129,11 @@ const transformQuizQuestions = (quizConfiguration: IQuizConfiguration): Question
             isRequired: true,
             orderIndex: longConfig.order_index,
             points: longConfig.points,
+            totalPoints: longConfig.points,
             description: longConfig.description,
         };
         quizQuestions.push(assembledQuestion);
     });
-
-    // Sort by order index
 
     return quizQuestions.sort((left, right) => left.orderIndex - right.orderIndex);
 };
@@ -198,11 +203,6 @@ export default function BuilderPage() {
     const [quizDescription, setQuizDescription] = useState('');
     const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
 
-    /* Change Quiz Content Tracker */
-    const [updatedQuizTitle, setUpdateQuizTitle] = useState('');
-    const [updatedQuizDescription, setUpdatedQuizDescription] = useState('');
-    const [updatedQuizQuestions, setUpdatedQuizQuestions] = useState<Question[]>([]);
-
     /* Module Level Information for Assignment Creation */
     const [modules, setModules] = useState<IModules[]>([]);
 
@@ -224,33 +224,46 @@ export default function BuilderPage() {
     const [allStudentQuizSubmission, setAllStudentQuizSubmission] = useState<
         Record<number, IQuizPerStudentInformation>
     >({});
+    const [allSubmittedStudents, setAllSubmittedStudents] = useState<ISubmittedStudents[]>([]);
     const [currentDisplayStudentSubmission, setCurrentDisplayStudentSubmission] = useState(-1);
+    const [currentStudentPoints, setCurrentStudentPoints] = useState(0);
+    const [totalPoints, setTotalPoints] = useState(0);
 
     const url = `${API_PREFIX}${COURSE_ENDPOINT}`;
 
     const setSubmissionDataOnQuizContent = (submissionData: IQuizSubmission[]) => {
+        let mcIndex = -1;
+        let saIndex = -1;
+        let laIndex = -1;
+        const mcAnswers = submissionData.filter(ele => ele.type == 'multiple');
+        const saAnswers = submissionData.filter(ele => ele.type == 'short');
+        const laAnswers = submissionData.filter(ele => ele.type == 'long');
         setQuizQuestions((prevQuizQuestions) => {
             return prevQuizQuestions.map((question, index) => {
                 if (question.type == 'multiple') {
-                    if (submissionData[index].type == 'multiple') {
+                    if (mcAnswers[mcIndex + 1] != undefined) {
+                        mcIndex += 1;
                         return {
                             ...question,
                             selectedOptionId:
-                                question.options[submissionData[index].multiple_value ?? 0].id,
+                                question.options[mcAnswers[mcIndex].multiple_value ?? 0].id,
                         };
                     }
                 } else if (question.type == 'short') {
-                    if (submissionData[index].type == 'short') {
+                    saIndex += 1
+                    if (saAnswers[saIndex + 1] != undefined) {
+                        saIndex += 1;
                         return {
                             ...question,
-                            answer: submissionData[index].short_value,
+                            answer: saAnswers[saIndex].short_value,
                         };
                     }
                 } else if (question.type == 'long') {
-                    if (submissionData[index].type == 'long') {
+                    if (laAnswers[laIndex + 1] != undefined) {
+                        laIndex += 1
                         return {
                             ...question,
-                            file: submissionData[index].long_value,
+                            file: laAnswers[laIndex].long_value,
                         };
                     }
                 }
@@ -275,27 +288,21 @@ export default function BuilderPage() {
                     return {
                         ...question,
                         feedback: mcFeedback[mcIndex].feedback,
-                        totalPoints: question.points,
                         points: mcFeedback[mcIndex].score,
-                        isCorrect: mcFeedback[mcIndex].is_correct,
                     };
                 } else if (question.type == 'short' && saFeedback[saIndex + 1] != undefined) {
                     saIndex += 1;
                     return {
                         ...question,
                         feedback: saFeedback[saIndex].feedback,
-                        totalPoints: question.points,
                         points: saFeedback[saIndex].score,
-                        isCorrect: saFeedback[saIndex].is_correct,
                     };
                 } else if (question.type == 'long' && laFeedback[laIndex + 1] != undefined) {
                     laIndex += 1;
                     return {
                         ...question,
                         feedback: laFeedback[laIndex].feedback,
-                        totalPoints: question.points,
                         points: laFeedback[laIndex].score,
-                        isCorrect: laFeedback[laIndex].is_correct,
                     };
                 }
                 return {
@@ -305,27 +312,60 @@ export default function BuilderPage() {
         });
     };
 
-    const setDefaultFeedbackDataOnQuizContent = () => {
-        setQuizQuestions((prevQuizQuestions) => {
-            return prevQuizQuestions.map((question) => {
+    const populateDefaultFeedbackData = () => {
+        const defaultFeedbackData: IQuizFeedback[] = quizQuestions.map((question) => {
+            return {
+                type: question.type,
+                score: 0,
+                feedback: [],
+            }
+        })
+
+        setAllStudentQuizSubmission((prevAllStudentQuizSubmission) => {
+            let newAllStudentQuizSubmission = {...prevAllStudentQuizSubmission}
+            newAllStudentQuizSubmission[currentDisplayStudentSubmission] = {
+                answers: [...newAllStudentQuizSubmission[currentDisplayStudentSubmission].answers],
+                ai_grade: defaultFeedbackData
+            }
+            return newAllStudentQuizSubmission
+        })
+    }
+
+    const transferFeedbackToAllStudentQuizSubmission = (callback?: (newAllStudentQuizSubmission: Record<number, IQuizPerStudentInformation>) => void) => {
+        setAllStudentQuizSubmission((prevAllStudentQuizSubmission) => {
+            if (prevAllStudentQuizSubmission[currentDisplayStudentSubmission] == undefined) {
+                return prevAllStudentQuizSubmission;
+            }
+
+            let newAllStudentQuizSubmission = {...prevAllStudentQuizSubmission}
+            const newFeedbackData: IQuizFeedback[] = quizQuestions.map((question) => {
                 return {
-                    ...question,
-                    feedback: [],
-                    totalPoints: question.points,
-                    points: 0,
-                };
-            });
-        });
-    };
+                    type: question.type,
+                    score: question.points ?? 0,
+                    feedback: question.feedback ?? [],
+                }
+            })
+            newAllStudentQuizSubmission[currentDisplayStudentSubmission] = {
+                answers: [...newAllStudentQuizSubmission[currentDisplayStudentSubmission].answers],
+                ai_grade: newFeedbackData
+            }
+
+            callback?.(newAllStudentQuizSubmission);
+
+            return newAllStudentQuizSubmission
+        })
+    }
 
     useEffect(() => {
         const studentData = allStudentQuizSubmission[currentDisplayStudentSubmission];
         if (studentData != undefined) {
             setSubmissionDataOnQuizContent(studentData.answers);
-            if (typeof studentData.ai_grade !== 'number') {
+            if (typeof studentData.ai_grade !== 'number' && studentData.ai_grade != undefined) {
                 setFeedbackDataOnQuizContent(studentData.ai_grade);
+                const studentPoints = studentData.ai_grade.map(feedback => feedback.score).reduce((accum, currValue) => accum + currValue);
+                setCurrentStudentPoints(studentPoints);
             } else {
-                setDefaultFeedbackDataOnQuizContent();
+                populateDefaultFeedbackData();
             }
         }
     }, [allStudentQuizSubmission, currentDisplayStudentSubmission]);
@@ -356,7 +396,6 @@ export default function BuilderPage() {
                 setQuizTitle(response.data.quiz_or_assignment_content.title);
                 setQuizDescription(response.data.quiz_or_assignment_content.description);
                 setQuizQuestions(transformedQuiz);
-                setUpdatedQuizQuestions(transformedQuiz);
                 if (response.data.submission_data != undefined) {
                     setSubmissionDataOnQuizContent(response.data.submission_data);
                 }
@@ -394,8 +433,11 @@ export default function BuilderPage() {
                     fetchMode == 'grade' &&
                     response.data.all_students_submission_data != undefined
                 ) {
-                    setAllStudentQuizSubmission(response.data.all_students_submission_data);
+                    setAllStudentQuizSubmission(response.data.all_students_submission_data.submissions);
+                    setAllSubmittedStudents(response.data.all_students_submission_data.submitted_students);
                     setCurrentDisplayStudentSubmission(parseInt(passedUserId as string));
+                    const totalPoints = transformedQuiz.map(question => question.points ?? 0).reduce((accum, currValue) => accum + currValue);
+                    setTotalPoints(totalPoints);
                 }
             }
             setIsAssignmentCreated(response.data.is_assignment_created);
@@ -424,18 +466,6 @@ export default function BuilderPage() {
         });
     }, [courseId]);
 
-    const onQuizChange = (newQuestions: Question[]) => {
-        setUpdatedQuizQuestions(newQuestions);
-    };
-
-    const onDescriptionChange = (newDescription: string) => {
-        setUpdatedQuizDescription(newDescription);
-    };
-
-    const onTitleChange = (newTitle: string) => {
-        setUpdateQuizTitle(newTitle);
-    };
-
     const onTextChange = (newContent: string) => {
         setUpdatedTextContent(newContent);
     };
@@ -457,9 +487,9 @@ export default function BuilderPage() {
 
         if (quizQuestions != undefined) {
             const backendQuizContent = {
-                title: updatedQuizTitle,
-                description: updatedQuizDescription,
-                ...reverseTransformQuizQuestions(updatedQuizQuestions),
+                title: quizTitle,
+                description: quizDescription,
+                ...reverseTransformQuizQuestions(quizQuestions),
             };
             formData.new_content = JSON.stringify({ quiz_or_assignment: backendQuizContent });
         }
@@ -520,6 +550,19 @@ export default function BuilderPage() {
                     newSubmission[questionIndex].long_value = response.data.data;
                     return newSubmission;
                 });
+                setQuizQuestions((prevQuestions) => {
+                    return prevQuestions.map((question, currQuestionIndex) => {
+                        if (question.type == "long" && questionIndex == currQuestionIndex) {
+                            return {
+                                ...question,
+                                file: response.data.data
+                            }
+                        }
+                        return question;
+                    })
+                })
+            }).catch(() => {
+                toast.error("The File couldn't be uploaded. Please check your internet connection and try again.")
             });
 
             return;
@@ -545,6 +588,17 @@ export default function BuilderPage() {
                     newSubmission[questionIndex].long_value = undefined;
                     return newSubmission;
                 });
+                setQuizQuestions((prevQuestions) => {
+                    return prevQuestions.map((question, currQuestionIndex) => {
+                        if (question.type == "long" && questionIndex == currQuestionIndex) {
+                            return {
+                                ...question,
+                                file: undefined
+                            }
+                        }
+                        return question;
+                    })
+                })
             });
 
             return;
@@ -586,6 +640,56 @@ export default function BuilderPage() {
             });
     };
 
+    const onChangeStudentSubmission = (direction: 'front' | 'back') => {
+        transferFeedbackToAllStudentQuizSubmission();
+
+        const selectedStudentIndex = allSubmittedStudents.findIndex(student => student.id == currentDisplayStudentSubmission);
+        if (direction == 'front' && selectedStudentIndex == allSubmittedStudents.length - 1) {
+            // This is when you are on the last student and then you try to move forward
+            return;
+        }
+
+        if (direction == 'back' && selectedStudentIndex == 0) {
+            // This is when you are on the first student and then you try to move backward
+            return;
+        }
+
+        const offsetValue = direction == 'front' ? 1 : -1;
+        const newStudentId = allSubmittedStudents[selectedStudentIndex + offsetValue].id;
+        setCurrentDisplayStudentSubmission(newStudentId)
+    }
+
+    const onUpdateGrades = () => {
+        transferFeedbackToAllStudentQuizSubmission((newAllStudentQuizSubmission) => {
+            let updateGradesObject: Record<number, IQuizFeedback[]> = {}
+            Object.entries(newAllStudentQuizSubmission).forEach(([studentId, studentSubmission]) => {
+                if (studentSubmission.ai_grade != undefined && typeof studentSubmission.ai_grade !== 'number') {
+                    updateGradesObject[parseInt(studentId)] = studentSubmission.ai_grade
+                }
+            })
+
+            const formData = {
+                builder_id: builderId,
+                feedback_data: JSON.stringify(updateGradesObject)
+            }
+            
+            const queryParams = {
+                section: "submit_builder_grades_and_feedback",
+                course_id: courseId
+            }
+
+            const requestResponse = httpPost(url, formData, queryParams)
+
+            requestResponse.then(() => {
+                toast.success("Updated Grades")
+            }).catch(() => {
+                toast.error("Something went wrong")
+            })
+
+            console.log(updateGradesObject);
+        });
+    }
+
     const getBody = () => {
         if (textContent != undefined) {
             return (
@@ -605,9 +709,9 @@ export default function BuilderPage() {
                         title={quizTitle}
                         description={quizDescription}
                         quizQuestions={quizQuestions}
-                        onQuizChange={onQuizChange}
-                        onDescriptionChange={onDescriptionChange}
-                        onTitleChange={onTitleChange}
+                        setQuestions={setQuizQuestions}
+                        setQuizDescription={setQuizDescription}
+                        setQuizTitle={setQuizTitle}
                     />
                 );
             }
@@ -619,6 +723,9 @@ export default function BuilderPage() {
                         title={quizTitle}
                         description={quizDescription}
                         quizQuestions={quizQuestions}
+                        setQuestions={setQuizQuestions}
+                        setQuizDescription={setQuizDescription}
+                        setQuizTitle={setQuizTitle}
                         onAnswerSelection={onAnswerSelection}
                         onSubmit={onQuizSubmit}
                     />
@@ -626,12 +733,22 @@ export default function BuilderPage() {
             }
 
             if (mode == 'grade-edit') {
+                const selectedStudentIndex = allSubmittedStudents.findIndex(student => student.id == currentDisplayStudentSubmission);
                 return (
                     <AssignmentBuilder
                         mode="grade-edit"
                         title={quizTitle}
                         description={quizDescription}
                         quizQuestions={quizQuestions}
+                        setQuestions={setQuizQuestions}
+                        setQuizDescription={setQuizDescription}
+                        setQuizTitle={setQuizTitle}
+                        onChangeStudentSubmission={onChangeStudentSubmission}
+                        gradedPoints={currentStudentPoints}
+                        totalPoints={totalPoints}
+                        submissionNumber={selectedStudentIndex + 1}
+                        totalSubmissions={allSubmittedStudents.length}
+                        studentName={allSubmittedStudents[selectedStudentIndex].name}
                     />
                 );
             }
@@ -722,6 +839,14 @@ export default function BuilderPage() {
                     <div className="action-btn">
                         <span className="tooltip-text">Save</span>
                         <Button variant="icon" onClick={onUpdate} icon={'/save.svg'} />
+                    </div>
+                </div>
+            )}
+            {mode == 'grade-edit' && (
+                <div className="action-btns">
+                    <div className="action-btn">
+                        <span className="tooltip-text">Save</span>
+                        <Button variant="icon" onClick={onUpdateGrades} icon={'/save.svg'} />
                     </div>
                 </div>
             )}

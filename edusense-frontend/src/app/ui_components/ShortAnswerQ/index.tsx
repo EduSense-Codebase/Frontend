@@ -22,7 +22,6 @@ interface ShortAnswerQProps {
     isRequired?: boolean;
     studentAnswer?: string;
     feedback?: string[];
-    isCorrect?: boolean;
     onChangeCorrectAnswerText?: (id: string, value: string) => void;
     onRemoveCorrectAnswer?: (id: string) => void;
     onAddCorrectAnswer?: () => void;
@@ -36,11 +35,7 @@ interface ShortAnswerQProps {
 }
 
 const View: React.FC<ShortAnswerQProps> = (props) => {
-    // State Variables to Control the Form
-    const [answer, setAnswer] = useState(props.answer);
-
     const onTextAreaChange = (newValue: string) => {
-        setAnswer(newValue);
         props.onChangeAnswer?.(newValue);
     };
 
@@ -52,7 +47,7 @@ const View: React.FC<ShortAnswerQProps> = (props) => {
             <label className="saq__answer-label">
                 <input
                     type="text"
-                    value={answer}
+                    value={props.answer ?? ""}
                     onChange={(e) => onTextAreaChange(e.target.value)}
                     placeholder="Type your answer here..."
                 />
@@ -80,7 +75,7 @@ const Edit: React.FC<ShortAnswerQProps> = (props) => {
             <>
                 <p>List All Correct Answer(s):</p>
                 <ul>
-                    {props.correctAnswers?.map((ans) => (
+                    {props.correctAnswers?.map((ans: CorrectAnswer) => (
                         <li key={ans.id} className="saq-correct-answer">
                             <input
                                 type="text"
@@ -149,7 +144,7 @@ const GradeView: React.FC<ShortAnswerQProps> = (props) => {
         <div className={`mcq mcq--view`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {props.isCorrect ? (
+                {props.points == props.totalPoints ? (
                     <div className="question-correct">
                         <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>
@@ -164,7 +159,7 @@ const GradeView: React.FC<ShortAnswerQProps> = (props) => {
             <label className="saq__answer-label">
                 <input
                     type="text"
-                    value={props.studentAnswer}
+                    value={props.studentAnswer ?? ""}
                     placeholder="Type your answer here..."
                 />
             </label>
@@ -185,7 +180,7 @@ const GradeEdit: React.FC<ShortAnswerQProps> = (props) => {
         <div className={`mcq mcq--grade-edit`}>
             <div className="mcq__header">
                 <h3>{props.question}</h3>
-                {props.isCorrect ? (
+                {props.points == props.totalPoints ? (
                     <div className="question-correct">
                         <img src="/grading-page/check.svg" alt="checkmark" />
                         <p>Correct!</p>

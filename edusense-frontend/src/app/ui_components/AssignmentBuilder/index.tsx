@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import './AssignmentBuilder.scss';
 import AssignmentBuilderView from './view';
@@ -34,7 +34,6 @@ export interface BaseQuestion {
     totalPoints?: number;
     mode?: QuestionMode;
     feedback?: string[]; // For Graded Views
-    isCorrect?: boolean; // For Graded Views
 }
 
 export interface LongAnswerQuestion extends BaseQuestion {
@@ -60,11 +59,15 @@ export interface AssignmentBuilderProps {
     quizQuestions: Question[];
     title: string;
     description: string;
+    setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
+    setQuizTitle: React.Dispatch<React.SetStateAction<string>>;
+    setQuizDescription: React.Dispatch<React.SetStateAction<string>>;
     onQuizChange?: (newQuizQuestions: Question[]) => void;
     onDescriptionChange?: (newDescription: string) => void;
     onTitleChange?: (newTitle: string) => void;
     onAnswerSelection?: (index: number, value?: string | number | File) => void;
     onSubmit?: () => void;
+    onChangeStudentSubmission?: (direction: 'front' | 'back') => void;
     mode: Mode;
     studentName?: string;
     gradedPoints?: number;
@@ -76,36 +79,6 @@ export interface AssignmentBuilderProps {
 export type Question = LongAnswerQuestion | MultipleChoiceQuestion | ShortAnswerQuestion;
 
 const AssignmentBuilder: React.FC<AssignmentBuilderProps> = (props) => {
-    const [questions, setQuestions] = useState<Question[]>([]);
-    const [quizTitle, setQuizTitle] = useState('');
-    const [quizDescription, setQuizDescription] = useState('');
-
-    useEffect(() => {
-        setQuestions(() => {
-            return props.quizQuestions.sort((left, right) => left.orderIndex - right.orderIndex);
-        });
-    }, [props.quizQuestions]);
-
-    useEffect(() => {
-        setQuizTitle(props.title);
-    }, [props.title]);
-
-    useEffect(() => {
-        setQuizDescription(props.description);
-    }, [props.description]);
-
-    useEffect(() => {
-        props.onQuizChange?.(questions);
-    }, [questions]);
-
-    useEffect(() => {
-        props.onTitleChange?.(quizTitle);
-    }, [quizTitle]);
-
-    useEffect(() => {
-        props.onDescriptionChange?.(quizDescription);
-    }, [quizDescription]);
-
     if (props.mode == 'view') {
         return <AssignmentBuilderView {...props} />;
     }
@@ -114,12 +87,6 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = (props) => {
         return (
             <AssignmentBuilderEdit
                 {...props}
-                quizQuestions={questions}
-                title={quizTitle}
-                description={quizDescription}
-                setQuestions={setQuestions}
-                setQuizDescription={setQuizDescription}
-                setQuizTitle={setQuizTitle}
             />
         );
     }
@@ -128,8 +95,6 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = (props) => {
         return (
             <AssignmentBuilderGradeView
                 {...props}
-                quizQuestions={questions}
-                setQuestions={setQuestions}
             />
         );
     }
@@ -138,8 +103,6 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = (props) => {
         return (
             <AssignmentBuilderGradeEdit
                 {...props}
-                quizQuestions={questions}
-                setQuestions={setQuestions}
             />
         );
     }

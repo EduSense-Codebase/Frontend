@@ -4,6 +4,7 @@ import {
     IQuizConfiguration,
     IQuizPerStudentInformation,
     IQuizSubmission,
+    ISubmittedStudents,
 } from './portal/builder/[courseId]/[builderId]/page';
 import { Mode } from './ui_components/AssignmentBuilder';
 import React from 'react';
@@ -146,7 +147,10 @@ export interface IBuilderResponse {
     text_content?: string;
     quiz_or_assignment_content?: IQuizConfiguration;
     submission_data?: IQuizSubmission[];
-    all_students_submission_data?: Record<number, IQuizPerStudentInformation>;
+    all_students_submission_data?: {
+        submissions: Record<number, IQuizPerStudentInformation>;
+        submitted_students: ISubmittedStudents[]
+    }
 }
 
 export interface ISubmitFileResponse {

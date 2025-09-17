@@ -6,6 +6,40 @@ import ShortAnswerQ from '../ShortAnswerQ';
 import LongAnswerQ from '../LongAnswerQ';
 
 const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
+    const onMcAnswerSelection = (questionIndex: number, answerIndex: number) => {
+        props.setQuestions((prevQuestions) => {
+            return prevQuestions.map((question, currQuestionIndex) => {
+                if (question.type == "multiple" && questionIndex == currQuestionIndex) {
+                    return {
+                        ...question,
+                        selectedOptionId: question.options[answerIndex].id
+                    }
+                }
+                return question
+            })
+        })
+        props.onAnswerSelection?.(questionIndex, answerIndex)
+    }
+
+    const onSaAnswerSelection = (questionIndex: number, answer: string) => {
+        props.setQuestions((prevQuestions) => {
+            return prevQuestions.map((question, currQuestionIndex) => {
+                if (question.type == "short" && questionIndex == currQuestionIndex) {
+                    return {
+                        ...question,
+                        answer: answer
+                    }
+                }
+                return question
+            })
+        })
+        props.onAnswerSelection?.(questionIndex, answer);
+    }
+
+    const onLaAnswerSelection = (questionIndex: number, file?: File) => {
+        props.onAnswerSelection?.(questionIndex, file);
+    }
+
     return (
         <div>
             <div className={`quiz-builder quiz-builder--view`}>
@@ -37,7 +71,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     qType={q.type}
                                     keyPrefix={questionIndex.toString()}
                                     onAnswerSelect={(answerIndex) =>
-                                        props.onAnswerSelection?.(questionIndex, answerIndex)
+                                        onMcAnswerSelection(questionIndex, answerIndex)
                                     }
                                 />
                             );
@@ -52,7 +86,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     isRequired={q.isRequired}
                                     qType={q.type}
                                     onChangeAnswer={(answerValue) =>
-                                        props.onAnswerSelection?.(questionIndex, answerValue)
+                                        onSaAnswerSelection(questionIndex, answerValue)
                                     }
                                 />
                             );
@@ -68,7 +102,7 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                                     isRequired={q.isRequired}
                                     qType={q.type}
                                     onChangeFile={(answerFile) =>
-                                        props.onAnswerSelection?.(questionIndex, answerFile)
+                                        onLaAnswerSelection(questionIndex, answerFile)
                                     }
                                 />
                             );

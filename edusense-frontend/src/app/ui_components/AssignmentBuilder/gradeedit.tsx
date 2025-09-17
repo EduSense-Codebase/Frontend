@@ -21,10 +21,10 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
             <nav className="assignment-builder__nav">
                 <span className="student-name">Student: {props.studentName}</span>
                 <span className="submission-count">
-                    <button>{`<`}</button>
+                    <button onClick={() => props.onChangeStudentSubmission?.('back')}>{`<`}</button>
                     <u>{props.submissionNumber}</u>
                     <p>of {props.totalSubmissions}</p>
-                    <button>{`>`}</button>
+                    <button onClick={() => props.onChangeStudentSubmission?.('front')}>{`>`}</button>
                 </span>
                 <span className="total-points">
                     Total Points: <u>{props.gradedPoints}</u>/{props.totalPoints}
@@ -63,7 +63,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.isCorrect}
+                                    onChangePoints={(newPoints) => handleUpdateQuestion(q.id, { points: newPoints })}
                                 />
                             );
                         case 'short':
@@ -81,7 +81,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.isCorrect}
+                                    onChangePoints={(newPoints) => handleUpdateQuestion(q.id, { points: newPoints })}
                                 />
                             );
                         case 'long':
@@ -100,7 +100,7 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                                     onChangeFeedback={(newFeedback) =>
                                         handleUpdateQuestion(q.id, { feedback: newFeedback })
                                     }
-                                    isCorrect={q.isCorrect}
+                                    onChangePoints={(newPoints) => handleUpdateQuestion(q.id, { points: newPoints })}
                                 />
                             );
                     }
