@@ -35,8 +35,8 @@ export default function ClassworkTab({
     const [fileDesc, setFileDesc] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false);
-
     const { enrollmentId } = useParams();
+
     const toggleModule = (id: number) => {
         setExpandedModules((prev) =>
             prev.includes(id) ? prev.filter((mid) => mid !== id) : [...prev, id],
@@ -222,12 +222,37 @@ export default function ClassworkTab({
                     {expandedModules.includes(module.id) && (
                         <ul className="assignmentList">
                             {assignmentsByModule[module.id].map((assignment) => (
-                                <li key={assignment.id} className="assignmentItem">
+                                <li
+                                    key={assignment.id}
+                                    className="assignmentItem flex items-center justify-between p-2"
+                                >
                                     <Link
                                         href={`/portal/builder/${enrollmentId}/${assignment.builder}`}
+                                        className="font-medium"
                                     >
                                         📝 {assignment.name}
                                     </Link>
+
+                                    <div className="flex gap-2">
+                                        <Button
+                                            displayName="Edit"
+                                            variant="primary"
+                                            onClick={() =>
+                                                router.push(
+                                                    `/portal/builder/${enrollmentId}/${assignment.builder}`,
+                                                )
+                                            }
+                                        />
+                                        <Button
+                                            displayName="Grade"
+                                            variant="secondary"
+                                            onClick={() =>
+                                                router.push(
+                                                    `/portal/grades/${enrollmentId}/${assignment.builder}`,
+                                                )
+                                            }
+                                        />
+                                    </div>
                                 </li>
                             ))}
                         </ul>
