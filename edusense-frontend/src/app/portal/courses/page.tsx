@@ -16,7 +16,7 @@ export default function CourseSection() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [createCourseName, setCreateCourseName] = useState('');
     const [joinCode, setJoinCode] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
     //const [courses, setCourses] = useState<ICourse[]>([]);
 
     const join_course = permissions?.join_course;
@@ -95,32 +95,32 @@ export default function CourseSection() {
     const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
         const bgImage = getBackgroundImage(courseTileArgs);
         return (
-                <Link
-                    key={`course-title-${index}`}
-                    id="tile-course-btn"
-                    href={`/portal/course_roadmap/${courseTileArgs.id}`}
-                    className="inline-block no-underline"
+            <Link
+                key={`course-title-${index}`}
+                id="tile-course-btn"
+                href={`/portal/course_roadmap/${courseTileArgs.id}`}
+                className="inline-block no-underline"
+            >
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{
+                        delay: index * 0.1,
+                        duration: 0.4,
+                        scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
+                    }}
+                    className="course-tile"
                 >
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        whileHover={{ scale: 1.05 }}
-                        transition={{
-                            delay: index * 0.1,
-                            duration: 0.4,
-                            scale: { type: 'spring', visualDuration: 0.4, bounce: 0.3 },
+                    <div
+                        className="course-image"
+                        style={{
+                            backgroundImage: `url(${bgImage})`,
                         }}
-                        className="course-tile"
-                    >
-                        <div
-                            className="course-image"
-                            style={{
-                                backgroundImage: `url(${bgImage})`,
-                            }}
-                        />
-                        <h3 className="course-tile-name">{courseTileArgs.course_name}</h3>
-                    </motion.div>
-                </Link>
+                    />
+                    <h3 className="course-tile-name">{courseTileArgs.course_name}</h3>
+                </motion.div>
+            </Link>
         );
     };
 

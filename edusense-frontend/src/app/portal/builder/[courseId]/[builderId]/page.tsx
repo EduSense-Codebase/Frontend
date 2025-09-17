@@ -312,11 +312,11 @@ export default function BuilderPage() {
                     ...question,
                     feedback: [],
                     totalPoints: question.points,
-                    points: 0
-                }
-            })
-        })
-    }
+                    points: 0,
+                };
+            });
+        });
+    };
 
     useEffect(() => {
         const studentData = allStudentQuizSubmission[currentDisplayStudentSubmission];
@@ -325,7 +325,7 @@ export default function BuilderPage() {
             if (typeof studentData.ai_grade !== 'number') {
                 setFeedbackDataOnQuizContent(studentData.ai_grade);
             } else {
-                setDefaultFeedbackDataOnQuizContent()
+                setDefaultFeedbackDataOnQuizContent();
             }
         }
     }, [allStudentQuizSubmission, currentDisplayStudentSubmission]);

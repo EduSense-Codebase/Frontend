@@ -26,7 +26,8 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                     switch (q.type) {
                         case 'multiple':
                             return (
-                                <MultipleChoiceQ key={`mc-${questionIndex}`}
+                                <MultipleChoiceQ
+                                    key={`mc-${questionIndex}`}
                                     mode="view"
                                     question={q.question}
                                     points={q.points}
@@ -42,7 +43,8 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
                             );
                         case 'short':
                             return (
-                                <ShortAnswerQ key={`sa-${questionIndex}`}
+                                <ShortAnswerQ
+                                    key={`sa-${questionIndex}`}
                                     mode="view"
                                     question={q.question}
                                     points={q.points}

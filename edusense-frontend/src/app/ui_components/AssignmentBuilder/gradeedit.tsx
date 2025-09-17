@@ -48,7 +48,8 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                     switch (q.type) {
                         case 'multiple':
                             return (
-                                <MultipleChoiceQ key={`mc-${questionIndex}`}
+                                <MultipleChoiceQ
+                                    key={`mc-${questionIndex}`}
                                     mode="grade-edit"
                                     question={q.question}
                                     points={q.points}
@@ -67,7 +68,8 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                             );
                         case 'short':
                             return (
-                                <ShortAnswerQ key={`sa-${questionIndex}`}
+                                <ShortAnswerQ
+                                    key={`sa-${questionIndex}`}
                                     mode="grade-edit"
                                     question={q.question}
                                     points={q.points}
@@ -84,7 +86,8 @@ const AssignmentBuilderGradeEdit: React.FC<AssignmentBuilderGradeEditProps> = (p
                             );
                         case 'long':
                             return (
-                                <LongAnswerQ key={`la-${questionIndex}`}
+                                <LongAnswerQ
+                                    key={`la-${questionIndex}`}
                                     mode="grade-edit"
                                     question={q.question}
                                     points={q.points}

@@ -108,19 +108,18 @@ const AssignmentBuilderEdit: React.FC<AssignmentBuilderEditProps> = (props) => {
                             if (opt.isCorrect && opt.id != optionId) {
                                 return {
                                     ...opt,
-                                    isCorrect: false
-                                }
+                                    isCorrect: false,
+                                };
                             }
 
                             if (opt.id == optionId) {
                                 return {
                                     ...opt,
-                                    isCorrect: true
-                                }
+                                    isCorrect: true,
+                                };
                             }
-                            return opt
-                        }
-                        ),
+                            return opt;
+                        }),
                     })
                 }
                 onToggleRequired={() => handleUpdateQuestion(q.id, { isRequired: !q.isRequired })}
