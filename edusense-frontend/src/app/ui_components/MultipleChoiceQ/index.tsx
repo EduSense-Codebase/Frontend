@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './MultipleChoiceQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
 import { Mode, QuestionType } from '../AssignmentBuilder';
 import Dropdown from '../Dropdown';
-import { useState } from 'react';
 import Feedback from '../Feedback/index';
 
 export interface Option {
@@ -209,7 +208,7 @@ const GradeView: React.FC<MultipleChoiceQProps> = (props) => {
 const GradeEdit: React.FC<MultipleChoiceQProps> = (props) => {
     const onChangePoints = (e: React.ChangeEvent<HTMLInputElement>) => {
         props.onChangePoints?.(parseInt(e.target.value));
-    }
+    };
     return (
         <div className={`mcq mcq--grade-edit`}>
             <div className="mcq__header">

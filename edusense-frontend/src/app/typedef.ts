@@ -149,8 +149,8 @@ export interface IBuilderResponse {
     submission_data?: IQuizSubmission[];
     all_students_submission_data?: {
         submissions: Record<number, IQuizPerStudentInformation>;
-        submitted_students: ISubmittedStudents[]
-    }
+        submitted_students: ISubmittedStudents[];
+    };
 }
 
 export interface ISubmitFileResponse {

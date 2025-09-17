@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ShortAnswerQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
@@ -47,7 +47,7 @@ const View: React.FC<ShortAnswerQProps> = (props) => {
             <label className="saq__answer-label">
                 <input
                     type="text"
-                    value={props.answer ?? ""}
+                    value={props.answer ?? ''}
                     onChange={(e) => onTextAreaChange(e.target.value)}
                     placeholder="Type your answer here..."
                 />
@@ -159,7 +159,7 @@ const GradeView: React.FC<ShortAnswerQProps> = (props) => {
             <label className="saq__answer-label">
                 <input
                     type="text"
-                    value={props.studentAnswer ?? ""}
+                    value={props.studentAnswer ?? ''}
                     placeholder="Type your answer here..."
                 />
             </label>

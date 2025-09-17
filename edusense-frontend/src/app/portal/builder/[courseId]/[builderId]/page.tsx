@@ -6,7 +6,7 @@ import './builder.scss';
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Text from '../../../../ui_components/Text';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import {
@@ -65,9 +65,9 @@ export interface ILongAnswerConfiguration extends IBaseQuestionConfiguration {
 }
 
 export interface ISubmittedStudents {
-    id: number,
-    name: string
-};
+    id: number;
+    name: string;
+}
 
 export interface IQuizConfiguration {
     title: string;
@@ -235,11 +235,11 @@ export default function BuilderPage() {
         let mcIndex = -1;
         let saIndex = -1;
         let laIndex = -1;
-        const mcAnswers = submissionData.filter(ele => ele.type == 'multiple');
-        const saAnswers = submissionData.filter(ele => ele.type == 'short');
-        const laAnswers = submissionData.filter(ele => ele.type == 'long');
+        const mcAnswers = submissionData.filter((ele) => ele.type == 'multiple');
+        const saAnswers = submissionData.filter((ele) => ele.type == 'short');
+        const laAnswers = submissionData.filter((ele) => ele.type == 'long');
         setQuizQuestions((prevQuizQuestions) => {
-            return prevQuizQuestions.map((question, index) => {
+            return prevQuizQuestions.map((question) => {
                 if (question.type == 'multiple') {
                     if (mcAnswers[mcIndex + 1] != undefined) {
                         mcIndex += 1;
@@ -250,7 +250,7 @@ export default function BuilderPage() {
                         };
                     }
                 } else if (question.type == 'short') {
-                    saIndex += 1
+                    saIndex += 1;
                     if (saAnswers[saIndex + 1] != undefined) {
                         saIndex += 1;
                         return {
@@ -260,7 +260,7 @@ export default function BuilderPage() {
                     }
                 } else if (question.type == 'long') {
                     if (laAnswers[laIndex + 1] != undefined) {
-                        laIndex += 1
+                        laIndex += 1;
                         return {
                             ...question,
                             file: laAnswers[laIndex].long_value,
@@ -318,43 +318,47 @@ export default function BuilderPage() {
                 type: question.type,
                 score: 0,
                 feedback: [],
-            }
-        })
+            };
+        });
 
         setAllStudentQuizSubmission((prevAllStudentQuizSubmission) => {
-            let newAllStudentQuizSubmission = {...prevAllStudentQuizSubmission}
+            const newAllStudentQuizSubmission = { ...prevAllStudentQuizSubmission };
             newAllStudentQuizSubmission[currentDisplayStudentSubmission] = {
                 answers: [...newAllStudentQuizSubmission[currentDisplayStudentSubmission].answers],
-                ai_grade: defaultFeedbackData
-            }
-            return newAllStudentQuizSubmission
-        })
-    }
+                ai_grade: defaultFeedbackData,
+            };
+            return newAllStudentQuizSubmission;
+        });
+    };
 
-    const transferFeedbackToAllStudentQuizSubmission = (callback?: (newAllStudentQuizSubmission: Record<number, IQuizPerStudentInformation>) => void) => {
+    const transferFeedbackToAllStudentQuizSubmission = (
+        callback?: (
+            newAllStudentQuizSubmission: Record<number, IQuizPerStudentInformation>,
+        ) => void,
+    ) => {
         setAllStudentQuizSubmission((prevAllStudentQuizSubmission) => {
             if (prevAllStudentQuizSubmission[currentDisplayStudentSubmission] == undefined) {
                 return prevAllStudentQuizSubmission;
             }
 
-            let newAllStudentQuizSubmission = {...prevAllStudentQuizSubmission}
+            const newAllStudentQuizSubmission = { ...prevAllStudentQuizSubmission };
             const newFeedbackData: IQuizFeedback[] = quizQuestions.map((question) => {
                 return {
                     type: question.type,
                     score: question.points ?? 0,
                     feedback: question.feedback ?? [],
-                }
-            })
+                };
+            });
             newAllStudentQuizSubmission[currentDisplayStudentSubmission] = {
                 answers: [...newAllStudentQuizSubmission[currentDisplayStudentSubmission].answers],
-                ai_grade: newFeedbackData
-            }
+                ai_grade: newFeedbackData,
+            };
 
             callback?.(newAllStudentQuizSubmission);
 
-            return newAllStudentQuizSubmission
-        })
-    }
+            return newAllStudentQuizSubmission;
+        });
+    };
 
     useEffect(() => {
         const studentData = allStudentQuizSubmission[currentDisplayStudentSubmission];
@@ -362,7 +366,9 @@ export default function BuilderPage() {
             setSubmissionDataOnQuizContent(studentData.answers);
             if (typeof studentData.ai_grade !== 'number' && studentData.ai_grade != undefined) {
                 setFeedbackDataOnQuizContent(studentData.ai_grade);
-                const studentPoints = studentData.ai_grade.map(feedback => feedback.score).reduce((accum, currValue) => accum + currValue);
+                const studentPoints = studentData.ai_grade
+                    .map((feedback) => feedback.score)
+                    .reduce((accum, currValue) => accum + currValue);
                 setCurrentStudentPoints(studentPoints);
             } else {
                 populateDefaultFeedbackData();
@@ -433,10 +439,16 @@ export default function BuilderPage() {
                     fetchMode == 'grade' &&
                     response.data.all_students_submission_data != undefined
                 ) {
-                    setAllStudentQuizSubmission(response.data.all_students_submission_data.submissions);
-                    setAllSubmittedStudents(response.data.all_students_submission_data.submitted_students);
+                    setAllStudentQuizSubmission(
+                        response.data.all_students_submission_data.submissions,
+                    );
+                    setAllSubmittedStudents(
+                        response.data.all_students_submission_data.submitted_students,
+                    );
                     setCurrentDisplayStudentSubmission(parseInt(passedUserId as string));
-                    const totalPoints = transformedQuiz.map(question => question.points ?? 0).reduce((accum, currValue) => accum + currValue);
+                    const totalPoints = transformedQuiz
+                        .map((question) => question.points ?? 0)
+                        .reduce((accum, currValue) => accum + currValue);
                     setTotalPoints(totalPoints);
                 }
             }
@@ -544,26 +556,30 @@ export default function BuilderPage() {
                 file: value,
             };
             const requestResponse = httpPost<ISubmitFileResponse>(url, formData, queryParams);
-            requestResponse.then((response) => {
-                setQuizSubmission((prevSubmission) => {
-                    const newSubmission = [...prevSubmission];
-                    newSubmission[questionIndex].long_value = response.data.data;
-                    return newSubmission;
-                });
-                setQuizQuestions((prevQuestions) => {
-                    return prevQuestions.map((question, currQuestionIndex) => {
-                        if (question.type == "long" && questionIndex == currQuestionIndex) {
-                            return {
-                                ...question,
-                                file: response.data.data
+            requestResponse
+                .then((response) => {
+                    setQuizSubmission((prevSubmission) => {
+                        const newSubmission = [...prevSubmission];
+                        newSubmission[questionIndex].long_value = response.data.data;
+                        return newSubmission;
+                    });
+                    setQuizQuestions((prevQuestions) => {
+                        return prevQuestions.map((question, currQuestionIndex) => {
+                            if (question.type == 'long' && questionIndex == currQuestionIndex) {
+                                return {
+                                    ...question,
+                                    file: response.data.data,
+                                };
                             }
-                        }
-                        return question;
-                    })
+                            return question;
+                        });
+                    });
                 })
-            }).catch(() => {
-                toast.error("The File couldn't be uploaded. Please check your internet connection and try again.")
-            });
+                .catch(() => {
+                    toast.error(
+                        "The File couldn't be uploaded. Please check your internet connection and try again.",
+                    );
+                });
 
             return;
         }
@@ -590,15 +606,15 @@ export default function BuilderPage() {
                 });
                 setQuizQuestions((prevQuestions) => {
                     return prevQuestions.map((question, currQuestionIndex) => {
-                        if (question.type == "long" && questionIndex == currQuestionIndex) {
+                        if (question.type == 'long' && questionIndex == currQuestionIndex) {
                             return {
                                 ...question,
-                                file: undefined
-                            }
+                                file: undefined,
+                            };
                         }
                         return question;
-                    })
-                })
+                    });
+                });
             });
 
             return;
@@ -643,7 +659,9 @@ export default function BuilderPage() {
     const onChangeStudentSubmission = (direction: 'front' | 'back') => {
         transferFeedbackToAllStudentQuizSubmission();
 
-        const selectedStudentIndex = allSubmittedStudents.findIndex(student => student.id == currentDisplayStudentSubmission);
+        const selectedStudentIndex = allSubmittedStudents.findIndex(
+            (student) => student.id == currentDisplayStudentSubmission,
+        );
         if (direction == 'front' && selectedStudentIndex == allSubmittedStudents.length - 1) {
             // This is when you are on the last student and then you try to move forward
             return;
@@ -656,39 +674,46 @@ export default function BuilderPage() {
 
         const offsetValue = direction == 'front' ? 1 : -1;
         const newStudentId = allSubmittedStudents[selectedStudentIndex + offsetValue].id;
-        setCurrentDisplayStudentSubmission(newStudentId)
-    }
+        setCurrentDisplayStudentSubmission(newStudentId);
+    };
 
     const onUpdateGrades = () => {
         transferFeedbackToAllStudentQuizSubmission((newAllStudentQuizSubmission) => {
-            let updateGradesObject: Record<number, IQuizFeedback[]> = {}
-            Object.entries(newAllStudentQuizSubmission).forEach(([studentId, studentSubmission]) => {
-                if (studentSubmission.ai_grade != undefined && typeof studentSubmission.ai_grade !== 'number') {
-                    updateGradesObject[parseInt(studentId)] = studentSubmission.ai_grade
-                }
-            })
+            const updateGradesObject: Record<number, IQuizFeedback[]> = {};
+            Object.entries(newAllStudentQuizSubmission).forEach(
+                ([studentId, studentSubmission]) => {
+                    if (
+                        studentSubmission.ai_grade != undefined &&
+                        typeof studentSubmission.ai_grade !== 'number'
+                    ) {
+                        updateGradesObject[parseInt(studentId)] = studentSubmission.ai_grade;
+                    }
+                },
+            );
 
             const formData = {
                 builder_id: builderId,
-                feedback_data: JSON.stringify(updateGradesObject)
-            }
-            
+                feedback_data: JSON.stringify(updateGradesObject),
+            };
+
             const queryParams = {
-                section: "submit_builder_grades_and_feedback",
-                course_id: courseId
-            }
+                section: 'submit_builder_grades_and_feedback',
+                course_id: courseId,
+            };
 
-            const requestResponse = httpPost(url, formData, queryParams)
+            const requestResponse = httpPost(url, formData, queryParams);
 
-            requestResponse.then(() => {
-                toast.success("Updated Grades")
-            }).catch(() => {
-                toast.error("Something went wrong")
-            })
+            requestResponse
+                .then(() => {
+                    toast.success('Updated Grades');
+                })
+                .catch(() => {
+                    toast.error('Something went wrong');
+                });
 
             console.log(updateGradesObject);
         });
-    }
+    };
 
     const getBody = () => {
         if (textContent != undefined) {
@@ -733,7 +758,9 @@ export default function BuilderPage() {
             }
 
             if (mode == 'grade-edit') {
-                const selectedStudentIndex = allSubmittedStudents.findIndex(student => student.id == currentDisplayStudentSubmission);
+                const selectedStudentIndex = allSubmittedStudents.findIndex(
+                    (student) => student.id == currentDisplayStudentSubmission,
+                );
                 return (
                     <AssignmentBuilder
                         mode="grade-edit"

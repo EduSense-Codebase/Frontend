@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
-import { useState } from 'react';
+import React from 'react';
 import './AssignmentBuilder.scss';
 import AssignmentBuilderView from './view';
 import AssignmentBuilderEdit from './edit';
@@ -84,27 +83,15 @@ const AssignmentBuilder: React.FC<AssignmentBuilderProps> = (props) => {
     }
 
     if (props.mode == 'edit') {
-        return (
-            <AssignmentBuilderEdit
-                {...props}
-            />
-        );
+        return <AssignmentBuilderEdit {...props} />;
     }
 
     if (props.mode == 'grade-view') {
-        return (
-            <AssignmentBuilderGradeView
-                {...props}
-            />
-        );
+        return <AssignmentBuilderGradeView {...props} />;
     }
 
     if (props.mode == 'grade-edit') {
-        return (
-            <AssignmentBuilderGradeEdit
-                {...props}
-            />
-        );
+        return <AssignmentBuilderGradeEdit {...props} />;
     }
 };
 

@@ -9,36 +9,36 @@ const AssignmentBuilderView: React.FC<AssignmentBuilderProps> = (props) => {
     const onMcAnswerSelection = (questionIndex: number, answerIndex: number) => {
         props.setQuestions((prevQuestions) => {
             return prevQuestions.map((question, currQuestionIndex) => {
-                if (question.type == "multiple" && questionIndex == currQuestionIndex) {
+                if (question.type == 'multiple' && questionIndex == currQuestionIndex) {
                     return {
                         ...question,
-                        selectedOptionId: question.options[answerIndex].id
-                    }
+                        selectedOptionId: question.options[answerIndex].id,
+                    };
                 }
-                return question
-            })
-        })
-        props.onAnswerSelection?.(questionIndex, answerIndex)
-    }
+                return question;
+            });
+        });
+        props.onAnswerSelection?.(questionIndex, answerIndex);
+    };
 
     const onSaAnswerSelection = (questionIndex: number, answer: string) => {
         props.setQuestions((prevQuestions) => {
             return prevQuestions.map((question, currQuestionIndex) => {
-                if (question.type == "short" && questionIndex == currQuestionIndex) {
+                if (question.type == 'short' && questionIndex == currQuestionIndex) {
                     return {
                         ...question,
-                        answer: answer
-                    }
+                        answer: answer,
+                    };
                 }
-                return question
-            })
-        })
+                return question;
+            });
+        });
         props.onAnswerSelection?.(questionIndex, answer);
-    }
+    };
 
     const onLaAnswerSelection = (questionIndex: number, file?: File) => {
         props.onAnswerSelection?.(questionIndex, file);
-    }
+    };
 
     return (
         <div>

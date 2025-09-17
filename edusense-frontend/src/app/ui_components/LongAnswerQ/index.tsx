@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import './LongAnswerQ.scss';
 import Button from '../Button';
 import ToggleSwitch from '../ToggleSwitch';
@@ -64,8 +64,7 @@ const View: React.FC<LongAnswerQProps> = (props) => {
                         <h3>Attached Files:</h3>
                         <li className="grid grid-cols-2 gap-0">
                             <div>
-                                {props.file.name} -{' '}
-                                {(props.file.size / 1024).toFixed(2)} KB
+                                {props.file.name} - {(props.file.size / 1024).toFixed(2)} KB
                             </div>
                             <div>
                                 <button onClick={() => onFileChange(undefined)}>X</button>
