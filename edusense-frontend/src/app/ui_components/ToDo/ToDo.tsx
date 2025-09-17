@@ -16,6 +16,10 @@ export default function ToDo({
 }) {
     const { enrollmentId } = useParams();
     const [isVisible, setIsVisible] = useState(true);
+    console.log(new Date(assignments[0].due).getTime());
+    assignments = assignments.filter(
+        (assignment) => new Date(assignment.due).getTime() > Date.now(),
+    );
     assignments = assignments.slice(0, 3);
 
     const handleClose = () => {
