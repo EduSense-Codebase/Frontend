@@ -233,6 +233,53 @@ export default function ClassworkTab({
                                         📝 {assignment.name}
                                     </Link>
 
+                                    {!join_course && (
+                                        <div className="flex gap-2">
+                                            <Button
+                                                displayName="Edit"
+                                                variant="primary"
+                                                onClick={() =>
+                                                    router.push(
+                                                        `/portal/builder/${enrollmentId}/${assignment.builder}`,
+                                                    )
+                                                }
+                                            />
+                                            {assignment.assignment_data['type'] ==
+                                                'quiz_or_assignment' && (
+                                                <Button
+                                                    displayName="Grade"
+                                                    variant="secondary"
+                                                    onClick={() =>
+                                                        router.push(
+                                                            `/portal/grades/${enrollmentId}/${assignment.builder}`,
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            ))}
+
+            {/* Unassigned Assignments */}
+            {unassignedAssignments.length > 0 && (
+                <div className="module unassigned">
+                    <ul className="assignmentList">
+                        {unassignedAssignments.map((assignment) => (
+                            <li
+                                key={assignment.id}
+                                className="assignmentItem flex items-center justify-between p-2"
+                            >
+                                <Link
+                                    href={`/portal/builder/${enrollmentId}/${assignment.builder}`}
+                                >
+                                    📝 {assignment.name}
+                                </Link>
+                                {!join_course && (
                                     <div className="flex gap-2">
                                         <Button
                                             displayName="Edit"
@@ -256,24 +303,7 @@ export default function ClassworkTab({
                                             />
                                         )}
                                     </div>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            ))}
-
-            {/* Unassigned Assignments */}
-            {unassignedAssignments.length > 0 && (
-                <div className="module unassigned">
-                    <ul className="assignmentList">
-                        {unassignedAssignments.map((assignment) => (
-                            <li key={assignment.id} className="assignmentItem">
-                                <Link
-                                    href={`/portal/builder/${enrollmentId}/${assignment.builder}`}
-                                >
-                                    📝 {assignment.name}
-                                </Link>
+                                )}
                             </li>
                         ))}
                     </ul>
