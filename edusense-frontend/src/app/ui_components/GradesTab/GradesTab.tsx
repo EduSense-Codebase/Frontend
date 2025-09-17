@@ -30,23 +30,28 @@ export default function GradesTab({ grades, create_course }: GradesProps) {
                 {grades.length === 0 ? (
                     <p className="empty-array">{emptyMessage}</p>
                 ) : (
-                    grades.map((item: any) => (
-                        <li key={item.email || item.id} className="gradeItem">
-                            <span className="gradeLabel">📋 {item.name}</span>
+                    (create_course
+                        ? grades // Teacher view → show all student data
+                        : grades.filter(
+                              (item: IAssignments) =>
+                                  item.assignment_data?.type === 'quiz_or_assignment',
+                          )
+                    ) // Student view → filter assignments
+                        .map((item: any) => (
+                            <li key={item.email || item.id} className="gradeItem">
+                                <span className="gradeLabel">📋 {item.name}</span>
 
-                            <span className="gradeValue">
-                                {create_course
-                                    ? // 📌 Teacher view → show overall student grades
-                                      item.overall_grade >= 0
-                                        ? `${item.overall_grade}% (${getLetterGrade(item.overall_grade)})`
-                                        : 'N/A'
-                                    : // 📌 Student view → show per-assignment grades
-                                      item.graded >= 0
-                                      ? `${item.graded}/${item.points}`
-                                      : 'N/A'}
-                            </span>
-                        </li>
-                    ))
+                                <span className="gradeValue">
+                                    {create_course
+                                        ? item.overall_grade >= 0
+                                            ? `${item.overall_grade}% (${getLetterGrade(item.overall_grade)})`
+                                            : 'N/A'
+                                        : item.graded >= 0
+                                          ? `${item.graded}/${item.points}`
+                                          : 'N/A'}
+                                </span>
+                            </li>
+                        ))
                 )}
             </ul>
         </div>
