@@ -35,12 +35,20 @@
 
         .submissions-header {
             width: 90%;
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.5fr 1fr;
+            column-gap: 1rem;
             font-size: 1.5rem;
             color: vars.$dark-blue;
             padding-bottom: 0.5rem;
             margin-bottom: 0.5rem;
+            align-items: center;
+            .submission-name {
+                text-align: left;
+            }
+            h3 {
+                text-align: center;
+            }
         }
 
         .submissions-list {
@@ -57,7 +65,7 @@
                 box-shadow: vars.$dropshadow;
                 width: 100%;
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr 0.5fr;
+                grid-template-columns: 1fr 1fr 1.5fr 1fr;
                 column-gap: 1rem; 
                 row-gap: 0.5rem;
                 align-items: center;
@@ -69,24 +77,19 @@
                     background-color: vars.$lighter-blue;
                 }
 
-                h3, p {
+                p {
                     margin: 0;
-                    text-align: left;
+                    text-align: center;
                 }
 
                 h3 {
+                    margin: 0;
                     grid-column: span 1;
                     text-align: left;
                 }
 
-                p {
-                    grid-column: span 1;
-                    display: flex;
-                    gap: 0.5rem;
-                }
-
                 .points {
-                    text-align: right;
+                    text-align: center;
                 }
 
                 .status--submitted {
