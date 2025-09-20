@@ -1,7 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import './ClassworkTab.scss';
-import { IModules, IAssignments, IModuleResponse, IFile, IOneFileResponse } from '@/app/typedef';
+import {
+    IModules,
+    IAssignments,
+    IModuleResponse,
+    IFile,
+    IOneFileResponse,
+    IPermissions,
+} from '@/app/typedef';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
@@ -10,7 +17,7 @@ import Button from '../Button';
 import { useRouter } from 'next/navigation';
 
 interface ClassworkProps {
-    join_course: boolean | undefined;
+    perms: IPermissions | undefined;
     modules: IModules[];
     assignments: IAssignments[];
 
@@ -23,7 +30,7 @@ export default function ClassworkTab({
     modules,
     assignments,
     setNewModules,
-    join_course,
+    perms,
     files,
     setFiles,
 }: ClassworkProps) {
@@ -82,18 +89,31 @@ export default function ClassworkTab({
 
     const renderCreateDropdown = () => (
         <div className="createDropdown">
-            <button className="dropdownItem" onClick={() => handleCreateSelect('assignment')}>
-                📝 Assignment
-            </button>
-            <button className="dropdownItem" onClick={() => handleCreateSelect('text-content')}>
-                Text-based Content
-            </button>
-            <button className="dropdownItem" onClick={() => handleCreateSelect('module')}>
-                📦 Module
-            </button>
-            <button className="dropdownItem" onClick={() => handleCreateSelect('file')}>
-                📄 File
-            </button>
+            {perms?.create && (
+                <>
+                    <button
+                        className="dropdownItem"
+                        onClick={() => handleCreateSelect('assignment')}
+                    >
+                        📝 Assignment
+                    </button>
+                    <button
+                        className="dropdownItem"
+                        onClick={() => handleCreateSelect('text-content')}
+                    >
+                        Text-based Content
+                    </button>
+                    <button className="dropdownItem" onClick={() => handleCreateSelect('module')}>
+                        📦 Module
+                    </button>
+                </>
+            )}
+
+            {perms?.upload && (
+                <button className="dropdownItem" onClick={() => handleCreateSelect('file')}>
+                    📄 File
+                </button>
+            )}
         </div>
     );
 
@@ -198,7 +218,7 @@ export default function ClassworkTab({
             <div className="header">
                 <h2>Classwork</h2>
                 <div className="createContainer">
-                    {!join_course && (
+                    {!perms?.join_course && (
                         <Button
                             displayName="＋ Create"
                             variant="primary"
@@ -233,7 +253,7 @@ export default function ClassworkTab({
                                         📝 {assignment.name}
                                     </Link>
 
-                                    {!join_course && (
+                                    {perms?.create_course && (
                                         <div className="flex gap-2">
                                             <Button
                                                 displayName="Edit"
@@ -279,7 +299,7 @@ export default function ClassworkTab({
                                 >
                                     📝 {assignment.name}
                                 </Link>
-                                {!join_course && (
+                                {perms?.create_course && (
                                     <div className="flex gap-2">
                                         <Button
                                             displayName="Edit"
@@ -291,17 +311,18 @@ export default function ClassworkTab({
                                             }
                                         />
                                         {assignment.assignment_data['type'] ==
-                                            'quiz_or_assignment' && (
-                                            <Button
-                                                displayName="Grade"
-                                                variant="secondary"
-                                                onClick={() =>
-                                                    router.push(
-                                                        `/portal/grades/${enrollmentId}/${assignment.builder}`,
-                                                    )
-                                                }
-                                            />
-                                        )}
+                                            'quiz_or_assignment' &&
+                                            perms?.grade && (
+                                                <Button
+                                                    displayName="Grade"
+                                                    variant="secondary"
+                                                    onClick={() =>
+                                                        router.push(
+                                                            `/portal/grades/${enrollmentId}/${assignment.builder}`,
+                                                        )
+                                                    }
+                                                />
+                                            )}
                                     </div>
                                 )}
                             </li>

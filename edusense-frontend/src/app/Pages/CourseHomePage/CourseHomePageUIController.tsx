@@ -18,7 +18,7 @@ import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
 interface Props {
-    permissions_all?: IPermissions
+    permissions_all?: IPermissions;
     // joinCourse?: boolean | undefined;
     // createCourse?: boolean | undefined;
     courseDetails?: ICourse | undefined;
@@ -59,13 +59,12 @@ const CourseHomePageUIController: React.FC<Props> = ({
     classModule,
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
-    const join_course = permissions_all?.join_course;
     const create_course = permissions_all?.create_course;
 
-    const edit = permissions_all?.edit
-    const upload = permissions_all?.upload
-    const create = permissions_all?.create
-    const grade= permissions_all?.create
+    // const edit = permissions_all?.edit;
+    // const upload = permissions_all?.upload;
+    // const create = permissions_all?.create;
+    // const grade = permissions_all?.create;
 
     const gradesData = create_course ? students : assignments;
 
@@ -148,7 +147,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             assignments={assignments}
                             modules={allModules.filter((item) => item.title !== 'no_module')}
                             setNewModules={setModules}
-                            join_course={join_course}
+                            perms={permissions_all}
                             files={files}
                             setFiles={setFiles}
                         />

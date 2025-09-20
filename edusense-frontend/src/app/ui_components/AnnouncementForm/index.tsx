@@ -9,15 +9,11 @@ interface AnnouncementFormProps {
     perms: IPermissions | undefined;
 }
 
-const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
-    onSubmit,
-    announcements,
-    perms,
-}) => {
+const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcements, perms }) => {
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<IAnnouncements | null>(null);
-    const allowed = perms?.create || perms?.edit || perms?.upload || perms?.grade
+    const allowed = perms?.create || perms?.edit || perms?.upload || perms?.grade;
 
     const handleCancel = () => {
         setTitle('');
