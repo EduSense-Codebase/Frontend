@@ -36,7 +36,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
     return (
         <div className="announcements">
             {/* LEFT SIDE - Recent Announcements List */}
-            <div className="announcements-left">
+            <div className={`announcements-left announcements-left--${create_course}`}>
                 <h3>Recent Announcements</h3>
                 {recentAnnouncements.length === 0 ? (
                     <p className="no-announcements">No announcements yet.</p>
@@ -57,80 +57,57 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
             {/* RIGHT SIDE */}
             {create_course && (
                 <div className="announcements-right">
-                    {selectedAnnouncement ? (
-                        // If teacher clicked an announcement, show its details
-                        <div className="announcement-detail-view">
-                            <h2>{selectedAnnouncement.title}</h2>
-                            <p>{selectedAnnouncement.content}</p>
-                            <Button
-                                displayName="Back"
-                                variant="secondary"
-                                onClick={handleBackToForm}
-                            />
-                        </div>
-                    ) : (
-                        // Otherwise show the form
-                        <>
-                            <div className="announcement-inputs">
-                                <label className="announcement-label">
-                                    Create an announcement...
-                                </label>
-                                <input
-                                    type="text"
-                                    className="announcement-title"
-                                    placeholder="Title*"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                />
-                                <textarea
-                                    className="announcement-textarea"
-                                    placeholder="Write a description..."
-                                    value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
-                                />
-                            </div>
-                            <div className="announcement-actions">
-                                <Button
-                                    displayName="Cancel"
-                                    variant="secondary"
-                                    onClick={handleCancel}
-                                />
-                                <Button
-                                    displayName="Post"
-                                    variant="primary"
-                                    onClick={() => onSubmit(title, message)}
-                                />
-                            </div>
-                        </>
-                    )}
-                </div>
-            )}
-
-            {/* STUDENT VIEW */}
-            {!create_course && recentAnnouncements.length > 0 && !selectedAnnouncement && (
-                <div
-                    className="single-announcement-view"
-                    onClick={() => handleViewAnnouncement(recentAnnouncements[0])}
-                >
-                    <h2>{recentAnnouncements[0].title}</h2>
-                    <p>{recentAnnouncements[0].content}</p>
-                </div>
-            )}
-
-            {/* Fullscreen View for Students */}
-            {!create_course && selectedAnnouncement && (
-                <div className="announcement-modal">
-                    <div className="announcement-modal-content">
-                        <h2>{selectedAnnouncement.title}</h2>
-                        <p>{selectedAnnouncement.content}</p>
+                    <div className="announcement-inputs">
+                        <label className="announcement-label">
+                            Create an announcement...
+                        </label>
+                        <input
+                            type="text"
+                            className="announcement-title"
+                            placeholder="Title*"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                        <textarea
+                            className="announcement-textarea"
+                            placeholder="Write a description..."
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+                    </div>
+                    <div className="announcement-actions">
                         <Button
-                            displayName="Close"
+                            displayName="Cancel"
                             variant="secondary"
-                            onClick={() => setSelectedAnnouncement(null)}
+                            onClick={handleCancel}
+                        />
+                        <Button
+                            displayName="Post"
+                            variant="primary"
+                            onClick={() => onSubmit(title, message)}
                         />
                     </div>
                 </div>
             )}
+
+            {/* Show selected announcement modal */}
+            {selectedAnnouncement && (
+                // If teacher clicked an announcement, show its details
+                <div className="announcement-detail-view">
+                    <div className="header">
+                        <h2>{selectedAnnouncement.title}</h2>
+                        <button onClick={handleBackToForm}>
+                            X
+                        </button>
+                    </div>
+                    <p>{selectedAnnouncement.content}</p>
+                    
+                </div>
+            )}
+
+            {/* STUDENT VIEW */}
+            
+
         </div>
     );
 };

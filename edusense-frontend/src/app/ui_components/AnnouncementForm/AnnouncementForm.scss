@@ -18,8 +18,10 @@
     max-width: 30%;
   }
 
-    .recent-announcements {
-      font-size: 0.75rem;
+    h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      margin-left: 0.25rem;
     }
       .no-announcements {
         background-color: variables.$light-blue;
@@ -40,7 +42,7 @@
       }
 
       .announcement-item h2 {
-        font-weight: bold;
+        font-size: 0.9rem;
       }
 
       .announcement-message {
@@ -100,3 +102,52 @@
       margin-top: 8px;
     }
   }
+
+.announcement-detail-view {
+  background-color: variables.$white;
+  padding: 2rem 2.5rem;
+  border-radius: 2rem;
+  width: 65vw;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -40%);
+  box-shadow: variables.$dropshadow;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  z-index: 100;
+  
+  .header {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+  button {
+    color: variables.$grey;
+    cursor: pointer;
+    font-size: 1.7rem;
+    justify-self: flex-end;
+  }
+  h2 {
+    font-size: 1.3rem;
+    color: variables.$dark-blue;
+  }
+
+  p {
+    font-size: 1rem;
+    background-color: variables.$light-blue;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+  }
+}
+
+.announcements-left--false {
+  max-width: 100% !important;
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      margin-left: 0.5rem;
+    }
+}
