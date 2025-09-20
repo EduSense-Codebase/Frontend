@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import './AnnouncementForm.scss';
 import Button from '../Button';
-import { IAnnouncements } from '@/app/typedef';
+import { IAnnouncements, IPermissions } from '@/app/typedef';
 
 interface AnnouncementFormProps {
     onSubmit: (title: string, message: string) => void;
     announcements: IAnnouncements[];
-    create_course: boolean | undefined;
+    perms: IPermissions | undefined;
 }
 
 const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
     onSubmit,
     announcements,
-    create_course,
+    perms,
 }) => {
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<IAnnouncements | null>(null);
+    const allowed = perms?.create || perms?.edit || perms?.upload || perms?.grade
 
     const handleCancel = () => {
         setTitle('');
@@ -55,7 +56,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
             </div>
 
             {/* RIGHT SIDE */}
-            {create_course && (
+            {allowed && (
                 <div className="announcements-right">
                     {selectedAnnouncement ? (
                         // If teacher clicked an announcement, show its details
@@ -107,7 +108,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
             )}
 
             {/* STUDENT VIEW */}
-            {!create_course && recentAnnouncements.length > 0 && !selectedAnnouncement && (
+            {!allowed && recentAnnouncements.length > 0 && !selectedAnnouncement && (
                 <div
                     className="single-announcement-view"
                     onClick={() => handleViewAnnouncement(recentAnnouncements[0])}
@@ -118,7 +119,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
             )}
 
             {/* Fullscreen View for Students */}
-            {!create_course && selectedAnnouncement && (
+            {!allowed && selectedAnnouncement && (
                 <div className="announcement-modal">
                     <div className="announcement-modal-content">
                         <h2>{selectedAnnouncement.title}</h2>

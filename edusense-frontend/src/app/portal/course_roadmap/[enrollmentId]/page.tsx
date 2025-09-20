@@ -37,6 +37,11 @@ export default function HomePage() {
     const join_course = permissions?.join_course;
     const create_course = permissions?.create_course;
 
+    const edit = permissions?.edit
+    // const upload = permissions?.upload
+    // const create = permissions?.create
+    // const grade= permissions?.create
+
     const [courseDetails, setCourseDetails] = useState<ICourse>();
     const [announcements, setAnnouncements] = useState<IAnnouncements[]>([]);
     const [assignments, setAssignments] = useState<IAssignments[]>([]);
@@ -145,7 +150,7 @@ export default function HomePage() {
             ) : (
                 <div className="view-course-page">
                     <div className="course-edit-btn">
-                        {create_course && (
+                        {edit && (
                             <Button
                                 displayName="Edit Page"
                                 onClick={enterEditMode}
@@ -155,8 +160,7 @@ export default function HomePage() {
                         )}
                     </div>
                     <CourseHomePageUIController
-                        joinCourse={join_course}
-                        createCourse={create_course}
+                        permissions_all = {permissions}
                         courseDetails={courseDetails}
                         announcements={announcements}
                         assignments={assignments}

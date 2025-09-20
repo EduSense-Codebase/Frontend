@@ -10,6 +10,7 @@ import {
     ICourse,
     IFile,
     IModules,
+    IPermissions,
     IStudentData,
 } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
@@ -17,8 +18,9 @@ import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
 interface Props {
-    joinCourse?: boolean | undefined;
-    createCourse?: boolean | undefined;
+    permissions_all?: IPermissions
+    // joinCourse?: boolean | undefined;
+    // createCourse?: boolean | undefined;
     courseDetails?: ICourse | undefined;
     announcements: IAnnouncements[];
     assignments: IAssignments[];
@@ -37,8 +39,9 @@ interface Props {
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({
-    joinCourse,
-    createCourse,
+    permissions_all,
+    // joinCourse,
+    // createCourse,
     courseDetails,
     announcements,
     assignments,
@@ -56,8 +59,15 @@ const CourseHomePageUIController: React.FC<Props> = ({
     classModule,
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
+    const join_course = permissions_all?.join_course;
+    const create_course = permissions_all?.create_course;
 
-    const gradesData = createCourse ? students : assignments;
+    const edit = permissions_all?.edit
+    const upload = permissions_all?.upload
+    const create = permissions_all?.create
+    const grade= permissions_all?.create
+
+    const gradesData = create_course ? students : assignments;
 
     const onTabChange = (name: string) => {
         setActiveTab(name);
@@ -89,7 +99,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                 {activeTab === 'Overview' && (
                     <div className="overview-content">
                         <div className="left-overview">
-                            {createCourse && <CourseCodeCard code={courseDetails?.join_code} />}
+                            {create_course && <CourseCodeCard code={courseDetails?.join_code} />}
 
                             {/* Widgets Section */}
                             <div className="widgets-section">
@@ -126,7 +136,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             <AnnouncementForm
                                 onSubmit={onPostAnnouncement}
                                 announcements={announcements}
-                                create_course={createCourse}
+                                perms={permissions_all}
                             />
                         </div>
                     </div>
@@ -138,7 +148,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             assignments={assignments}
                             modules={allModules.filter((item) => item.title !== 'no_module')}
                             setNewModules={setModules}
-                            join_course={joinCourse}
+                            join_course={join_course}
                             files={files}
                             setFiles={setFiles}
                         />
@@ -147,7 +157,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Grades' && (
                     <div>
-                        <GradesTab grades={gradesData} create_course={createCourse} />
+                        <GradesTab grades={gradesData} perms={permissions_all} />
                     </div>
                 )}
             </div>

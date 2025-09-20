@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
 import './GradesTab.scss';
-import { IAssignments, IStudentData } from '@/app/typedef';
+import { IAssignments, IPermissions, IStudentData } from '@/app/typedef';
 
 interface GradesProps {
     grades: IStudentData[] | IAssignments[];
-    create_course: boolean | undefined;
+    perms: IPermissions | undefined
 }
 
 function getLetterGrade(score: number): string {
@@ -16,8 +16,9 @@ function getLetterGrade(score: number): string {
     return 'F';
 }
 
-export default function GradesTab({ grades, create_course }: GradesProps) {
-    const emptyMessage = create_course
+export default function GradesTab({ grades, perms}: GradesProps) {
+    const non_student =  perms?.create || perms?.edit || perms?.upload || perms?.grade
+    const emptyMessage = non_student
         ? 'No students enrolled in course yet'
         : 'No assignments graded yet';
     return (
@@ -30,7 +31,7 @@ export default function GradesTab({ grades, create_course }: GradesProps) {
                 {grades.length === 0 ? (
                     <p className="empty-array">{emptyMessage}</p>
                 ) : (
-                    (create_course
+                    (non_student
                         ? grades // Teacher view → show all student data
                         : grades.filter(
                               (item: IAssignments) =>
@@ -42,7 +43,7 @@ export default function GradesTab({ grades, create_course }: GradesProps) {
                                 <span className="gradeLabel">📋 {item.name}</span>
 
                                 <span className="gradeValue">
-                                    {create_course
+                                    {non_student
                                         ? item.overall_grade >= 0
                                             ? `${item.overall_grade}% (${getLetterGrade(item.overall_grade)})`
                                             : 'N/A'

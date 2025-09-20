@@ -145,8 +145,9 @@ export default function CourseSection() {
                                 className="course-tile"
                                 id="enroll-course-tile"
                             >
-                                <img src="/plus_icon.png" className="plus-icon" alt="" />
-                                <h3 className="course-tile-name">{new_tile}</h3>
+                                { (join_course || create_course) &&
+                                    <><img src="/plus_icon.png" className="plus-icon" alt="" /><h3 className="course-tile-name">{new_tile}</h3></>
+                                }
                             </motion.div>
                         </button>
                     </div>
