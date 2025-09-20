@@ -252,9 +252,8 @@ export default function ClassworkTab({
                                     >
                                         📝 {assignment.name}
                                     </Link>
-
-                                    {perms?.create_course && (
-                                        <div className="flex gap-2">
+                                    <div className="flex gap-2">
+                                        {perms?.create && (
                                             <Button
                                                 displayName="Edit"
                                                 variant="primary"
@@ -264,8 +263,10 @@ export default function ClassworkTab({
                                                     )
                                                 }
                                             />
-                                            {assignment.assignment_data['type'] ==
-                                                'quiz_or_assignment' && (
+                                        )}
+                                        {assignment.assignment_data['type'] ===
+                                            'quiz_or_assignment' &&
+                                            perms?.grade && (
                                                 <Button
                                                     displayName="Grade"
                                                     variant="secondary"
@@ -276,8 +277,7 @@ export default function ClassworkTab({
                                                     }
                                                 />
                                             )}
-                                        </div>
-                                    )}
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -299,7 +299,7 @@ export default function ClassworkTab({
                                 >
                                     📝 {assignment.name}
                                 </Link>
-                                {perms?.create_course && (
+                                {perms?.create && (
                                     <div className="flex gap-2">
                                         <Button
                                             displayName="Edit"
@@ -310,21 +310,21 @@ export default function ClassworkTab({
                                                 )
                                             }
                                         />
-                                        {assignment.assignment_data['type'] ==
-                                            'quiz_or_assignment' &&
-                                            perms?.grade && (
-                                                <Button
-                                                    displayName="Grade"
-                                                    variant="secondary"
-                                                    onClick={() =>
-                                                        router.push(
-                                                            `/portal/grades/${enrollmentId}/${assignment.builder}`,
-                                                        )
-                                                    }
-                                                />
-                                            )}
                                     </div>
                                 )}
+
+                                {assignment.assignment_data['type'] == 'quiz_or_assignment' &&
+                                    perms?.grade && (
+                                        <Button
+                                            displayName="Grade"
+                                            variant="secondary"
+                                            onClick={() =>
+                                                router.push(
+                                                    `/portal/grades/${enrollmentId}/${assignment.builder}`,
+                                                )
+                                            }
+                                        />
+                                    )}
                             </li>
                         ))}
                     </ul>
