@@ -20,6 +20,7 @@ export default function GradesTab({ grades, create_course }: GradesProps) {
     const emptyMessage = create_course
         ? 'No students enrolled in course yet'
         : 'No assignments graded yet';
+    console.log('students', grades);
     return (
         <div className="grades">
             <div className="header">

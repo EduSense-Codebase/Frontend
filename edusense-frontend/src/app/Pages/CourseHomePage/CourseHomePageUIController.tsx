@@ -16,6 +16,7 @@ import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
+import SettingsTab from '@/app/ui_components/SettingsTab/SettingsTab';
 interface Props {
     joinCourse?: boolean | undefined;
     createCourse?: boolean | undefined;
@@ -81,7 +82,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
             <div className="course-content">
                 <Tabs
-                    tabs={['Overview', 'Classwork', 'Grades']}
+                    tabs={['Overview', 'Classwork', 'Grades', 'Settings']}
                     activeTab={activeTab}
                     onTabChange={onTabChange}
                 />
@@ -150,6 +151,8 @@ const CourseHomePageUIController: React.FC<Props> = ({
                         <GradesTab grades={gradesData} create_course={createCourse} />
                     </div>
                 )}
+
+                {activeTab === 'Settings' && <SettingsTab />}
             </div>
         </div>
     );

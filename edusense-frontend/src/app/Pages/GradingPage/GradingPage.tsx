@@ -39,7 +39,7 @@ const GradingPage: React.FC<GradingPageProps> = ({
             <h1>{title}</h1>
             <div className="submissions-container">
                 <div className="submissions-header">
-                    <h3 className='submission-name'>Name</h3>
+                    <h3 className="submission-name">Name</h3>
                     <h3>ID</h3>
                     <h3>Status</h3>
                     <h3>Points</h3>

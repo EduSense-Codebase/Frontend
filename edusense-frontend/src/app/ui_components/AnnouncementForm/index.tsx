@@ -58,9 +58,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
             {create_course && (
                 <div className="announcements-right">
                     <div className="announcement-inputs">
-                        <label className="announcement-label">
-                            Create an announcement...
-                        </label>
+                        <label className="announcement-label">Create an announcement...</label>
                         <input
                             type="text"
                             className="announcement-title"
@@ -76,11 +74,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
                         />
                     </div>
                     <div className="announcement-actions">
-                        <Button
-                            displayName="Cancel"
-                            variant="secondary"
-                            onClick={handleCancel}
-                        />
+                        <Button displayName="Cancel" variant="secondary" onClick={handleCancel} />
                         <Button
                             displayName="Post"
                             variant="primary"
@@ -96,18 +90,13 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
                 <div className="announcement-detail-view">
                     <div className="header">
                         <h2>{selectedAnnouncement.title}</h2>
-                        <button onClick={handleBackToForm}>
-                            X
-                        </button>
+                        <button onClick={handleBackToForm}>X</button>
                     </div>
                     <p>{selectedAnnouncement.content}</p>
-                    
                 </div>
             )}
 
             {/* STUDENT VIEW */}
-            
-
         </div>
     );
 };
