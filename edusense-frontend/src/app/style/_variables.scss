@@ -1,3 +1,5 @@
+$theme: 'college'; // default, college
+
 $white: #ffffff;
 $light-blue: #eff6ff;
 $lighter-blue: #f7fbfe;
@@ -10,3 +12,35 @@ $dark-grey: #232A36;
 $dropshadow: 0 4px 6px rgba(75, 118, 179, 0.25);
 $font-jua: 'Jua', sans-serif;
 $font-itim: 'Itim', sans-serif;
+
+// College Theme
+@if $theme == 'college' {
+    $white: #ffffff;
+    $light-blue: #F9F9F9;
+    $lighter-blue: #ffffff;
+    $blue: #979ca1;
+    $dark-blue: #525960;
+    $darker-blue: #32373c;
+    $light-grey: #e9ecee;
+    $grey: #828e9b;
+    $dark-grey: #232A36;
+    $dropshadow: 0 4px 6px rgba(161, 161, 161, 0.25);
+    $font-jua: 'Alatsi', sans-serif;
+    $font-itim: 'Carrois', sans-serif;
+}
+
+// Default Theme
+@else {
+    $white: #ffffff;
+    $light-blue: #eff6ff;
+    $lighter-blue: #f7fbfe;
+    $blue: #6b92d0;
+    $dark-blue: #4b76b3;
+    $darker-blue: #3b5a8c;
+    $light-grey: #e9ecee;
+    $grey: #828e9b;
+    $dark-grey: #232A36;
+    $dropshadow: 0 4px 6px rgba(75, 118, 179, 0.25);
+    $font-jua: 'Jua', sans-serif;
+    $font-itim: 'Itim', sans-serif;
+}
