@@ -5,8 +5,8 @@ import { API_PREFIX, COURSE_ENDPOINT } from '../../global';
 import { ICourse, IEnrollOrCreateCourseResponse } from '../../typedef';
 import { httpPost } from '../../utils';
 import * as motion from 'motion/react-client';
-//import '../../theme.css';
-import '../../style/index.scss';
+import './courses.scss';
+//import '../../style/index.scss';
 import { useCustomProp } from '@/app/typedef';
 import Button from '@/app/ui_components/Button';
 
@@ -126,7 +126,7 @@ export default function CourseSection() {
 
     return (
         <>
-            <div className="theme-vars theme">
+            <div className="dashboard">
                 <h1 className="heading">Dashboard</h1>
                 <div className="container">
                     <h3 className="subheading">My Courses</h3>
@@ -146,7 +146,7 @@ export default function CourseSection() {
                                 id="enroll-course-tile"
                             >
                                 <img src="/plus_icon.png" className="plus-icon" alt="" />
-                                <h3 className="course-tile-name">{new_tile}</h3>
+                                <h3 className="new-tile-name">{new_tile}</h3>
                             </motion.div>
                         </button>
                     </div>

@@ -1,0 +1,133 @@
+@use '../../style/variables' as variables;
+
+.dashboard {
+    background-color: variables.$white;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: variables.$font-jua;
+    color: variables.$dark-blue;
+}
+
+.heading {
+    width: 100%;
+    font-size: 4rem;
+    color: variables.$dark-blue;
+    text-align: center;
+    padding: 0.5rem 0;
+    background-color: variables.$light-blue;
+    margin: 0;
+    box-shadow: variables.$dropshadow;
+}
+
+.subheading {
+    font-size: 2rem;
+    color: variables.$dark-blue;
+    padding: 1rem 0;
+}
+
+.paragraph {
+    font-size: 1.2rem;
+    color: variables.$dark-blue;
+    padding: 0.5rem 0;
+}
+
+.container {
+    color: variables.$white;
+    padding: 2rem 4rem;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background-color: variables.$light-blue;
+    padding: 3rem;
+    gap: 2rem;
+    border-radius: 2rem;
+    box-shadow: variables.$dropshadow;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+    border-top: 1px solid #e5e7eb;
+    background-color: #ffffff;
+    padding: 1rem;
+    box-shadow: 0 -2px 4px rgba(161, 161, 161, 0.25);
+}
+
+.course-tile {
+    display: flex;
+    flex-direction: column;
+    color: variables.$white;
+    width: 13rem;
+    height: 13rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    box-shadow: variables.$dropshadow;
+    overflow: hidden;
+    font-family: variables.$font-itim;
+    cursor: pointer;
+}
+
+.course-tile-name, .new-tile-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: variables.$dark-blue;
+    font-size: 1.5rem;
+    height: 4rem;
+    width: 100%;
+    background-color: variables.$white;
+    text-align: center;
+    padding: 1rem;
+    font-family: variables.$font-itim;
+}
+
+.new-tile-name {
+    color: variables.$button-color !important;
+}
+
+.course-image {
+    height: 9rem;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 1rem 1rem 0 0;
+}
+
+#enroll-course-tile {
+    background-color: variables.$white;
+    gap: 1rem;
+}
+
+.plus-icon {
+    width: 4rem;
+    height: 4rem;
+}
+
+.button {
+    background-color: variables.$dark-blue;
+    color: variables.$white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: variables.$dropshadow;
+}
+
+.button:hover {
+    background-color: variables.$darker-blue;
+}
