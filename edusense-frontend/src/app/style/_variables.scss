@@ -12,6 +12,8 @@ $dark-grey: #232A36;
 $dropshadow: 0 4px 6px rgba(75, 118, 179, 0.25);
 $font-jua: 'Jua', sans-serif;
 $font-itim: 'Itim', sans-serif;
+$button-color: #4b76b3;
+$button-hover: #3b5a8c;
 
 // College Theme
 @if $theme == 'college' {
@@ -20,7 +22,7 @@ $font-itim: 'Itim', sans-serif;
     $lighter-blue: #ffffff;
     $blue: #979ca1;
     $dark-blue: #525960;
-    $darker-blue: #32373c;
+    $darker-blue: #252628;
     $light-grey: #e9ecee;
     $grey: #828e9b;
     $dark-grey: #232A36;

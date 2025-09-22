@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    background-color: variables.$dark-blue !important;
+    background-color: variables.$button-color !important;
     font-family: variables.$font-jua !important;
     color: variables.$white !important;
     padding: 0.5rem 1.25rem;
@@ -17,7 +17,7 @@
 }
 
 .button:hover {
-    background-color: variables.$darker-blue !important;
+    background-color: variables.$button-hover !important;
 }
 
 .button-icon {
@@ -27,11 +27,11 @@
 
 .button {
     &--primary {
-        background-color: variables.$dark-blue !important;
+        background-color: variables.$button-color !important;
         color: variables.$white !important;
 
         &:hover {
-            background-color: variables.$darker-blue !important;
+            background-color: variables.$button-hover !important;
         }
     }
 
@@ -54,7 +54,7 @@
     }
 
     &--icon {
-        background-color: variables.$dark-blue;
+        background-color: variables.$button-color;
         color: variables.$dark-blue !important;
         padding: 0.5rem !important;
         border: none !important;
@@ -62,7 +62,7 @@
         aspect-ratio: 1 !important;
 
         &:hover {
-            background-color: variables.$darker-blue !important;
+            background-color: variables.$button-hover !important;
         }
     }
 

@@ -146,7 +146,7 @@ export default function CourseSection() {
                                 id="enroll-course-tile"
                             >
                                 <img src="/plus_icon.png" className="plus-icon" alt="" />
-                                <h3 className="course-tile-name">{new_tile}</h3>
+                                <h3 className="new-tile-name">{new_tile}</h3>
                             </motion.div>
                         </button>
                     </div>

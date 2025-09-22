@@ -81,7 +81,7 @@
     cursor: pointer;
 }
 
-.course-tile-name {
+.course-tile-name, .new-tile-name {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,6 +93,10 @@
     text-align: center;
     padding: 1rem;
     font-family: variables.$font-itim;
+}
+
+.new-tile-name {
+    color: variables.$button-color !important;
 }
 
 .course-image {
