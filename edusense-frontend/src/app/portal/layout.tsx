@@ -52,11 +52,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             console.log(permissions?.create_course);
 
             const queryParams = {
-                section: res.data.data.join_course
-                    ? 'all_enrolled_courses'
-                    : res.data.data.create_course
-                      ? 'all_created_courses'
-                      : 'null',
+                section: res.data.data.create_course
+                    ? 'all_created_courses'
+                    : 'all_enrolled_courses',
             };
 
             const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
