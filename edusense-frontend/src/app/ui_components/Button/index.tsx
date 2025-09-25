@@ -9,9 +9,10 @@ export interface IButtonProps {
     onClick?: () => void;
     variant?: 'primary' | 'secondary' | 'danger' | 'icon' | 'icon-secondary';
     icon?: string;
+    id?: string;
 }
 
-const Button: React.FC<IButtonProps> = ({ displayName, onClick, variant = 'primary', icon }) => {
+const Button: React.FC<IButtonProps> = ({ displayName, onClick, variant = 'primary', icon, id }) => {
     return (
         <>
             <button
@@ -20,6 +21,7 @@ const Button: React.FC<IButtonProps> = ({ displayName, onClick, variant = 'prima
                     e.preventDefault();
                     onClick?.();
                 }}
+                data-testid={id}
             >
                 {icon && <img src={icon} alt={`${displayName} icon`} className="button-icon" />}
                 {displayName && <p>{displayName}</p>}

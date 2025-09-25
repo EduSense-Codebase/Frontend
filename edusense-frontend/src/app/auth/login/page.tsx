@@ -14,6 +14,7 @@ export default function LoginPage() {
 
     const fields: IFormFieldBase[] = [
         {
+            id: 'login-email',
             type: 'email',
             placeholder: 'Enter your email',
             value: email,
@@ -22,6 +23,7 @@ export default function LoginPage() {
             className: 'login-input',
         },
         {
+            id: 'login-password',
             type: 'password',
             placeholder: 'Enter your password',
             value: password,
@@ -73,6 +75,7 @@ export default function LoginPage() {
                 fields={fields}
                 callbackFunc={handleFieldChange}
                 submitCallback={handleLogin}
+                submitId="login-login-btn"
                 submitDisplayName="Login"
             />
 
