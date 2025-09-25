@@ -4,6 +4,7 @@ import Input from './Input';
 import Button from './Button';
 
 export interface IFormFieldBase {
+    id: string,
     type: 'text' | 'email' | 'password';
     value: string;
     callbackID: string;
@@ -22,6 +23,7 @@ export interface IFormProps {
     fields: IFormFieldBase[];
     callbackFunc: (callbackID: string, value: string) => void;
     submitCallback: () => void;
+    submitId: string,
     submitDisplayName: string;
     extraComponents?: React.ReactElement;
 }
@@ -31,6 +33,7 @@ const Form: React.FC<IFormProps> = ({
     fields,
     callbackFunc,
     submitCallback,
+    submitId,
     submitDisplayName,
     extraComponents,
 }) => {
@@ -56,6 +59,7 @@ const Form: React.FC<IFormProps> = ({
                 <React.Fragment key={index}>
                     <label className="mb-1 text-sm font-medium text-gray-700">{field.label}</label>
                     <Input
+                        id={field.id}
                         type={field.type}
                         placeholder={field.placeholder}
                         value={field.value}
@@ -68,7 +72,7 @@ const Form: React.FC<IFormProps> = ({
                 </React.Fragment>
             ))}
 
-            <Button displayName={submitDisplayName} onClick={submitCallback} variant="primary" />
+            <Button displayName={submitDisplayName} onClick={submitCallback} variant="primary" id={submitId} />
             {extraComponents}
         </form>
     );

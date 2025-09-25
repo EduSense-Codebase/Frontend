@@ -2,6 +2,7 @@
 import React from 'react';
 
 interface InputProps {
+    id: string,
     type: 'text' | 'email' | 'password';
     value: string;
     placeholder?: string;
@@ -11,6 +12,7 @@ interface InputProps {
 }
 
 const Input: React.FC<InputProps> = ({
+    id,
     type,
     value,
     placeholder,
@@ -26,6 +28,7 @@ const Input: React.FC<InputProps> = ({
             disabled={disabled}
             onChange={(e) => onChange(e.target.value)}
             className={className}
+            data-testid={id}
         />
     );
 };

@@ -127,7 +127,7 @@ export default function CourseSection() {
     return (
         <>
             <div className="theme-vars theme">
-                <h1 className="heading">Dashboard</h1>
+                <h1 className="heading" data-testid="dashboard-dashboard-title">Dashboard</h1>
                 <div className="container">
                     <h3 className="subheading">My Courses</h3>
                     <div className="cards-container">
