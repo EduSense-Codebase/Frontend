@@ -1,0 +1,262 @@
+@use '../../style/_variables.scss' as *;
+
+.settings-tab {
+  background: $lighter-blue;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: $dropshadow;
+  font-family: $font-itim;
+  color: $dark-grey;
+
+  .header {
+    margin-bottom: 1.2rem;
+    h2 {
+      font-family: $font-jua;
+      font-size: 1.8rem;
+      color: $darker-blue;
+      margin: 0 0 0.25rem 0;
+    }
+    .subtitle {
+      color: $grey;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+  }
+
+  .settings-grid {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .panel {
+    background: $white;
+    border-radius: 10px;
+    padding: 1rem;
+    flex: 1 1 420px;
+    min-width: 320px;
+    box-shadow: $dropshadow;
+
+    h3 {
+      margin: 0 0 0.75rem 0;
+      color: $blue;
+      font-size: 1.15rem;
+    }
+  }
+
+  /* Categories */
+  .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+
+    .category-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem;
+      border-radius: 8px;
+      background: $lighter-blue;
+      border: 1px solid $light-grey;
+    }
+
+    .cat-name {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      outline: none;
+      font-size: 0.98rem;
+      color: $dark-grey;
+    }
+
+    .weight-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Fix: right-align weight inputs */
+    .weight-input {
+      width: 72px;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid $light-grey;
+      text-align: right;   /* <--- important fix */
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: $white;
+    }
+
+    .percent {
+      color: $grey;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .remove-btn {
+      border: none;
+      background: transparent;
+      color: $grey;
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 0.2rem 0.4rem;
+    }
+  }
+
+  .add-row {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    margin-top: 0.6rem;
+
+    .add-name {
+      flex: 1;
+      padding: 0.5rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid $light-grey;
+      outline: none;
+    }
+
+    .add-weight {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+  }
+
+  .total-row {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    color: $grey;
+
+    .weight-warning {
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 600;
+      &.over {
+        color: #a12727;
+      }
+      &.under {
+        color: $darker-blue;
+      }
+    }
+  }
+
+  /* TA list */
+  .ta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 0.8rem;
+
+    .ta-card {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.65rem;
+      border-radius: 8px;
+      background: $lighter-blue;
+      border: 1px solid $light-grey;
+    }
+
+    .ta-left {
+      min-width: 140px;
+      .ta-name {
+        font-weight: 700;
+        color: $dark-blue;
+      }
+      .ta-email {
+        font-size: 0.9rem;
+        color: $grey;
+      }
+    }
+
+    .ta-perms {
+      display: flex;
+      gap: 0.6rem;
+      flex: 1;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ta-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .perm-label {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+      font-size: 0.95rem;
+      color: $dark-grey;
+
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: $blue; /* modern browsers */
+      }
+
+      &.small {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .add-ta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    .add-name,
+    .add-email {
+      padding: 0.5rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid $light-grey;
+      outline: none;
+    }
+
+    .new-ta-perms {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  /* Buttons */
+  .btn {
+    background: $blue;
+    color: $white;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: $darker-blue;
+    border: 1px solid transparent;
+  }
+
+  /* small helpers */
+  input:focus {
+    box-shadow: 0 0 0 3px rgba(107,146,208,0.12);
+    border-color: $dark-blue;
+  }
+
+  @media (max-width: 880px) {
+    .settings-grid {
+      flex-direction: column;
+    }
+  }
+}
+

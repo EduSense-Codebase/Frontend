@@ -96,30 +96,36 @@ const Text: React.FC<TextProps> = ({ content, allowEdit, onSave: passedOnSave })
                                             priority: 0,
                                             Editor: (props) => {
                                                 const cb = useCodeBlockEditorContext();
-                                                
+
                                                 return (
-                                                    <div 
-                                                        onKeyDown={(e) => e.nativeEvent.stopImmediatePropagation()}
+                                                    <div
+                                                        onKeyDown={(e) =>
+                                                            e.nativeEvent.stopImmediatePropagation()
+                                                        }
                                                         className="code-block"
                                                     >
                                                         <input
                                                             type="text"
                                                             value={props.language || ''}
-                                                            onChange={(e) => cb.setLanguage(e.target.value)}
+                                                            onChange={(e) =>
+                                                                cb.setLanguage(e.target.value)
+                                                            }
                                                             placeholder="Language (optional)"
                                                             className="code-language-input"
                                                         />
                                                         <textarea
                                                             value={props.code || ''}
-                                                            onChange={(e) => cb.setCode(e.target.value)}
+                                                            onChange={(e) =>
+                                                                cb.setCode(e.target.value)
+                                                            }
                                                             placeholder="Enter your code here..."
                                                             className="code-textarea"
                                                         />
                                                     </div>
                                                 );
-                                            }
-                                        }
-                                    ]
+                                            },
+                                        },
+                                    ],
                                 }),
 
                                 toolbarPlugin({
@@ -156,30 +162,25 @@ const Text: React.FC<TextProps> = ({ content, allowEdit, onSave: passedOnSave })
                         </div>
                     )}
                     <div className="text">
-                        <ReactMarkdown 
+                        <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
                             components={{
                                 code: ({ node, className, children, ...props }) => {
-                                    const isCodeBlock = String(children).includes('\n') || className;
-                                    
+                                    const isCodeBlock =
+                                        String(children).includes('\n') || className;
+
                                     return isCodeBlock ? (
                                         <pre>
-                                            <code 
-                                                className={className} 
-                                                {...props}
-                                            >
+                                            <code className={className} {...props}>
                                                 {children}
                                             </code>
                                         </pre>
                                     ) : (
-                                        <code 
-                                            className={className} 
-                                            {...props}
-                                        >
+                                        <code className={className} {...props}>
                                             {children}
                                         </code>
                                     );
-                                }
+                                },
                             }}
                         >
                             {savedContent}

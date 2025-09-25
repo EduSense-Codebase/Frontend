@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import './AnnouncementForm.scss';
 import Button from '../Button';
-import { IAnnouncements } from '@/app/typedef';
+import { IAnnouncements, IPermissions } from '@/app/typedef';
 
 interface AnnouncementFormProps {
     onSubmit: (title: string, message: string) => void;
     announcements: IAnnouncements[];
-    create_course: boolean | undefined;
+    perms: IPermissions | undefined;
 }
 
-const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
-    onSubmit,
-    announcements,
-    create_course,
-}) => {
+const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcements, perms }) => {
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<IAnnouncements | null>(null);
+    const allowed = perms?.create || perms?.edit || perms?.upload || perms?.grade;
 
     const handleCancel = () => {
         setTitle('');
@@ -55,12 +52,10 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
             </div>
 
             {/* RIGHT SIDE */}
-            {create_course && (
+            {allowed && (
                 <div className="announcements-right">
                     <div className="announcement-inputs">
-                        <label className="announcement-label">
-                            Create an announcement...
-                        </label>
+                        <label className="announcement-label">Create an announcement...</label>
                         <input
                             type="text"
                             className="announcement-title"
@@ -76,11 +71,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
                         />
                     </div>
                     <div className="announcement-actions">
-                        <Button
-                            displayName="Cancel"
-                            variant="secondary"
-                            onClick={handleCancel}
-                        />
+                        <Button displayName="Cancel" variant="secondary" onClick={handleCancel} />
                         <Button
                             displayName="Post"
                             variant="primary"
@@ -96,18 +87,13 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
                 <div className="announcement-detail-view">
                     <div className="header">
                         <h2>{selectedAnnouncement.title}</h2>
-                        <button onClick={handleBackToForm}>
-                            X
-                        </button>
+                        <button onClick={handleBackToForm}>X</button>
                     </div>
                     <p>{selectedAnnouncement.content}</p>
-                    
                 </div>
             )}
 
             {/* STUDENT VIEW */}
-            
-
         </div>
     );
 };

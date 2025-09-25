@@ -30,8 +30,10 @@ export interface IFile {
 export interface IPermissions {
     join_course: boolean;
     create_course: boolean;
-    edit_course: boolean;
-    quick_actions: boolean;
+    edit: boolean;
+    upload: boolean;
+    create: boolean;
+    grade: boolean;
 }
 
 export interface ICourse {

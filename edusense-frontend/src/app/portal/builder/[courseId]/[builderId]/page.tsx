@@ -747,7 +747,7 @@ export default function BuilderPage() {
                 <Text
                     content={textContent}
                     onSave={onTextChange}
-                    allowEdit={permissions?.create_course || false}
+                    allowEdit={permissions?.create || false}
                 />
             );
         }
@@ -893,7 +893,7 @@ export default function BuilderPage() {
 
     return (
         <div className="builder-page">
-            {permissions?.create_course && mode == 'edit' && (
+            {permissions?.create && mode == 'edit' && (
                 <div className="action-btns">
                     {!isAssignmentCreated && (
                         <div className="action-btn">
