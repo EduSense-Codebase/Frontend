@@ -33,7 +33,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
     return (
         <div className="announcements">
             {/* LEFT SIDE - Recent Announcements List */}
-            <div className={`announcements-left announcements-left--${create_course}`}>
+            <div className={`announcements-left announcements-left--${perms?.create_course}`}>
                 <h3>Recent Announcements</h3>
                 {recentAnnouncements.length === 0 ? (
                     <p className="no-announcements">No announcements yet.</p>
