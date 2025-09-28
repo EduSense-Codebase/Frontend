@@ -12,7 +12,13 @@ export interface IButtonProps {
     id?: string;
 }
 
-const Button: React.FC<IButtonProps> = ({ displayName, onClick, variant = 'primary', icon, id }) => {
+const Button: React.FC<IButtonProps> = ({
+    displayName,
+    onClick,
+    variant = 'primary',
+    icon,
+    id,
+}) => {
     return (
         <>
             <button

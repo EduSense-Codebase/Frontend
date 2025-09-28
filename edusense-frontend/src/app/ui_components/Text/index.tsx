@@ -165,6 +165,7 @@ const Text: React.FC<TextProps> = ({ content, allowEdit, onSave: passedOnSave })
                         <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
                             components={{
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                 code: ({ node, className, children, ...props }) => {
                                     const isCodeBlock =
                                         String(children).includes('\n') || className;

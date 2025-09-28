@@ -2,7 +2,7 @@
 import React from 'react';
 
 interface InputProps {
-    id: string,
+    id: string;
     type: 'text' | 'email' | 'password';
     value: string;
     placeholder?: string;

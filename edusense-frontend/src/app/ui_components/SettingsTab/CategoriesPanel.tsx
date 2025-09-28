@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { httpPost, httpGet } from '@/app/utils';
 import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
+import Button from '../Button';
 
 interface Category {
     name: string;
@@ -28,7 +29,7 @@ const CategoriesPanel: React.FC = () => {
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParams = { section: 'get_categories', course_id: enrollmentId };
         httpGet<CourseResponse>(url, queryParams).then((res) => {
-            console.log("categories", res.data);
+            console.log('categories', res.data);
             if (res.data) {
                 const catArray = Object.entries(res.data.data).map(([name, weight]) => ({
                     name,
@@ -149,9 +150,7 @@ const CategoriesPanel: React.FC = () => {
                     />
                     <span className="percent">%</span>
                 </div>
-                <button className="btn" onClick={addCategory}>
-                    + Add Category
-                </button>
+                <Button displayName="+ Add Category" variant="primary" onClick={addCategory} />
             </div>
 
             <div className="total-row">
@@ -168,9 +167,7 @@ const CategoriesPanel: React.FC = () => {
             </div>
 
             <div className="actions">
-                <button className="btn save-btn" onClick={saveCategories}>
-                    Save Categories
-                </button>
+                <Button displayName="Save Categories" variant="primary" onClick={saveCategories} />
             </div>
         </div>
     );
