@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import './AnnouncementForm.scss';
 import Button from '../Button';
-import { IAnnouncements, IPermissions } from '@/app/typedef';
+import { IAnnouncements, ICoursePermissions, IPermissions } from '@/app/typedef';
 
 interface AnnouncementFormProps {
     onSubmit: (title: string, message: string) => void;
     announcements: IAnnouncements[];
-    perms: IPermissions | undefined;
+    perms: ICoursePermissions | undefined;
 }
 
 const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcements, perms }) => {
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<IAnnouncements | null>(null);
-    const allowed = perms?.create || perms?.edit || perms?.upload || perms?.grade;
+    const allowed = perms?.create_annoucements;
 
     const handleCancel = () => {
         setTitle('');
@@ -33,7 +33,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
     return (
         <div className="announcements">
             {/* LEFT SIDE - Recent Announcements List */}
-            <div className={`announcements-left announcements-left--${perms?.create_course}`}>
+            <div className={`announcements-left announcements-left--${perms?.create_annoucements}`}>
                 <h3>Recent Announcements</h3>
                 {recentAnnouncements.length === 0 ? (
                     <p className="no-announcements">No announcements yet.</p>

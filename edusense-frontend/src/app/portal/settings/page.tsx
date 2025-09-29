@@ -84,6 +84,7 @@ export default function Settings() {
                 <h3 className="text-lg font-semibold">Change Email</h3>
                 <div className="flex items-center space-x-2">
                     <Input
+                        id="settings-email"
                         type="email"
                         value={newEmail}
                         placeholder="Enter new email"
@@ -106,6 +107,7 @@ export default function Settings() {
                 <h3 className="text-lg font-semibold">Change Password</h3>
                 <div className="flex items-center space-x-2">
                     <Input
+                        id="settings-password"
                         type="password"
                         value={newPassword}
                         placeholder="Enter new password"

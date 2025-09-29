@@ -188,7 +188,7 @@ export default function BuilderPage() {
 
     const router = useRouter();
 
-    const { permissions, setCurrCourseId, setCurrBuilderId } = useCustomProp();
+    const { permissions, setCurrCourseId, coursePermissions, setCurrBuilderId } = useCustomProp();
 
     const [mode, setMode] = useState<Mode | undefined>(undefined);
 
@@ -578,6 +578,7 @@ export default function BuilderPage() {
                 section: 'create_submission_file',
             };
             const formData = {
+                course_id: courseId,
                 builder_id: builderId,
                 file: value,
             };
@@ -619,6 +620,7 @@ export default function BuilderPage() {
                 section: 'delete_submission_file',
             };
             const formData = {
+                course_id: courseId,
                 builder_id: builderId,
                 file_id: quizSubmission[questionIndex].long_value.file_id,
             };
@@ -747,7 +749,7 @@ export default function BuilderPage() {
                 <Text
                     content={textContent}
                     onSave={onTextChange}
-                    allowEdit={permissions?.create || false}
+                    allowEdit={coursePermissions?.create_assignments || false}
                 />
             );
         }
@@ -893,7 +895,7 @@ export default function BuilderPage() {
 
     return (
         <div className="builder-page">
-            {permissions?.create && mode == 'edit' && (
+            {coursePermissions?.create_assignments && mode == 'edit' && (
                 <div className="action-btns">
                     {!isAssignmentCreated && (
                         <div className="action-btn">

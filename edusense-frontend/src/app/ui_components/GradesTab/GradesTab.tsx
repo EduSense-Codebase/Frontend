@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
 import './GradesTab.scss';
-import { IAssignments, IPermissions, IStudentData } from '@/app/typedef';
+import { IAssignments, ICoursePermissions, IPermissions, IStudentData } from '@/app/typedef';
 
 interface GradesProps {
     grades: IStudentData[] | IAssignments[];
-    perms: IPermissions | undefined;
+    perms: ICoursePermissions | undefined;
 }
 
 function getLetterGrade(score: number): string {
@@ -17,7 +17,7 @@ function getLetterGrade(score: number): string {
 }
 
 export default function GradesTab({ grades, perms }: GradesProps) {
-    const non_student = perms?.create || perms?.edit || perms?.upload || perms?.grade;
+    const non_student = perms?.view_all_students;
     const emptyMessage = non_student
         ? 'No students enrolled in course yet'
         : 'No assignments graded yet';

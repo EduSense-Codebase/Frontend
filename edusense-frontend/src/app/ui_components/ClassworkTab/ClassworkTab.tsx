@@ -8,6 +8,7 @@ import {
     IFile,
     IOneFileResponse,
     IPermissions,
+    ICoursePermissions,
 } from '@/app/typedef';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -17,7 +18,7 @@ import Button from '../Button';
 import { useRouter } from 'next/navigation';
 
 interface ClassworkProps {
-    perms: IPermissions | undefined;
+    perms: ICoursePermissions | undefined;
     modules: IModules[];
     assignments: IAssignments[];
 
@@ -43,6 +44,9 @@ export default function ClassworkTab({
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false);
     const { enrollmentId } = useParams();
+
+    console.log(perms?.create_assignments);
+    console.log(perms?.create_content_file);
 
     const toggleModule = (id: number) => {
         setExpandedModules((prev) =>
@@ -89,7 +93,7 @@ export default function ClassworkTab({
 
     const renderCreateDropdown = () => (
         <div className="createDropdown">
-            {perms?.create && (
+            {perms?.create_assignments && (
                 <>
                     <button
                         className="dropdownItem"
@@ -109,7 +113,7 @@ export default function ClassworkTab({
                 </>
             )}
 
-            {perms?.upload && (
+            {perms?.create_content_file && (
                 <button className="dropdownItem" onClick={() => handleCreateSelect('file')}>
                     📄 File
                 </button>
@@ -213,12 +217,14 @@ export default function ClassworkTab({
         </div>
     );
 
+    const showAddBtn = (perms?.create_assignments || perms?.create_content_file);
+
     return (
         <div className="classwork">
             <div className="header">
                 <h2>Classwork</h2>
                 <div className="createContainer">
-                    {!perms?.join_course && (
+                    { showAddBtn && (
                         <Button
                             displayName="＋ Create"
                             variant="primary"
@@ -253,7 +259,7 @@ export default function ClassworkTab({
                                         📝 {assignment.name}
                                     </Link>
                                     <div className="flex gap-2">
-                                        {perms?.create && (
+                                        {perms?.create_assignments && (
                                             <Button
                                                 displayName="Edit"
                                                 variant="primary"
@@ -266,7 +272,7 @@ export default function ClassworkTab({
                                         )}
                                         {assignment.assignment_data['type'] ===
                                             'quiz_or_assignment' &&
-                                            perms?.grade && (
+                                            perms?.grade_assignments && (
                                                 <Button
                                                     displayName="Grade"
                                                     variant="secondary"
@@ -299,7 +305,7 @@ export default function ClassworkTab({
                                 >
                                     📝 {assignment.name}
                                 </Link>
-                                {perms?.create && (
+                                {perms?.create_assignments && (
                                     <div className="flex gap-2">
                                         <Button
                                             displayName="Edit"
@@ -314,7 +320,7 @@ export default function ClassworkTab({
                                 )}
 
                                 {assignment.assignment_data['type'] == 'quiz_or_assignment' &&
-                                    perms?.grade && (
+                                    perms?.grade_assignments && (
                                         <Button
                                             displayName="Grade"
                                             variant="secondary"

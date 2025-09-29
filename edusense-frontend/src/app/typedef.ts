@@ -28,12 +28,21 @@ export interface IFile {
 }
 
 export interface IPermissions {
-    join_course: boolean;
+    enroll_course: boolean;
     create_course: boolean;
-    edit: boolean;
-    upload: boolean;
-    create: boolean;
-    grade: boolean;
+}
+
+export interface ICoursePermissions {
+    create_annoucements: boolean;
+    create_assignments: boolean;
+    publish_assignments: boolean;
+    grade_assignments: boolean;
+    aigrade_assignments: boolean;
+    submit_assignments: boolean;
+    view_all_students: boolean;
+    create_grade_categories: boolean;
+    create_content_file: boolean;
+    edit_course_homepage: boolean;
 }
 
 export interface ICourse {
@@ -135,6 +144,10 @@ export interface IPermissionsResponse {
     data: IPermissions;
 }
 
+export interface ICoursePermissionsResponse {
+    data: ICoursePermissions
+}
+
 export interface IFetchAllAISessions {
     data: IAISession[];
 }
@@ -176,6 +189,8 @@ export interface IEnrollOrCreateCourseResponse {
 export interface ICustomProps {
     permissions: IPermissions | undefined;
     setPermissions: React.Dispatch<React.SetStateAction<IPermissions | undefined>>;
+    coursePermissions: ICoursePermissions | undefined;
+    setCoursePermissions: React.Dispatch<React.SetStateAction<ICoursePermissions | undefined>>;
     institution: string;
     setInstitution: React.Dispatch<React.SetStateAction<string>>;
     courses: ICourse[];

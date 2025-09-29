@@ -5,6 +5,8 @@ import Link from 'next/link';
 import {
     CustomPropContext,
     IAllEnrolledCourseResponse,
+    ICoursePermissions,
+    ICoursePermissionsResponse,
     IPermissions,
     IPermissionsResponse,
 } from '../typedef';
@@ -27,8 +29,11 @@ interface IFetchInstitution {
 }
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
-    //   const router = useRouter();
+    const API_URL = API_PREFIX + AUTH_ENDPOINT;
+    const COURSE_API_URL = API_PREFIX + COURSE_ENDPOINT;
+
     const [permissions, setPermissions] = useState<IPermissions>();
+    const [coursePermissions, setCoursePermissions] = useState<ICoursePermissions>();
     const [institution, setInstitution] = useState<string>('');
     const [courses, setCourses] = useState<ICourse[]>([]);
 
@@ -36,47 +41,49 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     const [currBuilderId, setCurrBuilderId] = useState<number | undefined>(undefined);
 
     useEffect(() => {
-        //refreshXP();
-        //console.log(userXP);
-
-        const API_URL = API_PREFIX + AUTH_ENDPOINT;
         const queryParams = {
             section: 'permissions',
         };
 
         const requestResponse = httpGet<IPermissionsResponse>(API_URL, queryParams);
         requestResponse.then((res) => {
-            console.log('persmissions', res.data);
             setPermissions(res.data.data);
-            const courseApiUrl = API_PREFIX + COURSE_ENDPOINT;
-            console.log(permissions?.create_course);
-
-            const queryParams = {
-                section: res.data.data.create_course
-                    ? 'all_created_courses'
-                    : 'all_enrolled_courses',
-            };
-
-            const courseResponse = httpGet<IAllEnrolledCourseResponse>(courseApiUrl, queryParams);
-
-            courseResponse
-                .then((response) => {
-                    console.log(response);
-                    setCourses(response.data.data);
-                })
-                .catch((err) => {
-                    //FIXME: Add Error Handling
-                    console.log(err);
-                });
         });
 
         const queryParamsInst = { section: 'institution' };
         const requestResponseInst = httpGet<IFetchInstitution>(API_URL, queryParamsInst);
         requestResponseInst.then((res) => {
-            //console.log(res.data);
             setInstitution(res.data.data.name);
         });
+
+        const queryParamsCourse = {
+            section: 'all_enrolled_courses',
+        };
+        const courseResponse = httpGet<IAllEnrolledCourseResponse>(COURSE_API_URL, queryParamsCourse);
+        courseResponse.then((response) => {
+            setCourses(response.data.data);
+        })
+        .catch((err) => {
+            //FIXME: Add Error Handling
+        });
     }, []);
+
+    useEffect(() => {
+        if (currCourseId != undefined) {
+            console.log(currCourseId);
+            // Fetch Course Permissions
+            const queryParams = {
+                section: 'course_permissions',
+                course_id: currCourseId
+            }
+
+            const requestResponse = httpGet<ICoursePermissionsResponse>(API_URL, queryParams)
+
+            requestResponse.then((response) => {
+                setCoursePermissions(response.data.data)
+            })
+        }
+    }, [currCourseId])
 
     return (
         <div
@@ -120,6 +127,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     value={{
                         permissions,
                         setPermissions,
+                        coursePermissions,
+                        setCoursePermissions,
                         institution,
                         setInstitution,
                         courses,
