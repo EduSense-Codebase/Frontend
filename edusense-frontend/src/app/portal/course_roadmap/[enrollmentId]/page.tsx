@@ -33,12 +33,7 @@ export default function HomePage() {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
 
-    const { permissions, setCurrCourseId, setCurrBuilderId } = useCustomProp();
-
-    const edit = permissions?.edit;
-    // const upload = permissions?.upload
-    // const create = permissions?.create
-    // const grade= permissions?.create
+    const { permissions, coursePermissions, setCurrCourseId, setCurrBuilderId } = useCustomProp();
 
     const [courseDetails, setCourseDetails] = useState<ICourse>();
     const [announcements, setAnnouncements] = useState<IAnnouncements[]>([]);
@@ -68,17 +63,12 @@ export default function HomePage() {
             }),
             httpGet<IModulesResponse>(url, { section: 'get_modules', course_id: enrollmentId }),
             httpGet<any>(url, { section: 'get_homepage_data', course_id: enrollmentId }),
-            httpGet<IStudentDataResponse>(url, {
-                section: 'get_students_course',
-                course_id: enrollmentId,
-            }),
             httpGet<IFileResponse>(url, {
                 section: 'get_course_files',
                 course_id: enrollmentId,
-                teacher_uploaded: 'true',
             }),
         ])
-            .then(([course, announce, assign, modulesRes, config, studentsRes, files]) => {
+            .then(([course, announce, assign, modulesRes, config, files]) => {
                 setCourseDetails(course.data.data);
                 setAnnouncements(announce.data.data);
                 setAssignments(assign.data.data);
@@ -87,13 +77,21 @@ export default function HomePage() {
                 setShowToDoWidget(config.data.data?.todoWidgetConfig === 'true');
                 setBannerImage(config.data.data?.bannerImageConfig || null);
                 setClassModule(config.data.data.classModuleName);
-                setStudents(studentsRes.data.data);
                 setCurrCourseId(course.data.data.id);
                 setFiles(files.data.data);
                 console.log('files for this course', files.data);
                 console.log('homepage configs', config.data);
             })
             .catch(console.error);
+
+            const requestResponse = httpGet<IStudentDataResponse>(url, {
+                section: 'get_students_course',
+                course_id: enrollmentId,
+            })
+
+            requestResponse.then((response) => {
+                setStudents(response.data.data)
+            })
     }, [enrollmentId]);
 
     const handleCreateAnnouncement = (title: string, content: string) => {
@@ -148,7 +146,7 @@ export default function HomePage() {
             ) : (
                 <div className="view-course-page">
                     <div className="course-edit-btn">
-                        {edit && (
+                        {coursePermissions?.edit_course_homepage && (
                             <Button
                                 displayName="Edit Page"
                                 onClick={enterEditMode}
@@ -159,6 +157,7 @@ export default function HomePage() {
                     </div>
                     <CourseHomePageUIController
                         permissions_all={permissions}
+                        course_permissions={coursePermissions}
                         courseDetails={courseDetails}
                         announcements={announcements}
                         assignments={assignments}

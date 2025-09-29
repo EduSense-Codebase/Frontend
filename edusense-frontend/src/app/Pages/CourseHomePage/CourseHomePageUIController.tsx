@@ -8,6 +8,7 @@ import {
     IAnnouncements,
     IAssignments,
     ICourse,
+    ICoursePermissions,
     IFile,
     IModules,
     IPermissions,
@@ -20,6 +21,7 @@ import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
 import SettingsTab from '@/app/ui_components/SettingsTab/SettingsTab';
 interface Props {
     permissions_all?: IPermissions;
+    course_permissions?: ICoursePermissions;
     // joinCourse?: boolean | undefined;
     // createCourse?: boolean | undefined;
     courseDetails?: ICourse | undefined;
@@ -41,6 +43,7 @@ interface Props {
 
 const CourseHomePageUIController: React.FC<Props> = ({
     permissions_all,
+    course_permissions,
     // joinCourse,
     // createCourse,
     courseDetails,
@@ -136,7 +139,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             <AnnouncementForm
                                 onSubmit={onPostAnnouncement}
                                 announcements={announcements}
-                                perms={permissions_all}
+                                perms={course_permissions}
                             />
                         </div>
                     </div>
@@ -148,7 +151,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                             assignments={assignments}
                             modules={allModules.filter((item) => item.title !== 'no_module')}
                             setNewModules={setModules}
-                            perms={permissions_all}
+                            perms={course_permissions}
                             files={files}
                             setFiles={setFiles}
                         />
@@ -157,7 +160,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Grades' && (
                     <div>
-                        <GradesTab grades={gradesData} perms={permissions_all} />
+                        <GradesTab grades={gradesData} perms={course_permissions} />
                     </div>
                 )}
 

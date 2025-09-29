@@ -19,7 +19,7 @@ export default function CourseSection() {
     const [, setLoading] = useState(false);
     //const [courses, setCourses] = useState<ICourse[]>([]);
 
-    const join_course = permissions?.join_course;
+    const join_course = permissions?.enroll_course;
     const create_course = permissions?.create_course;
     const new_tile = join_course ? 'ENROLL COURSE' : create_course ? 'CREATE COURSE' : 'Neither';
 

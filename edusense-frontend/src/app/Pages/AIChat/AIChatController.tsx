@@ -49,17 +49,20 @@ export default function AIChatController(props: AIChatControllerProps) {
     > | null>(null);
 
     useEffect(() => {
-        const queryParams = {
-            section: 'get_ai_agents',
-        };
+        if (props.courseId) {
+            const queryParams = {
+                course_id: props.courseId,
+                section: 'get_ai_agents',
+            };
 
-        const getAgents = httpGet<IAIAgentsResponse>(`${API_PREFIX}${AUTH_ENDPOINT}`, queryParams);
+            const getAgents = httpGet<IAIAgentsResponse>(`${API_PREFIX}${AUTH_ENDPOINT}`, queryParams);
 
-        getAgents.then((response) => {
-            setAgents(response.data.data);
-            setCurrAgent(response.data.data[0].internal_name);
-        });
-    }, []);
+            getAgents.then((response) => {
+                setAgents(response.data.data);
+                setCurrAgent(response.data.data[0].internal_name);
+            });
+        }
+    }, [props.courseId]);
 
     useEffect(() => {
         if (props.courseId && currAgent) {
