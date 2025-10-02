@@ -112,8 +112,9 @@ const TAPermissionsPanel: React.FC = () => {
             course_id: enrollmentId,
             name: newTa.name,
             email: newTa.email,
-            permissions: newTa.permissions,
+            permissions: JSON.stringify(newTa.permissions),
         };
+        console.log('perms before sending', newTa.permissions);
         httpPost<TA>(url, formData, queryParams).then((res) => {
             console.log('TA saved:', res);
             setTAs((prev) => [...prev, newTa]);
