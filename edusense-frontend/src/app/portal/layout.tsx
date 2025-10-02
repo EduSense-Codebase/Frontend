@@ -59,13 +59,17 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         const queryParamsCourse = {
             section: 'all_enrolled_courses',
         };
-        const courseResponse = httpGet<IAllEnrolledCourseResponse>(COURSE_API_URL, queryParamsCourse);
-        courseResponse.then((response) => {
-            setCourses(response.data.data);
-        })
-        .catch((err) => {
-            //FIXME: Add Error Handling
-        });
+        const courseResponse = httpGet<IAllEnrolledCourseResponse>(
+            COURSE_API_URL,
+            queryParamsCourse,
+        );
+        courseResponse
+            .then((response) => {
+                setCourses(response.data.data);
+            })
+            .catch((err) => {
+                //FIXME: Add Error Handling
+            });
     }, []);
 
     useEffect(() => {
@@ -74,16 +78,16 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             // Fetch Course Permissions
             const queryParams = {
                 section: 'course_permissions',
-                course_id: currCourseId
-            }
+                course_id: currCourseId,
+            };
 
-            const requestResponse = httpGet<ICoursePermissionsResponse>(API_URL, queryParams)
+            const requestResponse = httpGet<ICoursePermissionsResponse>(API_URL, queryParams);
 
             requestResponse.then((response) => {
-                setCoursePermissions(response.data.data)
-            })
+                setCoursePermissions(response.data.data);
+            });
         }
-    }, [currCourseId])
+    }, [currCourseId]);
 
     return (
         <div
