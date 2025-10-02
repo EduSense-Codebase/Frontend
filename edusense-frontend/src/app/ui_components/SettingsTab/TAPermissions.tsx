@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { useParams } from 'next/navigation';
+import Button from '../Button';
 
 interface TA {
     name: string;
@@ -188,9 +189,7 @@ const TAPermissionsPanel: React.FC = () => {
                 </div>
 
                 <div className="add-row">
-                    <button className="btn" onClick={addTA}>
-                        + Add TA
-                    </button>
+                    <Button displayName="+ Add TA" variant="primary" onClick={addTA} />
                 </div>
             </div>
         </div>
