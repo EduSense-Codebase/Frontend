@@ -49,6 +49,23 @@ const PERMISSION_GROUPS: Record<string, (keyof TA['permissions'])[]> = {
     Upload: ['submit_assignments'],
 };
 
+// helper to check if all perms in a group are true
+const isGroupSelected = (permissions: TA['permissions'], group: (keyof TA['permissions'])[]) =>
+    group.every((perm) => permissions[perm]);
+
+// helper to toggle a group
+const toggleGroup = (
+    permissions: TA['permissions'],
+    group: (keyof TA['permissions'])[],
+    value: boolean,
+): TA['permissions'] => {
+    const updated = { ...permissions };
+    group.forEach((perm) => {
+        updated[perm] = value;
+    });
+    return updated;
+};
+
 const TAPermissionsPanel: React.FC = () => {
     const [tas, setTAs] = useState<TA[]>([]);
     const params = useParams();
@@ -67,20 +84,23 @@ const TAPermissionsPanel: React.FC = () => {
         });
     }, [enrollmentId]);
 
-    const togglePermission = (index: number, perm: keyof TA['permissions']) =>
+    const toggleGroupForTA = (index: number, groupName: string) => {
+        const groupPerms = PERMISSION_GROUPS[groupName];
         setTAs((prev) =>
             prev.map((ta, i) =>
                 i === index
                     ? {
                           ...ta,
-                          permissions: {
-                              ...ta.permissions,
-                              [perm]: !ta.permissions[perm],
-                          },
+                          permissions: toggleGroup(
+                              ta.permissions,
+                              groupPerms,
+                              !isGroupSelected(ta.permissions, groupPerms),
+                          ),
                       }
                     : ta,
             ),
         );
+    };
 
     const isValidEmail = (s: string) => /\S+@\S+\.\S+/.test(s);
 
@@ -98,14 +118,11 @@ const TAPermissionsPanel: React.FC = () => {
             email: newTAEmail.trim(),
             permissions: { ...newTAPermissions },
         };
-        //
 
-        // reset fields
         setNewTAName('');
         setNewTAEmail('');
         setNewTAPermissions(EMPTY_PERMISSIONS);
 
-        // persist to backend
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParams = { section: 'add_ta' };
         const formData = {
@@ -114,7 +131,6 @@ const TAPermissionsPanel: React.FC = () => {
             email: newTa.email,
             permissions: JSON.stringify(newTa.permissions),
         };
-        console.log('perms before sending', newTa.permissions);
         httpPost<TA>(url, formData, queryParams).then((res) => {
             console.log('TA saved:', res);
             setTAs((prev) => [...prev, newTa]);
@@ -134,33 +150,19 @@ const TAPermissionsPanel: React.FC = () => {
                         </div>
 
                         <div className="ta-perms">
-                            {Object.entries(PERMISSION_GROUPS).map(([groupName, perms]) => (
-                                <div key={groupName} className="perm-group">
-                                    <h4 className="group-title">{groupName}</h4>
-                                    {perms.map((perm) => (
-                                        <label key={perm} className="perm-label">
-                                            <input
-                                                type="checkbox"
-                                                checked={ta.permissions[perm]}
-                                                onChange={() => togglePermission(index, perm)}
-                                            />
-                                            <span className="perm-name">{perm}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            ))}
+                            {Object.entries(PERMISSION_GROUPS).map(([groupName, perms]) =>
+                                isGroupSelected(ta.permissions, perms) ? (
+                                    <span key={groupName} className="perm-name">
+                                        {groupName}
+                                    </span>
+                                ) : null,
+                            )}
                         </div>
                     </div>
                 ))}
             </div>
 
             <div className="add-ta">
-                <input
-                    className="add-name"
-                    placeholder="TA name"
-                    value={newTAName}
-                    onChange={(e) => setNewTAName(e.target.value)}
-                />
                 <input
                     className="add-email"
                     placeholder="TA email"
@@ -170,24 +172,18 @@ const TAPermissionsPanel: React.FC = () => {
 
                 <div className="new-ta-perms">
                     {Object.entries(PERMISSION_GROUPS).map(([groupName, perms]) => (
-                        <div key={groupName} className="perm-group">
-                            <h4 className="group-title">{groupName}</h4>
-                            {perms.map((perm) => (
-                                <label key={perm} className="perm-label small">
-                                    <input
-                                        type="checkbox"
-                                        checked={newTAPermissions[perm]}
-                                        onChange={(e) =>
-                                            setNewTAPermissions((p) => ({
-                                                ...p,
-                                                [perm]: e.target.checked,
-                                            }))
-                                        }
-                                    />
-                                    <span className="perm-name">{perm}</span>
-                                </label>
-                            ))}
-                        </div>
+                        <label key={groupName} className="perm-label small">
+                            <input
+                                type="checkbox"
+                                checked={isGroupSelected(newTAPermissions, perms)}
+                                onChange={(e) =>
+                                    setNewTAPermissions((prev) =>
+                                        toggleGroup(prev, perms, e.target.checked),
+                                    )
+                                }
+                            />
+                            <span className="perm-name">{groupName}</span>
+                        </label>
                     ))}
                 </div>
 
