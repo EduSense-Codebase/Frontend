@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { API_PREFIX, COURSE_ENDPOINT } from '../../global';
-import { ICourse, IEnrollOrCreateCourseResponse } from '../../typedef';
-import { httpPost } from '../../utils';
+import { ICourse, ICourseSection, ICourseSectionResponse, IEnrollOrCreateCourseResponse } from '../../typedef';
+import { httpGet, httpPost } from '../../utils';
 import * as motion from 'motion/react-client';
 //import '../../theme.css';
 import '../../style/index.scss';
@@ -18,6 +18,9 @@ export default function CourseSection() {
     const [joinCode, setJoinCode] = useState('');
     const [, setLoading] = useState(false);
     //const [courses, setCourses] = useState<ICourse[]>([]);
+
+    const [courseSections, setCourseSections] = useState<ICourseSection[] | undefined>(undefined);
+    const [selectedCourseSection, setSelectedCourseSection] = useState<number | undefined>(undefined);
 
     const join_course = permissions?.enroll_course;
     const create_course = permissions?.create_course;
@@ -66,12 +69,27 @@ export default function CourseSection() {
         setDialogOpen(true);
     };
 
+    const handleSelectCourse = () => {
+        const url = API_PREFIX + COURSE_ENDPOINT;
+
+        const queryParams = {
+            section: 'get_sections_from_join_code',
+            join_code: joinCode
+        }
+
+        const requestResponse = httpGet<ICourseSectionResponse>(url, queryParams);
+
+        requestResponse.then((response) => {
+            setCourseSections(response.data.data);
+        })
+    }
+
     const handleJoinCourse = async () => {
         setLoading(true);
 
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParams = { section: 'enroll_course' };
-        const formData = { join_code: joinCode };
+        const formData = { join_code: joinCode, section_id: selectedCourseSection };
 
         const requestResponse = httpPost<IEnrollOrCreateCourseResponse>(url, formData, queryParams);
         requestResponse
@@ -172,6 +190,20 @@ export default function CourseSection() {
                                 onChange={(e) => setJoinCode(e.target.value)}
                                 className="w-full rounded border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             />
+                            {courseSections ? 
+                                <select
+                                className="modalInput"
+                                value={selectedCourseSection}
+                                onChange={(e) => setSelectedCourseSection(parseInt(e.target.value))}
+                            >
+                                {courseSections.map((currSection, index) => (
+                                    <option key={index} value={currSection.id}>
+                                        {currSection.name}
+                                    </option>
+                                ))}
+                            </select>
+                            : null
+                            }
                         </div>
                         <div className="mt-4 flex justify-end space-x-4">
                             <Button
@@ -180,9 +212,9 @@ export default function CourseSection() {
                                 onClick={handleDialogClose}
                             />
                             <Button
-                                displayName="Join"
+                                displayName={courseSections ? "Join" : "Select Section"}
                                 variant="primary"
-                                onClick={handleJoinCourse}
+                                onClick={courseSections ? handleJoinCourse : handleSelectCourse}
                             />
                         </div>
                     </div>
