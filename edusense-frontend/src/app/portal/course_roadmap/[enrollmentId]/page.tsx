@@ -18,6 +18,8 @@ import {
     IStudentDataResponse,
     IFile,
     IFileResponse,
+    ICourseSectionResponse,
+    ICourseSectionCreateResponse,
 } from '@/app/typedef';
 // import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/typedef';
@@ -28,6 +30,7 @@ export const runtime = 'edge';
 import CourseHomePageUIController from '@/app/Pages/CourseHomePage/CourseHomePageUIController';
 import EditCoursePageUIController from '@/app/Pages/EditCoursePage/EditCoursePageUIController';
 import Button from '@/app/ui_components/Button';
+import CourseSection from '../../courses/page';
 
 export default function HomePage() {
     const params = useParams();
@@ -47,6 +50,7 @@ export default function HomePage() {
     const [students, setStudents] = useState<IStudentData[]>([]);
     const [files, setFiles] = useState<IFile[]>([]);
     const [classModule, setClassModule] = useState('');
+    const [classSections, setClassSections] = useState<string[]>([]);
 
     useEffect(() => {
         const url = API_PREFIX + COURSE_ENDPOINT;
@@ -67,8 +71,12 @@ export default function HomePage() {
                 section: 'get_course_files',
                 course_id: enrollmentId,
             }),
+            httpGet<ICourseSectionResponse>(url, {
+                section: 'get_sections',
+                course_id: enrollmentId
+            })
         ])
-            .then(([course, announce, assign, modulesRes, config, files]) => {
+            .then(([course, announce, assign, modulesRes, config, files, sections]) => {
                 setCourseDetails(course.data.data);
                 setAnnouncements(announce.data.data);
                 setAssignments(assign.data.data);
@@ -79,6 +87,7 @@ export default function HomePage() {
                 setClassModule(config.data.data.classModuleName);
                 setCurrCourseId(course.data.data.id);
                 setFiles(files.data.data);
+                setClassSections(sections.data.data.map(section => section.name))
                 console.log('files for this course', files.data);
                 console.log('homepage configs', config.data);
             })
@@ -113,6 +122,24 @@ export default function HomePage() {
                 console.log(enrollmentId);
             });
     };
+
+    const handleCreateSection = (newSection: string) => {
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        const formData = {
+            course_id: enrollmentId,
+            section_name: newSection
+        }
+        const queryParams = {
+            section: 'add_section'
+        }
+
+        const requestResponse = httpPost<ICourseSectionCreateResponse>(url, formData, queryParams);
+        requestResponse.then((response) => {
+            setClassSections((prevClassSections) => {
+                return [...prevClassSections, response.data.data.name]
+            })
+        })
+    }
 
     const enterEditMode = () => {
         console.log('homepage configs when entering edit mode.', showModuleWidget, showToDoWidget);
@@ -158,6 +185,7 @@ export default function HomePage() {
                     <CourseHomePageUIController
                         permissions_all={permissions}
                         course_permissions={coursePermissions}
+                        sections={classSections}
                         courseDetails={courseDetails}
                         announcements={announcements}
                         assignments={assignments}
@@ -168,6 +196,7 @@ export default function HomePage() {
                         showModuleWidget={showModuleWidget}
                         students={students}
                         setModules={setModules}
+                        addSection={handleCreateSection}
                         setShowModuleWidget={setShowModuleWidget}
                         setShowToDoWidget={setShowToDoWidget}
                         files={files}

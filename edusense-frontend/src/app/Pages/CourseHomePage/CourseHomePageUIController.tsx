@@ -22,6 +22,7 @@ import SettingsTab from '@/app/ui_components/SettingsTab/SettingsTab';
 interface Props {
     permissions_all?: IPermissions;
     course_permissions?: ICoursePermissions;
+    sections: string[],
     // joinCourse?: boolean | undefined;
     // createCourse?: boolean | undefined;
     courseDetails?: ICourse | undefined;
@@ -38,14 +39,14 @@ interface Props {
     setShowModuleWidget: React.Dispatch<React.SetStateAction<boolean>>;
     setShowToDoWidget: React.Dispatch<React.SetStateAction<boolean>>;
     setModules: React.Dispatch<React.SetStateAction<IModules[]>>;
+    addSection: (newSection: string) => void; 
     classModule: string;
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({
     permissions_all,
     course_permissions,
-    // joinCourse,
-    // createCourse,
+    sections,
     courseDetails,
     announcements,
     assignments,
@@ -56,6 +57,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     showModuleWidget,
     students,
     setModules,
+    addSection,
     setShowModuleWidget,
     setShowToDoWidget,
     files,
@@ -164,7 +166,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                     </div>
                 )}
 
-                {activeTab === 'Settings' && <SettingsTab />}
+                {activeTab === 'Settings' && <SettingsTab sections={sections} addSection={addSection} />}
             </div>
         </div>
     );
