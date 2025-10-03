@@ -72,7 +72,6 @@ const TAPermissionsPanel: React.FC = () => {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
 
-    const [newTAName, setNewTAName] = useState('');
     const [newTAEmail, setNewTAEmail] = useState('');
     const [newTAPermissions, setNewTAPermissions] = useState<TA['permissions']>(EMPTY_PERMISSIONS);
 
@@ -83,58 +82,45 @@ const TAPermissionsPanel: React.FC = () => {
             console.log('TA fetch:', res.data);
             setTAs(res.data.data);
         });
-    }, [enrollmentId]);
+    }, [tas]);
 
-    const toggleGroupForTA = (index: number, groupName: string) => {
-        const groupPerms = PERMISSION_GROUPS[groupName];
-        setTAs((prev) =>
-            prev.map((ta, i) =>
-                i === index
-                    ? {
-                          ...ta,
-                          permissions: toggleGroup(
-                              ta.permissions,
-                              groupPerms,
-                              !isGroupSelected(ta.permissions, groupPerms),
-                          ),
-                      }
-                    : ta,
-            ),
-        );
-    };
+    // const toggleGroupForTA = (index: number, groupName: string) => {
+    //     const groupPerms = PERMISSION_GROUPS[groupName];
+    //     setTAs((prev) =>
+    //         prev.map((ta, i) =>
+    //             i === index
+    //                 ? {
+    //                       ...ta,
+    //                       permissions: toggleGroup(
+    //                           ta.permissions,
+    //                           groupPerms,
+    //                           !isGroupSelected(ta.permissions, groupPerms),
+    //                       ),
+    //                   }
+    //                 : ta,
+    //         ),
+    //     );
+    // };
 
     const isValidEmail = (s: string) => /\S+@\S+\.\S+/.test(s);
 
     const addTA = () => {
-        if (!newTAName.trim()) {
-            alert('Please enter TA name.');
-            return;
-        }
         if (!isValidEmail(newTAEmail)) {
             alert('Please enter a valid email for TA.');
             return;
         }
-        const newTa: TA = {
-            name: newTAName.trim(),
-            email: newTAEmail.trim(),
-            permissions: { ...newTAPermissions },
-        };
-
-        setNewTAName('');
-        setNewTAEmail('');
-        setNewTAPermissions(EMPTY_PERMISSIONS);
 
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParams = { section: 'add_ta' };
         const formData = {
             course_id: enrollmentId,
-            name: newTa.name,
-            email: newTa.email,
-            permissions: JSON.stringify(newTa.permissions),
+            email: newTAEmail,
+            permissions: JSON.stringify(newTAPermissions),
         };
         httpPost<TA>(url, formData, queryParams).then((res) => {
-            console.log('TA saved:', res);
-            setTAs((prev) => [...prev, newTa]);
+            console.log('TA saved:', res.data);
+            setNewTAEmail('');
+            setNewTAPermissions(EMPTY_PERMISSIONS);
         });
     };
 
