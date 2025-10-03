@@ -145,7 +145,7 @@ export interface IPermissionsResponse {
 }
 
 export interface ICoursePermissionsResponse {
-    data: ICoursePermissions
+    data: ICoursePermissions;
 }
 
 export interface IFetchAllAISessions {

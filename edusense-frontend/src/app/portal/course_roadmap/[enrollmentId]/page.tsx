@@ -84,14 +84,14 @@ export default function HomePage() {
             })
             .catch(console.error);
 
-            const requestResponse = httpGet<IStudentDataResponse>(url, {
-                section: 'get_students_course',
-                course_id: enrollmentId,
-            })
+        const requestResponse = httpGet<IStudentDataResponse>(url, {
+            section: 'get_students_course',
+            course_id: enrollmentId,
+        });
 
-            requestResponse.then((response) => {
-                setStudents(response.data.data)
-            })
+        requestResponse.then((response) => {
+            setStudents(response.data.data);
+        });
     }, [enrollmentId]);
 
     const handleCreateAnnouncement = (title: string, content: string) => {

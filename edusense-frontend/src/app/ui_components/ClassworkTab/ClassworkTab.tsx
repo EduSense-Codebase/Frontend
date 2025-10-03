@@ -217,14 +217,14 @@ export default function ClassworkTab({
         </div>
     );
 
-    const showAddBtn = (perms?.create_assignments || perms?.create_content_file);
+    const showAddBtn = perms?.create_assignments || perms?.create_content_file;
 
     return (
         <div className="classwork">
             <div className="header">
                 <h2>Classwork</h2>
                 <div className="createContainer">
-                    { showAddBtn && (
+                    {showAddBtn && (
                         <Button
                             displayName="＋ Create"
                             variant="primary"

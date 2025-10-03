@@ -55,7 +55,10 @@ export default function AIChatController(props: AIChatControllerProps) {
                 section: 'get_ai_agents',
             };
 
-            const getAgents = httpGet<IAIAgentsResponse>(`${API_PREFIX}${AUTH_ENDPOINT}`, queryParams);
+            const getAgents = httpGet<IAIAgentsResponse>(
+                `${API_PREFIX}${AUTH_ENDPOINT}`,
+                queryParams,
+            );
 
             getAgents.then((response) => {
                 setAgents(response.data.data);
