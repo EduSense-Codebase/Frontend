@@ -1,38 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { httpGet, httpPost } from '@/app/utils';
-import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
-import { useParams } from 'next/navigation';
+import React from 'react';
 import Button from '../Button';
 
 interface ISectionsPanelProps {
-    sections: string[],
-    addSection: (sectionName: string) => void
+    sections: string[];
+    addSection: (sectionName: string) => void;
 }
 
 const SectionsPanel: React.FC<ISectionsPanelProps> = (props: ISectionsPanelProps) => {
-    const [sectionName, setSectionName] = React.useState("");
+    const [sectionName, setSectionName] = React.useState('');
 
     const onSectionSubmit = () => {
         props.addSection(sectionName);
-        setSectionName("");
-    }
+        setSectionName('');
+    };
 
     return (
         <div className="panel">
             <h3>Sections</h3>
 
             <div className="ta-list">
-                {props.sections.length ? 
-                    props.sections.map((section, index)=> {
-                        return <div className="ta-card" key={index}>
-                        <div className="ta-left">
-                            <div className="ta-name">{section}</div>
-                        </div>
-
-                    </div>
-                    })
-                    : null
-                } 
+                {props.sections.length
+                    ? props.sections.map((section, index) => {
+                          return (
+                              <div className="ta-card" key={index}>
+                                  <div className="ta-left">
+                                      <div className="ta-name">{section}</div>
+                                  </div>
+                              </div>
+                          );
+                      })
+                    : null}
             </div>
 
             <div className="add-ta">
@@ -44,7 +41,11 @@ const SectionsPanel: React.FC<ISectionsPanelProps> = (props: ISectionsPanelProps
                 />
 
                 <div className="add-row">
-                    <Button displayName="+ Add Section" variant="primary" onClick={onSectionSubmit} />
+                    <Button
+                        displayName="+ Add Section"
+                        variant="primary"
+                        onClick={onSectionSubmit}
+                    />
                 </div>
             </div>
         </div>

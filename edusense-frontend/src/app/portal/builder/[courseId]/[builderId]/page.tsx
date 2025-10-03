@@ -188,7 +188,7 @@ export default function BuilderPage() {
 
     const router = useRouter();
 
-    const { permissions, setCurrCourseId, coursePermissions, setCurrBuilderId } = useCustomProp();
+    const { setCurrCourseId, coursePermissions, setCurrBuilderId } = useCustomProp();
 
     const [mode, setMode] = useState<Mode | undefined>(undefined);
 

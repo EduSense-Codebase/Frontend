@@ -67,7 +67,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             .then((response) => {
                 setCourses(response.data.data);
             })
-            .catch((err) => {
+            .catch(() => {
                 //FIXME: Add Error Handling
             });
     }, []);

@@ -101,8 +101,8 @@ export interface IAIAgentData {
 }
 
 export interface ICourseSection {
-    id: number,
-    name: string
+    id: number;
+    name: string;
 }
 
 /* ********************* Generic Types END *********************** */
@@ -192,11 +192,11 @@ export interface IEnrollOrCreateCourseResponse {
 }
 
 export interface ICourseSectionResponse {
-    data: ICourseSection[]
+    data: ICourseSection[];
 }
 
 export interface ICourseSectionCreateResponse {
-    data: ICourseSection
+    data: ICourseSection;
 }
 
 export interface ICustomProps {

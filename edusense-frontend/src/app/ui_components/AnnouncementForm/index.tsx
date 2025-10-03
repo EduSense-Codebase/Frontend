@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AnnouncementForm.scss';
 import Button from '../Button';
-import { IAnnouncements, ICoursePermissions, IPermissions } from '@/app/typedef';
+import { IAnnouncements, ICoursePermissions } from '@/app/typedef';
 
 interface AnnouncementFormProps {
     onSubmit: (title: string, message: string) => void;

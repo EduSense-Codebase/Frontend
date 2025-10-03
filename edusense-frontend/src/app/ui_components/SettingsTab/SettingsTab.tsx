@@ -5,8 +5,8 @@ import TAPermissionsPanel from './TAPermissions';
 import SectionsPanel from './SectionsPanel';
 
 interface ISettingsTab {
-    sections: string[],
-    addSection: (newSection: string) => void
+    sections: string[];
+    addSection: (newSection: string) => void;
 }
 
 const SettingsTab: React.FC<ISettingsTab> = (props) => {
