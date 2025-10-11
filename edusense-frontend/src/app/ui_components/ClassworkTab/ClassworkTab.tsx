@@ -7,7 +7,6 @@ import {
     IModuleResponse,
     IFile,
     IOneFileResponse,
-    IPermissions,
     ICoursePermissions,
 } from '@/app/typedef';
 import Link from 'next/link';

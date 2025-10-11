@@ -100,6 +100,11 @@ export interface IAIAgentData {
     external_name: string;
 }
 
+export interface ICourseSection {
+    id: number;
+    name: string;
+}
+
 /* ********************* Generic Types END *********************** */
 
 /* ********************* Axios Response Types START ********************* */
@@ -184,6 +189,14 @@ export interface IAIAgentsResponse {
 
 export interface IEnrollOrCreateCourseResponse {
     data: ICourse;
+}
+
+export interface ICourseSectionResponse {
+    data: ICourseSection[];
+}
+
+export interface ICourseSectionCreateResponse {
+    data: ICourseSection;
 }
 
 export interface ICustomProps {

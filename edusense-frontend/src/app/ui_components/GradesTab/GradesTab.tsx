@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import './GradesTab.scss';
-import { IAssignments, ICoursePermissions, IPermissions, IStudentData } from '@/app/typedef';
+import { IAssignments, ICoursePermissions, IStudentData } from '@/app/typedef';
 
 interface GradesProps {
     grades: IStudentData[] | IAssignments[];
