@@ -47,6 +47,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
         const requestResponse = httpGet<IPermissionsResponse>(API_URL, queryParams);
         requestResponse.then((res) => {
+            console.log("permissions", res.data)
             setPermissions(res.data.data);
         });
 
@@ -84,6 +85,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             const requestResponse = httpGet<ICoursePermissionsResponse>(API_URL, queryParams);
 
             requestResponse.then((response) => {
+                console.log("course perms", response.data)
                 setCoursePermissions(response.data.data);
             });
         }

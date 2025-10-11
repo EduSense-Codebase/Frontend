@@ -20,7 +20,7 @@ import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
 import SettingsTab from '@/app/ui_components/SettingsTab/SettingsTab';
 interface Props {
-    permissions_all?: IPermissions;
+    global_permissions?: IPermissions;
     course_permissions?: ICoursePermissions;
     sections: string[];
     // joinCourse?: boolean | undefined;
@@ -44,7 +44,7 @@ interface Props {
 }
 
 const CourseHomePageUIController: React.FC<Props> = ({
-    permissions_all,
+    global_permissions,
     course_permissions,
     sections,
     courseDetails,
@@ -65,7 +65,9 @@ const CourseHomePageUIController: React.FC<Props> = ({
     classModule,
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
-    const create_course = permissions_all?.create_course;
+    const create_course = global_permissions?.create_course;
+    let tabs = ['Overview', 'Classwork', 'Grades'];
+    if (course_permissions?.create_grade_categories) tabs.push('Settings');
 
     // const edit = permissions_all?.edit;
     // const upload = permissions_all?.upload;
@@ -96,7 +98,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
             <div className="course-content">
                 <Tabs
-                    tabs={['Overview', 'Classwork', 'Grades', 'Settings']}
+                    tabs={tabs}
                     activeTab={activeTab}
                     onTabChange={onTabChange}
                 />
@@ -166,9 +168,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                     </div>
                 )}
 
-                {activeTab === 'Settings' && (
-                    <SettingsTab sections={sections} addSection={addSection} />
-                )}
+                {activeTab === 'Settings' &&  course_permissions?.create_grade_categories && <SettingsTab />}
             </div>
         </div>
     );

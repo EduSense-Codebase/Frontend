@@ -84,6 +84,12 @@ const CategoriesPanel: React.FC = () => {
             section: 'add_categories_and_weights',
         };
 
+        if (totalWeight != 100){
+            console.log("weights do not add up.");
+            return;
+        }
+
+
         httpPost(url, payload, queryParams).then((res) => {
             console.log('Saved categories:', res);
             alert('Categories saved!');

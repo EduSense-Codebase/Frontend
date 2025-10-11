@@ -84,6 +84,24 @@ const TAPermissionsPanel: React.FC = () => {
         });
     }, []);
 
+    // const toggleGroupForTA = (index: number, groupName: string) => {
+    //     const groupPerms = PERMISSION_GROUPS[groupName];
+    //     setTAs((prev) =>
+    //         prev.map((ta, i) =>
+    //             i === index
+    //                 ? {
+    //                       ...ta,
+    //                       permissions: toggleGroup(
+    //                           ta.permissions,
+    //                           groupPerms,
+    //                           !isGroupSelected(ta.permissions, groupPerms),
+    //                       ),
+    //                   }
+    //                 : ta,
+    //         ),
+    //     );
+    // };
+
     const isValidEmail = (s: string) => /\S+@\S+\.\S+/.test(s);
 
     const addTA = () => {

@@ -182,7 +182,7 @@ export default function HomePage() {
                         )}
                     </div>
                     <CourseHomePageUIController
-                        permissions_all={permissions}
+                        global_permissions={permissions}
                         course_permissions={coursePermissions}
                         sections={classSections}
                         courseDetails={courseDetails}
