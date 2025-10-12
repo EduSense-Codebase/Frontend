@@ -88,6 +88,9 @@ export default function CourseSection() {
 
         requestResponse.then((response) => {
             setCourseSections(response.data.data);
+            // console.log("Section Resposne", response.data.data);
+            // console.log("ID:", response.data.data[0].id);
+            setSelectedCourseSection(response.data.data[0].id);
         });
     };
 
@@ -97,6 +100,7 @@ export default function CourseSection() {
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParams = { section: 'enroll_course' };
         const formData = { join_code: joinCode, section_id: selectedCourseSection };
+        // console.log("course section id number", selectedCourseSection);
 
         const requestResponse = httpPost<IEnrollOrCreateCourseResponse>(url, formData, queryParams);
         requestResponse

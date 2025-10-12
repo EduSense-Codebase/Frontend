@@ -98,6 +98,7 @@ export default function HomePage() {
         });
 
         requestResponse.then((response) => {
+            console.log('student response', response.data);
             setStudents(response.data.data);
         });
     }, [enrollmentId]);

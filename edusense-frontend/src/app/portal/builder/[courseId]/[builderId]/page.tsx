@@ -10,7 +10,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { httpGet, httpPost } from '@/app/utils';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import {
+    CategoryResponse,
     IBuilderResponse,
+    ICategory,
     IFileInfo,
     IModules,
     IModulesResponse,
@@ -205,11 +207,13 @@ export default function BuilderPage() {
 
     /* Module Level Information for Assignment Creation */
     const [modules, setModules] = useState<IModules[]>([]);
+    const [categories, setCategories] = useState<ICategory[]>([]);
 
     /* Publish Assignment State Variables */
     const [name, setName] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [moduleId, setModuleId] = useState(-1);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [assignmentDescription, setAssignmentDescription] = useState('');
     const [isDraft, setIsDraft] = useState(false);
 
@@ -508,6 +512,21 @@ export default function BuilderPage() {
         });
     }, [courseId]);
 
+    useEffect(() => {
+        const url = API_PREFIX + COURSE_ENDPOINT;
+        const queryParams = { section: 'get_categories', course_id: courseId };
+        httpGet<CategoryResponse>(url, queryParams).then((res) => {
+            console.log('categories', res.data);
+            if (res.data) {
+                const catArray = Object.entries(res.data.data).map(([name, weight]) => ({
+                    name,
+                    weight,
+                }));
+                setCategories(catArray);
+            }
+        });
+    }, []);
+
     const onTextChange = (newContent: string) => {
         setUpdatedTextContent(newContent);
     };
@@ -557,6 +576,7 @@ export default function BuilderPage() {
             module_id: moduleId,
             description: assignmentDescription,
             is_draft: JSON.stringify(isDraft),
+            category: selectedCategory,
         };
 
         const assignmentCreateRequest = httpPost(url, formData, queryParams);
@@ -860,6 +880,22 @@ export default function BuilderPage() {
                     {modules.map((currModule, index) => (
                         <option key={index} value={currModule.id}>
                             {currModule.title}
+                        </option>
+                    ))}
+                </select>
+
+                <label>Category</label>
+                <select
+                    className="modalInput"
+                    value={selectedCategory || ''}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                    <option value="" disabled hidden>
+                        Select a category
+                    </option>
+                    {categories.map((cat, index) => (
+                        <option key={index} value={cat.name}>
+                            {cat.name} ({cat.weight.toFixed(0)}%)
                         </option>
                     ))}
                 </select>

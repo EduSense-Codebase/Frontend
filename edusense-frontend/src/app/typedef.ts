@@ -84,6 +84,11 @@ export interface IModules {
     course: number;
 }
 
+export interface ICategory {
+    name: string;
+    weight: number;
+}
+
 export interface IAISession {
     id: number;
     name: string;
@@ -115,6 +120,10 @@ export interface IFileResponse {
 
 export interface IOneFileResponse {
     data: IFile;
+}
+
+export interface CategoryResponse {
+    data: Record<string, number>;
 }
 
 export interface IAllOfferedResponse {
