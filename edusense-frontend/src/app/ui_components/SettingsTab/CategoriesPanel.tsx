@@ -4,20 +4,13 @@ import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import Button from '../Button';
 
-interface Category {
-    name: string;
-    weight: number;
-}
-
-interface CourseResponse {
-    data: Record<string, number>;
-}
+import { CategoryResponse, ICategory } from '@/app/typedef';
 
 const CategoriesPanel: React.FC = () => {
     const params = useParams();
     const enrollmentId = params.enrollmentId as string;
 
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<ICategory[]>([]);
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [newCategoryWeight, setNewCategoryWeight] = useState<number | ''>('');
     const [loading, setLoading] = useState(true);
@@ -28,7 +21,7 @@ const CategoriesPanel: React.FC = () => {
     useEffect(() => {
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParams = { section: 'get_categories', course_id: enrollmentId };
-        httpGet<CourseResponse>(url, queryParams).then((res) => {
+        httpGet<CategoryResponse>(url, queryParams).then((res) => {
             console.log('categories', res.data);
             if (res.data) {
                 const catArray = Object.entries(res.data.data).map(([name, weight]) => ({
@@ -57,7 +50,7 @@ const CategoriesPanel: React.FC = () => {
             alert('Please enter a valid weight (0 or greater).');
             return;
         }
-        const newCat: Category = {
+        const newCat: ICategory = {
             name: newCategoryName.trim(),
             weight: weightNumber,
         };
@@ -84,11 +77,10 @@ const CategoriesPanel: React.FC = () => {
             section: 'add_categories_and_weights',
         };
 
-        if (totalWeight != 100){
-            console.log("weights do not add up.");
+        if (totalWeight != 100) {
+            console.log('weights do not add up.');
             return;
         }
-
 
         httpPost(url, payload, queryParams).then((res) => {
             console.log('Saved categories:', res);

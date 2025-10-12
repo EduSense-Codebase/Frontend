@@ -66,7 +66,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
     const create_course = global_permissions?.create_course;
-    let tabs = ['Overview', 'Classwork', 'Grades'];
+    const tabs = ['Overview', 'Classwork', 'Grades'];
     if (course_permissions?.create_grade_categories) tabs.push('Settings');
 
     // const edit = permissions_all?.edit;
@@ -75,6 +75,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     // const grade = permissions_all?.create;
 
     const gradesData = create_course ? students : assignments;
+    console.log('there should be assignments', gradesData);
 
     const onTabChange = (name: string) => {
         setActiveTab(name);
@@ -97,11 +98,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
             </div>
 
             <div className="course-content">
-                <Tabs
-                    tabs={tabs}
-                    activeTab={activeTab}
-                    onTabChange={onTabChange}
-                />
+                <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
 
                 {activeTab === 'Overview' && (
                     <div className="overview-content">
@@ -168,7 +165,9 @@ const CourseHomePageUIController: React.FC<Props> = ({
                     </div>
                 )}
 
-                {activeTab === 'Settings' &&  course_permissions?.create_grade_categories && <SettingsTab />}
+                {activeTab === 'Settings' && course_permissions?.create_grade_categories && (
+                    <SettingsTab sections={sections} addSection={addSection} />
+                )}
             </div>
         </div>
     );

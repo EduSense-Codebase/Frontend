@@ -48,8 +48,8 @@ export default function GradesTab({ grades, perms }: GradesProps) {
                                         ? item.overall_grade >= 0
                                             ? `${item.overall_grade}% (${getLetterGrade(item.overall_grade)})`
                                             : 'N/A'
-                                        : item.graded >= 0
-                                          ? `${item.graded}/${item.points}`
+                                        : item.assignment_data?.is_published
+                                          ? `${item.assignment_data?.submission.user_id.ai_grade}`
                                           : 'N/A'}
                                 </span>
                             </li>
