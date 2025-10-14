@@ -740,13 +740,13 @@ export default function BuilderPage() {
             );
 
             const formData = {
+                course_id: courseId,
                 builder_id: builderId,
                 feedback_data: JSON.stringify(updateGradesObject),
             };
 
             const queryParams = {
                 section: 'submit_builder_grades_and_feedback',
-                course_id: courseId,
             };
 
             const requestResponse = httpPost(url, formData, queryParams);
