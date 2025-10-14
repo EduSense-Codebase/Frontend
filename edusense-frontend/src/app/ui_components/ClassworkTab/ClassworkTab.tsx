@@ -122,7 +122,7 @@ export default function ClassworkTab({
 
     const createModuleCallback = () => {
         const url = API_PREFIX + COURSE_ENDPOINT;
-        const formData = { course: enrollmentId, title: moduleTitle };
+        const formData = { course_id: enrollmentId, title: moduleTitle };
         const queryParams = { section: 'make_module' };
 
         const requestResponse = httpPost<IModuleResponse>(url, formData, queryParams);
@@ -139,7 +139,7 @@ export default function ClassworkTab({
         //make api request here
 
         const url = API_PREFIX + COURSE_ENDPOINT;
-        const formData = { file: selectedFile, course_id: enrollmentId, desc: fileDesc };
+        const formData = { file: selectedFile, course_id: enrollmentId, description: fileDesc };
         const queryParams = { section: 'upload_file' };
 
         const requestResponse = httpPost<IOneFileResponse>(url, formData, queryParams);

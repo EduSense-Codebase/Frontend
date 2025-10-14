@@ -72,12 +72,12 @@ const EditCoursePageUIController: React.FC<Props> = ({
         const url = API_PREFIX + COURSE_ENDPOINT;
         const formData = {
             course_id: course?.id,
-            config: {
+            config: JSON.stringify({
                 moduleWidgetConfig: showModuleWidget,
                 todoWidgetConfig: showToDoWidget,
                 bannerImageConfig: bannerImage,
                 classModuleName: classModule,
-            },
+            }),
         };
         console.log('formdata ', formData);
         const queryParams = { section: 'post_homepage_data' };

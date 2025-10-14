@@ -52,8 +52,9 @@ export default function HomePage() {
     const [classSections, setClassSections] = useState<string[]>([]);
 
     useEffect(() => {
-        const url = API_PREFIX + COURSE_ENDPOINT;
         setCurrBuilderId(undefined);
+
+        const url = API_PREFIX + COURSE_ENDPOINT;
         Promise.all([
             httpGet<INewEnrollment>(url, { section: 'course_details', course_id: enrollmentId }),
             httpGet<IAnnouncementsResponse>(url, {
@@ -76,6 +77,7 @@ export default function HomePage() {
             }),
         ])
             .then(([course, announce, assign, modulesRes, config, files, sections]) => {
+                console.log("Entering second block");
                 setCourseDetails(course.data.data);
                 setAnnouncements(announce.data.data);
                 setAssignments(assign.data.data);
@@ -83,15 +85,13 @@ export default function HomePage() {
                 setShowModuleWidget(config.data.data?.moduleWidgetConfig === 'true');
                 setShowToDoWidget(config.data.data?.todoWidgetConfig === 'true');
                 setBannerImage(config.data.data?.bannerImageConfig || null);
-                setClassModule(config.data.data.classModuleName);
+                setClassModule(config.data.data?.classModuleName);
                 setCurrCourseId(course.data.data.id);
                 setFiles(files.data.data);
                 setClassSections(sections.data.data.map((section) => section.name));
-                console.log('files for this course', files.data);
-                console.log('homepage configs', config.data);
             })
             .catch(console.error);
-
+        
         const requestResponse = httpGet<IStudentDataResponse>(url, {
             section: 'get_students_course',
             course_id: enrollmentId,
