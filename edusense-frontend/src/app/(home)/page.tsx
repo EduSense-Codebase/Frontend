@@ -248,7 +248,7 @@ export default function LandingPage() {
                                     className="videoframe"
                                 />
                                 {content.gifType ? (
-                                    <img src={content.gifPath} className="video" />
+                                    <img src={content.gifPath} className="video" alt="" />
                                 ) : (
                                     <video
                                         src={content.gifPath}
@@ -353,7 +353,7 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                <img src="/landing_page/grass.png" className="grass" />
+                <img src="/landing_page/grass.png" className="grass" alt="" />
             </div>
 
             {/* Footer */}

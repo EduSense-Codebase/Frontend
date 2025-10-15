@@ -55,7 +55,7 @@ export default function CourseSection() {
     const handleCreateCourseSubmit = () => {
         const apiUrl = API_PREFIX + COURSE_ENDPOINT;
         const formData = {
-            course_name: createCourseName
+            course_name: createCourseName,
         };
         const queryParams = { section: 'create_course' };
 

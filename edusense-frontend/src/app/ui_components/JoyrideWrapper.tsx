@@ -37,8 +37,6 @@ export default function JoyrideWrapper({ steps, seenKey }: IJoyrideWrapperProps)
                 console.log('seen');
             }
         });
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleCallback = (data: CallBackProps) => {

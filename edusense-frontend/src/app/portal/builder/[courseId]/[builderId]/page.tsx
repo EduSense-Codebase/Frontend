@@ -543,7 +543,10 @@ export default function BuilderPage() {
         };
 
         if (textContent != undefined) {
-            formData.new_content = JSON.stringify({ text: updatedTextContent, quiz_or_assignment: null });
+            formData.new_content = JSON.stringify({
+                text: updatedTextContent,
+                quiz_or_assignment: null,
+            });
         }
 
         if (quizQuestions.length > 0) {
@@ -552,7 +555,10 @@ export default function BuilderPage() {
                 description: quizDescription,
                 ...reverseTransformQuizQuestions(quizQuestions),
             };
-            formData.new_content = JSON.stringify({ quiz_or_assignment: backendQuizContent, text: null });
+            formData.new_content = JSON.stringify({
+                quiz_or_assignment: backendQuizContent,
+                text: null,
+            });
         }
 
         const builderRequest = httpPost(`${API_PREFIX}${COURSE_ENDPOINT}`, formData, queryParams);

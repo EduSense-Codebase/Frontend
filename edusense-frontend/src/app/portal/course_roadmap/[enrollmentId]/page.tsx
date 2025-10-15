@@ -77,7 +77,7 @@ export default function HomePage() {
             }),
         ])
             .then(([course, announce, assign, modulesRes, config, files, sections]) => {
-                console.log("Entering second block");
+                console.log('Entering second block');
                 setCourseDetails(course.data.data);
                 setAnnouncements(announce.data.data);
                 setAssignments(assign.data.data);
@@ -91,7 +91,7 @@ export default function HomePage() {
                 setClassSections(sections.data.data.map((section) => section.name));
             })
             .catch(console.error);
-        
+
         const requestResponse = httpGet<IStudentDataResponse>(url, {
             section: 'get_students_course',
             course_id: enrollmentId,
