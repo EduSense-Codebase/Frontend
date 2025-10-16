@@ -534,16 +534,19 @@ export default function BuilderPage() {
     const onUpdate = () => {
         const queryParams = {
             section: 'update_builder',
-            course_id: courseId,
-            builder_id: builderId,
         };
 
         const formData = {
+            course_id: courseId,
+            builder_id: builderId,
             new_content: JSON.stringify({}),
         };
 
         if (textContent != undefined) {
-            formData.new_content = JSON.stringify({ text: updatedTextContent });
+            formData.new_content = JSON.stringify({
+                text: updatedTextContent,
+                quiz_or_assignment: null,
+            });
         }
 
         if (quizQuestions.length > 0) {
@@ -552,7 +555,10 @@ export default function BuilderPage() {
                 description: quizDescription,
                 ...reverseTransformQuizQuestions(quizQuestions),
             };
-            formData.new_content = JSON.stringify({ quiz_or_assignment: backendQuizContent });
+            formData.new_content = JSON.stringify({
+                quiz_or_assignment: backendQuizContent,
+                text: null,
+            });
         }
 
         const builderRequest = httpPost(`${API_PREFIX}${COURSE_ENDPOINT}`, formData, queryParams);
@@ -567,9 +573,9 @@ export default function BuilderPage() {
     const onAssignmentCreate = () => {
         const queryParams = {
             section: 'create_builder_assignment',
-            course_id: courseId,
         };
         const formData = {
+            course_id: courseId,
             builder_id: builderId,
             name: name,
             due_date: new Date(dueDate).toISOString(),
@@ -684,10 +690,10 @@ export default function BuilderPage() {
 
         const queryParams = {
             section: 'submit_builder_assignment',
-            course_id: courseId,
         };
 
         const formData = {
+            course_id: courseId,
             builder_id: builderId,
             submission: JSON.stringify(quizSubmission),
         };
@@ -740,13 +746,13 @@ export default function BuilderPage() {
             );
 
             const formData = {
+                course_id: courseId,
                 builder_id: builderId,
                 feedback_data: JSON.stringify(updateGradesObject),
             };
 
             const queryParams = {
                 section: 'submit_builder_grades_and_feedback',
-                course_id: courseId,
             };
 
             const requestResponse = httpPost(url, formData, queryParams);
