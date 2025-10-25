@@ -66,7 +66,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         );
         courseResponse
             .then((response) => {
-                setCourses(response.data.data);
+                const orderedCourses = response.data.data.sort((a, b) => a.id - b.id);
+                setCourses(orderedCourses);
             })
             .catch(() => {
                 //FIXME: Add Error Handling

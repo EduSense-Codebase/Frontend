@@ -33,7 +33,10 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
     return (
         <div className="announcements">
             {/* LEFT SIDE - Recent Announcements List */}
-            <div className={`announcements-left announcements-left--${perms?.create_annoucements}`}>
+            <div
+                data-testid="check-announcment"
+                className={`announcements-left announcements-left--${perms?.create_annoucements}`}
+            >
                 <h3>Recent Announcements</h3>
                 {recentAnnouncements.length === 0 ? (
                     <p className="no-announcements">No announcements yet.</p>
@@ -42,6 +45,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
                         <div
                             key={index}
                             className="announcement-item"
+                            // data-testid={`announcment_appeared-${index}`}
                             onClick={() => handleViewAnnouncement(announcement)}
                         >
                             <h2>{announcement.title}</h2>
@@ -59,12 +63,14 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
                         <input
                             type="text"
                             className="announcement-title"
+                            data-testid="announcement-title-fill"
                             placeholder="Title*"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
                         <textarea
                             className="announcement-textarea"
+                            data-testid="announcement-body-fill"
                             placeholder="Write a description..."
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
@@ -75,6 +81,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
                         <Button
                             displayName="Post"
                             variant="primary"
+                            id="announcement-post"
                             onClick={() => onSubmit(title, message)}
                         />
                     </div>

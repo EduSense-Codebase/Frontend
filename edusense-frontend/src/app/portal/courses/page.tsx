@@ -146,7 +146,9 @@ export default function CourseSection() {
                             backgroundImage: `url(${bgImage})`,
                         }}
                     />
-                    <h3 className="course-tile-name">{courseTileArgs.course_name}</h3>
+                    <h3 className="course-tile-name" data-testid={`new-course-tilename-${index}`}>
+                        {courseTileArgs.course_name}
+                    </h3>
                 </motion.div>
             </Link>
         );
@@ -176,6 +178,7 @@ export default function CourseSection() {
                                     }}
                                     className="course-tile"
                                     id="enroll-course-tile"
+                                    data-testid="enroll-course-tile"
                                 >
                                     <img src="/plus_icon.png" className="plus-icon" alt="" />
                                     <h3 className="course-tile-name">{new_tile}</h3>
@@ -244,6 +247,7 @@ export default function CourseSection() {
                             value={createCourseName}
                             onChange={(e) => setCreateCourseName(e.target.value)}
                             className="mb-4 w-full rounded border p-2"
+                            data-testid="input-field-course-name"
                         />
 
                         <div className="flex justify-end gap-2">
@@ -251,11 +255,13 @@ export default function CourseSection() {
                                 displayName="Cancel"
                                 variant="secondary"
                                 onClick={handleDialogClose}
+                                id="cancel-create-button"
                             />
                             <Button
                                 displayName="Create"
                                 variant="primary"
                                 onClick={handleCreateCourseSubmit}
+                                id="create-course-button"
                             />
                         </div>
                     </div>
