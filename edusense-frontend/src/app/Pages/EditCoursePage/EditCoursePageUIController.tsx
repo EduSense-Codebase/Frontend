@@ -111,6 +111,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                 <div className="header-container">
                     <div
                         className="course-header"
+                        data-testid="course-header-test"
                         style={{
                             backgroundImage: bannerImage ? `url(${bannerImage})` : 'none',
                             backgroundSize: 'cover',
@@ -124,6 +125,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
                             <Button
                                 displayName="Customize"
                                 onClick={() => setShowCustomize(true)}
+                                id="customize"
                                 variant="primary"
                                 icon="/edit.svg"
                             />
@@ -268,9 +270,10 @@ const EditCoursePageUIController: React.FC<Props> = ({
                                     '/banner2.jpg',
                                     '/banner3.jpg',
                                     '/banner4.jpg',
-                                ].map((img) => (
+                                ].map((img, index) => (
                                     <img
                                         key={img}
+                                        data-testid={`banner-${index}`}
                                         src={img}
                                         alt="preset banner"
                                         onClick={() => {

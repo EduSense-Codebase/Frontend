@@ -154,6 +154,7 @@ const Text: React.FC<TextProps> = ({ content, allowEdit, onSave: passedOnSave })
                     {allowEdit && (
                         <div className="edit-btns">
                             <Button
+                                id="text-content-edit"
                                 onClick={onEdit}
                                 variant="primary"
                                 displayName="Edit"

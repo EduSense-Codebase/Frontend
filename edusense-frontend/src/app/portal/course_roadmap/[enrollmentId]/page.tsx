@@ -176,6 +176,7 @@ export default function HomePage() {
                         {coursePermissions?.edit_course_homepage && (
                             <Button
                                 displayName="Edit Page"
+                                id="edit-mode"
                                 onClick={enterEditMode}
                                 variant="primary"
                                 icon="/edit.svg"

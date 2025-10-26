@@ -99,12 +99,14 @@ const CategoriesPanel: React.FC = () => {
                     <div key={index} className="category-item">
                         <input
                             className="cat-name"
+                            data-testid={`cat-added-name-${index}`}
                             value={cat.name}
                             onChange={(e) => handleCategoryNameChange(index, e.target.value)}
                         />
                         <div className="weight-wrap">
                             <input
                                 className="weight-input"
+                                data-testid={`cat-added-weight-${index}`}
                                 type="number"
                                 value={cat.weight}
                                 min={0}
@@ -128,6 +130,7 @@ const CategoriesPanel: React.FC = () => {
             <div className="add-row">
                 <input
                     className="add-name"
+                    data-testid="cat-name"
                     placeholder="New category name"
                     value={newCategoryName}
                     onChange={(e) => setNewCategoryName(e.target.value)}
@@ -135,6 +138,7 @@ const CategoriesPanel: React.FC = () => {
                 <div className="add-weight">
                     <input
                         className="weight-input"
+                        data-testid="cat-weight"
                         type="number"
                         placeholder="0"
                         value={newCategoryWeight === '' ? '' : String(newCategoryWeight)}
@@ -148,7 +152,12 @@ const CategoriesPanel: React.FC = () => {
                     />
                     <span className="percent">%</span>
                 </div>
-                <Button displayName="+ Add Category" variant="primary" onClick={addCategory} />
+                <Button
+                    displayName="+ Add Category"
+                    variant="primary"
+                    onClick={addCategory}
+                    id="add-category"
+                />
             </div>
 
             <div className="total-row">
@@ -165,7 +174,12 @@ const CategoriesPanel: React.FC = () => {
             </div>
 
             <div className="actions">
-                <Button displayName="Save Categories" variant="primary" onClick={saveCategories} />
+                <Button
+                    displayName="Save Categories"
+                    variant="primary"
+                    onClick={saveCategories}
+                    id="save-choices"
+                />
             </div>
         </div>
     );

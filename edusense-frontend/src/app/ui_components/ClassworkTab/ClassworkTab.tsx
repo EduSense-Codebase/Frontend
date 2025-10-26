@@ -96,24 +96,34 @@ export default function ClassworkTab({
                 <>
                     <button
                         className="dropdownItem"
+                        data-testid="assignment-option"
                         onClick={() => handleCreateSelect('assignment')}
                     >
                         📝 Assignment
                     </button>
                     <button
+                        data-testid="text-option"
                         className="dropdownItem"
                         onClick={() => handleCreateSelect('text-content')}
                     >
                         Text-based Content
                     </button>
-                    <button className="dropdownItem" onClick={() => handleCreateSelect('module')}>
+                    <button
+                        data-testid="module-option"
+                        className="dropdownItem"
+                        onClick={() => handleCreateSelect('module')}
+                    >
                         📦 Module
                     </button>
                 </>
             )}
 
             {perms?.create_content_file && (
-                <button className="dropdownItem" onClick={() => handleCreateSelect('file')}>
+                <button
+                    data-testid="file-option"
+                    className="dropdownItem"
+                    onClick={() => handleCreateSelect('file')}
+                >
                     📄 File
                 </button>
             )}
@@ -159,12 +169,18 @@ export default function ClassworkTab({
                 <input
                     type="text"
                     value={moduleTitle}
+                    data-testid="module-name"
                     onChange={(e) => setModuleTitle(e.target.value)}
                     placeholder="Enter module title..."
                     className="modalInput"
                 />
                 <div className="modalActions">
-                    <Button displayName="Create" variant="primary" onClick={createModuleCallback} />
+                    <Button
+                        displayName="Create"
+                        variant="primary"
+                        onClick={createModuleCallback}
+                        id="add-module"
+                    />
                     <Button
                         displayName="Cancel"
                         variant="secondary"
@@ -226,6 +242,7 @@ export default function ClassworkTab({
                     {showAddBtn && (
                         <Button
                             displayName="＋ Create"
+                            id="create-classwork"
                             variant="primary"
                             onClick={() => setShowCreateMenu((prev) => !prev)}
                         />
@@ -235,9 +252,13 @@ export default function ClassworkTab({
             </div>
 
             {/* Modules */}
-            {modules.map((module) => (
+            {modules.map((module, index) => (
                 <div key={module.id} className="module">
-                    <div className="moduleHeader" onClick={() => toggleModule(module.id)}>
+                    <div
+                        data-testid={`module-added-name-${index}`}
+                        className="moduleHeader"
+                        onClick={() => toggleModule(module.id)}
+                    >
                         <span>
                             <span className="moduleIcon">📦</span> {module.title}
                         </span>
