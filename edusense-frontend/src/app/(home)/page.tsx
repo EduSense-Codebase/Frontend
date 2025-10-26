@@ -57,8 +57,7 @@ export default function LandingPage() {
             heading: 'Cut the busy work with AI assisted grading',
             content:
                 'Grades and adds feedback to short answer, long answer, and essay based questions, along with traditional multiple choice grading',
-            gifPath: '/landing_page/videos/coming_soon2.jpg',
-            gifType: 'image',
+            gifPath: '/landing_page/videos/grading_agent.mp4',
         },
     ];
 
