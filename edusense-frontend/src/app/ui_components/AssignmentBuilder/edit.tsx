@@ -227,6 +227,7 @@ const AssignmentBuilderEdit: React.FC<AssignmentBuilderEditProps> = (props) => {
         <div>
             <div className={`quiz-builder quiz-builder--edit`}>
                 <input
+                    data-testid="quiz-title-placeholder"
                     disabled={false}
                     type="text"
                     value={props.title}

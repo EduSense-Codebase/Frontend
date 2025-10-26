@@ -45,11 +45,16 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
                         <div
                             key={index}
                             className="announcement-item"
-                            // data-testid={`announcment_appeared-${index}`}
+                            data-testid={`announcment_appeared-${index}`}
                             onClick={() => handleViewAnnouncement(announcement)}
                         >
                             <h2>{announcement.title}</h2>
-                            <p className="announcement-message">{announcement.content}</p>
+                            <p
+                                data-testid={`announcement-body-${index}`}
+                                className="announcement-message"
+                            >
+                                {announcement.content}
+                            </p>
                         </div>
                     ))
                 )}

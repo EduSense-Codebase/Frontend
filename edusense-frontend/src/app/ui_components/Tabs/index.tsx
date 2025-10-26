@@ -28,11 +28,12 @@ const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onTabChange }) => {
 
     return (
         <div className="tabs" ref={containerRef} style={{ position: 'relative' }}>
-            {tabs.map((tab) => (
+            {tabs.map((tab, index) => (
                 <button
                     key={tab}
                     className={`tab ${tab === activeTab ? 'active' : ''}`}
                     onClick={() => onTabChange(tab)}
+                    data-testid={`tab-${index}`}
                 >
                     {tab}
                 </button>
