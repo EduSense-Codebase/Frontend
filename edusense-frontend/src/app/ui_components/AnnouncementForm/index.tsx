@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './AnnouncementForm.scss';
 import Button from '../Button';
 import { IAnnouncements, ICoursePermissions } from '@/app/typedef';
+//import { error } from 'node:console';
 
 interface AnnouncementFormProps {
     onSubmit: (title: string, message: string) => void;
@@ -14,6 +15,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
     const [message, setMessage] = useState('');
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<IAnnouncements | null>(null);
     const allowed = perms?.create_annoucements;
+    const [error, setError] = useState('');
 
     const handleCancel = () => {
         setTitle('');
@@ -26,6 +28,17 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
 
     const handleBackToForm = () => {
         setSelectedAnnouncement(null);
+    };
+
+    const handlePostAnnouncement = () => {
+        if (title.trim() === '' || message.trim() === '') {
+            setError('Error: Please input a title and description.');
+            return;
+        }
+        setError('');
+        onSubmit(title, message);
+        setTitle('');
+        setMessage('');
     };
 
     const recentAnnouncements = Array.isArray(announcements) ? announcements : [];
@@ -80,6 +93,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                         />
+                        {error && <p className="error-message">{error}</p>}
                     </div>
                     <div className="announcement-actions">
                         <Button displayName="Cancel" variant="secondary" onClick={handleCancel} />
@@ -87,7 +101,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
                             displayName="Post"
                             variant="primary"
                             id="announcement-post"
-                            onClick={() => onSubmit(title, message)}
+                            onClick={handlePostAnnouncement}
                         />
                     </div>
                 </div>
