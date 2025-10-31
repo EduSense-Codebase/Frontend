@@ -44,9 +44,6 @@ export default function ClassworkTab({
     const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false);
     const { enrollmentId } = useParams();
 
-    console.log(perms?.create_assignments);
-    console.log(perms?.create_content_file);
-
     const toggleModule = (id: number) => {
         setExpandedModules((prev) =>
             prev.includes(id) ? prev.filter((mid) => mid !== id) : [...prev, id],
@@ -89,6 +86,7 @@ export default function ClassworkTab({
     const unassignedAssignments = assignments.filter(
         (a) => !a.module || a.module === 0 || !modules.some((m) => m.id === a.module),
     );
+    console.log(unassignedAssignments);
 
     const renderCreateDropdown = () => (
         <div className="createDropdown">
@@ -325,8 +323,8 @@ export default function ClassworkTab({
                                 >
                                     📝 {assignment.name}
                                 </Link>
-                                {perms?.create_assignments && (
-                                    <div className="flex gap-2">
+                                <div className="flex gap-2">
+                                    {perms?.create_assignments && (
                                         <Button
                                             displayName="Edit"
                                             variant="primary"
@@ -336,21 +334,21 @@ export default function ClassworkTab({
                                                 )
                                             }
                                         />
-                                    </div>
-                                )}
-
-                                {assignment.assignment_data['type'] == 'quiz_or_assignment' &&
-                                    perms?.grade_assignments && (
-                                        <Button
-                                            displayName="Grade"
-                                            variant="secondary"
-                                            onClick={() =>
-                                                router.push(
-                                                    `/portal/grades/${enrollmentId}/${assignment.builder}`,
-                                                )
-                                            }
-                                        />
                                     )}
+
+                                    {assignment.assignment_data['type'] == 'quiz_or_assignment' &&
+                                        perms?.grade_assignments && (
+                                            <Button
+                                                displayName="Grade"
+                                                variant="secondary"
+                                                onClick={() =>
+                                                    router.push(
+                                                        `/portal/grades/${enrollmentId}/${assignment.builder}`,
+                                                    )
+                                                }
+                                            />
+                                        )}
+                                </div>
                             </li>
                         ))}
                     </ul>

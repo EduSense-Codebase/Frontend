@@ -39,8 +39,8 @@ export default function GradesTab({ grades, perms }: GradesProps) {
                                   item.assignment_data?.type === 'quiz_or_assignment',
                           )
                     ) // Student view → filter assignments
-                        .map((item: any) => (
-                            <li key={item.email || item.id} className="gradeItem">
+                        .map((item: any, index) => (
+                            <li key={`grades-items-${index}`} className="gradeItem">
                                 <span className="gradeLabel">📋 {item.name}</span>
 
                                 <span className="gradeValue">
