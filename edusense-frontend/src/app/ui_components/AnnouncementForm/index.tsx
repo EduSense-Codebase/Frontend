@@ -35,8 +35,8 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onSubmit, announcem
             setError('Error: Please input a title and description.');
             return;
         }
-        setError('');
         onSubmit(title, message);
+        setError('');
         setTitle('');
         setMessage('');
     };
