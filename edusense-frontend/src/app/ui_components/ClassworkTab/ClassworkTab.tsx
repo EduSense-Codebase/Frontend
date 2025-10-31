@@ -151,11 +151,10 @@ export default function ClassworkTab({
             console.log('created module', res.data);
             const newModule = res.data.data;
             setNewModules((prevModules) => [...prevModules, newModule]);
+            setError('');
+            setModuleTitle('');
+            setShowModuleModal(false);
         });
-
-        setError('');
-        setModuleTitle('');
-        setShowModuleModal(false);
     };
 
     const uploadFileCallback = async () => {
