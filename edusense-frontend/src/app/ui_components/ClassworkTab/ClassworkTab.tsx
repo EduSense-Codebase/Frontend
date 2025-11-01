@@ -43,6 +43,7 @@ export default function ClassworkTab({
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isFilesSectionOpen, setIsFilesSectionOpen] = useState(false);
     const { enrollmentId } = useParams();
+    const [error, setError] = useState('');
 
     const toggleModule = (id: number) => {
         setExpandedModules((prev) =>
@@ -78,6 +79,12 @@ export default function ClassworkTab({
             handleCreateBuilderPage('text');
         }
     };
+
+    const handleCancelModule = () => {
+        setError('');
+        setShowModuleModal(false);
+    };
+
     const assignmentsByModule: Record<number, IAssignments[]> = {};
     modules.forEach((mod) => {
         assignmentsByModule[mod.id] = assignments.filter((a) => a.module === mod.id);
@@ -129,6 +136,10 @@ export default function ClassworkTab({
     );
 
     const createModuleCallback = () => {
+        if (moduleTitle.trim() === '') {
+            setError('Error: Please specify a name for the module.');
+            return;
+        }
         const url = API_PREFIX + COURSE_ENDPOINT;
         const formData = { course_id: enrollmentId, title: moduleTitle };
         const queryParams = { section: 'make_module' };
@@ -138,9 +149,10 @@ export default function ClassworkTab({
             console.log('created module', res.data);
             const newModule = res.data.data;
             setNewModules((prevModules) => [...prevModules, newModule]);
+            setError('');
+            setModuleTitle('');
+            setShowModuleModal(false);
         });
-
-        setShowModuleModal(false);
     };
 
     const uploadFileCallback = async () => {
@@ -172,6 +184,7 @@ export default function ClassworkTab({
                     placeholder="Enter module title..."
                     className="modalInput"
                 />
+                {error && <p className="error-message">{error}</p>}
                 <div className="modalActions">
                     <Button
                         displayName="Create"
@@ -179,11 +192,7 @@ export default function ClassworkTab({
                         onClick={createModuleCallback}
                         id="add-module"
                     />
-                    <Button
-                        displayName="Cancel"
-                        variant="secondary"
-                        onClick={() => setShowModuleModal(false)}
-                    />
+                    <Button displayName="Cancel" variant="secondary" onClick={handleCancelModule} />
                 </div>
             </div>
         </div>
