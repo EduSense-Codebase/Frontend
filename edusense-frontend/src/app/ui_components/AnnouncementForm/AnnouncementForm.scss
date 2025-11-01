@@ -8,7 +8,7 @@
   gap: 16px;
   font-family: variables.$font-jua;
   box-shadow: variables.$dropshadow;
-  height: 15rem;
+  height: 40%;
 
   .announcements-left {
     font-size: 1rem;
@@ -93,6 +93,12 @@
           resize: none;
           font-family: inherit;
           color: variables.$dark-blue;
+      }
+
+      .error-message {
+        color: rgb(244, 143, 143);
+        font-size: 1rem;
+        margin-top: 0.5rem;
       }
 
     .announcement-actions {
