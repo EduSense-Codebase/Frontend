@@ -52,6 +52,7 @@ export interface ICourse {
     institution: number;
     join_code: string;
     teacher_id: number;
+    total_grade: number;
 }
 
 export interface IOfferedCourse {
