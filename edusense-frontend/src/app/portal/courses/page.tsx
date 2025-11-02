@@ -141,7 +141,10 @@ export default function CourseSection() {
                     }}
                     className="course-tile"
                 >
-                    {grade != null && <div className="grade-bubble">{grade}</div>}
+                    {grade != null && (
+                        <div className="grade-bubble">{grade == -1 ? 'N/A' : grade}</div>
+                    )}
+
                     <div
                         className="course-image"
                         style={{
