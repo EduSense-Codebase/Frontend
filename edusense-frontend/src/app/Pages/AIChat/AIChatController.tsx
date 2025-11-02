@@ -32,6 +32,7 @@ export interface IAIThinking {
 export interface AIChatControllerProps {
     courseId?: number;
     builderId?: number;
+    setBackgroundRunning?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AIChatController(props: AIChatControllerProps) {
@@ -141,6 +142,7 @@ export default function AIChatController(props: AIChatControllerProps) {
                 }
                 return prevThinking;
             });
+            props.setBackgroundRunning?.(true);
         } else if (jsonMsg.type == 'final_content') {
             const aiMessage: string = jsonMsg.final_content;
             setThinking(undefined);
@@ -148,6 +150,7 @@ export default function AIChatController(props: AIChatControllerProps) {
                 return [...prevMessages, { sender: 'ai', content: aiMessage }];
             });
             toast.success('Content generation complete!');
+            props.setBackgroundRunning?.(false);
         } else if (jsonMsg.type == 'stream_final_content') {
             setThinking(undefined);
             console.log(jsonMsg.chunk);
@@ -166,6 +169,7 @@ export default function AIChatController(props: AIChatControllerProps) {
                 }
                 return [];
             });
+            props.setBackgroundRunning?.(false);
         }
     };
 

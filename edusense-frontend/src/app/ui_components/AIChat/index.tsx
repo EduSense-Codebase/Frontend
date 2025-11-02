@@ -105,9 +105,9 @@ const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | 
     return (
         <div className="message-render">
             {props.messages.map((message, index) => (
-                <>
+                <React.Fragment key={`ai-chat-message-${index}`}>
                     <IndividualMessageRender message={message} index={index} />
-                </>
+                </React.Fragment>
             ))}
             {props.thinking ? <AIAgentLoader status={props.thinking.verbose_name} /> : null}
             <div style={{ display: 'none' }} />
