@@ -85,6 +85,7 @@ export interface IModules {
 }
 
 export interface ICategory {
+    id: string;
     name: string;
     weight: number;
 }
@@ -123,7 +124,7 @@ export interface IOneFileResponse {
 }
 
 export interface CategoryResponse {
-    data: Record<string, number>;
+    data: Record<number, [string, number]>;
 }
 
 export interface IAllOfferedResponse {

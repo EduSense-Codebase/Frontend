@@ -213,7 +213,7 @@ export default function BuilderPage() {
     const [name, setName] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [moduleId, setModuleId] = useState(-1);
-    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState(-1);
     const [assignmentDescription, setAssignmentDescription] = useState('');
     const [isDraft, setIsDraft] = useState(false);
 
@@ -516,9 +516,9 @@ export default function BuilderPage() {
         const url = API_PREFIX + COURSE_ENDPOINT;
         const queryParams = { section: 'get_categories', course_id: courseId };
         httpGet<CategoryResponse>(url, queryParams).then((res) => {
-            console.log('categories', res.data);
             if (res.data) {
-                const catArray = Object.entries(res.data.data).map(([name, weight]) => ({
+                const catArray = Object.entries(res.data.data).map(([id, [name, weight]]) => ({
+                    id: Number(id),
                     name,
                     weight,
                 }));
@@ -894,18 +894,15 @@ export default function BuilderPage() {
                 <select
                     className="modalInput"
                     value={selectedCategory || ''}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    onChange={(e) => setSelectedCategory(parseInt(e.target.value))}
                 >
-                    <option value="" disabled hidden>
-                        Select a category
-                    </option>
+                    <option value={-1}>Select a category</option>
                     {categories.map((cat, index) => (
-                        <option key={index} value={cat.name}>
+                        <option key={index} value={cat.id}>
                             {cat.name} ({cat.weight.toFixed(0)}%)
                         </option>
                     ))}
                 </select>
-
                 <textarea
                     value={assignmentDescription}
                     onChange={(e) => setAssignmentDescription(e.target.value)}
