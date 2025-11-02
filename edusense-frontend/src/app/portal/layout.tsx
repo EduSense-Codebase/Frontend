@@ -39,6 +39,23 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
     const [currCourseId, setCurrCourseId] = useState<number | undefined>(undefined);
     const [currBuilderId, setCurrBuilderId] = useState<number | undefined>(undefined);
+    const [isBackgroundRunning, setIsBackgroundRunning] = useState<boolean>(false);
+
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (!isBackgroundRunning) {
+                return;
+            }
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [isBackgroundRunning]);
 
     useEffect(() => {
         const queryParams = {
@@ -127,7 +144,11 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
                 {currCourseId ? (
-                    <AIChatController courseId={currCourseId} builderId={currBuilderId} />
+                    <AIChatController
+                        courseId={currCourseId}
+                        builderId={currBuilderId}
+                        setBackgroundRunning={setIsBackgroundRunning}
+                    />
                 ) : null}
 
                 <CustomPropContext.Provider
@@ -142,6 +163,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                         setCourses,
                         setCurrCourseId,
                         setCurrBuilderId,
+                        setIsBackgroundRunning,
                     }}
                 >
                     {children}
