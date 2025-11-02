@@ -36,42 +36,44 @@ function AIAgentLoader({
     }[size];
 
     return (
-        <div className={`flex items-start gap-3 ${className}`}>
-            <img src="/chat-icon.svg" alt="chatbot icon" className="chat-message-icon" />
+        <>
+            <div className={`flex items-start gap-3 ${className}`}>
+                <img src="/chat-icon.svg" alt="chatbot icon" className="chat-message-icon" />
 
-            {/* text area + animated dots */}
-            <div>
-                <div className="mt-4 flex-col items-center gap-3">
-                    <div>
-                        <div className={`${dims.text} leading-snug font-medium text-[#4b76b3]`}>
-                            {agentName}
+                {/* text area + animated dots */}
+                <div>
+                    <div className="mt-4 flex-col items-center gap-3">
+                        <div>
+                            <div className={`${dims.text} leading-snug font-medium text-[#4b76b3]`}>
+                                {agentName}
+                            </div>
+                            <div className="sr-only" aria-live="polite">
+                                {status}
+                            </div>
                         </div>
-                        <div className="sr-only" aria-live="polite">
-                            {status}
+
+                        {/* status text */}
+                        <div className={`mt-1 ${dims.text} text-[#6b92d0]`}>{status}</div>
+
+                        {/* animated dots box */}
+                        <div className="loader-container" role="status">
+                            <span
+                                className="loader-dot"
+                                style={{ width: '0.5rem', height: '0.5rem' }}
+                            />
+                            <span
+                                className="loader-dot"
+                                style={{ width: '0.5rem', height: '0.5rem' }}
+                            />
+                            <span
+                                className="loader-dot"
+                                style={{ width: '0.5rem', height: '0.5rem' }}
+                            />
                         </div>
-                    </div>
-
-                    {/* status text */}
-                    <div className={`mt-1 ${dims.text} text-[#6b92d0]`}>{status}</div>
-
-                    {/* animated dots box */}
-                    <div className="loader-container" role="status">
-                        <span
-                            className="loader-dot"
-                            style={{ width: '0.5rem', height: '0.5rem' }}
-                        />
-                        <span
-                            className="loader-dot"
-                            style={{ width: '0.5rem', height: '0.5rem' }}
-                        />
-                        <span
-                            className="loader-dot"
-                            style={{ width: '0.5rem', height: '0.5rem' }}
-                        />
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 
@@ -101,17 +103,28 @@ const IndividualMessageRender = (props: { message: IMessages; index: number }) =
     return <AIMessageRender {...props} />;
 };
 
-const MessagesRender = (props: { messages: IMessages[]; thinking: IAIThinking | undefined }) => {
+const MessagesRender = (props: {
+    messages: IMessages[];
+    thinking: IAIThinking | undefined;
+    endRef: React.RefObject<HTMLDivElement | null>;
+    chatRef: React.RefObject<HTMLDivElement | null>;
+}) => {
     return (
-        <div className="message-render">
-            {props.messages.map((message, index) => (
-                <>
-                    <IndividualMessageRender message={message} index={index} />
-                </>
-            ))}
-            {props.thinking ? <AIAgentLoader status={props.thinking.verbose_name} /> : null}
-            <div style={{ display: 'none' }} />
-        </div>
+        <>
+            <div
+                className="message-render"
+                style={{ overflowY: 'scroll', scrollBehavior: 'smooth' }}
+                ref={props.chatRef}
+            >
+                {props.messages.map((message, index) => (
+                    <>
+                        <IndividualMessageRender message={message} index={index} />
+                    </>
+                ))}
+                {props.thinking ? <AIAgentLoader status={props.thinking.verbose_name} /> : null}
+                <div ref={props.endRef} />
+            </div>
+        </>
     );
 };
 
@@ -140,10 +153,17 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
 
     const [input, setInput] = useState('');
 
+    const endRef = React.useRef<HTMLDivElement | null>(null);
+    const chatRef = React.useRef<HTMLDivElement | null>(null);
+
+    const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
+        ref.current?.scrollIntoView({ behavior: 'instant' });
+    };
+
     const toggleChat = () => {
         if (isOpen) {
             setSidebarOpen(false);
-        } // close sidebar
+        }
         setIsOpen(!isOpen);
     };
 
@@ -168,13 +188,27 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
         };
     }, [isResizing]);
 
+    useEffect(() => {
+        if (chatRef.current && props.thinking) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight - chatRef.current.offsetHeight;
+        }
+    }, [props.thinking]);
+
+    useEffect(() => {
+        if (isOpen) {
+            scrollToBottom(endRef);
+        }
+    }, [isOpen]);
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
-    const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+    const sendMessage = (
+        e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>,
+    ) => {
         e.preventDefault();
         props.sendMessage(input);
         setInput('');
@@ -262,17 +296,25 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <MessagesRender messages={props.messages} thinking={props.thinking} />
+                            <MessagesRender
+                                messages={props.messages}
+                                thinking={props.thinking}
+                                endRef={endRef}
+                                chatRef={chatRef}
+                            />
                         </div>
 
                         {/* Input */}
                         <div className="chat-footer">
                             <form className="chat-footer-input" onSubmit={sendMessage}>
-                                <input
-                                    type="text"
+                                <textarea
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter'}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            sendMessage(e);
+                                        }
+                                    }}
                                     className="flex-1 rounded-lg border px-4 py-2 text-gray-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     placeholder="Ask me anything..."
                                 />
