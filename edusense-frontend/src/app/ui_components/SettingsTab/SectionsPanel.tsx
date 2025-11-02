@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../Button';
+import toast from 'react-hot-toast';
 
 interface ISectionsPanelProps {
     sections: string[];
@@ -10,6 +11,23 @@ const SectionsPanel: React.FC<ISectionsPanelProps> = (props: ISectionsPanelProps
     const [sectionName, setSectionName] = React.useState('');
 
     const onSectionSubmit = () => {
+        const cleanName = sectionName.trim();
+
+        // Prevent empty input
+        if (!cleanName) {
+            toast.error('Section name cannot be empty');
+            return;
+        }
+
+        // Prevent duplicates (case-insensitive)
+        const duplicate = props.sections.some(
+            (s) => s.trim().toLowerCase() === cleanName.toLowerCase(),
+        );
+        if (duplicate) {
+            toast.error('This section already exists');
+            return;
+        }
+
         props.addSection(sectionName);
         setSectionName('');
     };

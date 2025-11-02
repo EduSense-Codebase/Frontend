@@ -3,8 +3,10 @@ import { httpPost, httpGet } from '@/app/utils';
 import { useParams } from 'next/navigation';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import Button from '../Button';
+import { toast } from 'react-hot-toast';
 
 import { CategoryResponse, ICategory } from '@/app/typedef';
+const MAX_WEIGHT = 100;
 
 const CategoriesPanel: React.FC = () => {
     const params = useParams();
@@ -43,12 +45,21 @@ const CategoriesPanel: React.FC = () => {
 
     const addCategory = () => {
         if (!newCategoryName.trim()) {
-            alert('Please enter a category name.');
+            toast.error('Please enter a category name.');
             return;
         }
         const weightNumber = Number(newCategoryWeight);
-        if (isNaN(weightNumber) || weightNumber < 0) {
-            alert('Please enter a valid weight (0 or greater).');
+        const totalCurrentWeight = categories.reduce(
+            (sum, cat) => sum + Number(cat.weight || 0),
+            0,
+        );
+        if (isNaN(weightNumber) || weightNumber <= 0) {
+            toast.error('Please enter a valid weight');
+            return;
+        }
+
+        if (weightNumber + totalCurrentWeight > MAX_WEIGHT) {
+            toast.error('Exceeding max weight');
             return;
         }
         const newCat: ICategory = {
@@ -89,7 +100,7 @@ const CategoriesPanel: React.FC = () => {
 
         httpPost(url, payload, queryParams).then((res) => {
             console.log('Saved categories:', res);
-            alert('Categories saved!');
+            toast.success('Categories saved!');
         });
     };
 
