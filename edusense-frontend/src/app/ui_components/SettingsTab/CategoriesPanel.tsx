@@ -24,7 +24,8 @@ const CategoriesPanel: React.FC = () => {
         httpGet<CategoryResponse>(url, queryParams).then((res) => {
             console.log('categories', res.data);
             if (res.data) {
-                const catArray = Object.entries(res.data.data).map(([name, weight]) => ({
+                const catArray = Object.entries(res.data.data).map(([id, [name, weight]]) => ({
+                    id: Number(id),
                     name,
                     weight,
                 }));
@@ -51,6 +52,7 @@ const CategoriesPanel: React.FC = () => {
             return;
         }
         const newCat: ICategory = {
+            id: categories.length > 0 ? categories[categories.length - 1].id + 1 : 1,
             name: newCategoryName.trim(),
             weight: weightNumber,
         };
@@ -64,8 +66,8 @@ const CategoriesPanel: React.FC = () => {
 
     const saveCategories = () => {
         const url = API_PREFIX + COURSE_ENDPOINT;
-        const catDict = categories.reduce<Record<string, number>>((acc, c) => {
-            if (c.name.trim()) acc[c.name] = c.weight;
+        const catDict = categories.reduce<Record<number, [string, number]>>((acc, c) => {
+            if (c.name.trim()) acc[c.id] = [c.name, c.weight];
             return acc;
         }, {});
         const payload = {
