@@ -211,6 +211,7 @@ export interface ICourseSectionCreateResponse {
 export interface ICustomProps {
     permissions: IPermissions | undefined;
     setPermissions: React.Dispatch<React.SetStateAction<IPermissions | undefined>>;
+    setIsBackgroundRunning: React.Dispatch<React.SetStateAction<boolean>>;
     coursePermissions: ICoursePermissions | undefined;
     setCoursePermissions: React.Dispatch<React.SetStateAction<ICoursePermissions | undefined>>;
     institution: string;
