@@ -25,7 +25,7 @@ const CategoriesPanel: React.FC = () => {
             console.log('categories', res.data);
             if (res.data) {
                 const catArray = Object.entries(res.data.data).map(([id, [name, weight]]) => ({
-                    id: Number(id),
+                    id,
                     name,
                     weight,
                 }));
@@ -52,7 +52,10 @@ const CategoriesPanel: React.FC = () => {
             return;
         }
         const newCat: ICategory = {
-            id: categories.length > 0 ? categories[categories.length - 1].id + 1 : 1,
+            id:
+                categories.length > 0
+                    ? String(Number(categories[categories.length - 1].id) + 1)
+                    : '1',
             name: newCategoryName.trim(),
             weight: weightNumber,
         };
@@ -66,7 +69,7 @@ const CategoriesPanel: React.FC = () => {
 
     const saveCategories = () => {
         const url = API_PREFIX + COURSE_ENDPOINT;
-        const catDict = categories.reduce<Record<number, [string, number]>>((acc, c) => {
+        const catDict = categories.reduce<Record<string, [string, number]>>((acc, c) => {
             if (c.name.trim()) acc[c.id] = [c.name, c.weight];
             return acc;
         }, {});

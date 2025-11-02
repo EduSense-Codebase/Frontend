@@ -903,7 +903,6 @@ export default function BuilderPage() {
                         </option>
                     ))}
                 </select>
-
                 <textarea
                     value={assignmentDescription}
                     onChange={(e) => setAssignmentDescription(e.target.value)}

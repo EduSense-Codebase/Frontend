@@ -85,7 +85,7 @@ export interface IModules {
 }
 
 export interface ICategory {
-    id: number;
+    id: string;
     name: string;
     weight: number;
 }
