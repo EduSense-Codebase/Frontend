@@ -90,7 +90,9 @@
     box-shadow: 0 -2px 4px rgba(75, 118, 179, 0.25);
 }
 
+
 .course-tile {
+    position: relative;
     display: flex;
     flex-direction: column;
     color: var(--white);
@@ -103,6 +105,31 @@
     overflow: hidden;
     font-family: 'Itim', sans-serif;
     cursor: pointer;
+}
+
+.grade-bubble {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    min-width: 2.0rem;         /* small but stretches for 2-char grades like "A+" */
+    height: 1.6rem;            /* pill height */
+    padding: 0 0.6rem;         /* horizontal breathing room */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;      /* full pill / elliptical */
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.92);  /* subtle white "canvas" */
+    color: var(--dark-blue);
+    box-shadow: 0 4px 8px rgba(59, 90, 140, 0.12); /* light elevation */
+    border: 1px solid rgba(59, 90, 140, 0.06);
+    z-index: 20;
+    font-family: 'Itim', sans-serif;
+    -webkit-backdrop-filter: blur(4px); /* soft glass effect where supported */
+    backdrop-filter: blur(4px);
+    pointer-events: none; /* bubble is decorative; doesn't intercept clicks */
 }
 
 .course-tile-name {
