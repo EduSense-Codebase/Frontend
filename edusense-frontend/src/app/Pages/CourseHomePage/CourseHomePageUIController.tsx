@@ -10,6 +10,7 @@ import {
     ICourse,
     ICoursePermissions,
     IFile,
+    IStudentAssignments,
     IModules,
     IPermissions,
     IStudentData,
@@ -28,6 +29,7 @@ interface Props {
     courseDetails?: ICourse | undefined;
     announcements: IAnnouncements[];
     assignments: IAssignments[];
+    studentAssignments?: IStudentAssignments[] | undefined;
     onPostAnnouncement: (title: string, message: string) => void;
     bannerImage?: string | null;
     allModules: IModules[];
@@ -50,6 +52,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     courseDetails,
     announcements,
     assignments,
+    studentAssignments,
     onPostAnnouncement,
     bannerImage,
     allModules,
@@ -74,7 +77,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     // const create = permissions_all?.create;
     // const grade = permissions_all?.create;
 
-    const gradesData = create_course ? students : assignments;
+    const gradesData = students;
     console.log('there should be assignments', gradesData);
 
     const onTabChange = (name: string) => {
@@ -161,7 +164,11 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Grades' && (
                     <div>
-                        <GradesTab grades={gradesData} perms={course_permissions} />
+                        <GradesTab
+                            grades={gradesData}
+                            studentAssignments={studentAssignments}
+                            perms={course_permissions}
+                        />
                     </div>
                 )}
 

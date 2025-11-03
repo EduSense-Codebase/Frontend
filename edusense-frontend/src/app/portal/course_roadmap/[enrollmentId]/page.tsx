@@ -20,6 +20,8 @@ import {
     IFileResponse,
     ICourseSectionResponse,
     ICourseSectionCreateResponse,
+    IStudentAssignments,
+    IStudentAssignmentsResponse,
 } from '@/app/typedef';
 // import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/typedef';
@@ -40,6 +42,9 @@ export default function HomePage() {
     const [courseDetails, setCourseDetails] = useState<ICourse>();
     const [announcements, setAnnouncements] = useState<IAnnouncements[]>([]);
     const [assignments, setAssignments] = useState<IAssignments[]>([]);
+    const [studentAssignments, setStudentAssignments] = useState<IStudentAssignments[] | undefined>(
+        undefined,
+    );
     const [modules, setModules] = useState<IModules[]>([]);
     const [editMode, setEditMode] = useState(false);
     const [bannerImage, setBannerImage] = useState<string | null>(null);
@@ -100,6 +105,14 @@ export default function HomePage() {
         requestResponse.then((response) => {
             console.log('student response', response.data);
             setStudents(response.data.data);
+        });
+
+        const studentAssignmentsResponse = httpGet<IStudentAssignmentsResponse>(url, {
+            section: 'all_assignments_for_student_in_course',
+            course_id: enrollmentId,
+        });
+        studentAssignmentsResponse.then((response) => {
+            setStudentAssignments(response.data.data);
         });
     }, [enrollmentId]);
 
@@ -190,6 +203,7 @@ export default function HomePage() {
                         courseDetails={courseDetails}
                         announcements={announcements}
                         assignments={assignments}
+                        studentAssignments={studentAssignments}
                         onPostAnnouncement={handleCreateAnnouncement}
                         bannerImage={bannerImage}
                         allModules={modules}
