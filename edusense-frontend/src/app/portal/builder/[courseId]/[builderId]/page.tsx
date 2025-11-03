@@ -574,16 +574,27 @@ export default function BuilderPage() {
         const queryParams = {
             section: 'create_builder_assignment',
         };
-        const formData = {
+
+        const formData: any = {
             course_id: courseId,
             builder_id: builderId,
-            name: name,
-            due_date: new Date(dueDate).toISOString(),
+            name,
             module_id: moduleId,
             description: assignmentDescription,
             is_draft: JSON.stringify(isDraft),
-            category: selectedCategory,
         };
+        if (textContent == null) {
+            if (!dueDate) {
+                toast.error('Please select a due date before creating this assignment.');
+                return;
+            }
+            formData.due_date = new Date(dueDate).toISOString();
+
+            // Add category only if selected
+            if (selectedCategory != null && selectedCategory >= 0) {
+                formData.category = selectedCategory;
+            }
+        }
 
         const assignmentCreateRequest = httpPost(url, formData, queryParams);
 
@@ -896,19 +907,23 @@ export default function BuilderPage() {
                     ))}
                 </select>
 
-                <label>Category</label>
-                <select
-                    className="modalInput"
-                    value={selectedCategory || ''}
-                    onChange={(e) => setSelectedCategory(parseInt(e.target.value))}
-                >
-                    <option value={-1}>Select a category</option>
-                    {categories.map((cat, index) => (
-                        <option key={index} value={cat.id}>
-                            {cat.name} ({cat.weight.toFixed(0)}%)
-                        </option>
-                    ))}
-                </select>
+                {textContent == null && (
+                    <>
+                        <label>Category</label>
+                        <select
+                            className="modalInput"
+                            value={selectedCategory || ''}
+                            onChange={(e) => setSelectedCategory(parseInt(e.target.value))}
+                        >
+                            <option value={-1}>Select a category</option>
+                            {categories.map((cat, index) => (
+                                <option key={index} value={cat.id}>
+                                    {cat.name} ({cat.weight.toFixed(0)}%)
+                                </option>
+                            ))}
+                        </select>
+                    </>
+                )}
                 <textarea
                     value={assignmentDescription}
                     onChange={(e) => setAssignmentDescription(e.target.value)}
