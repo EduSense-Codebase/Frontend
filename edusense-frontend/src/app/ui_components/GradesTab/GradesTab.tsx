@@ -1,11 +1,17 @@
 'use client';
 import React from 'react';
 import './GradesTab.scss';
-import { ICoursePermissions, IStudentAssignments, IStudentData } from '@/app/typedef';
+import {
+    IAssignmentCategories,
+    ICoursePermissions,
+    IStudentAssignments,
+    IStudentData,
+} from '@/app/typedef';
 
 interface GradesProps {
     grades: IStudentData[];
     studentAssignments?: IStudentAssignments[] | undefined;
+    assignmentCategories?: IAssignmentCategories[];
     perms: ICoursePermissions | undefined;
 }
 
@@ -17,7 +23,12 @@ function getLetterGrade(score: number): string {
     return 'F';
 }
 
-export default function GradesTab({ grades, studentAssignments, perms }: GradesProps) {
+export default function GradesTab({
+    grades,
+    studentAssignments,
+    assignmentCategories,
+    perms,
+}: GradesProps) {
     const emptyMessage = perms?.view_all_students
         ? 'No students enrolled in course yet'
         : 'No assignments graded yet';
@@ -63,19 +74,35 @@ export default function GradesTab({ grades, studentAssignments, perms }: GradesP
     };
 
     return (
-        <div className="grades">
-            <div className="header">
-                <h2>Grades</h2>
-            </div>
+        <div className="gradesPage">
+            <div className="grades">
+                <div className="header">
+                    <h2>Grades</h2>
+                </div>
 
-            <ul className="gradeList">
-                {/*{grades.length === 0 ? (
-                    <p className="empty-array">{emptyMessage}</p>
-                ) : (
-                    renderStudentsOrStudentAssignments()
-                )}*/}
-                {renderStudentsOrStudentAssignments()}
-            </ul>
+                <ul className="gradeList">{renderStudentsOrStudentAssignments()}</ul>
+            </div>
+            {assignmentCategories != undefined && (
+                <div className="categories">
+                    <h2 className="categoriesHeader">Categories</h2>
+                    <table className="categoriesTable">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {assignmentCategories.map((cat, index) => (
+                                <tr key={`cat-${index}`}>
+                                    <td>{cat.name}</td>
+                                    <td>{cat.weight}%</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 }

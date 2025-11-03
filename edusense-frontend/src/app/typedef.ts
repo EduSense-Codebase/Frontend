@@ -87,6 +87,12 @@ export interface IStudentAssignments {
     total_points: number;
 }
 
+export interface IAssignmentCategories {
+    id: number;
+    name: string;
+    weight: number;
+}
+
 export interface IModules {
     id: number;
     title: string;
@@ -204,7 +210,10 @@ export interface IStudentDataResponse {
 }
 
 export interface IStudentAssignmentsResponse {
-    data: IStudentAssignments[];
+    data: {
+        assignments: IStudentAssignments[];
+        categories: IAssignmentCategories[];
+    };
 }
 
 export interface IAIAgentsResponse {

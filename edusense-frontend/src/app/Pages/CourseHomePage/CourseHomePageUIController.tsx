@@ -14,6 +14,7 @@ import {
     IModules,
     IPermissions,
     IStudentData,
+    IAssignmentCategories,
 } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
@@ -30,6 +31,7 @@ interface Props {
     announcements: IAnnouncements[];
     assignments: IAssignments[];
     studentAssignments?: IStudentAssignments[] | undefined;
+    assignmentCategories?: IAssignmentCategories[] | undefined;
     onPostAnnouncement: (title: string, message: string) => void;
     bannerImage?: string | null;
     allModules: IModules[];
@@ -53,6 +55,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     announcements,
     assignments,
     studentAssignments,
+    assignmentCategories,
     onPostAnnouncement,
     bannerImage,
     allModules,
@@ -167,6 +170,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                         <GradesTab
                             grades={gradesData}
                             studentAssignments={studentAssignments}
+                            assignmentCategories={assignmentCategories}
                             perms={course_permissions}
                         />
                     </div>

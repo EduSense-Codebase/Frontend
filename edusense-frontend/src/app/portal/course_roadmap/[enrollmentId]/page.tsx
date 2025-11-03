@@ -22,11 +22,10 @@ import {
     ICourseSectionCreateResponse,
     IStudentAssignments,
     IStudentAssignmentsResponse,
+    IAssignmentCategories,
 } from '@/app/typedef';
-// import JoyrideWrapper from '@/app/ui_components/JoyrideWrapper';
 import { useCustomProp } from '@/app/typedef';
 import '../../../style/index.scss';
-// import { motion } from 'framer-motion';
 
 export const runtime = 'edge';
 import CourseHomePageUIController from '@/app/Pages/CourseHomePage/CourseHomePageUIController';
@@ -45,6 +44,9 @@ export default function HomePage() {
     const [studentAssignments, setStudentAssignments] = useState<IStudentAssignments[] | undefined>(
         undefined,
     );
+    const [assignmentCategories, setAssignmentCategories] = useState<
+        IAssignmentCategories[] | undefined
+    >(undefined);
     const [modules, setModules] = useState<IModules[]>([]);
     const [editMode, setEditMode] = useState(false);
     const [bannerImage, setBannerImage] = useState<string | null>(null);
@@ -112,7 +114,8 @@ export default function HomePage() {
             course_id: enrollmentId,
         });
         studentAssignmentsResponse.then((response) => {
-            setStudentAssignments(response.data.data);
+            setStudentAssignments(response.data.data.assignments);
+            setAssignmentCategories(response.data.data.categories);
         });
     }, [enrollmentId]);
 
@@ -204,6 +207,7 @@ export default function HomePage() {
                         announcements={announcements}
                         assignments={assignments}
                         studentAssignments={studentAssignments}
+                        assignmentCategories={assignmentCategories}
                         onPostAnnouncement={handleCreateAnnouncement}
                         bannerImage={bannerImage}
                         allModules={modules}
