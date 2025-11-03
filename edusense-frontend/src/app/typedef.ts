@@ -78,6 +78,21 @@ export interface IAssignments {
     assignment_data: Record<string, unknown>; // empty or dynamic object
 }
 
+export interface IStudentAssignments {
+    id: number;
+    name: string;
+    category_id: number;
+    category: string;
+    earned_points: number;
+    total_points: number;
+}
+
+export interface IAssignmentCategories {
+    id: number;
+    name: string;
+    weight: number;
+}
+
 export interface IModules {
     id: number;
     title: string;
@@ -192,6 +207,13 @@ export interface ISubmitFileResponse {
 
 export interface IStudentDataResponse {
     data: IStudentData[];
+}
+
+export interface IStudentAssignmentsResponse {
+    data: {
+        assignments: IStudentAssignments[];
+        categories: IAssignmentCategories[];
+    };
 }
 
 export interface IAIAgentsResponse {

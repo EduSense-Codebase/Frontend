@@ -10,9 +10,11 @@ import {
     ICourse,
     ICoursePermissions,
     IFile,
+    IStudentAssignments,
     IModules,
     IPermissions,
     IStudentData,
+    IAssignmentCategories,
 } from '@/app/typedef';
 import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
@@ -28,6 +30,8 @@ interface Props {
     courseDetails?: ICourse | undefined;
     announcements: IAnnouncements[];
     assignments: IAssignments[];
+    studentAssignments?: IStudentAssignments[] | undefined;
+    assignmentCategories?: IAssignmentCategories[] | undefined;
     onPostAnnouncement: (title: string, message: string) => void;
     bannerImage?: string | null;
     allModules: IModules[];
@@ -50,6 +54,8 @@ const CourseHomePageUIController: React.FC<Props> = ({
     courseDetails,
     announcements,
     assignments,
+    studentAssignments,
+    assignmentCategories,
     onPostAnnouncement,
     bannerImage,
     allModules,
@@ -74,7 +80,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
     // const create = permissions_all?.create;
     // const grade = permissions_all?.create;
 
-    const gradesData = create_course ? students : assignments;
+    const gradesData = students;
     console.log('there should be assignments', gradesData);
 
     const onTabChange = (name: string) => {
@@ -161,7 +167,12 @@ const CourseHomePageUIController: React.FC<Props> = ({
 
                 {activeTab === 'Grades' && (
                     <div>
-                        <GradesTab grades={gradesData} perms={course_permissions} />
+                        <GradesTab
+                            grades={gradesData}
+                            studentAssignments={studentAssignments}
+                            assignmentCategories={assignmentCategories}
+                            perms={course_permissions}
+                        />
                     </div>
                 )}
 
