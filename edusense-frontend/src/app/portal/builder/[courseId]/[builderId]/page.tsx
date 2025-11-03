@@ -866,14 +866,20 @@ export default function BuilderPage() {
                     placeholder="Enter assignment name..."
                     className="modalInput"
                 />
-                <label htmlFor={'dueDate'}>Due Date</label>
-                <input
-                    id="dueDate"
-                    type="date"
-                    value={dueDate}
-                    onChange={(e) => setDueDate(e.target.value)}
-                    className="modalInput"
-                />
+
+                {textContent == null && (
+                    <>
+                        <label htmlFor={'dueDate'}>Due Date</label>
+                        <input
+                            id="dueDate"
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                            className="modalInput"
+                        />
+                    </>
+                )}
+
                 <label>Module</label>
                 <select
                     className="modalInput"
@@ -931,6 +937,7 @@ export default function BuilderPage() {
             </div>
         </div>
     );
+    // console.log("is text:", textContent);
 
     return (
         <div className="builder-page">
