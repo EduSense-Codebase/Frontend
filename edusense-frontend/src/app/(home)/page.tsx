@@ -246,18 +246,14 @@ export default function LandingPage() {
                                     alt="video frame"
                                     className="videoframe"
                                 />
-                                {content.gifType ? (
-                                    <img src={content.gifPath} className="video" alt="" />
-                                ) : (
-                                    <video
-                                        src={content.gifPath}
-                                        title="EduSense Demo Video"
-                                        autoPlay
-                                        muted
-                                        loop
-                                        className="video"
-                                    ></video>
-                                )}
+                                <video
+                                    src={content.gifPath}
+                                    title="EduSense Demo Video"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    className="video"
+                                ></video>
                             </div>
                             <div className="text">
                                 <h1>{content.heading}</h1>

@@ -10,7 +10,9 @@
     "format": "prettier --write \"src/**/*.{js,ts,tsx,jsx,json,css,md}\"",
     "pre-commit": "prettier --write \"src/**/*.{js,ts,tsx,jsx,json,css,md}\"; next lint --max-warnings 0",
     "pages:build": "npx @cloudflare/next-on-pages",
+    "pages:deploy": "wrangler pages deploy --branch dev",
     "preview": "npm run pages:build && wrangler pages dev",
+    "deploy:step1": "opennextjs-cloudflare build",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

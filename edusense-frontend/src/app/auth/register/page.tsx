@@ -16,6 +16,7 @@ const Register: React.FC = () => {
 
     const fields: IFormFieldBase[] = [
         {
+            id: 'fname',
             type: 'text',
             placeholder: 'Enter your first name',
             value: fname,
@@ -23,6 +24,7 @@ const Register: React.FC = () => {
             label: 'First Name',
         },
         {
+            id: 'lname',
             type: 'text',
             placeholder: 'Enter your last name',
             value: lname,
@@ -30,6 +32,7 @@ const Register: React.FC = () => {
             label: 'Last Name',
         },
         {
+            id: 'email',
             type: 'email',
             placeholder: 'Enter your email',
             value: email,
@@ -37,6 +40,7 @@ const Register: React.FC = () => {
             label: 'Email',
         },
         {
+            id: 'password',
             type: 'password',
             placeholder: 'Enter your password',
             value: password,
@@ -92,6 +96,7 @@ const Register: React.FC = () => {
             }}
             fields={fields}
             callbackFunc={handleFieldChange}
+            submitId="submit-btn"
             submitCallback={handleSubmit}
             submitDisplayName="Register"
         />
