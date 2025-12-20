@@ -190,7 +190,8 @@ export default function BuilderPage() {
 
     const router = useRouter();
 
-    const { setCurrCourseId, coursePermissions, setCurrBuilderId } = useCustomProp();
+    const { setCurrCourseId, coursePermissions, setCurrBuilderId, aiDisable, setAIDisable } =
+        useCustomProp();
 
     const [mode, setMode] = useState<Mode | undefined>(undefined);
 
@@ -433,9 +434,10 @@ export default function BuilderPage() {
         const builderRequest = httpGet<IBuilderResponse>(url, queryParams);
 
         builderRequest.then((response) => {
-            console.log("assignment data: ", response.data);
+            console.log('assignment data: ', response.data);
             setMode(response.data.mode);
             setIsAssignmentCreated(response.data.is_assignment_created);
+            setAIDisable(response.data.ai_enable_status);
 
             if (response.data.type === 'text' && response.data.text_content != undefined) {
                 setTextContent(response.data.text_content);

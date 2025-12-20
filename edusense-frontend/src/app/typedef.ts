@@ -199,6 +199,7 @@ export interface IBuilderResponse {
         submissions: Record<number, IQuizPerStudentInformation>;
         submitted_students: ISubmittedStudents[];
     };
+    ai_enable_status: boolean;
 }
 
 export interface ISubmitFileResponse {
