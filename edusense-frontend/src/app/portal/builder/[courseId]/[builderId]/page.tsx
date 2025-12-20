@@ -216,6 +216,7 @@ export default function BuilderPage() {
     const [selectedCategory, setSelectedCategory] = useState(-1);
     const [assignmentDescription, setAssignmentDescription] = useState('');
     const [isDraft, setIsDraft] = useState(false);
+    const [aiConfig, setAIConfig] = useState(false);
 
     /* Assignment Level Information */
     const [isAssignmentCreated, setIsAssignmentCreated] = useState(false);
@@ -432,6 +433,7 @@ export default function BuilderPage() {
         const builderRequest = httpGet<IBuilderResponse>(url, queryParams);
 
         builderRequest.then((response) => {
+            console.log("assignment data: ", response.data);
             setMode(response.data.mode);
             setIsAssignmentCreated(response.data.is_assignment_created);
 
@@ -582,6 +584,7 @@ export default function BuilderPage() {
             module_id: moduleId,
             description: assignmentDescription,
             is_draft: JSON.stringify(isDraft),
+            ai_enable_status: aiConfig,
         };
         if (textContent == null) {
             if (!dueDate) {
@@ -930,6 +933,18 @@ export default function BuilderPage() {
                     placeholder="Enter assignment description..."
                     className="modalInput"
                 />
+                <div className="cat-name-row">
+                    <label className="ai-slider">
+                        <span className="ai-label">Disable AI</span>
+                        <input
+                            type="checkbox"
+                            checked={aiConfig}
+                            onChange={(e) => setAIConfig(e.target.checked)}
+                        />
+                        <span className="slider" />
+                    </label>
+                </div>
+
                 <label>Draft</label>
                 <input
                     type="checkbox"

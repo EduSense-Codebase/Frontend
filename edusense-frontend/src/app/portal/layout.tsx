@@ -42,6 +42,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     const [currCourseId, setCurrCourseId] = useState<number | undefined>(undefined);
     const [currBuilderId, setCurrBuilderId] = useState<number | undefined>(undefined);
     const [isBackgroundRunning, setIsBackgroundRunning] = useState<boolean>(false);
+    const [aiDisable, setAIDisable] = useState<boolean>(false);
 
     useEffect(() => {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -146,7 +147,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             </header>
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
-                {currCourseId ? (
+                {currCourseId && !aiDisable ? (
                     <AIChatController
                         courseId={currCourseId}
                         builderId={currBuilderId}
@@ -167,6 +168,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                         setCurrCourseId,
                         setCurrBuilderId,
                         setIsBackgroundRunning,
+                        aiDisable,
+                        setAIDisable,
                     }}
                 >
                     {children}

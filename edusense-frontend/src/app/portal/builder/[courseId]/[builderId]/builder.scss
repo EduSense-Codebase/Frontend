@@ -102,3 +102,94 @@
         visibility: visible;
         opacity: 1;
     }
+
+.cat-name-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.ai-slider {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.ai-slider input {
+    display: none;
+}
+
+.ai-slider .slider {
+    width: 34px;
+    height: 18px;
+    background: #d1d5db; /* gray-300 */
+    border-radius: 999px;
+    position: relative;
+    transition: background 0.2s ease;
+}
+
+.ai-slider {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.ai-slider input {
+    display: none;
+}
+
+.ai-slider .slider {
+    width: 34px;
+    height: 18px;
+    background: #d1d5db;
+    border-radius: 999px;
+    position: relative;
+    transition: background 0.2s ease;
+}
+
+/* 👇 THE WHITE DOT */
+.ai-slider .slider::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.ai-slider input:checked + .slider {
+    background: #2563eb;
+}
+
+.ai-slider input:checked + .slider::before {
+    transform: translateX(16px);
+}
+
+.ai-label {
+    white-space: nowrap;
+    color: #374151;
+}
+
+
+.ai-slider input:checked + .slider {
+    background: #2563eb; /* blue-600 */
+}
+
+.ai-slider input:checked + .slider::before {
+    transform: translateX(16px);
+}
+
+.ai-label {
+    white-space: nowrap;
+    color: #374151; /* gray-700 */
+}

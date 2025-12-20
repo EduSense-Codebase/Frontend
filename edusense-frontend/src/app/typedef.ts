@@ -244,6 +244,8 @@ export interface ICustomProps {
     setCourses: React.Dispatch<React.SetStateAction<ICourse[]>>;
     setCurrCourseId: React.Dispatch<React.SetStateAction<number | undefined>>;
     setCurrBuilderId: React.Dispatch<React.SetStateAction<number | undefined>>;
+    aiDisable: boolean;
+    setAIDisable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const useCustomProp = () => {
