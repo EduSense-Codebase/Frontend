@@ -122,7 +122,8 @@ export default function CourseSection() {
 
     const renderCourseTile = (courseTileArgs: ICourse, index: number) => {
         const bgImage = getBackgroundImage(courseTileArgs);
-        const grade = courseTileArgs.total_grade || null;
+        const grade = courseTileArgs.total_grade;
+
         return (
             <Link
                 key={`course-title-${index}`}
@@ -141,8 +142,10 @@ export default function CourseSection() {
                     }}
                     className="course-tile"
                 >
-                    {grade != null && (
-                        <div className="grade-bubble">{grade == -1 ? 'N/A' : grade}</div>
+                    {join_course && (
+                        <div className="grade-bubble">
+                            {grade == -1 ? 'N/A' : grade.toFixed(2) + '%'}
+                        </div>
                     )}
 
                     <div
