@@ -21,6 +21,7 @@ import Sidebar from '../ui_components/Sidebar/Sidebar';
 import { ICourse } from '../typedef';
 import AIChatController from '../Pages/AIChat/AIChatController';
 import { Toaster } from 'react-hot-toast';
+import { usePathname } from 'next/navigation';
 
 const interClassName = 'font-inter';
 
@@ -42,6 +43,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     const [currCourseId, setCurrCourseId] = useState<number | undefined>(undefined);
     const [currBuilderId, setCurrBuilderId] = useState<number | undefined>(undefined);
     const [isBackgroundRunning, setIsBackgroundRunning] = useState<boolean>(false);
+    const [aiDisable, setAIDisable] = useState<boolean>(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -112,6 +115,10 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         }
     }, [currCourseId]);
 
+    useEffect(() => {
+        setAIDisable(false);
+    }, [pathname]);
+
     return (
         <div
             id="main"
@@ -146,7 +153,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             </header>
 
             <main className="mx-auto flex h-full min-h-screen w-full bg-white px-4 py-4">
-                {currCourseId ? (
+                {currCourseId && !aiDisable ? (
                     <AIChatController
                         courseId={currCourseId}
                         builderId={currBuilderId}
@@ -167,6 +174,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                         setCurrCourseId,
                         setCurrBuilderId,
                         setIsBackgroundRunning,
+                        aiDisable,
+                        setAIDisable,
                     }}
                 >
                     {children}

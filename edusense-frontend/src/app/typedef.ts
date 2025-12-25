@@ -199,6 +199,7 @@ export interface IBuilderResponse {
         submissions: Record<number, IQuizPerStudentInformation>;
         submitted_students: ISubmittedStudents[];
     };
+    ai_enable_status: boolean;
 }
 
 export interface ISubmitFileResponse {
@@ -244,6 +245,8 @@ export interface ICustomProps {
     setCourses: React.Dispatch<React.SetStateAction<ICourse[]>>;
     setCurrCourseId: React.Dispatch<React.SetStateAction<number | undefined>>;
     setCurrBuilderId: React.Dispatch<React.SetStateAction<number | undefined>>;
+    aiDisable: boolean;
+    setAIDisable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const useCustomProp = () => {
