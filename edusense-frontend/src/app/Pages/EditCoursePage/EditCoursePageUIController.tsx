@@ -9,6 +9,8 @@ import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import { API_PREFIX, COURSE_ENDPOINT } from '@/app/global';
 import { httpPost } from '@/app/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import QuickActionsTab from '@/app/ui_components/QuickActionsTab';
+import AIChatController from '../../Pages/AIChat/AIChatController';
 
 interface Props {
     course: ICourse | undefined;
@@ -46,6 +48,7 @@ const EditCoursePageUIController: React.FC<Props> = ({
     // const [editMode, setEditMode] = useState(false);
     const [sideBarOpen, setSidebarOpen] = useState(false);
     const [chooseModule, setChooseModule] = useState(false);
+    const [showQuickActionsWidget, setShowQuickActionsWidget] = useState(false);
     // const [textBoxStyle, setTextBoxStyle] = useState('');
     // const [classModule, setClassModule] = useState('');
     // const [bannerImage, setBannerImage] = useState<string | null>(null);
@@ -157,6 +160,12 @@ const EditCoursePageUIController: React.FC<Props> = ({
                             setModule={setShowModuleWidget}
                         />
                     )}
+                    {/* {showQuickActionsWidget && (
+                        <div className="quick-actions-container">
+                            <QuickActionsTab />
+                            <AIChatController courseId={course?.id} />
+                        </div>
+                    )} */}
                 </section>
 
                 {editMode && (
@@ -230,6 +239,11 @@ const EditCoursePageUIController: React.FC<Props> = ({
                                         onClick={() => setShowModuleWidget(true)}
                                     />
                                 )}
+                                {/* <Button
+                                    displayName="Add Quick Actions Widget"
+                                    variant="primary"
+                                    onClick={() => setShowQuickActionsWidget(true)}
+                                /> */}
                             </div>
                         </div>
                     </motion.div>

@@ -181,9 +181,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
                     <SettingsTab sections={sections} addSection={addSection} />
                 )}
 
-                {activeTab === 'Quick Actions' && (
-                    <QuickActionsTab />
-                )}
+                {activeTab === 'Quick Actions' && <QuickActionsTab />}
             </div>
         </div>
     );
