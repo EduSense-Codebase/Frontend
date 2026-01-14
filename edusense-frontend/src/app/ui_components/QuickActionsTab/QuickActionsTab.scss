@@ -1,0 +1,121 @@
+@import '../../style/variables';
+
+.quick-actions-tab {
+  padding: 20px;
+  h2 {
+    color: $dark-blue;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .quick-actions-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .quick-action-card {
+    background-color: $white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: $dropshadow;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(75, 118, 179, 0.35);
+    }
+
+    h3 {
+      color: $darker-blue;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    p {
+      color: $grey;
+      font-size: 0.9rem;
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background-color: $light-blue;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: $dropshadow;
+    width: 90%;
+    max-width: 500px;
+
+    h3 {
+      color: $dark-blue;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .form-field {
+      margin-bottom: 15px;
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: $darker-blue;
+        font-weight: bold;
+      }
+      input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        border: 1px solid $light-grey;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.2s ease;
+
+        &[type="submit"] {
+          background-color: $blue;
+          color: $white;
+          &:hover {
+            background-color: $dark-blue;
+          }
+        }
+
+        &[type="button"] { // Cancel button
+          background-color: $grey;
+          color: $white;
+          &:hover {
+            background-color: darken($grey, 10%);
+          }
+        }
+      }
+    }
+  }
+}

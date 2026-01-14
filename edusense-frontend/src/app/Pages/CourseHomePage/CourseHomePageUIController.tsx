@@ -20,7 +20,8 @@ import ToDo from '@/app/ui_components/ToDo/ToDo';
 import CurrentModule from '@/app/ui_components/CurrentModule/CurrentModule';
 import ClassworkTab from '@/app/ui_components/ClassworkTab/ClassworkTab';
 import GradesTab from '@/app/ui_components/GradesTab/GradesTab';
-import SettingsTab from '@/app/ui_components/SettingsTab/SettingsTab';
+import SettingsTab from '../../ui_components/SettingsTab/SettingsTab';
+import QuickActionsTab from '../../ui_components/QuickActionsTab';
 interface Props {
     global_permissions?: IPermissions;
     course_permissions?: ICoursePermissions;
@@ -72,7 +73,7 @@ const CourseHomePageUIController: React.FC<Props> = ({
 }) => {
     const [activeTab, setActiveTab] = useState('Overview');
     const create_course = global_permissions?.create_course;
-    const tabs = ['Overview', 'Classwork', 'Grades'];
+    const tabs = ['Overview', 'Classwork', 'Grades', 'Quick Actions'];
     if (course_permissions?.create_grade_categories) tabs.push('Settings');
 
     // const edit = permissions_all?.edit;
@@ -179,6 +180,8 @@ const CourseHomePageUIController: React.FC<Props> = ({
                 {activeTab === 'Settings' && course_permissions?.create_grade_categories && (
                     <SettingsTab sections={sections} addSection={addSection} />
                 )}
+
+                {activeTab === 'Quick Actions' && <QuickActionsTab />}
             </div>
         </div>
     );

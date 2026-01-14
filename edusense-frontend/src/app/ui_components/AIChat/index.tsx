@@ -8,6 +8,7 @@ import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import { IAIAgentData, IAISession } from '../../typedef';
 import { IMessages } from '@/app/Pages/AIChat/AIChatController';
+import { useChatStore } from '@/app/store/chatStore';
 
 interface AIAgentLoaderProps {
     agentName?: string;
@@ -147,7 +148,7 @@ export interface IChatWidgetProps {
 }
 
 const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const { isChatOpen, closeChat, openChat, chatPrompt, setChatPrompt } = useChatStore();
     const [panelWidth, setPanelWidth] = useState(550);
     const [isResizing, setIsResizing] = useState(false);
 
@@ -161,10 +162,12 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
     };
 
     const toggleChat = () => {
-        if (isOpen) {
+        if (isChatOpen) {
             setSidebarOpen(false);
+            closeChat();
+        } else {
+            openChat();
         }
-        setIsOpen(!isOpen);
     };
 
     useEffect(() => {
@@ -195,10 +198,14 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
     }, [props.thinking]);
 
     useEffect(() => {
-        if (isOpen) {
+        if (isChatOpen) {
             scrollToBottom(endRef);
+            if (chatPrompt) {
+                setInput(chatPrompt);
+                setChatPrompt('');
+            }
         }
-    }, [isOpen]);
+    }, [isChatOpen, chatPrompt, setChatPrompt]);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -217,7 +224,7 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
     return (
         <div className="chat-window z-50">
             {/* Floating Button */}
-            {!isOpen && (
+            {!isChatOpen && (
                 <motion.button
                     onClick={toggleChat}
                     className="chat-icon"
@@ -240,7 +247,7 @@ const ChatWidget: React.FC<IChatWidgetProps> = (props) => {
 
             {/* Chat Panel */}
             <AnimatePresence>
-                {isOpen && (
+                {isChatOpen && (
                     <motion.div
                         key="chat-panel"
                         initial={{ opacity: 0, x: 300 }}
